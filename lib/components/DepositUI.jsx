@@ -1,5 +1,8 @@
 import React, { useContext, useState } from 'react'
 import { ethers } from 'ethers'
+import { batch, contract } from '@pooltogether/etherplex'
+
+import PoolAbi from 'lib/abis/PoolAbi'
 
 import { ADDRESSES } from 'lib/constants'
 import { DepositForm } from 'lib/components/DepositForm'
@@ -8,8 +11,7 @@ import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { poolToast } from 'lib/utils/poolToast'
 
-const digChainIdFromWalletState = () => {
-  const walletContext = useContext(WalletContext)
+const digChainIdFromWalletState = (walletContext) => {
   const onboard = walletContext._onboard
 
   let chainId = 1
@@ -20,8 +22,8 @@ const digChainIdFromWalletState = () => {
   return chainId
 }
 
-const handleSubmit = async (setTx) => {
-  const chainId = digChainIdFromWalletState()
+const handleSubmit = async (setTx, walletContext, depositAmount) => {
+  const chainId = digChainIdFromWalletState(walletContext)
 
   const poolContractAddress = ADDRESSES[chainId]['POOL_CONTRACT_ADDRESS']
 
@@ -38,7 +40,6 @@ const handleSubmit = async (setTx) => {
     inWallet: true
   }))
 
-  const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
   const signer = provider.getSigner()
 
@@ -49,8 +50,9 @@ const handleSubmit = async (setTx) => {
   )
 
   try {
-    const newTx = await poolContract.deposit(
-      mintTickets,
+    console.log({ depositAmount})
+    const newTx = await poolContract.mintTickets(
+      ethers.utils.bigNumberify(depositAmount),
       {
         gasLimit: 200000,
       }
@@ -89,8 +91,10 @@ const handleSubmit = async (setTx) => {
 }
 
 export const DepositUI = (props) => {
-  const [depositAmount, setDepositAmount] = useState(ethers.utils.bigNumberify(0))
-  // const [depositAmount, setDepositAmount] = useState(ethers.utils.bigNumberify(0))
+  const walletContext = useContext(WalletContext)
+
+  const [depositAmount, setDepositAmount] = useState('')
+  // const [depositAmount, setDepositAmount] = useState('')
   const [tx, setTx] = useState({
     inWallet: false,
     sent: false,
@@ -99,8 +103,24 @@ export const DepositUI = (props) => {
 
   const txInFlight = tx.inWallet || tx.sent
 
+  const chainId = digChainIdFromWalletState(walletContext)
+  const poolContractAddress = ADDRESSES[chainId]['POOL_CONTRACT_ADDRESS']
+  const etherplexPoolContract = contract('DaiPool', PoolAbi, poolContractAddress)
+  console.log({ etherplexPoolContract})
   const usersDaiBalance = 2
   const usersPoolBalance = 23
+
+  const usersAddress = walletContext._onboard.getState().address
+
+  batch(
+    ethers.getDefaultProvider(),
+    etherplexPoolContract
+      .totalBalanceOf(usersAddress),
+  ).then(results => {
+    console.log('Your data', results)
+  }).catch(e => {
+    console.error('Uh-or read error', e)
+  })
 
   return <>
     <div
@@ -121,7 +141,7 @@ export const DepositUI = (props) => {
           handleSubmit={(e) => {
             e.preventDefault()
 
-            handleSubmit(setTx)
+            handleSubmit(setTx, walletContext, depositAmount)
           }}
           vars={{
             depositAmount,

@@ -20,12 +20,6 @@ export const TxMessage = (props) => {
     return null
   }
 
-  console.log({ txInWallet})
-  console.log({ txSent})
-  console.log({ txCompleted})
-  console.log({ txError})
-  console.log({ txInFlight})
-
   return <>
     {txInFlight && <>
       <div
@@ -63,7 +57,7 @@ export const TxMessage = (props) => {
           </div>
         </>}
 
-        {txCompleted && <>
+        {txCompleted && !txError && <>
           <div
             className='mb-2 text-green-300 text-base sm:text-lg lg:text-xl'
           >

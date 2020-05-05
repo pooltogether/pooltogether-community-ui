@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@pooltogether/etherplex": "^0.1.0",
     "autoprefixer": "^9.7.6",
     "bnc-onboard": "^1.7.7",
     "classnames": "^2.2.6",
