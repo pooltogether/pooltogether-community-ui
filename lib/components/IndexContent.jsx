@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 
 import { Button } from 'lib/components/Button'
 import { Forms } from 'lib/components/Forms'
+import { MainPanel } from 'lib/components/MainPanel'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 
 import PoolIcon from 'assets/images/holidays.svg'
@@ -27,14 +28,16 @@ export const IndexContent = (
       <div
         className='text-blue-400 title text-xl sm:text-3xl'
       >
-        v3.0 - Reference Frontend
+        v3.0 - Reference Pool Frontend
       </div>
 
       <a
-        href='https://docs.pooltogether.com'
+        href='https://docs.pooltogether.com/contracts/prize-pool'
         className='trans'
       >View documentation</a>
     </div>
+
+    <MainPanel />
 
     {address ?
       <Forms
