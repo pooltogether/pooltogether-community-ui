@@ -1,0 +1,30 @@
+{
+  "name": "ripcord",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "autoprefixer": "^9.7.6",
+    "bnc-onboard": "^1.7.7",
+    "classnames": "^2.2.6",
+    "ethers": "^4.0.47",
+    "feather-icons-react": "^0.4.1",
+    "js-cookie": "^2.2.1",
+    "next": "9.3.6",
+    "next-images": "^1.4.0",
+    "postcss-easy-import": "^3.0.0",
+    "react": "16.13.1",
+    "react-copy-to-clipboard": "^5.0.2",
+    "react-device-detect": "^1.12.1",
+    "react-dom": "16.13.1",
+    "react-toastify": "^5.5.0",
+    "tailwindcss": "^1.3.5"
+  },
+  "devDependencies": {
+    "@next/bundle-analyzer": "^9.3.6"
+  }
+}

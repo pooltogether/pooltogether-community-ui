@@ -1,0 +1,171 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-min-height {
+  min-height: 60px;
+}
+
+@screen sm {
+  .nav-min-height {
+    min-height: 90px;
+  }
+}
+
+.pool-container {
+  width: 100%;
+}
+
+@screen sm {
+  .max-height-wrapper {
+    height: 660px;
+  }
+}
+
+@screen lg {
+  .max-height-wrapper {
+    height: 700px;
+  }
+}
+
+@media screen and (max-height: 860px) {
+  .max-height-wrapper {
+    height: 530px !important;
+  }
+}
+
+@media screen and (max-height: 600px) {
+  .max-height-wrapper {
+    height: 360px !important;
+  }
+}
+
+.nav-and-footer-container {
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
+  width: calc(100% - 2rem);
+}
+
+.pool-container .pool-container,
+.nav-and-footer-container .nav-and-footer-container {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+@screen sm {
+  .pool-container,
+  .nav-and-footer-container {
+    max-width: 788px;
+
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+  }
+}
+
+/* breakpoint overrides */
+
+@screen sm {
+  .nav-and-footer-container {
+    max-width: 788px;
+  }
+}
+
+@screen lg {
+  .nav-and-footer-container {
+    max-width: 1132px;
+  }
+}
+
+@screen sm {
+  .pool-container {
+    max-width: 788px;
+  }
+}
+
+@screen lg {
+  .pool-container {
+    max-width: 1228px;
+  }
+}
+
+.pool-max-width {
+  max-width: 1228px; 
+}
+
+.modal-max-width {
+  max-width: 640px;
+}
+
+.modal-wrapper {
+  min-height: 300px;
+  max-height: 100vh;
+  overflow-y: auto;
+}
+
+.modal-content-container {
+  max-height: 100vh;
+}
+
+@media screen and (min-width: 640px) {
+  .modal-wrapper {
+    max-height: calc(100vh - 1px);
+  }
+}
+
+.page {
+  min-height: 400px;
+  width: 100%;
+}
+
+.page-bg {
+  @apply bg-lightPurple-900;
+}
+
+.section-min-height {
+  min-height: 70vh;
+}
+
+.scene {
+	margin: 0 auto;
+  z-index: 3;
+  width: 95%;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.fadeOut {
+  animation-name: fadeOut;
+  pointer-events: none;
+}
+
+.notification-close-btn {
+  padding: 0.08rem;
+}
+
+@screen sm {
+  .notification-close-btn {
+    padding: 0.5rem;
+  }
+}

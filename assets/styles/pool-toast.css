@@ -1,0 +1,153 @@
+.pool-toast {
+  background: transparent;
+  margin: 0 auto;
+  left: 1%;
+  max-width: 1228px;
+  min-width: 50%;
+  padding: 1rem;
+  text-align: center;
+  right: 1%;
+  top: 0;
+  width: 100%;
+  z-index: 20000;
+}
+
+@screen sm {
+  .pool-toast {
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+  }
+}
+
+.pool-toast.Toastify__toast-container {
+  max-width: 1228px;
+  height: 50px; 
+  width: 100%;
+}
+
+@screen sm {
+  .pool-toast.Toastify__toast-container {
+    width: 50%;
+  }
+}
+
+@screen lg {
+  .pool-toast.Toastify__toast-container {
+    width: 35%;
+  }
+}
+
+.pool-toast .Toastify__toast {
+  @apply rounded-lg;
+  color: white;
+  font-family: inherit;
+  font-weight: 400;
+  margin: 0 auto;
+  min-height: 30px;
+  min-width: 100%;
+  padding: 0;
+}
+
+@screen lg {
+  .pool-toast .Toastify__toast {
+    min-width: auto;
+    max-width: 1228px;
+  }
+}
+
+.pool-toast.Toastify__toast-container--top-center {
+  left: 0;
+  margin-left: 0;
+  max-width: 1228px;
+  bottom: 90px;
+  top: auto;
+}
+
+@screen sm {
+  .pool-toast.Toastify__toast-container--top-center {
+    top: 50px;
+    left: 50%;
+    margin-left: -25%;  
+  }
+}
+
+.pool-toast .Toastify__toast--success {
+  @apply bg-black text-green-400;
+}
+
+.Toastify__progress-bar--success {
+  @apply bg-green-500;
+}
+
+.pool-toast .Toastify__toast--info {
+  @apply bg-blue-500 text-white;
+}
+
+.Toastify__progress-bar--info {
+  @apply bg-blue-500;
+}
+
+.pool-toast .Toastify__toast--error {
+  @apply bg-black text-red-500;
+}
+
+.Toastify__progress-bar--error {
+  @apply bg-red-500;
+}
+
+.pool-toast .Toastify__toast--warning {
+  @apply bg-black text-orange-500;
+}
+
+.Toastify__progress-bar--warning {
+  @apply bg-orange-500;
+}
+
+.pool-toast .Toastify__toast-body {
+  font-size: 0.825rem;
+  margin: 0.5rem;
+  padding: 0.5rem 1rem;
+}
+
+@screen sm {
+  .pool-toast .Toastify__toast-body {
+    font-size: 1.25rem;
+    padding: 0 1rem;
+    margin: 1rem auto;
+  }
+}
+
+.pool-toast .Toastify__close-button {
+  color: white;
+  font-size: 14px;
+  right: 10px;
+  top: 10px;
+  position: absolute;
+  opacity: 1;
+}
+
+@screen sm {
+  .pool-toast .Toastify__close-button:after {
+    font-size: 19px;
+  }
+}
+
+.pool-toast .Toastify__close-button:after {
+  background-color: black;
+  content: '✕';
+  color: white;
+  font-size: 19px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.pool-toast .Toastify__toast--default .Toastify__close-button,
+.pool-toast .Toastify__toast--info .Toastify__close-button {
+  color: rgba(255, 255, 255, 0.8);
+}

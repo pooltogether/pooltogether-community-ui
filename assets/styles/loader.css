@@ -1,0 +1,148 @@
+span {
+  --inactive: #9bc9eb;
+  --active: #98eeb3;
+  --speed: 1.2s;
+  --size: 30px;
+  --unit: 10px;
+}
+
+@keyframes loadingFader {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.loading-fader {
+  animation: loadingFader 3s infinite ease-in-out;
+  margin: 0 auto;
+  opacity: 0;
+  text-align: center;
+  width: 170px;
+}
+
+.spinner-hidden .loading-indicator {
+  display: none;
+}
+
+.spinner-small .loading-indicator img {
+  transform: scale3d(0.5, 0.5, 0.5);
+}
+
+@screen sm {
+  .spinner-small .loading-indicator img {
+    transform: scale3d(0.75, 0.75, 0.75);
+  }
+}
+
+@screen lg {
+  .spinner-small .loading-indicator img {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.loading-indicator {
+  /* clip-path: url(#svg-mask); */
+  /* background-clip: content-box; */
+  align-items: center;
+  background-color: #120420;
+  /* background-color: orange; */
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  position: fixed;
+  text-align: center;
+  width: 100%;
+  transform-origin: 50% 50%;
+}
+
+/* can only get this working in Firefox. Polyfill? */
+/* svg#circleMask {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform-origin: 50% 50%;
+}
+
+svg#circleMask mask circle {
+  transform-origin: 50% 50%;
+  transform: scale3d(0, 0, 0);
+}
+
+.clipOut {
+  -webkit-mask: url(#mask);
+  mask: url(#mask);
+}
+
+.clipOut circle {
+  animation: clipOut 1s infinite cubic-bezier(.55,.09,.68,.53);
+}
+
+@keyframes clipOut {
+  from {
+    transform: scale3d(0, 0, 0);
+  }
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+} */
+
+.loading-indicator img {
+  margin-top: -25vh;
+}
+
+.spinner {
+  margin: 0 auto;
+  width: 170px;
+  text-align: center;
+}
+
+.spinner > div {
+  width: 14px;
+  height: 14px;
+  margin: 0 10px;
+  background-color: #fff;
+  border-radius: 100%;
+  display: inline-block;
+  animation: bounceLoad 1.4s infinite ease-in-out both;
+}
+
+.spinner .bounce1 {
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  animation-delay: -0.16s;
+}
+
+@keyframes bounceLoad {
+  0%, 80%, 100% { 
+    transform: scale3d(0, 0, 0);
+  } 40% { 
+    transform: scale3d(0.5, 0.5, 0.5);
+  }
+}
+
+@screen sm {
+  @keyframes bounceLoad {
+    0%, 80%, 100% { 
+      transform: scale3d(0, 0, 0);
+    } 40% { 
+      transform: scale3d(1, 1, 1);
+    }
+  }
+}
