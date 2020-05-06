@@ -38,12 +38,13 @@ export const IndexContent = (
       >View documentation</a>
     </div>
 
-    <MainPanel />
-
     {address ?
-      <Forms
-        {...props}
-      /> :
+      <>
+        <MainPanel />
+        <Forms
+          {...props}
+        />
+      </> : <>
       <Button
         color='green'
         className='button'
@@ -51,6 +52,6 @@ export const IndexContent = (
       >
         Connect Wallet
       </Button>
-    }
+    </>}
   </>
 }
