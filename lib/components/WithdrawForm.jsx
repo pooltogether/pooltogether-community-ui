@@ -22,7 +22,7 @@ export const WithdrawForm = (props) => {
       onSubmit={handleSubmit}
     >
       <div
-        className='font-bold mb-8 py-2 text-lg sm:text-xl lg:text-2xl'
+        className='font-bold mb-4 py-2 text-lg sm:text-xl lg:text-2xl'
       >
         Make a withdraw:
       </div>

@@ -15,7 +15,7 @@ export const DepositForm = (props) => {
   let depositAmount, setDepositAmount
   if (vars && stateSetters) {
     depositAmount = vars.depositAmount
-    setDepositAmount = vars.setDepositAmount
+    setDepositAmount = stateSetters.setDepositAmount
   }
 
   return <>
@@ -23,16 +23,16 @@ export const DepositForm = (props) => {
       onSubmit={handleSubmit}
     >
       <div
-        className='font-bold mb-8 py-2 text-lg sm:text-xl lg:text-2xl'
+        className='font-bold mb-4 py-2 text-lg sm:text-xl lg:text-2xl'
       >
         Make a deposit:
       </div>
 
       {disabled && <>
         <div
-          className='bg-purple-800 rounded-lg text-center w-3/4 mx-auto px-4 py-3 text-sm sm:text-base lg:text-lg text-purple-300'
+          className='bg-purple-800 rounded-lg text-center sm:w-10/12 mx-auto px-4 py-3 text-xs sm:text-base lg:text-lg text-purple-300'
         >
-          Unlock deposits first by providing the pool with a DAI spend allowance.
+          Unlock deposits first by providing the pool's ticket contract with a DAI spend allowance.
         </div>
       </>}
 

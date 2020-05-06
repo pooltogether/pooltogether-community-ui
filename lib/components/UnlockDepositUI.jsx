@@ -3,6 +3,7 @@ import { ethers } from 'ethers'
 
 import ERC20Abi from '@pooltogether/pooltogether-contracts/abis/ERC20'
 
+import { Button } from 'lib/components/Button'
 import { DepositForm } from 'lib/components/DepositForm'
 // import { DepositPanel } from 'lib/components/DepositPanel'
 import { TxMessage } from 'lib/components/TxMessage'
@@ -28,6 +29,7 @@ const handleSubmit = async (setTx, walletContext, chainValues) => {
   )
 
   try {
+    console.log({ chainValues})
     const newTx = await erc20Contract.approve(
       poolContractAddress,
       ethers.utils.parseEther('1000000000'),
@@ -74,13 +76,15 @@ export const UnlockDepositUI = (props) => {
 
   const walletContext = useContext(WalletContext)
 
-  const [tx, setTx] = useState({
-    inWallet: false,
-    sent: false,
-    completed: false,
-  })
+  const [tx, setTx] = useState({})
 
   const txInFlight = tx.inWallet || tx.sent
+  const txCompleted = tx.completed
+
+  const resetState = (e) => {
+    e.preventDefault()
+    setTx({})
+  }
 
   return <>
     {!txInFlight ? <>
@@ -98,7 +102,17 @@ export const UnlockDepositUI = (props) => {
         tx={tx}
       />
     </>}
-      
+
+    {txCompleted && <>
+      <div className='my-3 text-center'>
+        <Button
+          size='sm'
+          color='black'
+          onClick={resetState}
+        >Reset Form</Button>
+      </div>
+    </>}
+
     
   </>
 }

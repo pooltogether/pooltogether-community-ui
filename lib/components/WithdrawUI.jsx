@@ -3,6 +3,7 @@ import { ethers } from 'ethers'
 
 import PeriodicPrizePoolAbi from 'lib/abis/PeriodicPrizePoolAbi'
 
+import { Button } from 'lib/components/Button'
 import { WithdrawForm } from 'lib/components/WithdrawForm'
 // import { WithdrawPanel } from 'lib/components/WithdrawPanel'
 import { TxMessage } from 'lib/components/TxMessage'
@@ -87,6 +88,13 @@ export const WithdrawUI = (props) => {
   })
 
   const txInFlight = tx.inWallet || tx.sent
+  const txCompleted = tx.completed
+
+  const resetState = (e) => {
+    e.preventDefault()
+    setWithdrawAmount('')
+    setTx({})
+  }
 
   return <>
     
@@ -110,7 +118,16 @@ export const WithdrawUI = (props) => {
         tx={tx}
       />
     </>}
-      
+
+    {txCompleted && <>
+      <div className='my-3 text-center'>
+        <Button
+          size='sm'
+          color='black'
+          onClick={resetState}
+        >Reset Form</Button>
+      </div>
+    </>}      
     
   </>
 }

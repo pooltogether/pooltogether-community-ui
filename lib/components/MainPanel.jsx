@@ -23,28 +23,46 @@ export const MainPanel = (props) => {
         '-mx-8 sm:-mx-8 lg:-mx-12',
       )}
     >
-      <div className='rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'>
-        <strong>ETH Balance:</strong>
+      <div
+        className='w-1/4 rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
+      >
+        <strong
+          className='text-purple-400'
+        >ETH Balance:</strong>
         <br />
         {displayAmountInEther(ethBalance, { precision: 2 })}
       </div>
 
-      <div className='rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'>
-        <strong>ERC20 Token Balance: (DAI or USDC)</strong>
+      <div
+        className='w-1/4 rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
+      >
+        <strong
+          className='text-purple-400'
+        >{chainValues.erc20Symbol} Balance:</strong>
         <br />
         {displayAmountInEther(usersERC20Balance, { precision: 2 })} 
       </div>
 
-      <div className='rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'>
-        <span className='text-yellow-500'>
-          <strong>Allowance: (DAI or USDC)</strong>
-          <br />
-          {displayAmountInEther(usersERC20Allowance, { precision: 2 })}
-        </span>
-      </div>
+      {usersERC20Allowance.lte(0) && <>
+        <div
+            className='w-1/4 rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
+          >
+          <span className='text-yellow-400'>
+            <strong
+              className='text-purple-400'
+            >{chainValues.erc20Symbol} Allowance:</strong>
+            <br />
+            {displayAmountInEther(usersERC20Allowance, { precision: 2 })}
+          </span>
+        </div>
+      </>}
 
-      <div className='rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'>
-        <strong>Your Pool Balance:</strong>
+      <div
+        className='w-1/4 rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
+      >
+        <strong
+          className='text-purple-400'
+        >Ticket Balance:</strong>
         <br />
         {displayAmountInEther(usersTicketBalance, { precision: 2 })}
       </div>

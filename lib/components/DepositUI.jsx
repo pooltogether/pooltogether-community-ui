@@ -3,6 +3,7 @@ import { ethers } from 'ethers'
 
 import PeriodicPrizePoolAbi from 'lib/abis/PeriodicPrizePoolAbi'
 
+import { Button } from 'lib/components/Button'
 import { DepositForm } from 'lib/components/DepositForm'
 // import { DepositPanel } from 'lib/components/DepositPanel'
 import { TxMessage } from 'lib/components/TxMessage'
@@ -40,7 +41,7 @@ const handleSubmit = async (setTx, walletContext, depositAmount) => {
     const newTx = await poolContract.mintTickets(
       ethers.utils.parseEther(depositAmount),
       {
-        gasLimit: 200000,
+        gasLimit: 300000,
       }
     )
 
@@ -82,13 +83,16 @@ export const DepositUI = (props) => {
 
   const [depositAmount, setDepositAmount] = useState('')
 
-  const [tx, setTx] = useState({
-    inWallet: false,
-    sent: false,
-    completed: false,
-  })
+  const [tx, setTx] = useState({})
 
   const txInFlight = tx.inWallet || tx.sent
+  const txCompleted = tx.completed
+
+  const resetState = (e) => {
+    e.preventDefault()
+    setDepositAmount('')
+    setTx({})
+  }
 
   return <>
     
@@ -113,6 +117,15 @@ export const DepositUI = (props) => {
       />
     </>}
       
+    {txCompleted && <>
+      <div className='my-3 text-center'>
+        <Button
+          size='sm'
+          color='black'
+          onClick={resetState}
+        >Reset Form</Button>
+      </div>
+    </>}
     
   </>
 }
