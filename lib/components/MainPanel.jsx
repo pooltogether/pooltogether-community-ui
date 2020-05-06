@@ -3,8 +3,12 @@ import classnames from 'classnames'
 import { ethers } from 'ethers'
 import { batch, contract } from '@pooltogether/etherplex'
 
-import PeriodicPrizePoolAbi from 'lib/abis/PeriodicPrizePoolAbi'
-import TicketAbi from 'lib/abis/TicketAbi'
+import PeriodicPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PeriodicPrizePool'
+import TicketAbi from '@pooltogether/pooltogether-contracts/abis/Ticket'
+import ControlledTokenAbi from '@pooltogether/pooltogether-contracts/abis/ControlledToken'
+
+// import PeriodicPrizePoolAbi from 'lib/abis/PeriodicPrizePoolAbi'
+// import TicketAbi from 'lib/abis/TicketAbi'
 
 import { ADDRESSES } from 'lib/constants'
 import { WalletContext } from 'lib/components/WalletContextProvider'
@@ -39,8 +43,28 @@ const getTicketValues = async (walletContext, setTicketValues) => {
         sponsorship,
         prizeStrategy,
       } = poolBatch.pool
+      console.log(poolBatch.pool)
 
       if (ticket) {
+        const etherplexSponsorshipContract = contract(
+          'sponsorship',
+          ControlledTokenAbi,
+          sponsorship[0]
+        )
+
+        const usersAddress = walletContext.state.address
+        const values = await batch(
+          provider,
+          etherplexSponsorshipContract
+            .allowance(usersAddress, poolContractAddress)
+            .balanceOf(usersAddress)
+            .name()
+            .symbol()
+            .totalSupply()
+        )
+        console.log(values)
+
+
         console.log(ticket[0])
         const etherplexTicketContract = contract(
           'ticket',
@@ -48,7 +72,7 @@ const getTicketValues = async (walletContext, setTicketValues) => {
           ticket[0]
         )
 
-        const usersAddress = walletContext.state.address
+        // const usersAddress = walletContext.state.address
         const ticketValues = await batch(
           provider,
           etherplexTicketContract
