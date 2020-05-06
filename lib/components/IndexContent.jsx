@@ -1,9 +1,13 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { ethers } from 'ethers'
 
 import { Button } from 'lib/components/Button'
 import { Forms } from 'lib/components/Forms'
 import { MainPanel } from 'lib/components/MainPanel'
 import { WalletContext } from 'lib/components/WalletContextProvider'
+
+import { getChainValues } from 'lib/utils/getChainValues'
+import { getEthBalance } from 'lib/utils/getEthBalance'
 
 import PoolIcon from 'assets/images/holidays.svg'
 
@@ -12,6 +16,22 @@ export const IndexContent = (
 ) => {
   const walletContext = useContext(WalletContext)
 
+  const [ethBalance, setEthBalance] = useState(ethers.utils.bigNumberify(0))
+  const [chainValues, setChainValues] = useState({
+    usersTicketBalance: ethers.utils.bigNumberify(0),
+    usersERC20Allowance: ethers.utils.bigNumberify(0),
+    usersERC20Balance: ethers.utils.bigNumberify(0),
+  })
+
+  useEffect(() => {
+    getChainValues(walletContext, setChainValues)
+  }, [walletContext])
+
+  useEffect(() => {
+    getEthBalance(walletContext, setEthBalance)
+  }, [walletContext])
+
+
   const handleConnect = (e) => {
     e.preventDefault()
 
@@ -19,7 +39,6 @@ export const IndexContent = (
   }
 
   const address = walletContext._onboard.getState().address
-  console.log(address);
   
   return <>
     <div
@@ -40,8 +59,12 @@ export const IndexContent = (
 
     {address ?
       <>
-        <MainPanel />
+        <MainPanel
+          ethBalance={ethBalance}
+          chainValues={chainValues}
+        />
         <Forms
+          chainValues={chainValues}
           {...props}
         />
       </> : <>

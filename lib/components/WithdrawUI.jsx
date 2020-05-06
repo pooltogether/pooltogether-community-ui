@@ -3,21 +3,21 @@ import { ethers } from 'ethers'
 
 import PeriodicPrizePoolAbi from 'lib/abis/PeriodicPrizePoolAbi'
 
-import { DepositForm } from 'lib/components/DepositForm'
-// import { DepositPanel } from 'lib/components/DepositPanel'
+import { WithdrawForm } from 'lib/components/WithdrawForm'
+// import { WithdrawPanel } from 'lib/components/WithdrawPanel'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { getPoolContractAddress } from 'lib/utils/getPoolContractAddress'
 import { poolToast } from 'lib/utils/poolToast'
 
-const handleSubmit = async (setTx, walletContext, depositAmount) => {
+const handleSubmit = async (setTx, walletContext, withdrawAmount) => {
   const poolContractAddress = getPoolContractAddress(walletContext)
 
   if (
-    !depositAmount
+    !withdrawAmount
   ) {
-    poolToast.error(`Deposit Amount needs to be filled in`)
-    console.error(`depositAmount needs to be filled in!`)
+    poolToast.error(`Withdraw Amount needs to be filled in`)
+    console.error(`withdrawAmount needs to be filled in!`)
     return
   }
 
@@ -37,8 +37,8 @@ const handleSubmit = async (setTx, walletContext, depositAmount) => {
   )
 
   try {
-    const newTx = await poolContract.mintTickets(
-      ethers.utils.parseEther(depositAmount),
+    const newTx = await poolContract.redeemTicketsInstantly(
+      ethers.utils.parseEther(withdrawAmount),
       {
         gasLimit: 200000,
       }
@@ -50,8 +50,6 @@ const handleSubmit = async (setTx, walletContext, depositAmount) => {
       sent: true,
     }))
 
-
-
     await newTx.wait()
 
     setTx(tx => ({
@@ -59,7 +57,7 @@ const handleSubmit = async (setTx, walletContext, depositAmount) => {
       completed: true,
     }))
 
-    poolToast.success('Deposit transaction complete!')
+    poolToast.success('Withdraw transaction complete!')
   } catch (e) {
     setTx(tx => ({
       ...tx,
@@ -77,10 +75,10 @@ const handleSubmit = async (setTx, walletContext, depositAmount) => {
 }
 
 
-export const DepositUI = (props) => {
+export const WithdrawUI = (props) => {
   const walletContext = useContext(WalletContext)
 
-  const [depositAmount, setDepositAmount] = useState('')
+  const [withdrawAmount, setWithdrawAmount] = useState('')
 
   const [tx, setTx] = useState({
     inWallet: false,
@@ -93,22 +91,22 @@ export const DepositUI = (props) => {
   return <>
     
     {!txInFlight ? <>
-      <DepositForm
+      <WithdrawForm
         handleSubmit={(e) => {
           e.preventDefault()
 
-          handleSubmit(setTx, walletContext, depositAmount)
+          handleSubmit(setTx, walletContext, withdrawAmount)
         }}
         vars={{
-          depositAmount,
+          withdrawAmount,
         }}
         stateSetters={{
-          setDepositAmount,
+          setWithdrawAmount,
         }}
       />
     </> : <>
       <TxMessage
-        txType='Deposit to Pool'
+        txType='Withdraw to Pool'
         tx={tx}
       />
     </>}

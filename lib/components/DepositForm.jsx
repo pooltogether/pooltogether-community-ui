@@ -1,4 +1,5 @@
 import React from 'react'
+import classnames from 'classnames'
 
 import { Button } from 'lib/components/Button'
 import { Input } from 'lib/components/Input'
@@ -8,15 +9,14 @@ export const DepositForm = (props) => {
     handleSubmit,
     vars,
     stateSetters,
+    disabled,
   } = props
 
-  const {
-    depositAmount,
-  } = vars
-
-  const {
-    setDepositAmount,
-  } = stateSetters
+  let depositAmount, setDepositAmount
+  if (vars && stateSetters) {
+    depositAmount = vars.depositAmount
+    setDepositAmount = vars.setDepositAmount
+  }
 
   return <>
     <form
@@ -28,9 +28,23 @@ export const DepositForm = (props) => {
         Make a deposit:
       </div>
 
+      {disabled && <>
+        <div
+          className='bg-purple-800 rounded-lg text-center w-3/4 mx-auto px-4 py-3 text-sm sm:text-base lg:text-lg text-purple-300'
+        >
+          Unlock deposits first by providing the pool with a DAI spend allowance.
+        </div>
+      </>}
+
       <label
         htmlFor='depositAmount'
-        className='text-purple-300 hover:text-white trans'
+        className={classnames(
+          'trans',
+          {
+            'text-purple-700 cursor-not-allowed': disabled,
+            'text-purple-300 hover:text-white': !disabled,
+          }
+        )}
       >
         Deposit amount <span className='text-purple-600 italic'> (in DAI)</span>
       </label>
@@ -38,6 +52,7 @@ export const DepositForm = (props) => {
         id='depositAmount'
         required
         autoFocus
+        disabled={disabled}
         type='number'
         pattern='\d+'
         onChange={(e) => setDepositAmount(e.target.value)}
@@ -48,7 +63,7 @@ export const DepositForm = (props) => {
         className='mt-10 mb-0'
       >
         <Button>
-          Deposit        
+          {disabled ? 'Unlock Deposits' : 'Make Deposit'}
         </Button>
       </div>
     </form>

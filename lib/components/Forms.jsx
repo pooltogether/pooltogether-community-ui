@@ -1,10 +1,15 @@
 import React from 'react'
 import classnames from 'classnames'
 
+import { UnlockDepositUI } from 'lib/components/UnlockDepositUI'
 import { DepositUI } from 'lib/components/DepositUI'
-// import { WithdrawUI } from 'lib/components/WithdrawUI'
+import { WithdrawUI } from 'lib/components/WithdrawUI'
 
 export const Forms = (props) => {
+  const {
+    chainValues
+  } = props
+
   return <>
     <div
       className='flex flex-col sm:flex-row'
@@ -15,8 +20,14 @@ export const Forms = (props) => {
           '-mx-8 sm:-ml-8 sm:mr-4 lg:-ml-12 lg:mr-8',
         )}
       >
-        <DepositUI
-        />
+        {chainValues.usersERC20Allowance.gt(0) ?
+          <DepositUI
+            chainValues={chainValues}
+          /> :
+          <UnlockDepositUI
+            chainValues={chainValues}
+          />
+        }
       </div>
       <div
         className={classnames(
@@ -24,10 +35,9 @@ export const Forms = (props) => {
           '-mx-8 sm:ml-4 sm:-mr-8 lg:ml-8 lg:-mr-12',
         )}
       >
-        <DepositUI
+        <WithdrawUI
+          chainValues={chainValues}
         />
-        {/* <WithdrawUI
-        /> */}
       </div>
     </div>    
   </>

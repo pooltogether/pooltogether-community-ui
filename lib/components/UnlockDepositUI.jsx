@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { ethers } from 'ethers'
 
-import PeriodicPrizePoolAbi from 'lib/abis/PeriodicPrizePoolAbi'
+import ERC20Abi from '@pooltogether/pooltogether-contracts/abis/ERC20'
 
 import { DepositForm } from 'lib/components/DepositForm'
 // import { DepositPanel } from 'lib/components/DepositPanel'
@@ -10,37 +10,29 @@ import { WalletContext } from 'lib/components/WalletContextProvider'
 import { getPoolContractAddress } from 'lib/utils/getPoolContractAddress'
 import { poolToast } from 'lib/utils/poolToast'
 
-const handleSubmit = async (setTx, walletContext, depositAmount) => {
+const handleSubmit = async (setTx, walletContext, chainValues) => {
   const poolContractAddress = getPoolContractAddress(walletContext)
-
-  if (
-    !depositAmount
-  ) {
-    poolToast.error(`Deposit Amount needs to be filled in`)
-    console.error(`depositAmount needs to be filled in!`)
-    return
-  }
 
   setTx(tx => ({
     ...tx,
     inWallet: true
   }))
 
-
   const provider = walletContext.state.provider
   const signer = provider.getSigner()
 
-  const poolContract = new ethers.Contract(
-    poolContractAddress,
-    PeriodicPrizePoolAbi,
+  const erc20Contract = new ethers.Contract(
+    chainValues.erc20ContractAddress,
+    ERC20Abi,
     signer
   )
 
   try {
-    const newTx = await poolContract.mintTickets(
-      ethers.utils.parseEther(depositAmount),
+    const newTx = await erc20Contract.approve(
+      poolContractAddress,
+      ethers.utils.parseEther('1000000000'),
       {
-        gasLimit: 200000,
+        gasLimit: 100000,
       }
     )
 
@@ -50,8 +42,6 @@ const handleSubmit = async (setTx, walletContext, depositAmount) => {
       sent: true,
     }))
 
-
-
     await newTx.wait()
 
     setTx(tx => ({
@@ -59,7 +49,7 @@ const handleSubmit = async (setTx, walletContext, depositAmount) => {
       completed: true,
     }))
 
-    poolToast.success('Deposit transaction complete!')
+    poolToast.success('Unlock Allowance transaction complete!')
   } catch (e) {
     setTx(tx => ({
       ...tx,
@@ -77,10 +67,12 @@ const handleSubmit = async (setTx, walletContext, depositAmount) => {
 }
 
 
-export const DepositUI = (props) => {
-  const walletContext = useContext(WalletContext)
+export const UnlockDepositUI = (props) => {
+  const {
+    chainValues
+  } = props
 
-  const [depositAmount, setDepositAmount] = useState('')
+  const walletContext = useContext(WalletContext)
 
   const [tx, setTx] = useState({
     inWallet: false,
@@ -91,24 +83,18 @@ export const DepositUI = (props) => {
   const txInFlight = tx.inWallet || tx.sent
 
   return <>
-    
     {!txInFlight ? <>
       <DepositForm
+        disabled
         handleSubmit={(e) => {
           e.preventDefault()
 
-          handleSubmit(setTx, walletContext, depositAmount)
-        }}
-        vars={{
-          depositAmount,
-        }}
-        stateSetters={{
-          setDepositAmount,
+          handleSubmit(setTx, walletContext, chainValues)
         }}
       />
     </> : <>
       <TxMessage
-        txType='Deposit to Pool'
+        txType='Unlock Token Deposits'
         tx={tx}
       />
     </>}
