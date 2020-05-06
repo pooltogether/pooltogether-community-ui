@@ -41,7 +41,7 @@ const handleSubmit = async (setTx, walletContext, depositAmount) => {
     const newTx = await poolContract.mintTickets(
       ethers.utils.parseEther(depositAmount),
       {
-        gasLimit: 300000,
+        gasLimit: 450000,
       }
     )
 

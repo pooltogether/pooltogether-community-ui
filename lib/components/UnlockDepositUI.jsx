@@ -31,7 +31,7 @@ const handleSubmit = async (setTx, walletContext, chainValues) => {
   try {
     console.log({ chainValues})
     const newTx = await erc20Contract.approve(
-      poolContractAddress,
+      chainValues.ticketAddress,
       ethers.utils.parseEther('1000000000'),
       {
         gasLimit: 100000,

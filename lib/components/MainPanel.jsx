@@ -19,7 +19,7 @@ export const MainPanel = (props) => {
     <div
       className={classnames(
         'flex flex-col sm:flex-row justify-between',
-        'bg-purple-1200 py-8 px-4 sm:p-8 sm:py-4 rounded-xl text-base sm:text-lg mb-12',
+        'py-8 px-4 sm:p-8 sm:py-4 rounded-xl text-base sm:text-lg mb-12',
         '-mx-8 sm:-mx-8 lg:-mx-12',
       )}
     >
