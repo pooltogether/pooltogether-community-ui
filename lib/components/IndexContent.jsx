@@ -19,7 +19,8 @@ export const IndexContent = (
   }
 
   const address = walletContext._onboard.getState().address
-
+  console.log(address);
+  
   return <>
     <div
       className='mt-10 mb-10 sm:mb-20 lg:w-2/3'

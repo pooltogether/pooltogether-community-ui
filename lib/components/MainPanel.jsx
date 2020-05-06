@@ -17,13 +17,13 @@ const getTicketValues = async (walletContext, setTicketValues) => {
     const chainId = digChainIdFromWalletState(walletContext)
     const poolContractAddress = ADDRESSES[chainId]['POOL_CONTRACT_ADDRESS']
     const etherplexPoolContract = contract(
-      'PeriodicPrizePool',
+      'pool',
       PeriodicPrizePoolAbi,
       poolContractAddress
     )
 
     try {
-      const poolValues = await batch(
+      const poolBatch = await batch(
         provider,
         etherplexPoolContract
           .interestPool()
@@ -31,17 +31,19 @@ const getTicketValues = async (walletContext, setTicketValues) => {
           .sponsorship()
           .prizeStrategy()
       )
+      console.log(poolBatch)
 
       const {
         interestPool,
         ticket,
         sponsorship,
         prizeStrategy,
-      } = poolValues.PeriodicPrizePool
+      } = poolBatch.pool
 
       if (ticket) {
+        console.log(ticket[0])
         const etherplexTicketContract = contract(
-          'Ticket',
+          'ticket',
           TicketAbi,
           ticket[0]
         )
@@ -50,16 +52,21 @@ const getTicketValues = async (walletContext, setTicketValues) => {
         const ticketValues = await batch(
           provider,
           etherplexTicketContract
+            .allowance(usersAddress, poolContractAddress)
             .balanceOf(usersAddress)
+            .name()
+            .symbol()
+            .totalSupply()
         )
-        console.log({ ticketValues})
+        console.log(ticketValues)
       }
     } catch (e) {
-      console.error(e)
+      console.log(e.message)
+      // console.error(e)
     }
     
   } else {
-    console.warn('no provider?')
+    // console.warn('no provider?')
   }
 }
 
