@@ -10,10 +10,13 @@ export const UserStats = (props) => {
   } = props
   
   const {
+    erc20Decimals,
     usersERC20Balance,
     usersERC20Allowance,
     usersTicketBalance,
   } = chainValues
+  
+  const decimals = erc20Decimals
 
   return <>
     <div
@@ -40,7 +43,7 @@ export const UserStats = (props) => {
           className='text-purple-400'
         >{chainValues.erc20Symbol || 'TOKEN'} Balance:</strong>
         <br />
-        {displayAmountInEther(usersERC20Balance, { precision: 2 })} 
+        {displayAmountInEther(usersERC20Balance, { precision: 2, decimals })} 
       </div>
 
       {usersERC20Allowance.lte(0) && <>
@@ -52,7 +55,7 @@ export const UserStats = (props) => {
               className='text-purple-400'
             >{chainValues.erc20Symbol || 'TOKEN'} Allowance:</strong>
             <br />
-            {displayAmountInEther(usersERC20Allowance, { precision: 2 })}
+            {displayAmountInEther(usersERC20Allowance, { precision: 2, decimals })}
           </span>
         </div>
       </>}
@@ -64,7 +67,7 @@ export const UserStats = (props) => {
           className='text-purple-400'
         >Ticket Balance:</strong>
         <br />
-        {displayAmountInEther(usersTicketBalance, { precision: 2 })}
+        {displayAmountInEther(usersTicketBalance, { precision: 2, decimals })}
       </div>
       {/* <DepositPanel
       /> */}

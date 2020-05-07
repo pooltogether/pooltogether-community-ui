@@ -1,8 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
 
-import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
-
 export const PoolControls = (props) => {
   const {
     chainValues

@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 
 import { Button } from 'lib/components/Button'
 import { LoadingDots } from 'lib/components/LoadingDots'
-import { AdminActionsUI } from 'lib/components/AdminActionsUI'
+import { PoolActionsUI } from 'lib/components/PoolActionsUI'
 import { UserActionsUI } from 'lib/components/UserActionsUI'
 import { UserStats } from 'lib/components/UserStats'
 import { WalletContext } from 'lib/components/WalletContextProvider'
@@ -72,10 +72,15 @@ export const PoolUI = (
             Fetching chain values ...
           </div>
         : <>
-          <AdminActionsUI
-            chainValues={chainValues}
-            poolAddresses={poolAddresses}
-          />
+          <div className='bg-lightPurple-800 p-10 text-center rounded-lg'>
+            Pool address: {poolAddresses.pool}
+            <hr/>
+            <PoolActionsUI
+              chainValues={chainValues}
+              poolAddresses={poolAddresses}
+            />
+          </div>
+
           <UserStats
             ethBalance={ethBalance}
             chainValues={chainValues}
