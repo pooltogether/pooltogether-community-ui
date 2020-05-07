@@ -43,7 +43,7 @@ export const MainPanel = (props) => {
         {displayAmountInEther(usersERC20Balance, { precision: 2 })} 
       </div>
 
-      {/* {usersERC20Allowance.lte(0) && <> */}
+      {usersERC20Allowance.lte(0) && <>
         <div
             className='w-1/4 rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
           >
@@ -55,7 +55,7 @@ export const MainPanel = (props) => {
             {displayAmountInEther(usersERC20Allowance, { precision: 2 })}
           </span>
         </div>
-      {/* </>} */}
+      </>}
 
       <div
         className='w-1/4 rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
