@@ -1,7 +1,7 @@
 // import App from 'next/app'
 import React, { useState } from 'react'
 import { ethers } from 'ethers'
-import Onboard from 'bnc-onboard'
+import Onboard from '@pooltogether/bnc-onboard'
 import Cookies from 'js-cookie'
 
 const debug = require('debug')('WalletContextProvider')
@@ -54,7 +54,7 @@ let _onboard
 
 const initializeOnboard = (setOnboardState) => {
   _onboard = Onboard({
-    dappId: '77ae9152-5956-40aa-b745-4bb96d97fdfb',
+    dappId: '2cbf96ae-2e31-4b16-bb75-b28c430bb1b1',
     networkId: 42,
     darkMode: true,
     walletSelect: {

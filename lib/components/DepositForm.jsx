@@ -26,7 +26,7 @@ export const DepositForm = (props) => {
       <div
         className='font-bold mb-4 py-2 text-lg sm:text-xl lg:text-2xl'
       >
-        Make a deposit:
+        Deposit:
       </div>
 
       {disabled && <>

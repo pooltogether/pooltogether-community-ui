@@ -1238,6 +1238,31 @@
     web3-eth-contract "1.2.2"
     web3-utils "1.2.2"
 
+"@pooltogether/bnc-onboard@^1.7.8":
+  version "1.7.8"
+  resolved "https://registry.yarnpkg.com/@pooltogether/bnc-onboard/-/bnc-onboard-1.7.8.tgz#5b94d819dadd358a771f8726845f31b1325ade26"
+  integrity sha512-npJTLsQFGmtqjnSR5m5MFm0UUy+xT+zLCSSBkJLzbihdZENnlWzT5MOaVvFHEnEUTK3U6irJfR8Os7ImD3zhsQ==
+  dependencies:
+    "@ledgerhq/hw-app-eth" "^5.7.0"
+    "@ledgerhq/hw-transport-u2f" "^5.7.0"
+    "@portis/web3" "^2.0.0-beta.42"
+    "@toruslabs/torus-embed" "^1.3.0"
+    "@unilogin/provider" "^0.5.21"
+    "@walletconnect/web3-provider" "^1.0.0-beta.47"
+    authereum "^0.0.4-beta.131"
+    bignumber.js "^9.0.0"
+    bnc-sdk "2.1.1"
+    bowser "^2.5.2"
+    ethereumjs-tx "^2.1.2"
+    ethereumjs-util "^6.2.0"
+    ethereumjs-wallet "^0.6.3"
+    fortmatic "^0.8.2"
+    hdkey "^1.1.1"
+    regenerator-runtime "^0.13.3"
+    squarelink "^1.1.4"
+    trezor-connect "7.0.1"
+    web3-provider-engine "^15.0.4"
+
 "@pooltogether/etherplex@^0.2.0":
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@pooltogether/etherplex/-/etherplex-0.2.0.tgz#99e6dbc32b7ae1ea1b5a9fb3cac2be8443cdcee6"
@@ -3062,31 +3087,6 @@ bn.js@^5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-5.1.1.tgz#48efc4031a9c4041b9c99c6941d903463ab62eb5"
   integrity sha512-IUTD/REb78Z2eodka1QZyyEk66pciRcP6Sroka0aI3tG/iwIdYLrBD62RsubR7vqdt3WyX8p4jxeatzmRSphtA==
-
-bnc-onboard@^1.7.7:
-  version "1.7.8"
-  resolved "https://registry.yarnpkg.com/bnc-onboard/-/bnc-onboard-1.7.8.tgz#4f2823e546778ef0928b3d66f73801a60093913a"
-  integrity sha512-22y97M+X9PPQWUvLsV+HVRBnwrUXEoX2asgw0B7fay9bB4xif1wM4jhvHe49N56zDdt3ksKy9dqfF+JpTuReeA==
-  dependencies:
-    "@ledgerhq/hw-app-eth" "^5.7.0"
-    "@ledgerhq/hw-transport-u2f" "^5.7.0"
-    "@portis/web3" "^2.0.0-beta.42"
-    "@toruslabs/torus-embed" "^1.3.0"
-    "@unilogin/provider" "^0.5.21"
-    "@walletconnect/web3-provider" "^1.0.0-beta.47"
-    authereum "^0.0.4-beta.131"
-    bignumber.js "^9.0.0"
-    bnc-sdk "2.1.1"
-    bowser "^2.5.2"
-    ethereumjs-tx "^2.1.2"
-    ethereumjs-util "^6.2.0"
-    ethereumjs-wallet "^0.6.3"
-    fortmatic "^0.8.2"
-    hdkey "^1.1.1"
-    regenerator-runtime "^0.13.3"
-    squarelink "^1.1.4"
-    trezor-connect "7.0.1"
-    web3-provider-engine "^15.0.4"
 
 bnc-sdk@2.1.1:
   version "2.1.1"

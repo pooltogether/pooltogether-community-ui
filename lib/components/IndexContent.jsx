@@ -8,7 +8,7 @@ import { MainPanel } from 'lib/components/MainPanel'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 
 import { useInterval } from 'lib/hooks/useInterval'
-import { getChainValues } from 'lib/utils/getChainValues'
+import { getChainValues, getPoolAddresses } from 'lib/utils/getChainValues'
 import { getEthBalance } from 'lib/utils/getEthBalance'
 
 import PoolIcon from 'assets/images/holidays.svg'
@@ -19,6 +19,7 @@ export const IndexContent = (
   const walletContext = useContext(WalletContext)
 
   const [ethBalance, setEthBalance] = useState(ethers.utils.bigNumberify(0))
+  const [poolAddresses, setPoolAddresses] = useState({})
   const [chainValues, setChainValues] = useState({
     loading: true,
     erc20Symbol: 'TOKEN',
@@ -28,19 +29,18 @@ export const IndexContent = (
   })
 
   useInterval(() => {
-    getChainValues(walletContext, setChainValues)
+    getPoolAddresses(walletContext, poolAddresses, setPoolAddresses)
+    getChainValues(walletContext, poolAddresses, chainValues, setChainValues)
   }, 5000)
 
   useEffect(() => {
-    if (address) {
-      getChainValues(walletContext, setChainValues)
-    }
-  }, [walletContext, address])
+    getPoolAddresses(walletContext, poolAddresses, setPoolAddresses)
+    getChainValues(walletContext, poolAddresses, chainValues, setChainValues)
+  }, [walletContext, address, poolAddresses])
 
   useEffect(() => {
     getEthBalance(walletContext, setEthBalance)
   }, [walletContext])
-
 
   const handleConnect = (e) => {
     e.preventDefault()
