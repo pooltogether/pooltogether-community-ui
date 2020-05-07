@@ -41,7 +41,7 @@ const handleSubmit = async (setTx, walletContext, withdrawAmount) => {
     const newTx = await poolContract.redeemTicketsInstantly(
       ethers.utils.parseEther(withdrawAmount),
       {
-        gasLimit: 300000,
+        gasLimit: 500000,
       }
     )
 
