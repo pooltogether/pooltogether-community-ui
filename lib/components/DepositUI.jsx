@@ -95,9 +95,9 @@ export const DepositUI = (props) => {
   }
 
   return <>
-    
     {!txInFlight ? <>
       <DepositForm
+        chainValues={props.chainValues}
         handleSubmit={(e) => {
           e.preventDefault()
 

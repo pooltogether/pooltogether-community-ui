@@ -3,9 +3,11 @@ import { ethers } from 'ethers'
 
 import { Button } from 'lib/components/Button'
 import { Forms } from 'lib/components/Forms'
+import { LoadingDots } from 'lib/components/LoadingDots'
 import { MainPanel } from 'lib/components/MainPanel'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 
+import { useInterval } from 'lib/hooks/useInterval'
 import { getChainValues } from 'lib/utils/getChainValues'
 import { getEthBalance } from 'lib/utils/getEthBalance'
 
@@ -18,14 +20,22 @@ export const IndexContent = (
 
   const [ethBalance, setEthBalance] = useState(ethers.utils.bigNumberify(0))
   const [chainValues, setChainValues] = useState({
+    loading: true,
+    erc20Symbol: 'TOKEN',
     usersTicketBalance: ethers.utils.bigNumberify(0),
     usersERC20Allowance: ethers.utils.bigNumberify(0),
     usersERC20Balance: ethers.utils.bigNumberify(0),
   })
 
-  useEffect(() => {
+  useInterval(() => {
     getChainValues(walletContext, setChainValues)
-  }, [walletContext])
+  }, 5000)
+
+  useEffect(() => {
+    if (address) {
+      getChainValues(walletContext, setChainValues)
+    }
+  }, [walletContext, address])
 
   useEffect(() => {
     getEthBalance(walletContext, setEthBalance)
@@ -59,14 +69,24 @@ export const IndexContent = (
 
     {address ?
       <>
-        <MainPanel
-          ethBalance={ethBalance}
-          chainValues={chainValues}
-        />
-        <Forms
-          chainValues={chainValues}
-          {...props}
-        />
+        {chainValues.loading ?
+          <div
+            className='text-center text-xl'
+          >
+            <LoadingDots />
+            <br/>
+            Fetching chain values ...
+          </div>
+        : <>
+          <MainPanel
+            ethBalance={ethBalance}
+            chainValues={chainValues}
+          />
+          <Forms
+            chainValues={chainValues}
+            {...props}
+          />
+        </>}
       </> : <>
       <Button
         color='green'

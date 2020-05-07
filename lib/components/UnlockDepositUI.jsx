@@ -29,9 +29,8 @@ const handleSubmit = async (setTx, walletContext, chainValues) => {
   )
 
   try {
-    console.log({ chainValues})
     const newTx = await erc20Contract.approve(
-      chainValues.ticketAddress,
+      poolContractAddress,
       ethers.utils.parseEther('1000000000'),
       {
         gasLimit: 100000,
@@ -89,6 +88,7 @@ export const UnlockDepositUI = (props) => {
   return <>
     {!txInFlight ? <>
       <DepositForm
+        chainValues={props.chainValues}
         disabled
         handleSubmit={(e) => {
           e.preventDefault()

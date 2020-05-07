@@ -41,7 +41,7 @@ const handleSubmit = async (setTx, walletContext, withdrawAmount) => {
     const newTx = await poolContract.redeemTicketsInstantly(
       ethers.utils.parseEther(withdrawAmount),
       {
-        gasLimit: 200000,
+        gasLimit: 300000,
       }
     )
 
@@ -97,9 +97,9 @@ export const WithdrawUI = (props) => {
   }
 
   return <>
-    
     {!txInFlight ? <>
       <WithdrawForm
+        chainValues={props.chainValues}
         handleSubmit={(e) => {
           e.preventDefault()
 

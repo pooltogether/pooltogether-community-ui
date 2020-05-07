@@ -100,6 +100,8 @@ const doConnectWallet = async (walletType) => {
   if (currentState.wallet.type) {
     debug("run walletCheck")
     await _onboard.walletCheck()
+    debug("walletCheck done")
+
   }
 }
 
@@ -176,7 +178,7 @@ export const WalletContextProvider = (props) => {
   }
 
   debug('re-render')
-
+  
   return <WalletContext.Provider
     value={{
       handleConnectWallet,

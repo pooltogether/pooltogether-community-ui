@@ -6,6 +6,7 @@ import { Input } from 'lib/components/Input'
 
 export const WithdrawForm = (props) => {
   const {
+    chainValues,
     handleSubmit,
     vars,
     stateSetters,
@@ -14,7 +15,7 @@ export const WithdrawForm = (props) => {
   let withdrawAmount, setWithdrawAmount
   if (vars && stateSetters) {
     withdrawAmount = vars.withdrawAmount
-    setWithdrawAmount = vars.setWithdrawAmount
+    setWithdrawAmount = stateSetters.setWithdrawAmount
   }
 
   return <>
@@ -31,7 +32,7 @@ export const WithdrawForm = (props) => {
         htmlFor='withdrawAmount'
         className='trans text-purple-300 hover:text-white'
       >
-        Withdraw amount <span className='text-purple-600 italic'> (in DAI)</span>
+        Withdraw amount <span className='text-purple-600 italic'> (in {chainValues.erc20Symbol || 'TOKEN'})</span>
       </label>
       <Input
         id='withdrawAmount'

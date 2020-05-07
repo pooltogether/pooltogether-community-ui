@@ -38,24 +38,24 @@ export const MainPanel = (props) => {
       >
         <strong
           className='text-purple-400'
-        >{chainValues.erc20Symbol} Balance:</strong>
+        >{chainValues.erc20Symbol || 'TOKEN'} Balance:</strong>
         <br />
         {displayAmountInEther(usersERC20Balance, { precision: 2 })} 
       </div>
 
-      {usersERC20Allowance.lte(0) && <>
+      {/* {usersERC20Allowance.lte(0) && <> */}
         <div
             className='w-1/4 rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
           >
           <span className='text-yellow-400'>
             <strong
               className='text-purple-400'
-            >{chainValues.erc20Symbol} Allowance:</strong>
+            >{chainValues.erc20Symbol || 'TOKEN'} Allowance:</strong>
             <br />
             {displayAmountInEther(usersERC20Allowance, { precision: 2 })}
           </span>
         </div>
-      </>}
+      {/* </>} */}
 
       <div
         className='w-1/4 rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'

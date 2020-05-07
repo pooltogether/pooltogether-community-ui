@@ -6,6 +6,7 @@ import { Input } from 'lib/components/Input'
 
 export const DepositForm = (props) => {
   const {
+    chainValues,
     handleSubmit,
     vars,
     stateSetters,
@@ -46,7 +47,7 @@ export const DepositForm = (props) => {
           }
         )}
       >
-        Deposit amount <span className='text-purple-600 italic'> (in DAI)</span>
+        Deposit amount <span className='text-purple-600 italic'> (in {chainValues.erc20Symbol || 'TOKEN'})</span>
       </label>
       <Input
         id='depositAmount'
