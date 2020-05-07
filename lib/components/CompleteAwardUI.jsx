@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react'
-import classnames from 'classnames'
 import { ethers } from 'ethers'
 
 import PeriodicPrizePoolAbi from 'lib/abis/PeriodicPrizePoolAbi'
@@ -7,13 +6,9 @@ import PeriodicPrizePoolAbi from 'lib/abis/PeriodicPrizePoolAbi'
 import { Button } from 'lib/components/Button'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
-import { getPoolContractAddress } from 'lib/utils/getPoolContractAddress'
 import { poolToast } from 'lib/utils/poolToast'
 
-const handleCompleteAward = async (setTx, walletContext) => {
-  const poolContractAddress = getPoolContractAddress(walletContext)
-
+const handleCompleteAward = async (setTx, poolAddresses, walletContext) => {
   setTx(tx => ({
     ...tx,
     inWallet: true
@@ -23,7 +18,7 @@ const handleCompleteAward = async (setTx, walletContext) => {
   const signer = provider.getSigner()
 
   const poolContract = new ethers.Contract(
-    poolContractAddress,
+    poolAddresses.pool,
     PeriodicPrizePoolAbi,
     signer
   )
@@ -84,7 +79,7 @@ export const CompleteAwardUI = (props) => {
         <Button
           onClick={(e) => {
             e.preventDefault()
-            handleCompleteAward(setTx, walletContext)
+            handleCompleteAward(setTx, props.poolAddresses, walletContext)
           }}
           color='green'
           size='sm'

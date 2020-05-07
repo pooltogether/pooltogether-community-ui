@@ -7,13 +7,9 @@ import PeriodicPrizePoolAbi from 'lib/abis/PeriodicPrizePoolAbi'
 import { Button } from 'lib/components/Button'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
-import { getPoolContractAddress } from 'lib/utils/getPoolContractAddress'
 import { poolToast } from 'lib/utils/poolToast'
 
-const handleStartAward = async (setTx, walletContext) => {
-  const poolContractAddress = getPoolContractAddress(walletContext)
-
+const handleStartAward = async (setTx, poolAddresses, walletContext) => {
   setTx(tx => ({
     ...tx,
     inWallet: true
@@ -23,7 +19,7 @@ const handleStartAward = async (setTx, walletContext) => {
   const signer = provider.getSigner()
 
   const poolContract = new ethers.Contract(
-    poolContractAddress,
+    poolAddresses.pool,
     PeriodicPrizePoolAbi,
     signer
   )
@@ -84,7 +80,7 @@ export const StartAwardUI = (props) => {
         <Button
           onClick={(e) => {
             e.preventDefault()
-            handleStartAward(setTx, walletContext)
+            handleStartAward(setTx, props.poolAddresses, walletContext)
           }}
           color='green'
           size='sm'

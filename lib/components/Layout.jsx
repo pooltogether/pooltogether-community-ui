@@ -6,6 +6,8 @@ import { Meta } from 'lib/components/Meta'
 import { Nav } from 'lib/components/Nav'
 import { StaticNetworkNotificationBanner } from 'lib/components/StaticNetworkNotificationBanner'
 
+import PoolIcon from 'assets/images/holidays.svg'
+
 export const Layout = (props) => {
   const {
     children
@@ -42,6 +44,22 @@ export const Layout = (props) => {
               flex: 1
             }}
           >
+            <div
+              className='mt-10 mb-10 sm:mb-20 lg:w-2/3'
+            >
+              <img src={PoolIcon} className='inline-block w-10 h-10 ml-2' />
+              <div
+                className='text-blue-400 title text-xl sm:text-3xl'
+              >
+                v3.0 - Reference Pool Frontend
+              </div>
+
+              <a
+                href='https://docs.pooltogether.com/contracts/prize-pool'
+                className='trans'
+              >View documentation</a>
+            </div>
+            
             {React.cloneElement(children, {
               ...props,
             })}

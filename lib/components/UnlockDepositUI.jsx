@@ -5,15 +5,11 @@ import ERC20Abi from '@pooltogether/pooltogether-contracts/abis/ERC20'
 
 import { Button } from 'lib/components/Button'
 import { DepositForm } from 'lib/components/DepositForm'
-// import { DepositPanel } from 'lib/components/DepositPanel'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import { getPoolContractAddress } from 'lib/utils/getPoolContractAddress'
 import { poolToast } from 'lib/utils/poolToast'
 
-const handleSubmit = async (setTx, walletContext, chainValues) => {
-  const poolContractAddress = getPoolContractAddress(walletContext)
-
+const handleSubmit = async (setTx, poolAddresses, walletContext) => {
   setTx(tx => ({
     ...tx,
     inWallet: true
@@ -21,16 +17,17 @@ const handleSubmit = async (setTx, walletContext, chainValues) => {
 
   const provider = walletContext.state.provider
   const signer = provider.getSigner()
+  console.log({ poolAddresses })
 
   const erc20Contract = new ethers.Contract(
-    chainValues.erc20ContractAddress,
+    poolAddresses.pool,
     ERC20Abi,
     signer
   )
 
   try {
     const newTx = await erc20Contract.approve(
-      poolContractAddress,
+      poolAddresses.pool,
       ethers.utils.parseEther('1000000000'),
       {
         gasLimit: 100000,
@@ -69,10 +66,6 @@ const handleSubmit = async (setTx, walletContext, chainValues) => {
 
 
 export const UnlockDepositUI = (props) => {
-  const {
-    chainValues
-  } = props
-
   const walletContext = useContext(WalletContext)
 
   const [tx, setTx] = useState({})
@@ -88,12 +81,12 @@ export const UnlockDepositUI = (props) => {
   return <>
     {!txInFlight ? <>
       <DepositForm
-        chainValues={props.chainValues}
+        {...props}
         disabled
         handleSubmit={(e) => {
           e.preventDefault()
 
-          handleSubmit(setTx, walletContext, chainValues)
+          handleSubmit(setTx, props.poolAddresses, walletContext)
         }}
       />
     </> : <>

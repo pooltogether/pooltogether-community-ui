@@ -5,15 +5,11 @@ import PeriodicPrizePoolAbi from 'lib/abis/PeriodicPrizePoolAbi'
 
 import { Button } from 'lib/components/Button'
 import { DepositForm } from 'lib/components/DepositForm'
-// import { DepositPanel } from 'lib/components/DepositPanel'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import { getPoolContractAddress } from 'lib/utils/getPoolContractAddress'
 import { poolToast } from 'lib/utils/poolToast'
 
-const handleSubmit = async (setTx, walletContext, depositAmount) => {
-  const poolContractAddress = getPoolContractAddress(walletContext)
-
+const handleSubmit = async (setTx, poolAddresses, walletContext, depositAmount) => {
   if (
     !depositAmount
   ) {
@@ -32,7 +28,7 @@ const handleSubmit = async (setTx, walletContext, depositAmount) => {
   const signer = provider.getSigner()
 
   const poolContract = new ethers.Contract(
-    poolContractAddress,
+    poolAddresses.pool,
     PeriodicPrizePoolAbi,
     signer
   )
@@ -101,7 +97,7 @@ export const DepositUI = (props) => {
         handleSubmit={(e) => {
           e.preventDefault()
 
-          handleSubmit(setTx, walletContext, depositAmount)
+          handleSubmit(setTx, props.poolAddresses, walletContext, depositAmount)
         }}
         vars={{
           depositAmount,

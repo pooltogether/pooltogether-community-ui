@@ -3,7 +3,7 @@ import classnames from 'classnames'
 
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 
-export const MainPanel = (props) => {
+export const UserStats = (props) => {
   const {
     ethBalance,
     chainValues,

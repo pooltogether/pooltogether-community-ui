@@ -5,7 +5,7 @@ import { UnlockDepositUI } from 'lib/components/UnlockDepositUI'
 import { DepositUI } from 'lib/components/DepositUI'
 import { WithdrawUI } from 'lib/components/WithdrawUI'
 
-export const Forms = (props) => {
+export const UserActionsUI = (props) => {
   const {
     chainValues
   } = props
@@ -22,10 +22,10 @@ export const Forms = (props) => {
       >
         {chainValues.usersERC20Allowance.gt(0) ?
           <DepositUI
-            chainValues={chainValues}
+            {...props}
           /> :
           <UnlockDepositUI
-            chainValues={chainValues}
+            {...props}
           />
         }
       </div>

@@ -5,15 +5,11 @@ import PeriodicPrizePoolAbi from 'lib/abis/PeriodicPrizePoolAbi'
 
 import { Button } from 'lib/components/Button'
 import { WithdrawForm } from 'lib/components/WithdrawForm'
-// import { WithdrawPanel } from 'lib/components/WithdrawPanel'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import { getPoolContractAddress } from 'lib/utils/getPoolContractAddress'
 import { poolToast } from 'lib/utils/poolToast'
 
-const handleSubmit = async (setTx, walletContext, withdrawAmount) => {
-  const poolContractAddress = getPoolContractAddress(walletContext)
-
+const handleSubmit = async (setTx, poolAddresses, walletContext, withdrawAmount) => {
   if (
     !withdrawAmount
   ) {
@@ -32,7 +28,7 @@ const handleSubmit = async (setTx, walletContext, withdrawAmount) => {
   const signer = provider.getSigner()
 
   const poolContract = new ethers.Contract(
-    poolContractAddress,
+    poolAddresses.pool,
     PeriodicPrizePoolAbi,
     signer
   )
@@ -99,11 +95,11 @@ export const WithdrawUI = (props) => {
   return <>
     {!txInFlight ? <>
       <WithdrawForm
-        chainValues={props.chainValues}
+        {...props}
         handleSubmit={(e) => {
           e.preventDefault()
 
-          handleSubmit(setTx, walletContext, withdrawAmount)
+          handleSubmit(setTx, props.poolAddresses, walletContext, withdrawAmount)
         }}
         vars={{
           withdrawAmount,
