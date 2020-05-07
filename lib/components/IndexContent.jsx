@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import Link from 'next/link'
 
 import { Button } from 'lib/components/Button'
 import { WalletContext } from 'lib/components/WalletContextProvider'
@@ -22,7 +23,15 @@ export const IndexContent = (
     {address ?
       <>
         Form for pool address or default pool for this network:
-        {poolContractAddress}
+        <br/>
+        <Link
+          href='/pools/[poolAddress]'
+          as={`/pools/${poolContractAddress}`}
+        >
+          <a>
+            {poolContractAddress}
+          </a>
+        </Link>
       </> : <>
       <Button
         color='green'

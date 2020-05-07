@@ -36,7 +36,7 @@ export const UserActionsUI = (props) => {
         )}
       >
         <WithdrawUI
-          chainValues={chainValues}
+          {...props}
         />
       </div>
     </div>    

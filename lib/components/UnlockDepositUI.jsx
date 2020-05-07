@@ -17,10 +17,9 @@ const handleSubmit = async (setTx, poolAddresses, walletContext) => {
 
   const provider = walletContext.state.provider
   const signer = provider.getSigner()
-  console.log({ poolAddresses })
 
   const erc20Contract = new ethers.Contract(
-    poolAddresses.pool,
+    poolAddresses.erc20,
     ERC20Abi,
     signer
   )
