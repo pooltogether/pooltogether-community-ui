@@ -4,8 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "build": "next build && next export && yarn postexport",
+    "start": "next start",
+    "postexport": "node post-export.js",
+    "distrelease": "yarn build"
   },
   "dependencies": {
     "@pooltogether/bnc-onboard": "^1.7.8",
