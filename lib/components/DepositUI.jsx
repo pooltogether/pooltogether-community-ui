@@ -9,7 +9,13 @@ import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { poolToast } from 'lib/utils/poolToast'
 
-const handleSubmit = async (setTx, poolAddresses, walletContext, depositAmount) => {
+const handleSubmit = async (
+  setTx,
+  poolAddresses,
+  walletContext,
+  depositAmount,
+  chainValues,
+) => {
   if (
     !depositAmount
   ) {
@@ -35,7 +41,7 @@ const handleSubmit = async (setTx, poolAddresses, walletContext, depositAmount) 
 
   try {
     const newTx = await poolContract.mintTickets(
-      ethers.utils.parseEther(depositAmount),
+      ethers.utils.parseUnits(depositAmount, chainValues.erc20Decimals),
       {
         gasLimit: 700000,
       }
@@ -97,7 +103,13 @@ export const DepositUI = (props) => {
         handleSubmit={(e) => {
           e.preventDefault()
 
-          handleSubmit(setTx, props.poolAddresses, walletContext, depositAmount)
+          handleSubmit(
+            setTx,
+            props.poolAddresses,
+            walletContext,
+            depositAmount,
+            props.chainValues
+          )
         }}
         vars={{
           depositAmount,

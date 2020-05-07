@@ -9,7 +9,13 @@ import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { poolToast } from 'lib/utils/poolToast'
 
-const handleSubmit = async (setTx, poolAddresses, walletContext, withdrawAmount) => {
+const handleSubmit = async (
+  setTx,
+  poolAddresses,
+  walletContext,
+  withdrawAmount,
+  chainValues
+) => {
   if (
     !withdrawAmount
   ) {
@@ -35,7 +41,7 @@ const handleSubmit = async (setTx, poolAddresses, walletContext, withdrawAmount)
 
   try {
     const newTx = await poolContract.redeemTicketsInstantly(
-      ethers.utils.parseEther(withdrawAmount),
+      ethers.utils.parseUnits(withdrawAmount, chainValues.erc20Decimals),
       {
         gasLimit: 500000,
       }
@@ -99,7 +105,13 @@ export const WithdrawUI = (props) => {
         handleSubmit={(e) => {
           e.preventDefault()
 
-          handleSubmit(setTx, props.poolAddresses, walletContext, withdrawAmount)
+          handleSubmit(
+            setTx,
+            props.poolAddresses,
+            walletContext,
+            withdrawAmount,
+            props.chainValues
+          )
         }}
         vars={{
           withdrawAmount,
