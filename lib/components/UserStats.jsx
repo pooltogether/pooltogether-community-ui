@@ -1,6 +1,8 @@
 import React from 'react'
 import classnames from 'classnames'
 
+import { BlueLineStat } from 'lib/components/BlueLineStat'
+import { StatContainer } from 'lib/components/StatContainer'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 
 export const UserStats = (props) => {
@@ -25,13 +27,13 @@ export const UserStats = (props) => {
   return <>
     <div
       className={classnames(
-        'flex flex-col sm:flex-row justify-between',
-        'py-8 px-4 sm:p-8 sm:py-4 rounded-xl text-base sm:text-lg mb-12',
-        'sm:-mx-8 lg:-mx-12',
+        // 'flex flex-col sm:flex-row justify-between',
+        'flex flex-col sm:flex-row sm:flex-wrap justify-center items-center',
+        'my-4 rounded-xl text-base sm:text-lg',
       )}
     >
       {/* <div
-        className='w-full sm:w-1/3  mx-2  rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
+        className='w-full sm:w-1/3 flex-grow rounded-lg px-4 py-1 my-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
       >
         <strong
           className='text-purple-400'
@@ -40,41 +42,26 @@ export const UserStats = (props) => {
         {displayAmountInEther(ethBalance, { precision: 2 })}
       </div> */}
 
-      <div
-        className='w-full sm:w-1/3  mx-2  rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
-      >
-        <strong
-          className='text-purple-400'
-        >Your {genericChainValues.erc20Symbol || 'TOKEN'} balance:</strong>
-        <br />
-        {displayAmountInEther(usersERC20Balance, { precision: 2, decimals })} 
-      </div>
+      <StatContainer>
+        <BlueLineStat
+          title={`Your ${genericChainValues.erc20Symbol || 'TOKEN'} balance`}
+          value={displayAmountInEther(usersERC20Balance, { precision: 2, decimals })}
+        />
+      </StatContainer>
 
-      {usersERC20Allowance.lte(0) && <>
-        <div
-            className='w-full sm:w-1/3  mx-2  rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
-          >
-          <span className='text-yellow-400'>
-            <strong
-              className='text-purple-400'
-            >{genericChainValues.erc20Symbol || 'TOKEN'} Allowance:</strong>
-            <br />
-            {displayAmountInEther(usersERC20Allowance, { precision: 2, decimals })}
-          </span>
-        </div>
-      </>}
+      <StatContainer>
+        <BlueLineStat
+          title={`${genericChainValues.erc20Symbol || 'TOKEN'} Allowance`}
+          value={displayAmountInEther(usersERC20Allowance, { precision: 0, decimals })}
+        />
+      </StatContainer>
 
-      <div
-        className='w-full sm:w-1/3  mx-2  rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
-      >
-        <strong
-          className='text-purple-400'
-        >Your ticket balance:</strong>
-        <br />
-        {displayAmountInEther(usersTicketBalance, { precision: 2, decimals })}
-      </div>
-      {/* <DepositPanel
-      /> */}
+      <StatContainer>
+        <BlueLineStat
+          title={`Your ticket balance`}
+          value={displayAmountInEther(usersTicketBalance, { precision: 2, decimals })}
+        />
+      </StatContainer>
     </div>
   </>
 }
