@@ -4,10 +4,10 @@ import { CompleteAwardUI } from 'lib/components/CompleteAwardUI'
 import { StartAwardUI } from 'lib/components/StartAwardUI'
 
 export const PoolActionsUI = (props) => {
-  if (!usersAddress) {
+  if (!props.usersAddress) {
     return null
   }
-  
+
   return <>
     <StartAwardUI
       {...props}

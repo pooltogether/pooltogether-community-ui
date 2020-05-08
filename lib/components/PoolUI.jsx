@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import { useRouter } from 'next/router'
 
-import { Button } from 'lib/components/Button'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { PoolActionsUI } from 'lib/components/PoolActionsUI'
 import { UserActionsUI } from 'lib/components/UserActionsUI'
@@ -10,20 +9,19 @@ import { UserStats } from 'lib/components/UserStats'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 
 import { useInterval } from 'lib/hooks/useInterval'
-import {
-  getGenericChainValues,
-  getUserChainValues,
-  getPoolAddresses
-} from 'lib/utils/fetchChainData'
-import { getEthBalance } from 'lib/utils/getEthBalance'
+import { fetchChainData } from 'lib/utils/fetchChainData'
+// import { getEthBalance } from 'lib/utils/getEthBalance'
 
 export const PoolUI = (
   props,
 ) => {
   const router = useRouter()
-  const walletContext = useContext(WalletContext)
-  
+  const networkName = router.query.networkName
   const pool = router.query.poolAddress
+
+  const walletContext = useContext(WalletContext)
+  const provider = walletContext.state.provider
+  const usersAddress = walletContext._onboard.getState().address
 
   try {
     ethers.utils.getAddress(pool)
@@ -48,38 +46,33 @@ export const PoolUI = (
     usersERC20Balance: ethers.utils.bigNumberify(0),
   })
 
+
   useInterval(() => {
     fetchChainData(
-      walletContext,
+      networkName,
+      usersAddress,
       poolAddresses,
       setPoolAddresses,
       setGenericChainValues,
-      setUserChainValues,
+      setUsersChainValues,
     )
   }, 5000)
 
   useEffect(() => {
     fetchChainData(
-      walletContext,
+      networkName,
+      usersAddress,
       poolAddresses,
       setPoolAddresses,
       setGenericChainValues,
-      setUserChainValues,
+      setUsersChainValues,
     )
-  }, [walletContext, address, poolAddresses])
+  }, [provider, usersAddress, poolAddresses])
 
   // useEffect(() => {
   //   getEthBalance(walletContext, setEthBalance)
   // }, [walletContext])
 
-  const handleConnect = (e) => {
-    e.preventDefault()
-
-    walletContext.handleConnectWallet()
-  }
-
-  const usersAddress = walletContext._onboard.getState().address
-  
   return <>
     {genericChainValues.loading ?
       <div
@@ -90,7 +83,7 @@ export const PoolUI = (
         Fetching chain values ...
       </div>
     : <>
-      <div className='bg-lightPurple-800 p-10 text-center rounded-lg'>
+      <div className='bg-purple-1000 p-10 text-center rounded-lg'>
         Pool address: {poolAddresses.pool}
         <hr/>
         <PoolActionsUI

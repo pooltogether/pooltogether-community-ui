@@ -16,7 +16,7 @@ export const UserActionsUI = (props) => {
           '-mx-8 sm:-ml-8 sm:mr-4 lg:-ml-12 lg:mr-8',
         )}
       >
-        {usersChainValues.usersERC20Allowance.gt(0) ?
+        {props.usersChainValues.usersERC20Allowance.gt(0) ?
           <DepositUI
             {...props}
           /> :

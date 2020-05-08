@@ -1,10 +1,20 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
+import { Button } from 'lib/components/Button'
+import { WalletContext } from 'lib/components/WalletContextProvider'
 import { WalletInfo } from 'lib/components/WalletInfo'
 
 import PoolLogo from 'assets/images/pooltogether-white-wordmark.svg'
 
 export const Nav = (props) => {
+  const walletContext = useContext(WalletContext)
+
+  const handleConnect = (e) => {
+    e.preventDefault()
+
+    walletContext.handleConnectWallet()
+  }
+
   return <>
     <div className='nav-and-footer-container'>
       <nav
