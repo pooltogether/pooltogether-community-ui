@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 
-import { Button } from 'lib/components/Button'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { WalletInfo } from 'lib/components/WalletInfo'
 
@@ -8,6 +7,8 @@ import PoolLogo from 'assets/images/pooltogether-white-wordmark.svg'
 
 export const Nav = (props) => {
   const walletContext = useContext(WalletContext)
+
+  const usersAddress = walletContext._onboard.getState().address
 
   const handleConnect = (e) => {
     e.preventDefault()
@@ -47,16 +48,17 @@ export const Nav = (props) => {
           <div
             className='mt-0 sm:mt-0 text-xxs sm:text-sm tracking-wide text-right spinner-hidden'
           >
-            <WalletInfo
-              {...props}
-            />
-            <Button
-              color='green'
-              className='button'
-              onClick={handleConnect}
-            >
-              Connect Wallet
-            </Button>
+            {usersAddress ?
+              <WalletInfo
+                {...props}
+              /> :
+              <button
+                className='font-bold rounded-full text-green-300 border-2 sm:border-4 border-green-300 hover:text-white hover:bg-lightPurple-900 text-xxs sm:text-base pt-2 pb-2 px-3 sm:px-6 trans'
+                onClick={handleConnect}
+              >
+                Connect Wallet
+              </button>
+            }
           </div>
         </div>
       </nav>
