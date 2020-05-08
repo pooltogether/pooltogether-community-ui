@@ -8,13 +8,14 @@ import { DepositForm } from 'lib/components/DepositForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { poolToast } from 'lib/utils/poolToast'
+import { sendTx } from 'lib/utils/sendTx'
 
-const handleSubmit = async (
+const handleDepositSubmit = async (
   setTx,
-  poolAddresses,
-  walletContext,
+  provider,
+  contractAddress,
   depositAmount,
-  genericChainValues,
+  decimals
 ) => {
   if (
     !depositAmount
@@ -24,64 +25,28 @@ const handleSubmit = async (
     return
   }
 
-  setTx(tx => ({
-    ...tx,
-    inWallet: true
-  }))
+  const params = [
+    ethers.utils.parseUnits(depositAmount, decimals),
+    {
+      gasLimit: 700000,
+    }
+  ]
 
-
-  const provider = walletContext.state.provider
-  const signer = provider.getSigner()
-
-  const poolContract = new ethers.Contract(
-    poolAddresses.pool,
+  await sendTx(
+    setTx,
+    provider,
+    contractAddress,
     PeriodicPrizePoolAbi,
-    signer
+    'mintTickets',
+    params,
   )
 
-  try {
-    const newTx = await poolContract.mintTickets(
-      ethers.utils.parseUnits(depositAmount, genericChainValues.erc20Decimals),
-      {
-        gasLimit: 700000,
-      }
-    )
-
-    setTx(tx => ({
-      ...tx,
-      hash: newTx.hash,
-      sent: true,
-    }))
-
-
-
-    await newTx.wait()
-
-    setTx(tx => ({
-      ...tx,
-      completed: true,
-    }))
-
-    poolToast.success('Deposit transaction complete!')
-  } catch (e) {
-    setTx(tx => ({
-      ...tx,
-      hash: '',
-      inWallet: true,
-      sent: true,
-      completed: true,
-      error: true
-    }))
-
-    poolToast.error(`Error with transaction. See JS Console`)
-
-    console.error(e.message)
-  }
+  poolToast.success('Deposit transaction complete!')
 }
-
 
 export const DepositUI = (props) => {
   const walletContext = useContext(WalletContext)
+  const provider = walletContext.state.provider
 
   const [depositAmount, setDepositAmount] = useState('')
 
@@ -102,13 +67,12 @@ export const DepositUI = (props) => {
         genericChainValues={props.genericChainValues}
         handleSubmit={(e) => {
           e.preventDefault()
-
-          handleSubmit(
+          handleDepositSubmit(
             setTx,
-            props.poolAddresses,
-            walletContext,
+            provider,
+            props.poolAddresses.pool,
             depositAmount,
-            props.genericChainValues
+            props.genericChainValues.erc20Decimals
           )
         }}
         vars={{
