@@ -1,12 +1,12 @@
 import React from 'react'
 import classnames from 'classnames'
 
+import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
+
 export const PoolControls = (props) => {
   const {
     genericChainValues
   } = props
-
-  console.log({ sec: genericChainValues.remainingSecondsToPrize})
 
   return <>
     <div
@@ -22,10 +22,10 @@ export const PoolControls = (props) => {
         <strong
           className='text-purple-400'
         >
-          Pool Total Supply:
+          Total ticket supply:
         </strong>
         <br />
-        {/* {displayAmountInEther(ethBalance, { precision: 2 })} */}
+        {displayAmountInEther(genericChainValues.ticketTotalSupply, { precision: 2 })}
       </div>
       <div
         className='w-1/4 rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'

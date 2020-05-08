@@ -9,63 +9,34 @@ import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { poolToast } from 'lib/utils/poolToast'
 
-const handleSubmit = async (setTx, poolAddresses, walletContext) => {
-  setTx(tx => ({
-    ...tx,
-    inWallet: true
-  }))
+const handleUnlockSubmit = async (
+  setTx,
+  provider,
+  contractAddress,
+) => {
+  const params = [
+    poolAddresses.pool,
+    ethers.utils.parseEther('1000000000'),
+    {
+      gasLimit: 200000
+    }
+  ]
 
-  const provider = walletContext.state.provider
-  const signer = provider.getSigner()
-
-  const erc20Contract = new ethers.Contract(
-    poolAddresses.erc20,
-    ERC20Abi,
-    signer
+  await sendTx(
+    setTx,
+    provider,
+    contractAddress,
+    PeriodicPrizePoolAbi,
+    'approve',
+    params,
   )
 
-  try {
-    const newTx = await erc20Contract.approve(
-      poolAddresses.pool,
-      ethers.utils.parseEther('1000000000'),
-      {
-        gasLimit: 100000,
-      }
-    )
-
-    setTx(tx => ({
-      ...tx,
-      hash: newTx.hash,
-      sent: true,
-    }))
-
-    await newTx.wait()
-
-    setTx(tx => ({
-      ...tx,
-      completed: true,
-    }))
-
-    poolToast.success('Unlock Allowance transaction complete!')
-  } catch (e) {
-    setTx(tx => ({
-      ...tx,
-      hash: '',
-      inWallet: true,
-      sent: true,
-      completed: true,
-      error: true
-    }))
-
-    poolToast.error(`Error with transaction. See JS Console`)
-
-    console.error(e.message)
-  }
+  poolToast.success('Deposit transaction complete!')
 }
-
 
 export const UnlockDepositUI = (props) => {
   const walletContext = useContext(WalletContext)
+  const provider = walletContext.state.provider
 
   const [tx, setTx] = useState({})
 
@@ -85,7 +56,7 @@ export const UnlockDepositUI = (props) => {
         handleSubmit={(e) => {
           e.preventDefault()
 
-          handleSubmit(setTx, props.poolAddresses, walletContext)
+          handleUnlockSubmit(setTx, provider, props.poolAddresses.erc20)
         }}
       />
     </> : <>

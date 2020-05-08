@@ -52,7 +52,6 @@ export const DepositForm = (props) => {
       <Input
         id='depositAmount'
         required
-        autoFocus
         disabled={disabled}
         type='number'
         pattern='\d+'

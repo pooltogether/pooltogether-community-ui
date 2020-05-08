@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { CompleteAwardUI } from 'lib/components/CompleteAwardUI'
+import { PoolControls } from 'lib/components/PoolControls'
 import { StartAwardUI } from 'lib/components/StartAwardUI'
 
 export const PoolActionsUI = (props) => {
@@ -9,6 +10,9 @@ export const PoolActionsUI = (props) => {
   }
 
   return <>
+    <PoolControls
+      {...props}
+    />
     <StartAwardUI
       {...props}
     />

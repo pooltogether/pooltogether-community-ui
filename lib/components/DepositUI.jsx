@@ -21,14 +21,13 @@ const handleDepositSubmit = async (
     !depositAmount
   ) {
     poolToast.error(`Deposit Amount needs to be filled in`)
-    console.error(`depositAmount needs to be filled in!`)
     return
   }
 
   const params = [
     ethers.utils.parseUnits(depositAmount, decimals),
     {
-      gasLimit: 700000,
+      gasLimit: 700000
     }
   ]
 

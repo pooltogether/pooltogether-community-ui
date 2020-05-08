@@ -1,6 +1,4 @@
 import React, { useContext, useState } from 'react'
-import classnames from 'classnames'
-import { ethers } from 'ethers'
 
 import PeriodicPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PeriodicPrizePool'
 
@@ -8,55 +6,34 @@ import { Button } from 'lib/components/Button'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { poolToast } from 'lib/utils/poolToast'
+import { sendTx } from 'lib/utils/sendTx'
 
-const handleStartAward = async (setTx, poolAddresses, walletContext) => {
-  setTx(tx => ({
-    ...tx,
-    inWallet: true
-  }))
-
-  const provider = walletContext.state.provider
-  const signer = provider.getSigner()
-
-  const poolContract = new ethers.Contract(
-    poolAddresses.pool,
-    PeriodicPrizePoolAbi,
-    signer
-  )
+const handleStartAwardSubmit = async (
+  setTx,
+  provider,
+  contractAddress,
+) => {
+  const params = [
+    {
+      gasLimit: 200000
+    }
+  ]
 
   try {
-    const newTx = await poolContract.startAward()
+    await sendTx(
+      setTx,
+      provider,
+      contractAddress,
+      PeriodicPrizePoolAbi,
+      'startAward',
+      params,
+    )
 
-    setTx(tx => ({
-      ...tx,
-      hash: newTx.hash,
-      sent: true,
-    }))
-
-    await newTx.wait()
-
-    setTx(tx => ({
-      ...tx,
-      completed: true,
-    }))
-
-    poolToast.success('Start award tx complete!')
+    poolToast.success('Start award transaction complete!')
   } catch (e) {
-    setTx(tx => ({
-      ...tx,
-      hash: '',
-      inWallet: true,
-      sent: true,
-      completed: true,
-      error: true
-    }))
-
-    poolToast.error(`Error with transaction. See JS Console`)
-
-    console.error(e.message)
+    // poolToast.error('err!')
   }
 }
-
 
 export const StartAwardUI = (props) => {
   const {
@@ -64,6 +41,7 @@ export const StartAwardUI = (props) => {
   } = props
 
   const walletContext = useContext(WalletContext)
+  const provider = walletContext.state.provider
 
   const [tx, setTx] = useState({})
 
@@ -74,17 +52,23 @@ export const StartAwardUI = (props) => {
     setTx({})
   }
 
+  const handleClick = (e) => {
+    e.preventDefault()
+
+    handleStartAwardSubmit(
+      setTx,
+      provider,
+      props.poolAddresses.pool,
+    )
+  }
+
   return <>
     {!txInFlight ? <>
-      {genericChainValues.canAward && <>
+      {genericChainValues.canStartAward && <>
         <Button
-          onClick={(e) => {
-            e.preventDefault()
-            handleStartAward(setTx, props.poolAddresses, walletContext)
-          }}
+          onClick={handleClick}
           color='green'
           size='sm'
-          paddingClasses='px-2 py-3'
         >
           Start Award
         </Button>

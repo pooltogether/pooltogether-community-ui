@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import { useRouter } from 'next/router'
 
+import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { PoolActionsUI } from 'lib/components/PoolActionsUI'
 import { UserActionsUI } from 'lib/components/UserActionsUI'
@@ -90,8 +91,14 @@ export const PoolUI = (
         Fetching chain values ...
       </div>
     : <>
-      <div className='bg-purple-1000 p-10 text-center rounded-lg'>
-        Pool address: {poolAddresses.pool}
+      <div className='bg-purple-1000 p-8 sm:px-20 sm:py-10 text-center rounded-lg'>
+        Contract address:
+        <br /> <EtherscanAddressLink
+          address={poolAddresses.pool}
+          networkName={networkName}
+        >
+          {poolAddresses.pool}
+        </EtherscanAddressLink>
         <hr/>
         <PoolActionsUI
           genericChainValues={genericChainValues}
@@ -100,7 +107,7 @@ export const PoolUI = (
         />
       </div>
 
-      <div className='relative bg-purple-1000 p-10 text-center rounded-lg my-4'>
+      <div className='relative bg-purple-1000 p-8 sm:px-20 sm:py-10 text-center rounded-lg my-4'>
         {!usersAddress && <>
           <div
             className='absolute text-center p-10 z-30'

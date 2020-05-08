@@ -5,7 +5,34 @@ import PeriodicPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/Peri
 import { Button } from 'lib/components/Button'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
+import { poolToast } from 'lib/utils/poolToast'
 import { sendTx } from 'lib/utils/sendTx'
+
+const handleCompleteAwardSubmit = async (
+  setTx,
+  provider,
+  contractAddress,
+) => {
+  const params = [
+    {
+      gasLimit: 200000
+    }
+  ]
+  try {
+    await sendTx(
+      setTx,
+      provider,
+      contractAddress,
+      PeriodicPrizePoolAbi,
+      'completeAward',
+      params,
+    )
+
+    poolToast.success('Complete award transaction complete!')
+  } catch (e) {
+    // poolToast.error('err!')
+  }
+}
 
 export const CompleteAwardUI = (props) => {
   const {
@@ -23,28 +50,24 @@ export const CompleteAwardUI = (props) => {
     e.preventDefault()
     setTx({})
   }
-  
 
-  const handleAwardClick = (e) => {
+  const handleClick = (e) => {
     e.preventDefault()
-    sendTx(
+
+    handleCompleteAwardSubmit(
       setTx,
       provider,
       props.poolAddresses.pool,
-      PeriodicPrizePoolAbi,
-      'completeAward'
     )
-    // handleCompleteAward(setTx, props.poolAddresses, walletContext)
   }
 
   return <>
     {!txInFlight ? <>
-      {genericChainValues.canAward && <>
+      {genericChainValues.canCompleteAward && <>
         <Button
-          onClick={handleAwardClick}
+          onClick={handleClick}
           color='green'
           size='sm'
-          paddingClasses='px-2 py-3'
         >
           Complete Award
         </Button>

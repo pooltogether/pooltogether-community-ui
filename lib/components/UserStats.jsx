@@ -45,7 +45,7 @@ export const UserStats = (props) => {
       >
         <strong
           className='text-purple-400'
-        >{genericChainValues.erc20Symbol || 'TOKEN'} Balance:</strong>
+        >Your {genericChainValues.erc20Symbol || 'TOKEN'} balance:</strong>
         <br />
         {displayAmountInEther(usersERC20Balance, { precision: 2, decimals })} 
       </div>
@@ -69,7 +69,7 @@ export const UserStats = (props) => {
       >
         <strong
           className='text-purple-400'
-        >Ticket Balance:</strong>
+        >Your ticket balance:</strong>
         <br />
         {displayAmountInEther(usersTicketBalance, { precision: 2, decimals })}
       </div>

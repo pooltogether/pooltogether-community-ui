@@ -8,78 +8,44 @@ import { WithdrawForm } from 'lib/components/WithdrawForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { poolToast } from 'lib/utils/poolToast'
+import { sendTx } from 'lib/utils/sendTx'
 
-const handleSubmit = async (
+const handleWithdrawSubmit = async (
   setTx,
-  poolAddresses,
-  walletContext,
+  provider,
+  contractAddress,
   withdrawAmount,
-  genericChainValues
+  decimals
 ) => {
   if (
     !withdrawAmount
   ) {
     poolToast.error(`Withdraw Amount needs to be filled in`)
-    console.error(`withdrawAmount needs to be filled in!`)
     return
   }
 
-  setTx(tx => ({
-    ...tx,
-    inWallet: true
-  }))
+  const params = [
+    ethers.utils.parseUnits(withdrawAmount, decimals),
+    {
+      gasLimit: 500000
+    }
+  ]
 
-
-  const provider = walletContext.state.provider
-  const signer = provider.getSigner()
-
-  const poolContract = new ethers.Contract(
-    poolAddresses.pool,
+  await sendTx(
+    setTx,
+    provider,
+    contractAddress,
     PeriodicPrizePoolAbi,
-    signer
+    'redeemTicketsInstantly',
+    params,
   )
 
-  try {
-    const newTx = await poolContract.redeemTicketsInstantly(
-      ethers.utils.parseUnits(withdrawAmount, genericChainValues.erc20Decimals),
-      {
-        gasLimit: 500000,
-      }
-    )
-
-    setTx(tx => ({
-      ...tx,
-      hash: newTx.hash,
-      sent: true,
-    }))
-
-    await newTx.wait()
-
-    setTx(tx => ({
-      ...tx,
-      completed: true,
-    }))
-
-    poolToast.success('Withdraw transaction complete!')
-  } catch (e) {
-    setTx(tx => ({
-      ...tx,
-      hash: '',
-      inWallet: true,
-      sent: true,
-      completed: true,
-      error: true
-    }))
-
-    poolToast.error(`Error with transaction. See JS Console`)
-
-    console.error(e.message)
-  }
+  poolToast.success('Withdraw transaction complete!')
 }
-
 
 export const WithdrawUI = (props) => {
   const walletContext = useContext(WalletContext)
+  const provider = walletContext.state.provider
 
   const [withdrawAmount, setWithdrawAmount] = useState('')
 
@@ -105,12 +71,12 @@ export const WithdrawUI = (props) => {
         handleSubmit={(e) => {
           e.preventDefault()
 
-          handleSubmit(
+          handleWithdrawSubmit(
             setTx,
-            props.poolAddresses,
-            walletContext,
+            provider,
+            props.poolAddresses.pool,
             withdrawAmount,
-            props.genericChainValues
+            props.genericChainValues.erc20Decimals
           )
         }}
         vars={{
