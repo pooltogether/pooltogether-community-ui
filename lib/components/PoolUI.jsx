@@ -101,28 +101,30 @@ export const PoolUI = (
       </div>
 
       <div className='relative bg-purple-1000 p-10 text-center rounded-lg my-4'>
-        <div
-          className='absolute text-center p-10 z-30'
-          style={{
-            backgroundColor: 'rgba(30, 20, 65, 0.87)',
-            top: 20,
-            right: 20,
-            bottom: 20,
-            left: 20,
-          }}
-        >
-          To interact with the contract first connect your wallet:
-
-          <br/>
-          <br/>
-
-          <button
-            className='font-bold rounded-full text-green-300 border-2 sm:border-4 border-green-300 hover:text-white hover:bg-lightPurple-900 text-xxs sm:text-base pt-2 pb-2 px-3 sm:px-6 trans'
-            onClick={handleConnect}
+        {!usersAddress && <>
+          <div
+            className='absolute text-center p-10 z-30'
+            style={{
+              backgroundColor: 'rgba(30, 20, 65, 0.87)',
+              top: 20,
+              right: 20,
+              bottom: 20,
+              left: 20,
+            }}
           >
-            Connect Wallet
-          </button>
-        </div>
+            To interact with the contract first connect your wallet:
+
+            <br/>
+            <br/>
+
+            <button
+              className='font-bold rounded-full text-green-300 border-2 sm:border-4 border-green-300 hover:text-white hover:bg-lightPurple-900 text-xxs sm:text-base pt-2 pb-2 px-3 sm:px-6 trans'
+              onClick={handleConnect}
+            >
+              Connect Wallet
+            </button>
+          </div>
+        </>}
         
         <UserStats
           // ethBalance={ethBalance}

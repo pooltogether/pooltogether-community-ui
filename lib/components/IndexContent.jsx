@@ -7,9 +7,7 @@ import { getDefaultPoolContractAddress } from 'lib/utils/getDefaultPoolContractA
 export const IndexContent = (
   props,
 ) => {
-  const walletContext = useContext(WalletContext)
-
-  const poolContractAddress = getDefaultPoolContractAddress(walletContext)
+  const kovanPoolContractAddress = getDefaultPoolContractAddress('kovan')
 
   return <>
     TODO: Form to enter pool address or use link to default pool for this network:
@@ -18,10 +16,10 @@ export const IndexContent = (
     <br />
     <Link
       href='/pools/[networkName]/[poolAddress]'
-      as={`/pools/kovan/${poolContractAddress}`}
+      as={`/pools/kovan/${kovanPoolContractAddress}`}
     >
       <a>
-        {poolContractAddress}
+        {kovanPoolContractAddress}
       </a>
     </Link>
   </>
