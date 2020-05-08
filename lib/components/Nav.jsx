@@ -40,6 +40,13 @@ export const Nav = (props) => {
             <WalletInfo
               {...props}
             />
+            <Button
+              color='green'
+              className='button'
+              onClick={handleConnect}
+            >
+              Connect Wallet
+            </Button>
           </div>
         </div>
       </nav>

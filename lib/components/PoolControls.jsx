@@ -3,10 +3,10 @@ import classnames from 'classnames'
 
 export const PoolControls = (props) => {
   const {
-    chainValues
+    genericChainValues
   } = props
 
-  console.log({ sec: chainValues.remainingSecondsToPrize})
+  console.log({ sec: genericChainValues.remainingSecondsToPrize})
 
   return <>
     <div
@@ -36,7 +36,7 @@ export const PoolControls = (props) => {
           Seconds until reward:
         </strong>
         <br />
-        {chainValues.remainingSecondsToPrize.toString()}
+        {genericChainValues.remainingSecondsToPrize.toString()}
       </div>
     </div>
     

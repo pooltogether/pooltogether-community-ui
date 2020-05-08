@@ -10,7 +10,11 @@ import { UserStats } from 'lib/components/UserStats'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 
 import { useInterval } from 'lib/hooks/useInterval'
-import { getChainValues, getPoolAddresses } from 'lib/utils/fetchChainData'
+import {
+  getGenericChainValues,
+  getUserChainValues,
+  getPoolAddresses
+} from 'lib/utils/fetchChainData'
 import { getEthBalance } from 'lib/utils/getEthBalance'
 
 export const PoolUI = (
@@ -18,8 +22,9 @@ export const PoolUI = (
 ) => {
   const router = useRouter()
   const walletContext = useContext(WalletContext)
-
+  
   const pool = router.query.poolAddress
+
   try {
     ethers.utils.getAddress(pool)
   } catch (e) {
@@ -30,27 +35,42 @@ export const PoolUI = (
   const [poolAddresses, setPoolAddresses] = useState({
     pool
   })
-  const [chainValues, setChainValues] = useState({
+  const [genericChainValues, setGenericChainValues] = useState({
     loading: true,
     erc20Symbol: 'TOKEN',
+    poolTotalSupply: '1234',
+  })
+
+  const [usersChainValues, setUsersChainValues] = useState({
+    loading: true,
     usersTicketBalance: ethers.utils.bigNumberify(0),
     usersERC20Allowance: ethers.utils.bigNumberify(0),
     usersERC20Balance: ethers.utils.bigNumberify(0),
   })
 
   useInterval(() => {
-    getPoolAddresses(walletContext, poolAddresses, setPoolAddresses)
-    getChainValues(walletContext, poolAddresses, setChainValues)
+    fetchChainData(
+      walletContext,
+      poolAddresses,
+      setPoolAddresses,
+      setGenericChainValues,
+      setUserChainValues,
+    )
   }, 5000)
 
   useEffect(() => {
-    getPoolAddresses(walletContext, poolAddresses, setPoolAddresses)
-    getChainValues(walletContext, poolAddresses, setChainValues)
+    fetchChainData(
+      walletContext,
+      poolAddresses,
+      setPoolAddresses,
+      setGenericChainValues,
+      setUserChainValues,
+    )
   }, [walletContext, address, poolAddresses])
 
-  useEffect(() => {
-    getEthBalance(walletContext, setEthBalance)
-  }, [walletContext])
+  // useEffect(() => {
+  //   getEthBalance(walletContext, setEthBalance)
+  // }, [walletContext])
 
   const handleConnect = (e) => {
     e.preventDefault()
@@ -58,46 +78,38 @@ export const PoolUI = (
     walletContext.handleConnectWallet()
   }
 
-  const address = walletContext._onboard.getState().address
+  const usersAddress = walletContext._onboard.getState().address
   
   return <>
-    {address ?
-      <>
-        {chainValues.loading ?
-          <div
-            className='text-center text-xl'
-          >
-            <LoadingDots />
-            <br/>
-            Fetching chain values ...
-          </div>
-        : <>
-          <div className='bg-lightPurple-800 p-10 text-center rounded-lg'>
-            Pool address: {poolAddresses.pool}
-            <hr/>
-            <PoolActionsUI
-              chainValues={chainValues}
-              poolAddresses={poolAddresses}
-            />
-          </div>
-
-          <UserStats
-            ethBalance={ethBalance}
-            chainValues={chainValues}
-          />
-          <UserActionsUI
-            chainValues={chainValues}
-            poolAddresses={poolAddresses}
-          />
-        </>}
-      </> : <>
-      <Button
-        color='green'
-        className='button'
-        onClick={handleConnect}
+    {genericChainValues.loading ?
+      <div
+        className='text-center text-xl'
       >
-        Connect Wallet
-      </Button>
+        <LoadingDots />
+        <br/>
+        Fetching chain values ...
+      </div>
+    : <>
+      <div className='bg-lightPurple-800 p-10 text-center rounded-lg'>
+        Pool address: {poolAddresses.pool}
+        <hr/>
+        <PoolActionsUI
+          genericChainValues={genericChainValues}
+          poolAddresses={poolAddresses}
+          usersAddress={usersAddress}
+        />
+      </div>
+
+      <UserStats
+        // ethBalance={ethBalance}
+        genericChainValues={genericChainValues}
+        usersChainValues={usersChainValues}
+      />
+      <UserActionsUI
+        genericChainValues={genericChainValues}
+        poolAddresses={poolAddresses}
+        usersChainValues={usersChainValues}
+      />
     </>}
   </>
 }

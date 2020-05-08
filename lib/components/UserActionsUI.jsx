@@ -6,10 +6,6 @@ import { DepositUI } from 'lib/components/DepositUI'
 import { WithdrawUI } from 'lib/components/WithdrawUI'
 
 export const UserActionsUI = (props) => {
-  const {
-    chainValues
-  } = props
-
   return <>
     <div
       className='flex flex-col sm:flex-row'
@@ -20,7 +16,7 @@ export const UserActionsUI = (props) => {
           '-mx-8 sm:-ml-8 sm:mr-4 lg:-ml-12 lg:mr-8',
         )}
       >
-        {chainValues.usersERC20Allowance.gt(0) ?
+        {usersChainValues.usersERC20Allowance.gt(0) ?
           <DepositUI
             {...props}
           /> :

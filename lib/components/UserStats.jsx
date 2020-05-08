@@ -6,16 +6,20 @@ import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 export const UserStats = (props) => {
   const {
     ethBalance,
-    chainValues,
+    genericChainValues,
+    usersChainValues,
   } = props
   
   const {
     erc20Decimals,
+  } = genericChainValues
+
+  const {
     usersERC20Balance,
     usersERC20Allowance,
     usersTicketBalance,
-  } = chainValues
-  
+  } = usersChainValues
+
   const decimals = erc20Decimals
 
   return <>
@@ -26,7 +30,7 @@ export const UserStats = (props) => {
         '-mx-8 sm:-mx-8 lg:-mx-12',
       )}
     >
-      <div
+      {/* <div
         className='w-1/4 rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
       >
         <strong
@@ -34,14 +38,14 @@ export const UserStats = (props) => {
         >ETH Balance:</strong>
         <br />
         {displayAmountInEther(ethBalance, { precision: 2 })}
-      </div>
+      </div> */}
 
       <div
         className='w-1/4 rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
       >
         <strong
           className='text-purple-400'
-        >{chainValues.erc20Symbol || 'TOKEN'} Balance:</strong>
+        >{genericChainValues.erc20Symbol || 'TOKEN'} Balance:</strong>
         <br />
         {displayAmountInEther(usersERC20Balance, { precision: 2, decimals })} 
       </div>
@@ -53,7 +57,7 @@ export const UserStats = (props) => {
           <span className='text-yellow-400'>
             <strong
               className='text-purple-400'
-            >{chainValues.erc20Symbol || 'TOKEN'} Allowance:</strong>
+            >{genericChainValues.erc20Symbol || 'TOKEN'} Allowance:</strong>
             <br />
             {displayAmountInEther(usersERC20Allowance, { precision: 2, decimals })}
           </span>
