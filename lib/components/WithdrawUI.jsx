@@ -14,7 +14,7 @@ const handleSubmit = async (
   poolAddresses,
   walletContext,
   withdrawAmount,
-  chainValues
+  genericChainValues
 ) => {
   if (
     !withdrawAmount
@@ -41,7 +41,7 @@ const handleSubmit = async (
 
   try {
     const newTx = await poolContract.redeemTicketsInstantly(
-      ethers.utils.parseUnits(withdrawAmount, chainValues.erc20Decimals),
+      ethers.utils.parseUnits(withdrawAmount, genericChainValues.erc20Decimals),
       {
         gasLimit: 500000,
       }
@@ -110,7 +110,7 @@ export const WithdrawUI = (props) => {
             props.poolAddresses,
             walletContext,
             withdrawAmount,
-            props.chainValues
+            props.genericChainValues
           )
         }}
         vars={{

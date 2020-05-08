@@ -14,7 +14,7 @@ const handleSubmit = async (
   poolAddresses,
   walletContext,
   depositAmount,
-  chainValues,
+  genericChainValues,
 ) => {
   if (
     !depositAmount
@@ -41,7 +41,7 @@ const handleSubmit = async (
 
   try {
     const newTx = await poolContract.mintTickets(
-      ethers.utils.parseUnits(depositAmount, chainValues.erc20Decimals),
+      ethers.utils.parseUnits(depositAmount, genericChainValues.erc20Decimals),
       {
         gasLimit: 700000,
       }
@@ -99,7 +99,7 @@ export const DepositUI = (props) => {
   return <>
     {!txInFlight ? <>
       <DepositForm
-        chainValues={props.chainValues}
+        genericChainValues={props.genericChainValues}
         handleSubmit={(e) => {
           e.preventDefault()
 
@@ -108,7 +108,7 @@ export const DepositUI = (props) => {
             props.poolAddresses,
             walletContext,
             depositAmount,
-            props.chainValues
+            props.genericChainValues
           )
         }}
         vars={{

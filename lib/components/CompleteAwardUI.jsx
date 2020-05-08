@@ -59,7 +59,7 @@ const handleCompleteAward = async (setTx, poolAddresses, walletContext) => {
 
 export const CompleteAwardUI = (props) => {
   const {
-    chainValues
+    genericChainValues
   } = props
 
   const walletContext = useContext(WalletContext)
@@ -75,7 +75,7 @@ export const CompleteAwardUI = (props) => {
 
   return <>
     {!txInFlight ? <>
-      {chainValues.canAward && <>
+      {genericChainValues.canAward && <>
         <Button
           onClick={(e) => {
             e.preventDefault()

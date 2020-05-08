@@ -10,6 +10,14 @@ const INFURA_KEY = process.env.NEXT_JS_INFURA_KEY
 const FORTMATIC_KEY = process.env.NEXT_JS_FORTMATIC_API_KEY
 const SELECTED_WALLET_COOKIE_KEY = 'selectedWallet'
 
+let cookieOptions = { sameSite: 'strict' }
+if (process.env.NEXT_JS_DOMAIN_NAME) {
+  cookieOptions = {
+    ...cookieOptions,
+    domain: `.${process.env.NEXT_JS_DOMAIN_NAME}`
+  }
+}
+
 const WALLETS_CONFIG = [
   { walletName: "coinbase", preferred: true },
   // { walletName: "trust", preferred: true, rpcUrl: RPC_URL },
@@ -106,7 +114,11 @@ const doConnectWallet = async (walletType) => {
 }
 
 const connectWallet = (w, setOnboardState) => {
-  Cookies.set(SELECTED_WALLET_COOKIE_KEY, w.name, { sameSite: 'strict' })
+  Cookies.set(
+    SELECTED_WALLET_COOKIE_KEY,
+    w.name,
+    cookieOptions
+  )
 
   setOnboardState(previousState => ({
     ...previousState,
@@ -117,7 +129,10 @@ const connectWallet = (w, setOnboardState) => {
 }
 
 const disconnectWallet = (setOnboardState) => {
-  Cookies.remove(SELECTED_WALLET_COOKIE_KEY)
+  Cookies.remove(
+    SELECTED_WALLET_COOKIE_KEY,
+    cookieOptions
+  )
 
   setOnboardState(previousState => ({
     ...previousState,

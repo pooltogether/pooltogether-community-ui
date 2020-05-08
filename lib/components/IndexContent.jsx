@@ -1,45 +1,26 @@
 import React, { useContext } from 'react'
 import Link from 'next/link'
 
-import { Button } from 'lib/components/Button'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { getDefaultPoolContractAddress } from 'lib/utils/getDefaultPoolContractAddress'
 
 export const IndexContent = (
   props,
 ) => {
-  const walletContext = useContext(WalletContext)
-  const address = walletContext._onboard.getState().address
-
-  const poolContractAddress = getDefaultPoolContractAddress(walletContext)
-
-  const handleConnect = (e) => {
-    e.preventDefault()
-
-    walletContext.handleConnectWallet()
-  }
+  const kovanPoolContractAddress = getDefaultPoolContractAddress('kovan')
 
   return <>
-    {address ?
-      <>
-        Form for pool address or default pool for this network:
-        <br/>
-        <Link
-          href='/pools/[poolAddress]'
-          as={`/pools/${poolContractAddress}`}
-        >
-          <a>
-            {poolContractAddress}
-          </a>
-        </Link>
-      </> : <>
-      <Button
-        color='green'
-        className='button'
-        onClick={handleConnect}
-      >
-        Connect Wallet
-      </Button>
-    </>}
+    TODO: Form to enter pool address or use link to default pool for this network:
+    <hr/>
+    Kovan:
+    <br />
+    <Link
+      href='/pools/[networkName]/[poolAddress]'
+      as={`/pools/kovan/${kovanPoolContractAddress}`}
+    >
+      <a>
+        {kovanPoolContractAddress}
+      </a>
+    </Link>
   </>
 }
