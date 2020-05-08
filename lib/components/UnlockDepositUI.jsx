@@ -8,6 +8,7 @@ import { DepositForm } from 'lib/components/DepositForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { poolToast } from 'lib/utils/poolToast'
+import { sendTx } from 'lib/utils/sendTx'
 
 const handleUnlockSubmit = async (
   setTx,
@@ -15,7 +16,7 @@ const handleUnlockSubmit = async (
   contractAddress,
 ) => {
   const params = [
-    poolAddresses.pool,
+    contractAddress,
     ethers.utils.parseEther('1000000000'),
     {
       gasLimit: 200000
@@ -26,7 +27,7 @@ const handleUnlockSubmit = async (
     setTx,
     provider,
     contractAddress,
-    PeriodicPrizePoolAbi,
+    ERC20Abi,
     'approve',
     params,
   )
