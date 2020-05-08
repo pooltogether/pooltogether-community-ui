@@ -27,11 +27,11 @@ export const UserStats = (props) => {
       className={classnames(
         'flex flex-col sm:flex-row justify-between',
         'py-8 px-4 sm:p-8 sm:py-4 rounded-xl text-base sm:text-lg mb-12',
-        '-mx-8 sm:-mx-8 lg:-mx-12',
+        'sm:-mx-8 lg:-mx-12',
       )}
     >
       {/* <div
-        className='w-1/4 rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
+        className='w-full sm:w-1/3  mx-2  rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
       >
         <strong
           className='text-purple-400'
@@ -41,7 +41,7 @@ export const UserStats = (props) => {
       </div> */}
 
       <div
-        className='w-1/4 rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
+        className='w-full sm:w-1/3  mx-2  rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
       >
         <strong
           className='text-purple-400'
@@ -52,7 +52,7 @@ export const UserStats = (props) => {
 
       {usersERC20Allowance.lte(0) && <>
         <div
-            className='w-1/4 rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
+            className='w-full sm:w-1/3  mx-2  rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
           >
           <span className='text-yellow-400'>
             <strong
@@ -65,7 +65,7 @@ export const UserStats = (props) => {
       </>}
 
       <div
-        className='w-1/4 rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
+        className='w-full sm:w-1/3  mx-2  rounded-lg px-4 py-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
       >
         <strong
           className='text-purple-400'

@@ -47,9 +47,9 @@ export const Layout = (props) => {
             <div
               className='mt-10 mb-10 sm:mb-20 lg:w-2/3'
             >
-              <img src={PoolIcon} className='inline-block w-10 h-10 ml-2' />
+              <img src={PoolIcon} className='inline-block w-10 h-10 ml-2 mb-2 sm:mb-0' />
               <div
-                className='text-blue-400 title text-xl sm:text-3xl'
+                className='text-blue-400 title text-base sm:text-3xl'
               >
                 v3.0 - Reference Pool Frontend
               </div>
