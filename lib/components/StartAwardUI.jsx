@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import classnames from 'classnames'
 import { ethers } from 'ethers'
 
-import PeriodicPrizePoolAbi from 'lib/abis/PeriodicPrizePoolAbi'
+import PeriodicPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PeriodicPrizePool'
 
 import { Button } from 'lib/components/Button'
 import { TxMessage } from 'lib/components/TxMessage'

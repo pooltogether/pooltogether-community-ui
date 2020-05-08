@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { ethers } from 'ethers'
 
-import PeriodicPrizePoolAbi from 'lib/abis/PeriodicPrizePoolAbi'
+import PeriodicPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PeriodicPrizePool'
 
 import { Button } from 'lib/components/Button'
 import { DepositForm } from 'lib/components/DepositForm'
