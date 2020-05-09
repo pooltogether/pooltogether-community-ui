@@ -15,7 +15,7 @@ const handleCompleteAwardSubmit = async (
 ) => {
   const params = [
     {
-      gasLimit: 300000
+      gasLimit: 500000
     }
   ]
   try {

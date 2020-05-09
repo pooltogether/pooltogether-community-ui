@@ -20,7 +20,7 @@ export const PoolStats = (props) => {
       <StatContainer>
         <BlueLineStat
           title='Total ticket supply'
-          value={`${displayAmountInEther(genericChainValues.ticketTotalSupply, { precision: 2 })} ASDF`}
+          value={`${displayAmountInEther(genericChainValues.ticketTotalSupply, { precision: 2 })} ${genericChainValues.erc20Symbol || 'TOKEN'}`}
         />
       </StatContainer>
 
