@@ -14,9 +14,10 @@ const handleUnlockSubmit = async (
   setTx,
   provider,
   contractAddress,
+  poolAddress,
 ) => {
   const params = [
-    contractAddress,
+    poolAddress,
     ethers.utils.parseEther('1000000000'),
     {
       gasLimit: 200000
@@ -57,7 +58,13 @@ export const UnlockDepositUI = (props) => {
         handleSubmit={(e) => {
           e.preventDefault()
 
-          handleUnlockSubmit(setTx, provider, props.poolAddresses.erc20)
+          console.log({p:props.poolAddresses})
+          handleUnlockSubmit(
+            setTx,
+            provider,
+            props.poolAddresses.erc20,
+            props.poolAddresses.pool,
+          )
         }}
       />
     </> : <>
