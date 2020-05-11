@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import classnames from 'classnames'
 
+import { useInterval } from 'lib/hooks/useInterval'
 import { BlueLineStat } from 'lib/components/BlueLineStat'
 import { StatContainer } from 'lib/components/StatContainer'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
@@ -9,6 +10,27 @@ export const PoolStats = (props) => {
   const {
     genericChainValues
   } = props
+
+  const [mountedAt, setMountedAt] = useState(0)
+  const [secondsToPrizeAtMount, setSecondsToPrizeAtMount] = useState(0)
+  const [secondsRemainingNow, setSecondsRemainingNow] = useState('--')
+
+  useEffect(() => {
+    const set = () => {
+      setSecondsToPrizeAtMount(
+        genericChainValues.remainingSecondsToPrize.toString(),
+        10
+      )
+      setMountedAt(parseInt(Date.now() / 1000, 10))
+    }
+    set()
+  }, [genericChainValues.canCompleteAward])
+
+  useInterval(() => {
+    const diffInSeconds = parseInt(Date.now() / 1000, 10) - mountedAt
+    const remaining = secondsToPrizeAtMount - diffInSeconds
+    setSecondsRemainingNow(remaining <= 0 ? 0 : remaining)
+  }, 1000)
 
   return <>
     <div
@@ -26,15 +48,19 @@ export const PoolStats = (props) => {
 
       <StatContainer>
         <BlueLineStat
-          title='EST. prize remaining'
+          title={<div className='flex flex-col leading-tight'>
+            next prize
+            <span className='text-purple-600 italic'>
+              (estimate)
+            </span></div>}
           value={displayAmountInEther(genericChainValues.estimateRemainingPrize, { precision: 0 })}
         />
       </StatContainer>
 
       <StatContainer>
         <BlueLineStat
-          title='Seconds until reward'
-          value={genericChainValues.remainingSecondsToPrize.toString()}
+          title='Seconds until rewardable'
+          value={secondsRemainingNow}
         />
       </StatContainer>
 
