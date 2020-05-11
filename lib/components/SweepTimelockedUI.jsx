@@ -1,59 +1,39 @@
 import React, { useContext, useState } from 'react'
-import { ethers } from 'ethers'
 
 import PeriodicPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PeriodicPrizePool'
 
 import { Button } from 'lib/components/Button'
-import { WithdrawForm } from 'lib/components/WithdrawForm'
+import { SweepTimelockedForm } from 'lib/components/SweepTimelockedForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { poolToast } from 'lib/utils/poolToast'
 import { sendTx } from 'lib/utils/sendTx'
 
-const handleWithdrawSubmit = async (
+const handleSweepTimelockedSubmit = async (
   setTx,
   provider,
   contractAddress,
-  withdrawAmount,
-  withdrawType,
-  decimals
+  usersAddress,
 ) => {
-  if (
-    !withdrawAmount
-  ) {
-    poolToast.error(`Withdraw Amount needs to be filled in`)
-    return
-  }
-
   const params = [
-    ethers.utils.parseUnits(withdrawAmount, decimals),
-    {
-      gasLimit: 500000
-    }
+    [usersAddress]
   ]
-
-  const method = withdrawType === 'instant' ?
-    'redeemTicketsInstantly' :
-    'redeemTicketsWithTimelock'
-
   await sendTx(
     setTx,
     provider,
     contractAddress,
     PeriodicPrizePoolAbi,
-    method,
+    'sweepTimelockFunds',
     params,
   )
 
-  poolToast.success('Withdraw transaction complete!')
+  poolToast.success('Sweep timelocked funds transaction complete!')
 }
 
-export const WithdrawUI = (props) => {
+export const SweepTimelockedUI = (props) => {
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
-
-  const [withdrawAmount, setWithdrawAmount] = useState('')
-  const [withdrawType, setWithdrawType] = useState('scheduled')
+  const usersAddress = walletContext._onboard.getState().address
 
   const [tx, setTx] = useState({
     inWallet: false,
@@ -66,38 +46,27 @@ export const WithdrawUI = (props) => {
 
   const resetState = (e) => {
     e.preventDefault()
-    setWithdrawAmount('')
     setTx({})
   }
 
   return <>
     {!txInFlight ? <>
-      <WithdrawForm
+      <SweepTimelockedForm
         {...props}
         handleSubmit={(e) => {
           e.preventDefault()
 
-          handleWithdrawSubmit(
+          handleSweepTimelockedSubmit(
             setTx,
             provider,
             props.poolAddresses.pool,
-            withdrawAmount,
-            withdrawType,
-            props.genericChainValues.erc20Decimals
+            usersAddress,
           )
-        }}
-        vars={{
-          withdrawAmount,
-          withdrawType,
-        }}
-        stateSetters={{
-          setWithdrawAmount,
-          setWithdrawType,
         }}
       />
     </> : <>
       <TxMessage
-        txType='Withdraw to Pool'
+        txType='Sweep Timelocked Funds'
         tx={tx}
       />
     </>}

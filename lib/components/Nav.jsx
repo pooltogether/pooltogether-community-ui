@@ -7,7 +7,6 @@ import PoolLogo from 'assets/images/pooltogether-white-wordmark.svg'
 
 export const Nav = (props) => {
   const walletContext = useContext(WalletContext)
-
   const usersAddress = walletContext._onboard.getState().address
 
   const handleConnect = (e) => {

@@ -1,8 +1,8 @@
 import React from 'react'
-import classnames from 'classnames'
 
 import { Button } from 'lib/components/Button'
 import { Input } from 'lib/components/Input'
+import { PTHint } from 'lib/components/PTHint'
 
 export const WithdrawForm = (props) => {
   const {
@@ -12,20 +12,71 @@ export const WithdrawForm = (props) => {
     stateSetters,
   } = props
 
-  let withdrawAmount, setWithdrawAmount
-  if (vars && stateSetters) {
-    withdrawAmount = vars.withdrawAmount
-    setWithdrawAmount = stateSetters.setWithdrawAmount
+  const {
+    withdrawAmount,
+    withdrawType,
+  } = vars
+  const {
+    setWithdrawAmount,
+    setWithdrawType,
+  } = stateSetters
+
+  const handleWithdrawTypeChange = (e) => {
+    setWithdrawType(e.target.value)
   }
 
   return <>
     <form
       onSubmit={handleSubmit}
+      className='relative '
     >
       <div
-        className='font-bold mb-4 py-2 text-lg sm:text-xl lg:text-2xl'
+        className='font-bold mb-2 py-2 text-lg sm:text-xl lg:text-2xl'
       >
         Withdraw:
+      </div>
+      {/* can't get this tooltip to render in the proper place atm: */}
+      {/* <PTHint
+        tip={`To maintain fairness your funds need to contribute interest towards the prize each week. You can:
+1) SCHEDULE: receive $1000 DAI once enough interest has been provided to the prize
+2) INSTANT: pay $1.90 to withdraw right now and forfeit the interest that would go towards the prize`}
+      /> */}
+      <label
+        htmlFor='kovan-radio'
+        className='text-purple-300 hover:text-white trans mt-0'
+      >What type of withdraw?</label> 
+      <div
+        className='inputGroup w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
+      >
+        <input
+          id='scheduled-radio'
+          name='radio'
+          type='radio'
+          onChange={handleWithdrawTypeChange}
+          value='scheduled'
+          checked={withdrawType === 'scheduled'}
+        />
+        <label
+          htmlFor='scheduled-radio'
+          className='text-purple-300 relative pl-6 py-3'
+        >scheduled</label>
+      </div>
+
+      <div
+        className='inputGroup w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
+      >
+        <input
+          id='instant-radio'
+          name='radio'
+          type='radio'
+          onChange={handleWithdrawTypeChange}
+          value='instant'
+          checked={withdrawType === 'instant'}
+        />
+        <label
+          htmlFor='instant-radio'
+          className='text-purple-300 relative pl-6 py-3'
+        >instant</label>
       </div>
 
       <label
@@ -44,9 +95,11 @@ export const WithdrawForm = (props) => {
       />
 
       <div
-        className='mt-10 mb-0'
+        className='my-5'
       >
-        <Button>
+        <Button
+          color='green'
+        >
           Withdraw
         </Button>
       </div>

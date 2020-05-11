@@ -3,6 +3,7 @@ import classnames from 'classnames'
 
 import { UnlockDepositUI } from 'lib/components/UnlockDepositUI'
 import { DepositUI } from 'lib/components/DepositUI'
+import { SweepTimelockedUI } from 'lib/components/SweepTimelockedUI'
 import { WithdrawUI } from 'lib/components/WithdrawUI'
 
 export const UserActionsUI = (props) => {
@@ -12,10 +13,13 @@ export const UserActionsUI = (props) => {
     >
       <div
         className={classnames(
-          'bg-purple-1000 px-2 pt-4 pb-16 rounded-xl w-full sm:w-1/2',
-          'lg:w-3/4 text-base sm:text-lg mb-20',
+          'px-6 pt-4 pb-4 rounded-xl w-full sm:w-1/2 mx-2',
+          'text-left text-base sm:text-lg mb-4',
           '',
         )}
+        style={{
+          backgroundColor: 'rgba(64, 28, 109, 0.4)'
+        }}
       >
         {props.usersChainValues.usersERC20Allowance.gt(0) ?
           <DepositUI
@@ -28,16 +32,34 @@ export const UserActionsUI = (props) => {
       </div>
       <div
         className={classnames(
-          'bg-purple-1000 px-2 pt-4 pb-16 rounded-xl w-full sm:w-1/2',
-          'lg:w-3/4 text-base sm:text-lg mb-20',
+          'px-6 pt-4 pb-4 rounded-xl w-full sm:w-1/2 mx-2',
+          'text-left text-base sm:text-lg mb-4',
           '',
         )}
+        style={{
+          backgroundColor: 'rgba(64, 28, 109, 0.4)'
+        }}
       >
         <WithdrawUI
           {...props}
         />
       </div>
-    </div>    
+    </div>  
+
+    <div
+      className={classnames(
+        'px-6 pt-4 pb-4 rounded-xl w-full sm:w-1/2 mx-2',
+        'text-left text-base sm:text-lg mb-4',
+        '',
+      )}
+      style={{
+        backgroundColor: 'rgba(64, 28, 109, 0.4)'
+      }}
+    >
+      <SweepTimelockedUI
+        {...props}
+      />
+    </div>  
   </>
 }
 

@@ -62,6 +62,14 @@ export const UserStats = (props) => {
           value={displayAmountInEther(usersTicketBalance, { precision: 2, decimals })}
         />
       </StatContainer>
+
+      {/* <StatContainer>
+        <BlueLineStat
+          title={`Your scheduled balance`}
+          value={displayAmountInEther(usersTimelockBalanceAvailableAt, { precision: 2, decimals })}
+        />
+      </StatContainer> */}
+      
     </div>
   </>
 }

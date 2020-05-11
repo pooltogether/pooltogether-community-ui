@@ -24,7 +24,7 @@ export const DepositForm = (props) => {
       onSubmit={handleSubmit}
     >
       <div
-        className='font-bold mb-4 py-2 text-lg sm:text-xl lg:text-2xl'
+        className='font-bold mb-2 py-2 text-lg sm:text-xl lg:text-2xl'
       >
         Deposit:
       </div>
@@ -60,10 +60,12 @@ export const DepositForm = (props) => {
       />
 
       <div
-        className='mt-10 mb-0'
+        className='my-5'
       >
-        <Button>
-          {disabled ? 'Unlock Deposits' : 'Make Deposit'}
+        <Button
+          color='green'
+        >
+          {disabled ? 'Unlock Deposits' : 'Deposit'}
         </Button>
       </div>
     </form>
