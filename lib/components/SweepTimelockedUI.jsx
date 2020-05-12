@@ -16,7 +16,10 @@ const handleSweepTimelockedSubmit = async (
   usersAddress,
 ) => {
   const params = [
-    [usersAddress]
+    [usersAddress],
+    {
+      gasLimit: 500000
+    }
   ]
   await sendTx(
     setTx,
