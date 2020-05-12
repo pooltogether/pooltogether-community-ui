@@ -1,30 +1,33 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/zeit/next.js/tree/canary/packages/create-next-app).
+# PoolTogether v3 - Reference Frontend
 
-## Getting Started
+The newest UI for communicating with the (unreleased) v3 PoolTogether protocol. 
 
-First, run the development server:
+A demo of this app is live [here](https://reference-app.pooltogether.com).
+
+To run the project against a local node you can use the [pooltogether-contracts](https://github.com/pooltogether/pooltogether-contracts/tree/version-3). With those contracts you can bootstrap a local Buidler EVM instance with test data so that you can develop the app locally.
+
+# Setup
+
+Install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
+$ yarn
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Make sure you have `direnv` installed and copy `.envrc.example` to `.envrc`:
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+```bash
+$ cp .envrc.example .envrc
+```
 
-## Learn More
+Fill in your own values for `.envrc`, then run:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+$ direnv allow
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To run the local server, run:
 
-You can check out [the Next.js GitHub repository](https://github.com/zeit/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on ZEIT Now
-
-The easiest way to deploy your Next.js app is to use the [ZEIT Now Platform](https://zeit.co/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```
+$ yarn dev
+```
