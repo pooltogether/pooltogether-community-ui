@@ -269,9 +269,6 @@
   bottom: 2rem;
 }
 
-.b-special {
-  bottom: 4rem;
-}
 
 @screen sm {
   .sm\:b-1 {
@@ -298,9 +295,6 @@
     bottom: 2rem;
   }
 
-  .sm\:b-special {
-    bottom: 4.75rem;
-  }
 }
 
 @screen lg {
@@ -328,10 +322,91 @@
     bottom: 2rem;
   }
 
-  .lg\:b-special {
-    bottom: 5.75rem;
-  }
 }
+
+
+
+
+
+.-l-1 {
+  left: -0.25rem;
+}
+
+.-l-2 {
+  left: -0.5rem;
+}
+
+.-l-3 {
+  left: -0.75rem;
+}
+
+.-l-4 {
+  left: -1rem;
+}
+
+.-l-6 {
+  left: -1.5rem;
+}
+
+.-l-8 {
+  left: -2rem;
+}
+
+
+@screen sm {
+  .sm\:-l-1 {
+    left: -0.25rem;
+  }
+
+  .sm\:-l-2 {
+    left: -0.5rem;
+  }
+
+  .sm\:-l-3 {
+    left: -0.75rem;
+  }
+
+  .sm\:-l-4 {
+    left: -1rem;
+  }
+
+  .sm\:-l-6 {
+    left: -1.5rem;
+  }
+
+  .sm\:-l-8 {
+    left: -2rem;
+  }
+
+}
+
+@screen lg {
+  .lg\:-l-1 {
+    left: -0.25rem;
+  }
+
+  .lg\:-l-2 {
+    left: -0.5rem;
+  }
+
+  .lg\:-l-3 {
+    left: -0.75rem;
+  }
+
+  .lg\:-l-4 {
+    left: -1rem;
+  }
+
+  .lg\:-l-6 {
+    left: -1.5rem;
+  }
+
+  .lg\:-l-8 {
+    left: -2rem;
+  }
+
+}
+
 
 
 

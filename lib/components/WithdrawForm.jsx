@@ -1,11 +1,15 @@
 import React from 'react'
+import { ethers } from 'ethers'
 
 import { Button } from 'lib/components/Button'
 import { Input } from 'lib/components/Input'
-import { PTHint } from 'lib/components/PTHint'
+// import { PTHint } from 'lib/components/PTHint'
+
+import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 
 export const WithdrawForm = (props) => {
   const {
+    exitFee,
     genericChainValues,
     handleSubmit,
     vars,
@@ -23,6 +27,13 @@ export const WithdrawForm = (props) => {
 
   const handleWithdrawTypeChange = (e) => {
     setWithdrawType(e.target.value)
+  }
+
+  const tokenSymbol = genericChainValues.erc20Symbol || 'TOKEN'
+
+  let instantTotal = ethers.utils.bigNumberify(0)
+  if (exitFee && withdrawType === 'instant') {
+    instantTotal = ethers.utils.parseEther(withdrawAmount).sub(exitFee)
   }
 
   return <>
@@ -83,7 +94,7 @@ export const WithdrawForm = (props) => {
         htmlFor='withdrawAmount'
         className='trans text-purple-300 hover:text-white'
       >
-        Withdraw amount <span className='text-purple-600 italic'> (in {genericChainValues.erc20Symbol || 'TOKEN'})</span>
+        Withdraw amount <span className='text-purple-600 italic'> (in {tokenSymbol})</span>
       </label>
       <Input
         id='withdrawAmount'
@@ -93,6 +104,12 @@ export const WithdrawForm = (props) => {
         onChange={(e) => setWithdrawAmount(e.target.value)}
         value={withdrawAmount}
       />
+
+      {exitFee && withdrawType === 'instant' && <>
+        <div className='text-yellow-400'>
+          You will receive {displayAmountInEther(instantTotal)} {tokenSymbol} now and forfeit {displayAmountInEther(exitFee)} as interest
+        </div>
+      </>}
 
       <div
         className='my-5'

@@ -36,7 +36,7 @@ export const PoolStats = (props) => {
     <div
       className={classnames(
         'flex flex-col sm:flex-row sm:flex-wrap justify-center items-center',
-        'my-4 rounded-xl text-base sm:text-lg',
+        'mt-2 mb-4 rounded-xl text-base sm:text-lg',
       )}
     >
       <StatContainer>
@@ -53,7 +53,7 @@ export const PoolStats = (props) => {
             <span className='text-purple-600 italic'>
               (estimate)
             </span></div>}
-          value={displayAmountInEther(genericChainValues.estimateRemainingPrize, { precision: 0 })}
+          value={`$${displayAmountInEther(genericChainValues.estimatePrize, { precision: 0 })} ${genericChainValues.erc20Symbol || 'TOKEN'}`}
         />
       </StatContainer>
 

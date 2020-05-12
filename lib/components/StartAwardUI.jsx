@@ -77,6 +77,8 @@ export const StartAwardUI = (props) => {
       <TxMessage
         txType='Start Award'
         tx={tx}
+        setTx={setTx}
+        showHide
       />
     </>}
     

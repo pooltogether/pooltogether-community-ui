@@ -29,7 +29,7 @@ export const UserStats = (props) => {
       className={classnames(
         // 'flex flex-col sm:flex-row justify-between',
         'flex flex-col sm:flex-row sm:flex-wrap justify-center items-center',
-        'my-4 rounded-xl text-base sm:text-lg',
+        'mt-2 mb-4 rounded-xl text-base sm:text-lg',
       )}
     >
       {/* <div

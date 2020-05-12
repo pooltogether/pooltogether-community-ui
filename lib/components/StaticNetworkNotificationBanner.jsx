@@ -19,7 +19,7 @@ export const StaticNetworkNotificationBanner = ({
   if (chainId === 42) {
     networkWords = `the Kovan testnet 👍`
   } else if (chainId === 31337) {
-    networkWords = `the localhost 👍`
+    networkWords = `local 👍`
   }
 
   return <div

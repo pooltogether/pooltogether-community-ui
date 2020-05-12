@@ -91,7 +91,7 @@ export const PoolUI = (
         Fetching chain values ...
       </div>
     : <>
-      <div className='bg-purple-1000 px-4 sm:px-8 lg:px-20 py-8 sm:py-10 text-center rounded-lg'>
+      <div className='bg-purple-1000 px-4 sm:px-8 lg:px-20 py-8 sm:py-10 mb-4 text-center rounded-lg'>
         Contract address:
         <br /> <EtherscanAddressLink
           address={poolAddresses.pool}

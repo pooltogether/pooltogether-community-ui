@@ -31,7 +31,7 @@ export const DepositForm = (props) => {
 
       {disabled && <>
         <div
-          className='bg-purple-800 rounded-lg text-center sm:w-10/12 mx-auto px-4 py-3 text-xs sm:text-base lg:text-lg text-purple-300'
+          className='bg-purple-800 rounded-lg text-center mx-auto px-4 py-3 text-xs sm:text-base lg:text-lg text-purple-200'
         >
           Unlock deposits first by providing the pool's ticket contract with a DAI spend allowance.
         </div>

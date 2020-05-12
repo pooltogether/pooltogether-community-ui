@@ -1,12 +1,15 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { ethers } from 'ethers'
+import { useRouter } from 'next/router'
 
 import PeriodicPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PeriodicPrizePool'
 
+import { useDebounce } from 'lib/hooks/useDebounce'
 import { Button } from 'lib/components/Button'
 import { WithdrawForm } from 'lib/components/WithdrawForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
+import { fetchExitFee } from 'lib/utils/fetchExitFee'
 import { poolToast } from 'lib/utils/poolToast'
 import { sendTx } from 'lib/utils/sendTx'
 
@@ -49,11 +52,38 @@ const handleWithdrawSubmit = async (
 }
 
 export const WithdrawUI = (props) => {
+  const router = useRouter()
+  const networkName = router.query.networkName
+  const pool = router.query.poolAddress
+
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
+  const usersAddress = walletContext._onboard.getState().address
 
+  const [exitFee, setExitFee] = useState('')
   const [withdrawAmount, setWithdrawAmount] = useState('')
   const [withdrawType, setWithdrawType] = useState('scheduled')
+
+  const debouncedWithdrawAmount = useDebounce(withdrawAmount, 500)
+
+  useEffect(() => {
+    const t = async () => {
+      if (debouncedWithdrawAmount) {
+        const result = await fetchExitFee(
+          networkName,
+          usersAddress,
+          pool,
+          debouncedWithdrawAmount
+        )
+        setExitFee(result.exitFee)
+      } else {
+        setExitFee(null)
+      }
+    }
+
+    t()
+  }, [debouncedWithdrawAmount])
+
 
   const [tx, setTx] = useState({
     inWallet: false,
@@ -74,6 +104,7 @@ export const WithdrawUI = (props) => {
     {!txInFlight ? <>
       <WithdrawForm
         {...props}
+        exitFee={exitFee}
         handleSubmit={(e) => {
           e.preventDefault()
 

@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { Button } from 'lib/components/Button'
 import { EtherscanTxLink } from 'lib/components/EtherscanTxLink'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { shortenAddress } from 'lib/utils/shortenAddress'
@@ -8,6 +9,8 @@ export const TxMessage = (props) => {
   const {
     tx,
     txType,
+    showHide,
+    setTx,
   } = props
 
   const txInWallet = tx.inWallet && !tx.sent
@@ -64,9 +67,9 @@ export const TxMessage = (props) => {
             Transaction successful!
           </div>
 
-          <div className='my-3'>
+          {/* <div className='my-3'>
             Waiting on events ...
-          </div>
+          </div> */}
         </>}
 
         {txError && <>
@@ -103,6 +106,24 @@ export const TxMessage = (props) => {
             </EtherscanTxLink>}
           </>}
         </div>
+
+
+        {showHide && txCompleted && <>
+          <div className='my-3 text-center'>
+            <Button
+              size='sm'
+              color='black'
+              onClick={(e) => {
+                e.preventDefault()
+                setTx({})
+              }}
+            >
+              Hide this
+            </Button>
+          </div>
+        </>}
+
+        
 
       </div>
     </>}
