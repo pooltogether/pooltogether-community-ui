@@ -12,6 +12,7 @@ import { WalletContext } from 'lib/components/WalletContextProvider'
 import { useInterval } from 'lib/hooks/useInterval'
 import { fetchChainData } from 'lib/utils/fetchChainData'
 import { getEthBalance } from 'lib/utils/getEthBalance'
+import { poolToast } from 'lib/utils/poolToast'
 
 export const PoolUI = (
   props,
@@ -23,12 +24,6 @@ export const PoolUI = (
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
   const usersAddress = walletContext._onboard.getState().address
-
-  try {
-    ethers.utils.getAddress(pool)
-  } catch (e) {
-    return 'Incorrectly formatted Ethereum address!'
-  }
 
   const [ethBalance, setEthBalance] = useState(ethers.utils.bigNumberify(0))
   const [poolAddresses, setPoolAddresses] = useState({
@@ -46,6 +41,13 @@ export const PoolUI = (
     usersERC20Allowance: ethers.utils.bigNumberify(0),
     usersERC20Balance: ethers.utils.bigNumberify(0),
   })
+
+
+  try {
+    ethers.utils.getAddress(pool)
+  } catch (e) {
+    return 'Incorrectly formatted Ethereum address!'
+  }
 
 
   useInterval(() => {
@@ -74,6 +76,21 @@ export const PoolUI = (
     getEthBalance(walletContext, setEthBalance)
   }, [walletContext])
 
+  if (poolAddresses.error) {
+    console.warn(poolAddresses.errorMessage)
+    alert(`Error fetching data for pool with address: ${pool}, wrong Ethereum network?`)
+    // poolToast.error(`Error+fetching+data+for+pool+with+address+${pool}`)
+    router.push(
+      `/`,
+      `/`,
+      {
+        shallow: true
+      }
+    )
+    return null
+  }
+
+
 
   const handleConnect = (e) => {
     e.preventDefault()
@@ -92,13 +109,17 @@ export const PoolUI = (
       </div>
     : <>
       <div className='bg-purple-1000 px-4 sm:px-8 lg:px-20 py-8 sm:py-10 mb-4 text-center rounded-lg'>
-        Contract address:
-        <br /> <EtherscanAddressLink
-          address={poolAddresses.pool}
-          networkName={networkName}
+        <div
+          className='mb-6'
         >
-          {poolAddresses.pool}
-        </EtherscanAddressLink>
+          Contract address:
+          <br /> <EtherscanAddressLink
+            address={poolAddresses.pool}
+            networkName={networkName}
+          >
+            {poolAddresses.pool}
+          </EtherscanAddressLink>
+        </div>
 
         <PoolActionsUI
           genericChainValues={genericChainValues}

@@ -91,7 +91,6 @@ export const WithdrawUI = (props) => {
   })
 
   const txInFlight = tx.inWallet || tx.sent
-  const txCompleted = tx.completed
 
   const resetState = (e) => {
     e.preventDefault()
@@ -129,18 +128,9 @@ export const WithdrawUI = (props) => {
       <TxMessage
         txType='Withdraw to Pool'
         tx={tx}
+        handleReset={resetState}
       />
     </>}
-
-    {txCompleted && <>
-      <div className='my-3 text-center'>
-        <Button
-          size='sm'
-          color='black'
-          onClick={resetState}
-        >Reset Form</Button>
-      </div>
-    </>}      
     
   </>
 }

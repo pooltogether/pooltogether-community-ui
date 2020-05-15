@@ -51,7 +51,6 @@ export const DepositUI = (props) => {
   const [tx, setTx] = useState({})
 
   const txInFlight = tx.inWallet || tx.sent
-  const txCompleted = tx.completed
 
   const resetState = (e) => {
     e.preventDefault()
@@ -85,17 +84,8 @@ export const DepositUI = (props) => {
       <TxMessage
         txType='Deposit to Pool'
         tx={tx}
+        handleReset={resetState}
       />
-    </>}
-      
-    {txCompleted && <>
-      <div className='my-3 text-center'>
-        <Button
-          size='sm'
-          color='black'
-          onClick={resetState}
-        >Reset Form</Button>
-      </div>
     </>}
     
   </>

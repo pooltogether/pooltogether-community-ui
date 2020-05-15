@@ -71,8 +71,8 @@ export const CompleteAwardUI = (props) => {
       <TxMessage
         txType='Complete Award'
         tx={tx}
-        setTx={setTx}
-        showHide
+        handleReset={resetState}
+        resetButtonText='Hide this'
       />
     </>}
     

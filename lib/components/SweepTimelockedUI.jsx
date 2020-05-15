@@ -53,7 +53,6 @@ export const SweepTimelockedUI = (props) => {
   const userHasTimelockedFunds = usersTimelockBalance && usersTimelockBalance.gt(0)
 
   const txInFlight = tx.inWallet || tx.sent
-  const txCompleted = tx.completed
 
   const resetState = (e) => {
     e.preventDefault()
@@ -81,18 +80,9 @@ export const SweepTimelockedUI = (props) => {
       <TxMessage
         txType='Sweep Timelocked Funds'
         tx={tx}
+        handleReset={resetState}
       />
     </>}
-
-    {txCompleted && <>
-      <div className='my-3 text-center'>
-        <Button
-          size='sm'
-          color='black'
-          onClick={resetState}
-        >Reset Form</Button>
-      </div>
-    </>}      
     
   </>
 }

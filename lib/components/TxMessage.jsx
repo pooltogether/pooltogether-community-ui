@@ -9,8 +9,8 @@ export const TxMessage = (props) => {
   const {
     tx,
     txType,
-    showHide,
-    setTx,
+    resetButtonText,
+    handleReset,
   } = props
 
   const txInWallet = tx.inWallet && !tx.sent
@@ -66,10 +66,6 @@ export const TxMessage = (props) => {
           >
             Transaction successful!
           </div>
-
-          {/* <div className='my-3'>
-            Waiting on events ...
-          </div> */}
         </>}
 
         {txError && <>
@@ -108,18 +104,14 @@ export const TxMessage = (props) => {
         </div>
 
 
-        {showHide && txCompleted && <>
+        {handleReset && txCompleted && <>
           <div className='my-3 text-center'>
-            <Button
-              size='sm'
-              color='black'
-              onClick={(e) => {
-                e.preventDefault()
-                setTx({})
-              }}
+            <button
+              className='font-bold rounded-full text-green-300 border-2 sm:border-4 border-green-300 hover:text-white hover:bg-lightPurple-900 text-xxs sm:text-base pt-2 pb-2 px-3 sm:px-6 trans'
+              onClick={handleReset}
             >
-              Hide this
-            </Button>
+              {resetButtonText || 'Reset form'}
+            </button>
           </div>
         </>}
 

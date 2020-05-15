@@ -3,7 +3,6 @@ import classnames from 'classnames'
 
 import { useInterval } from 'lib/hooks/useInterval'
 import { BlueLineStat } from 'lib/components/BlueLineStat'
-import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 import { StatContainer } from 'lib/components/StatContainer'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 
