@@ -72,10 +72,7 @@ const initializeOnboard = (setOnboardState) => {
       address: async (a) => {
         debug('address change')
         debug(a)
-        setOnboardState(previousState => ({
-          ...previousState,
-          address: a
-        }))
+        setAddress(setOnboardState)
       },
       network: async (n) => {
         debug('network change')
@@ -101,15 +98,22 @@ const initializeOnboard = (setOnboardState) => {
 }
 
 // walletType is optional here:
-const doConnectWallet = async (walletType) => {
+const doConnectWallet = async (walletType, setOnboardState) => {
   await _onboard.walletSelect(walletType)
   const currentState = _onboard.getState()
+  debug({ currentState})
 
   if (currentState.wallet.type) {
     debug("run walletCheck")
     await _onboard.walletCheck()
     debug("walletCheck done")
+    debug({ currentState: _onboard.getState() })
 
+    // trigger re-render
+    setOnboardState(previousState => ({
+      ...previousState,
+      timestamp: Date.now()
+    }))
   }
 }
 
@@ -142,12 +146,12 @@ const disconnectWallet = (setOnboardState) => {
   }))
 }
 
-const onPageLoad = async () => {
+const onPageLoad = async (setOnboardState) => {
   const previouslySelectedWallet = Cookies.get(SELECTED_WALLET_COOKIE_KEY)
 
   if (previouslySelectedWallet !== undefined) {
     debug('using cookie')
-    doConnectWallet(previouslySelectedWallet)
+    doConnectWallet(previouslySelectedWallet, setOnboardState)
   }
 }
 
@@ -157,15 +161,20 @@ const setAddress = (setOnboardState) => {
 
   try {
     const provider = currentState.wallet.provider
-    debug({ provider})
-    debug({ address: provider.selectedAddress })
-    const address = provider.selectedAddress
-  
-    debug('setting address to, ', address)
+    let address = null
+
+    if (provider) {
+      address = provider.selectedAddress
+      debug('setting address to: ', address)
+    } else {
+      debug('no provider, setting address: to null')
+    }
+
     // trigger re-render
     setOnboardState(previousState => ({
       ...previousState,
-      address
+      address,
+      timestamp: Date.now()
     }))
   } catch (e) {
     console.error(e)
@@ -178,7 +187,7 @@ export const WalletContextProvider = (props) => {
   if (!onboardState) {
     initializeOnboard(setOnboardState)
 
-    onPageLoad(_onboard)
+    onPageLoad(setOnboardState)
     
     setOnboardState(previousState => ({
       ...previousState,
@@ -188,7 +197,7 @@ export const WalletContextProvider = (props) => {
 
   const handleConnectWallet = () => {
     if (onboardState) {
-      doConnectWallet()
+      doConnectWallet(null, setOnboardState)
     }
   }
 
