@@ -3,15 +3,15 @@ import { ethers } from 'ethers'
 import { useRouter } from 'next/router'
 
 import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
+import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { PoolActionsUI } from 'lib/components/PoolActionsUI'
 import { UserActionsUI } from 'lib/components/UserActionsUI'
 import { UserStats } from 'lib/components/UserStats'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-
 import { useInterval } from 'lib/hooks/useInterval'
 import { fetchChainData } from 'lib/utils/fetchChainData'
-// import { getEthBalance } from 'lib/utils/getEthBalance'
+import { getEthBalance } from 'lib/utils/getEthBalance'
 
 export const PoolUI = (
   props,
@@ -70,9 +70,9 @@ export const PoolUI = (
     )
   }, [provider, usersAddress, poolAddresses])
 
-  // useEffect(() => {
-  //   getEthBalance(walletContext, setEthBalance)
-  // }, [walletContext])
+  useEffect(() => {
+    getEthBalance(walletContext, setEthBalance)
+  }, [walletContext])
 
 
   const handleConnect = (e) => {
@@ -99,8 +99,10 @@ export const PoolUI = (
         >
           {poolAddresses.pool}
         </EtherscanAddressLink>
+
         <PoolActionsUI
           genericChainValues={genericChainValues}
+          networkName={networkName}
           poolAddresses={poolAddresses}
           usersAddress={usersAddress}
         />
@@ -109,36 +111,48 @@ export const PoolUI = (
       <div
         className='relative bg-purple-1000 px-4 sm:px-8 lg:px-20 py-8 sm:py-10 text-center rounded-lg my-4'
       >
-        {!usersAddress && <>
-          <div
-            className='absolute text-center p-10 z-30'
-            style={{
-              backgroundColor: 'rgba(30, 20, 65, 0.87)',
-              top: 20,
-              right: 20,
-              bottom: 20,
-              left: 20,
-            }}
+        {ethBalance && ethBalance.eq(0) && <>
+          <FormLockedOverlay
+            flexColJustifyClass='justify-start'
+            title={`Deposit & Withdraw`}
+            zLayerClass='z-30'
           >
-            To interact with the contract first connect your wallet:
-
-            <br/>
-            <br/>
-
-            <button
-              className='font-bold rounded-full text-green-300 border-2 sm:border-4 border-green-300 hover:text-white hover:bg-lightPurple-900 text-xxs sm:text-base pt-2 pb-2 px-3 sm:px-6 trans'
-              onClick={handleConnect}
-            >
-              Connect Wallet
-            </button>
-          </div>
+            <>
+              Your ETH balance is 0.
+              <br />To interact with the contracts you will need ETH.
+            </>
+          </FormLockedOverlay>
         </>}
+
+
+        {!usersAddress && <FormLockedOverlay
+          flexColJustifyClass='justify-start'
+          title={`Deposit & Withdraw`}
+          zLayerClass='z-30'
+        >
+          <>
+            <div>
+              To interact with the contracts first connect your wallet:
+            </div>
+
+            <div
+              className='mt-3 sm:mt-5 mb-5'
+            >
+              <button
+                className='font-bold rounded-full text-green-300 border-2 sm:border-4 border-green-300 hover:text-white hover:bg-lightPurple-900 text-xxs sm:text-base pt-2 pb-2 px-3 sm:px-6 trans'
+                onClick={handleConnect}
+              >
+                Connect Wallet
+              </button>
+            </div>
+          </>
+        </FormLockedOverlay>}
         
         <UserStats
-          // ethBalance={ethBalance}
           genericChainValues={genericChainValues}
           usersChainValues={usersChainValues}
         />
+
         <UserActionsUI
           genericChainValues={genericChainValues}
           poolAddresses={poolAddresses}

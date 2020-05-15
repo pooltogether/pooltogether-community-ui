@@ -1,8 +1,12 @@
 import React from 'react'
 import classnames from 'classnames'
+import { ethers } from 'ethers'
 
 import { Button } from 'lib/components/Button'
+import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 import { Input } from 'lib/components/Input'
+
+import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 
 export const DepositForm = (props) => {
   const {
@@ -11,7 +15,14 @@ export const DepositForm = (props) => {
     vars,
     stateSetters,
     disabled,
+    usersChainValues,
   } = props
+
+  const {
+    usersERC20Balance,
+  } = usersChainValues || {}
+
+  const tokenSymbol = genericChainValues.erc20Symbol || 'TOKEN'
 
   let depositAmount, setDepositAmount
   if (vars && stateSetters) {
@@ -19,23 +30,42 @@ export const DepositForm = (props) => {
     setDepositAmount = stateSetters.setDepositAmount
   }
 
+  const overBalance = depositAmount && usersERC20Balance && usersERC20Balance.lt(
+    ethers.utils.parseEther(depositAmount)
+  )
+
   return <>
     <form
       onSubmit={handleSubmit}
     >
+      {disabled && <FormLockedOverlay
+        title='Deposit'
+      >
+        <>
+          <div
+          >
+            Unlock deposits by first approving the pool's ticket contract to have a DAI allowance.
+          </div>
+
+          <div
+            className='mt-3 sm:mt-5 mb-5'
+          >
+            <Button
+              color='green'
+            >
+              Unlock Deposits
+            </Button>
+          </div>
+        </>
+      </FormLockedOverlay>}
+      
       <div
         className='font-bold mb-2 py-2 text-lg sm:text-xl lg:text-2xl'
       >
         Deposit:
       </div>
 
-      {disabled && <>
-        <div
-          className='bg-purple-800 rounded-lg text-center mx-auto px-4 py-3 text-xs sm:text-base lg:text-lg text-purple-200'
-        >
-          Unlock deposits first by providing the pool's ticket contract with a DAI spend allowance.
-        </div>
-      </>}
+      
 
       <label
         htmlFor='depositAmount'
@@ -59,13 +89,21 @@ export const DepositForm = (props) => {
         value={depositAmount}
       />
 
+      {overBalance && <>
+        <div className='text-yellow-400'>
+          You only have {displayAmountInEther(usersERC20Balance)} {tokenSymbol}.
+          <br />The maximum you can deposit is {displayAmountInEther(usersERC20Balance, { precision: 2 })}.
+        </div>
+      </>}
+
       <div
         className='my-5'
       >
         <Button
+          disabled={overBalance}
           color='green'
         >
-          {disabled ? 'Unlock Deposits' : 'Deposit'}
+          Deposit
         </Button>
       </div>
     </form>

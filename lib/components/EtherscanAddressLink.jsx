@@ -10,23 +10,30 @@ export const EtherscanAddressLink = (props) => {
     children,
     className,
     networkName,
+    size,
   } = props
 
   const chainId = nameToChainId(networkName)
   const url = formatEtherscanAddressUrl(address, chainId)
 
+  let textSizeClasses = 'text-xs sm:text-base lg:text-lg'
+  if (size === 'xxs') {
+    textSizeClasses = 'text-xxs sm:text-xxxs lg:text-xs'
+  }
+
   return <>
     <a
       href={url}
-      className={`trans text-xxs sm:text-base lg:text-lg no-underline ${className}`}
+      className={`trans no-underline ${textSizeClasses} ${className}`}
       target='_blank'
       rel='noopener noreferrer'
       title='View on Etherscan'
     >
-      {children}<FeatherIcon
+      {children}
+      {/* <br /><FeatherIcon
         icon='arrow-up-right'
         className='is-etherscan-arrow inline-block'
-      />
+      /> */}
     </a>
   </>
 }

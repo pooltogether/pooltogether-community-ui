@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 
 import { Button } from 'lib/components/Button'
 import { Input } from 'lib/components/Input'
-// import { PTHint } from 'lib/components/PTHint'
+import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 
@@ -14,7 +14,12 @@ export const WithdrawForm = (props) => {
     handleSubmit,
     vars,
     stateSetters,
+    usersChainValues,
   } = props
+
+  const {
+    usersTicketBalance,
+  } = usersChainValues || {}
 
   const {
     withdrawAmount,
@@ -32,15 +37,24 @@ export const WithdrawForm = (props) => {
   const tokenSymbol = genericChainValues.erc20Symbol || 'TOKEN'
 
   let instantTotal = ethers.utils.bigNumberify(0)
-  if (exitFee && withdrawType === 'instant') {
+  if (withdrawAmount && exitFee && withdrawType === 'instant') {
     instantTotal = ethers.utils.parseEther(withdrawAmount).sub(exitFee)
   }
 
+  const overBalance = withdrawAmount && usersTicketBalance && usersTicketBalance.lt(
+    ethers.utils.parseEther(withdrawAmount)
+  )
+  
   return <>
     <form
       onSubmit={handleSubmit}
-      className='relative '
     >
+      {usersTicketBalance && usersTicketBalance.lte(0) && <FormLockedOverlay
+        title='Withdraw'
+      >
+        You have no tickets to withdraw. Deposit some {genericChainValues.erc20Symbol || 'TOKEN'} first!
+      </FormLockedOverlay>}
+
       <div
         className='font-bold mb-2 py-2 text-lg sm:text-xl lg:text-2xl'
       >
@@ -55,7 +69,9 @@ export const WithdrawForm = (props) => {
       <label
         htmlFor='kovan-radio'
         className='text-purple-300 hover:text-white trans mt-0'
-      >What type of withdraw?</label> 
+      >
+        What type of withdraw?
+      </label> 
       <div
         className='inputGroup w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
       >
@@ -109,12 +125,28 @@ export const WithdrawForm = (props) => {
         <div className='text-yellow-400'>
           You will receive {displayAmountInEther(instantTotal)} {tokenSymbol} now and forfeit {displayAmountInEther(exitFee)} as interest
         </div>
+
+        {exitFee.eq(0) && <>
+          Why is the exit fee $0?
+          <br/>
+          The exit fee is based on the previous prize and other factors (see documentation or contract code).
+          <br/>
+          You may want to pay exit fee's for your users and/or hide the exit fee when it's $0.
+        </>}
+      </>}
+
+      {overBalance && <>
+        <div className='text-yellow-400'>
+          You only have {displayAmountInEther(usersTicketBalance)} tickets.
+          <br />The maximum you can withdraw is {displayAmountInEther(usersTicketBalance, { precision: 2 })} {tokenSymbol}.
+        </div>
       </>}
 
       <div
         className='my-5'
       >
         <Button
+          disabled={overBalance}
           color='green'
         >
           Withdraw

@@ -44,6 +44,8 @@ export const SweepTimelockedUI = (props) => {
     completed: false,
   })
 
+  const userHasTimelockedFunds = false
+
   const txInFlight = tx.inWallet || tx.sent
   const txCompleted = tx.completed
 
@@ -56,6 +58,7 @@ export const SweepTimelockedUI = (props) => {
     {!txInFlight ? <>
       <SweepTimelockedForm
         {...props}
+        disabled={!userHasTimelockedFunds}
         handleSubmit={(e) => {
           e.preventDefault()
 

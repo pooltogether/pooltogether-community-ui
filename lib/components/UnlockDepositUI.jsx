@@ -3,7 +3,6 @@ import { ethers } from 'ethers'
 
 import ERC20Abi from '@pooltogether/pooltogether-contracts/abis/ERC20'
 
-import { Button } from 'lib/components/Button'
 import { DepositForm } from 'lib/components/DepositForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
@@ -74,17 +73,6 @@ export const UnlockDepositUI = (props) => {
         tx={tx}
       />
     </>}
-
-    {txCompleted && <>
-      <div className='my-3 text-center'>
-        <Button
-          size='sm'
-          color='black'
-          onClick={resetState}
-        >Reset Form</Button>
-      </div>
-    </>}
-
     
   </>
 }
