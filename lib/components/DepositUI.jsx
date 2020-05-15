@@ -38,9 +38,8 @@ const handleDepositSubmit = async (
     PeriodicPrizePoolAbi,
     'mintTickets',
     params,
+    'Deposit',
   )
-
-  poolToast.success('Deposit transaction complete!')
 }
 
 export const DepositUI = (props) => {

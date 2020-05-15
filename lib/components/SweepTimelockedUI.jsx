@@ -6,7 +6,6 @@ import { Button } from 'lib/components/Button'
 import { SweepTimelockedForm } from 'lib/components/SweepTimelockedForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import { poolToast } from 'lib/utils/poolToast'
 import { sendTx } from 'lib/utils/sendTx'
 
 const handleSweepTimelockedSubmit = async (
@@ -21,6 +20,7 @@ const handleSweepTimelockedSubmit = async (
       gasLimit: 500000
     }
   ]
+
   await sendTx(
     setTx,
     provider,
@@ -28,9 +28,8 @@ const handleSweepTimelockedSubmit = async (
     PeriodicPrizePoolAbi,
     'sweepTimelockFunds',
     params,
+    'Sweep Timelocked Funds'
   )
-
-  poolToast.success('Sweep timelocked funds transaction complete!')
 }
 
 export const SweepTimelockedUI = (props) => {

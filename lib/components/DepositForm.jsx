@@ -21,6 +21,7 @@ export const DepositForm = (props) => {
     usersERC20Balance,
   } = usersChainValues || {}
 
+  const poolIsLocked = genericChainValues.isRngRequested
   const tokenSymbol = genericChainValues.erc20Symbol || 'TOKEN'
 
   let depositAmount, setDepositAmount
@@ -37,6 +38,14 @@ export const DepositForm = (props) => {
     <form
       onSubmit={handleSubmit}
     >
+      {poolIsLocked && <FormLockedOverlay
+        title='Deposit'
+      >
+        <div>
+          The Pool is currently being awarded and until awarding is complete can not accept withdrawals.
+        </div>
+      </FormLockedOverlay>}
+
       {disabled && <FormLockedOverlay
         title='Deposit'
       >

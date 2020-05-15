@@ -5,7 +5,6 @@ import PeriodicPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/Peri
 import { Button } from 'lib/components/Button'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import { poolToast } from 'lib/utils/poolToast'
 import { sendTx } from 'lib/utils/sendTx'
 
 const handleCompleteAwardSubmit = async (
@@ -18,20 +17,16 @@ const handleCompleteAwardSubmit = async (
       gasLimit: 500000
     }
   ]
-  try {
-    await sendTx(
-      setTx,
-      provider,
-      contractAddress,
-      PeriodicPrizePoolAbi,
-      'completeAward',
-      params,
-    )
 
-    poolToast.success('Complete award transaction complete!')
-  } catch (e) {
-    // poolToast.error('err!')
-  }
+  await sendTx(
+    setTx,
+    provider,
+    contractAddress,
+    PeriodicPrizePoolAbi,
+    'completeAward',
+    params,
+    'Complete Award',
+  )
 }
 
 export const CompleteAwardUI = (props) => {

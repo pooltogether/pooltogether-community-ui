@@ -33,7 +33,8 @@ export const WithdrawForm = (props) => {
   const handleWithdrawTypeChange = (e) => {
     setWithdrawType(e.target.value)
   }
-
+  
+  const poolIsLocked = genericChainValues.isRngRequested
   const tokenSymbol = genericChainValues.erc20Symbol || 'TOKEN'
 
   let instantTotal = ethers.utils.bigNumberify(0)
@@ -49,7 +50,15 @@ export const WithdrawForm = (props) => {
     <form
       onSubmit={handleSubmit}
     >
-      {usersTicketBalance && usersTicketBalance.lte(0) && <FormLockedOverlay
+      {poolIsLocked && <FormLockedOverlay
+        title='Withdrawal'
+      >
+        <div>
+          The Pool is currently being awarded and until awarding is complete can not accept withdrawals.
+        </div>
+      </FormLockedOverlay>}
+
+      {!poolIsLocked && usersTicketBalance && usersTicketBalance.lte(0) && <FormLockedOverlay
         title='Withdraw'
       >
         You have no tickets to withdraw. Deposit some {genericChainValues.erc20Symbol || 'TOKEN'} first!

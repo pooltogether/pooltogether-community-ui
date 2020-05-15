@@ -6,7 +6,6 @@ import ERC20Abi from '@pooltogether/pooltogether-contracts/abis/ERC20'
 import { DepositForm } from 'lib/components/DepositForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import { poolToast } from 'lib/utils/poolToast'
 import { sendTx } from 'lib/utils/sendTx'
 
 const handleUnlockSubmit = async (
@@ -31,9 +30,8 @@ const handleUnlockSubmit = async (
     ERC20Abi,
     'approve',
     params,
+    'Unlock Deposits',
   )
-
-  poolToast.success('Deposit transaction complete!')
 }
 
 export const UnlockDepositUI = (props) => {

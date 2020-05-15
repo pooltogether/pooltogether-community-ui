@@ -46,9 +46,8 @@ const handleWithdrawSubmit = async (
     PeriodicPrizePoolAbi,
     method,
     params,
+    'Withdraw'
   )
-
-  poolToast.success('Withdraw transaction complete!')
 }
 
 export const WithdrawUI = (props) => {
