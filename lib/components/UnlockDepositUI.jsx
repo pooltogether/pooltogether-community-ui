@@ -43,12 +43,6 @@ export const UnlockDepositUI = (props) => {
   const [tx, setTx] = useState({})
 
   const txInFlight = tx.inWallet || tx.sent
-  const txCompleted = tx.completed
-
-  const resetState = (e) => {
-    e.preventDefault()
-    setTx({})
-  }
 
   return <>
     {!txInFlight ? <>

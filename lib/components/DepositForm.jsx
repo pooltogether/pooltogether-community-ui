@@ -5,7 +5,6 @@ import { ethers } from 'ethers'
 import { Button } from 'lib/components/Button'
 import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 import { Input } from 'lib/components/Input'
-
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 
 export const DepositForm = (props) => {

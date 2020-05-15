@@ -2,12 +2,17 @@ import React from 'react'
 
 import { Button } from 'lib/components/Button'
 import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
+import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 
 export const SweepTimelockedForm = (props) => {
   const {
     disabled,
+    genericChainValues,
     handleSubmit,
+    usersTimelockBalance,
   } = props
+
+  const tokenSymbol = genericChainValues.erc20Symbol || 'TOKEN'
 
   return <>
     <form
@@ -27,6 +32,13 @@ export const SweepTimelockedForm = (props) => {
       >
         Sweep Timelocked Funds:
       </div>
+
+      {!disabled && <>
+        <div className='text-yellow-400'>
+          You have {displayAmountInEther(usersTimelockBalance)} {tokenSymbol} scheduled for withdrawal after the interest has matured.
+          {/* TODO: Unable to get timelockBalanceAvailableAt working */}
+        </div>
+      </>}
       
       <div
         className='my-5'

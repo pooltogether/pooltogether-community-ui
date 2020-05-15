@@ -34,6 +34,10 @@ const handleSweepTimelockedSubmit = async (
 }
 
 export const SweepTimelockedUI = (props) => {
+  const {
+    usersChainValues,
+  } = props
+
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
   const usersAddress = walletContext._onboard.getState().address
@@ -44,7 +48,10 @@ export const SweepTimelockedUI = (props) => {
     completed: false,
   })
 
-  const userHasTimelockedFunds = false
+  const {
+    usersTimelockBalance
+  } = usersChainValues || {}
+  const userHasTimelockedFunds = usersTimelockBalance && usersTimelockBalance.gt(0)
 
   const txInFlight = tx.inWallet || tx.sent
   const txCompleted = tx.completed
@@ -59,6 +66,7 @@ export const SweepTimelockedUI = (props) => {
       <SweepTimelockedForm
         {...props}
         disabled={!userHasTimelockedFunds}
+        usersTimelockBalance={usersTimelockBalance}
         handleSubmit={(e) => {
           e.preventDefault()
 
