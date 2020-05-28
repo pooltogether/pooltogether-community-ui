@@ -71,7 +71,7 @@ export const SweepTimelockedUI = (props) => {
           handleSweepTimelockedSubmit(
             setTx,
             provider,
-            props.poolAddresses.pool,
+            props.poolAddresses.poolManager,
             usersAddress,
           )
         }}

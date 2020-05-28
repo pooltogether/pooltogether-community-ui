@@ -68,7 +68,7 @@ export const DepositUI = (props) => {
           handleDepositSubmit(
             setTx,
             provider,
-            props.poolAddresses.pool,
+            props.poolAddresses.poolManager,
             depositAmount,
             props.genericChainValues.erc20Decimals
           )

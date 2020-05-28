@@ -14,12 +14,23 @@ import { fetchChainData } from 'lib/utils/fetchChainData'
 import { getEthBalance } from 'lib/utils/getEthBalance'
 import { poolToast } from 'lib/utils/poolToast'
 
+const renderErrorMessage = (
+  address,
+  type,
+  message
+) => {
+  const errorMsg = `Error fetching ${type} for Pool Manager with address: ${address}: ${message}. (maybe wrong Ethereum network?)`
+
+  console.error(errorMsg)
+  poolToast.error(errorMsg)
+}
+
 export const PoolUI = (
   props,
 ) => {
   const router = useRouter()
   const networkName = router.query.networkName
-  const pool = router.query.poolAddress
+  const poolManager = router.query.poolManagerAddress
 
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
@@ -27,7 +38,7 @@ export const PoolUI = (
 
   const [ethBalance, setEthBalance] = useState(ethers.utils.bigNumberify(0))
   const [poolAddresses, setPoolAddresses] = useState({
-    pool
+    poolManager
   })
   const [genericChainValues, setGenericChainValues] = useState({
     loading: true,
@@ -44,7 +55,7 @@ export const PoolUI = (
 
 
   try {
-    ethers.utils.getAddress(pool)
+    ethers.utils.getAddress(poolManager)
   } catch (e) {
     return 'Incorrectly formatted Ethereum address!'
   }
@@ -76,21 +87,29 @@ export const PoolUI = (
     getEthBalance(walletContext, setEthBalance)
   }, [walletContext])
 
-  if (poolAddresses.error) {
-    console.warn(poolAddresses.errorMessage)
-    alert(`Error fetching data for pool with address: ${pool}, wrong Ethereum network?`)
-    // poolToast.error(`Error+fetching+data+for+pool+with+address+${pool}`)
-    router.push(
-      `/`,
-      `/`,
-      {
-        shallow: true
-      }
-    )
+  if (poolAddresses.error || genericChainValues.error || usersChainValues.error) {
+    if (poolAddresses.error) {
+      renderErrorMessage(poolManager, 'pool addresses', poolAddresses.errorMessage)
+    }
+
+    if (genericChainValues.error) {
+      renderErrorMessage(poolManager, 'generic chain values', genericChainValues.errorMessage)
+    }
+
+    if (usersChainValues.error) {
+      renderErrorMessage(poolManager, `user's chain values`, usersChainValues.errorMessage)
+    }
+
+    // router.push(
+    //   `/`,
+    //   `/`,
+    //   {
+    //     shallow: true
+    //   }
+    // )
+
     return null
   }
-
-
 
   const handleConnect = (e) => {
     e.preventDefault()
@@ -114,10 +133,10 @@ export const PoolUI = (
         >
           Contract address:
           <br /> <EtherscanAddressLink
-            address={poolAddresses.pool}
+            address={poolAddresses.poolManager}
             networkName={networkName}
           >
-            {poolAddresses.pool}
+            {poolAddresses.poolManager}
           </EtherscanAddressLink>
         </div>
 

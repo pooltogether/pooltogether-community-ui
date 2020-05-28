@@ -1,2 +1,2 @@
-/pools/:networkName/:poolAddress /pools/[networkName]/[poolAddress].html 200
+/pools/:networkName/:poolManagerAddress /pools/[networkName]/[poolManagerAddress].html 200
 /pools/:networkName              /pools/[networkName].html               200

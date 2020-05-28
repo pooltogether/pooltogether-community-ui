@@ -28,13 +28,13 @@
 
 @screen sm {
   .pool-toast.Toastify__toast-container {
-    width: 50%;
+    width: 80%;
   }
 }
 
 @screen lg {
   .pool-toast.Toastify__toast-container {
-    width: 35%;
+    width: 60%;
   }
 }
 
@@ -68,7 +68,14 @@
   .pool-toast.Toastify__toast-container--top-center {
     top: 50px;
     left: 50%;
-    margin-left: -25%;  
+    margin-left: -40%;  
+  }
+}
+
+@screen lg {
+  .pool-toast.Toastify__toast-container--top-center {
+    left: 70%;
+    margin-left: -50%;
   }
 }
 

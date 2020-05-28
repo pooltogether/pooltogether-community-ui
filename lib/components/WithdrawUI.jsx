@@ -53,7 +53,7 @@ const handleWithdrawSubmit = async (
 export const WithdrawUI = (props) => {
   const router = useRouter()
   const networkName = router.query.networkName
-  const pool = router.query.poolAddress
+  const poolManager = router.query.poolManagerAddress
 
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
@@ -71,7 +71,7 @@ export const WithdrawUI = (props) => {
         const result = await fetchExitFee(
           networkName,
           usersAddress,
-          pool,
+          poolManager,
           debouncedWithdrawAmount
         )
         setExitFee(result.exitFee)
@@ -109,7 +109,7 @@ export const WithdrawUI = (props) => {
           handleWithdrawSubmit(
             setTx,
             provider,
-            props.poolAddresses.pool,
+            props.poolAddresses.poolManager,
             withdrawAmount,
             withdrawType,
             props.genericChainValues.erc20Decimals

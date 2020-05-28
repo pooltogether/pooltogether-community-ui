@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { ethers } from 'ethers'
 
-import ERC20Abi from '@pooltogether/pooltogether-contracts/abis/ERC20'
+import IERC20Abi from '@pooltogether/pooltogether-contracts/abis/IERC20'
 
 import { DepositForm } from 'lib/components/DepositForm'
 import { TxMessage } from 'lib/components/TxMessage'
@@ -12,11 +12,11 @@ const handleUnlockSubmit = async (
   setTx,
   provider,
   contractAddress,
-  poolAddress,
+  poolManagerAddress,
   decimals,
 ) => {
   const params = [
-    poolAddress,
+    poolManagerAddress,
     ethers.utils.parseUnits('1000000000', decimals),
     {
       gasLimit: 200000
@@ -27,7 +27,7 @@ const handleUnlockSubmit = async (
     setTx,
     provider,
     contractAddress,
-    ERC20Abi,
+    IERC20Abi,
     'approve',
     params,
     'Unlock Deposits',
@@ -54,7 +54,7 @@ export const UnlockDepositUI = (props) => {
             setTx,
             provider,
             props.poolAddresses.erc20,
-            props.poolAddresses.pool,
+            props.poolAddresses.poolManager,
             props.genericChainValues.erc20Decimals,
           )
         }}
