@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 import { Button } from 'lib/components/Button'
 import { Input } from 'lib/components/Input'
-import { getDefaultPoolContractAddress } from 'lib/utils/getDefaultPoolContractAddress'
+import { getDemoPoolContractAddress } from 'lib/utils/getDemoPoolContractAddress'
 
 export const IndexContent = (
   props,
@@ -11,7 +11,9 @@ export const IndexContent = (
   const [network, setNetwork] = useState('kovan')
   const [contractAddress, setContractAddress] = useState('')
 
-  const kovanPoolManagerContractAddress = getDefaultPoolContractAddress('kovan')
+  const kovanDaiPoolManagerContractAddress = getDemoPoolContractAddress('kovan', 'dai')
+  const kovanUsdcPoolManagerContractAddress = getDemoPoolContractAddress('kovan', 'usdc')
+  const kovanUsdtPoolManagerContractAddress = getDemoPoolContractAddress('kovan', 'usdt')
 
   const handleNetworkChange = (e) => {
     setNetwork(e.target.value)
@@ -21,7 +23,7 @@ export const IndexContent = (
     <div
       className='text-lg sm:text-xl lg:text-2xl mb-4'
     >
-      1. View one of the default pools:
+      1. View one of the demo pools:
     </div>
 
     <div
@@ -29,14 +31,40 @@ export const IndexContent = (
     >
       <Link
         href='/pools/[networkName]/[poolManagerAddress]'
-        as={`/pools/kovan/${kovanPoolManagerContractAddress}`}
+        as={`/pools/kovan/${kovanDaiPoolManagerContractAddress}`}
       >
         <a
-          className='-mx-6 px-6 sm:px-4 sm:mx-0 pt-2 pb-3 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
+          className='-mx-6 px-6 sm:px-4 sm:mx-0 lg:mr-4 mb-2 pt-2 pb-3 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
         >
-          <span className='text-blue-200 text-base'>  Default Kovan Pool</span>
+          <span className='text-blue-200 text-base'>Demo Kovan DAI Pool</span>
           <br/>
-          {kovanPoolManagerContractAddress}
+          {kovanDaiPoolManagerContractAddress}
+        </a>
+      </Link>
+
+      <Link
+        href='/pools/[networkName]/[poolManagerAddress]'
+        as={`/pools/kovan/${kovanUsdcPoolManagerContractAddress}`}
+      >
+        <a
+          className='-ml-6 px-6 sm:px-4 sm:mx-0 mb-2 mr-2 pt-2 pb-3 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
+        >
+          <span className='text-blue-200 text-base'>Demo Kovan USDC Pool</span>
+          <br />
+          {kovanUsdcPoolManagerContractAddress}
+        </a>
+      </Link>
+
+      <Link
+        href='/pools/[networkName]/[poolManagerAddress]'
+        as={`/pools/kovan/${kovanUsdtPoolManagerContractAddress}`}
+      >
+        <a
+          className='-ml-6 px-6 sm:px-4 sm:mx-0 mb-2 mr-2 pt-2 pb-3 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
+        >
+          <span className='text-blue-200 text-base'>Demo Kovan Tether Pool</span>
+          <br />
+          {kovanUsdtPoolManagerContractAddress}
         </a>
       </Link>
     </div>
