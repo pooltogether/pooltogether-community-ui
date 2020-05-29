@@ -52,7 +52,7 @@ export const CompleteAwardUI = (props) => {
     handleCompleteAwardSubmit(
       setTx,
       provider,
-      props.poolAddresses.poolManager,
+      props.poolAddresses.prizePool,
     )
   }
 

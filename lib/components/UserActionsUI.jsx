@@ -13,7 +13,7 @@ export const UserActionsUI = (props) => {
     >
       <div
         className={classnames(
-          'relative sm:-l-2 px-6 pt-4 pb-4 rounded-xl w-full sm:w-1/2',
+          'relative sm:-l-2 px-6 py-5 rounded-xl w-full sm:w-1/2',
           'text-left text-base sm:text-lg mb-4',
         )}
         style={{
@@ -31,7 +31,7 @@ export const UserActionsUI = (props) => {
       </div>
       <div
         className={classnames(
-          'relative sm:-r-2 px-6 pt-4 pb-4 rounded-xl w-full sm:w-1/2',
+          'relative sm:-r-2 px-6 py-5 rounded-xl w-full sm:w-1/2',
           'text-left text-base sm:text-lg mb-4',
         )}
         style={{
@@ -46,7 +46,7 @@ export const UserActionsUI = (props) => {
 
     <div
       className={classnames(
-        'relative sm:-l-2 px-6 pt-4 pb-4 rounded-xl w-full sm:w-1/2',
+        'relative sm:-l-2 px-6 py-5 rounded-xl w-full sm:w-1/2',
         'text-left text-base sm:text-lg mb-4',
       )}
       style={{

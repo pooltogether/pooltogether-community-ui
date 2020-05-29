@@ -70,7 +70,7 @@ export const PoolUI = (
       setGenericChainValues,
       setUsersChainValues,
     )
-  }, 5000)
+  }, 7777)
 
   useEffect(() => {
     fetchChainData(

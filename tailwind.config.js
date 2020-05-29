@@ -144,6 +144,7 @@ module.exports = {
         },
         orange: {
           ...colors.orange,
+          '300': '#FFCF1A',
           '400': '#FFCB32',
           '500': '#FF9303',
           '600': '#EF7301',

@@ -136,11 +136,11 @@ export const WithdrawForm = (props) => {
         </div>
 
         {exitFee.eq(0) && <>
-          Why is the exit fee $0?
+          Why is the fairness fee $0?
           <br/>
-          The exit fee is based on the previous prize and other factors (see documentation or contract code).
+          The fairness fee is based on the previous prize and other factors (see documentation or contract code).
           <br/>
-          You may want to pay exit fee's for your users and/or hide the exit fee when it's $0.
+          You may want to pay fairness fee's for your users and/or hide the fairness fee when it's $0.
         </>}
       </>}
 

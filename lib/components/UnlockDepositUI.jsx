@@ -12,11 +12,11 @@ const handleUnlockSubmit = async (
   setTx,
   provider,
   contractAddress,
-  poolManagerAddress,
+  prizePoolAddress,
   decimals,
 ) => {
   const params = [
-    poolManagerAddress,
+    prizePoolAddress,
     ethers.utils.parseUnits('1000000000', decimals),
     {
       gasLimit: 200000
@@ -54,7 +54,7 @@ export const UnlockDepositUI = (props) => {
             setTx,
             provider,
             props.poolAddresses.erc20,
-            props.poolAddresses.poolManager,
+            props.poolAddresses.ticket,
             props.genericChainValues.erc20Decimals,
           )
         }}

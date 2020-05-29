@@ -18,7 +18,7 @@ export const PoolStats = (props) => {
   useEffect(() => {
     const set = () => {
       setSecondsToPrizeAtMount(
-        genericChainValues.remainingSecondsToPrize.toString(),
+        genericChainValues.prizePeriodRemainingSeconds.toString(),
         10
       )
       setMountedAt(parseInt(Date.now() / 1000, 10))
@@ -53,7 +53,7 @@ export const PoolStats = (props) => {
             <span className='text-purple-600 italic'>
               (estimate)
             </span></div>}
-          value={`$${displayAmountInEther(genericChainValues.estimatePrize, { precision: 0 })} ${genericChainValues.erc20Symbol || 'TOKEN'}`}
+          value={`$${displayAmountInEther(genericChainValues.estimateRemainingPrize, { precision: 0 })} ${genericChainValues.erc20Symbol || 'TOKEN'}`}
         />
       </StatContainer>
 

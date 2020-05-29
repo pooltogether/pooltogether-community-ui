@@ -42,7 +42,7 @@ export const TxMessage = (props) => {
 
         {txInWallet && <>
           <div
-            className='mb-2 text-orange-400 text-base sm:text-lg lg:text-xl'
+            className='mb-2 text-orange-400 text-base sm:text-lg lg:text-2xl'
           >
             Please confirm the transaction in your wallet ...
           </div>
@@ -50,7 +50,7 @@ export const TxMessage = (props) => {
 
         {txSent && <>
           <div
-            className='mb-2 text-orange-400 text-base sm:text-lg lg:text-xl'
+            className='mb-2 text-orange-400 text-base sm:text-lg lg:text-2xl'
           >
             Waiting for confirmations ...
           </div>

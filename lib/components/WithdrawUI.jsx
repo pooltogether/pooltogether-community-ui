@@ -2,10 +2,9 @@ import React, { useContext, useState, useEffect } from 'react'
 import { ethers } from 'ethers'
 import { useRouter } from 'next/router'
 
-import PeriodicPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PeriodicPrizePool'
+import TicketAbi from '@pooltogether/pooltogether-contracts/abis/Ticket'
 
 import { useDebounce } from 'lib/hooks/useDebounce'
-import { Button } from 'lib/components/Button'
 import { WithdrawForm } from 'lib/components/WithdrawForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
@@ -30,6 +29,7 @@ const handleWithdrawSubmit = async (
 
   const params = [
     ethers.utils.parseUnits(withdrawAmount, decimals),
+    [],
     {
       gasLimit: 500000
     }
@@ -43,7 +43,7 @@ const handleWithdrawSubmit = async (
     setTx,
     provider,
     contractAddress,
-    PeriodicPrizePoolAbi,
+    TicketAbi,
     method,
     params,
     'Withdraw'
@@ -53,7 +53,7 @@ const handleWithdrawSubmit = async (
 export const WithdrawUI = (props) => {
   const router = useRouter()
   const networkName = router.query.networkName
-  const poolManager = router.query.poolManagerAddress
+  const prizePool = props.poolAddresses.prizePool
 
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
@@ -63,7 +63,7 @@ export const WithdrawUI = (props) => {
   const [withdrawAmount, setWithdrawAmount] = useState('')
   const [withdrawType, setWithdrawType] = useState('scheduled')
 
-  const debouncedWithdrawAmount = useDebounce(withdrawAmount, 500)
+  const debouncedWithdrawAmount = useDebounce(withdrawAmount, 300)
 
   useEffect(() => {
     const t = async () => {
@@ -71,7 +71,7 @@ export const WithdrawUI = (props) => {
         const result = await fetchExitFee(
           networkName,
           usersAddress,
-          poolManager,
+          prizePool,
           debouncedWithdrawAmount
         )
         setExitFee(result.exitFee)
@@ -109,7 +109,7 @@ export const WithdrawUI = (props) => {
           handleWithdrawSubmit(
             setTx,
             provider,
-            props.poolAddresses.poolManager,
+            props.poolAddresses.ticket,
             withdrawAmount,
             withdrawType,
             props.genericChainValues.erc20Decimals

@@ -11,7 +11,7 @@ export const Footer = () => {
   let twitterHref = 'https://twitter.com/PoolTogether_'
   
   return <footer
-    className='footer w-full text-purple-700 text-sm'
+    className='footer w-full text-purple-600 text-sm'
   >
     <div className='nav-and-footer-container'>
       <div

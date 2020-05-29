@@ -52,7 +52,7 @@ export const StartAwardUI = (props) => {
     handleStartAwardSubmit(
       setTx,
       provider,
-      props.poolAddresses.poolManager,
+      props.poolAddresses.prizePool,
     )
   }
 

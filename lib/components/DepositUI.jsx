@@ -1,9 +1,8 @@
 import React, { useContext, useState } from 'react'
 import { ethers } from 'ethers'
 
-import PeriodicPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PeriodicPrizePool'
+import TicketAbi from '@pooltogether/pooltogether-contracts/abis/Ticket'
 
-import { Button } from 'lib/components/Button'
 import { DepositForm } from 'lib/components/DepositForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
@@ -26,6 +25,7 @@ const handleDepositSubmit = async (
 
   const params = [
     ethers.utils.parseUnits(depositAmount, decimals),
+    [], // bytes calldata
     {
       gasLimit: 700000
     }
@@ -35,7 +35,7 @@ const handleDepositSubmit = async (
     setTx,
     provider,
     contractAddress,
-    PeriodicPrizePoolAbi,
+    TicketAbi,
     'mintTickets',
     params,
     'Deposit',
@@ -68,7 +68,7 @@ export const DepositUI = (props) => {
           handleDepositSubmit(
             setTx,
             provider,
-            props.poolAddresses.poolManager,
+            props.poolAddresses.ticket,
             depositAmount,
             props.genericChainValues.erc20Decimals
           )
