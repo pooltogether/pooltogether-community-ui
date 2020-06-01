@@ -1,4 +1,4 @@
-# PoolTogether v3 - Reference Frontend
+# PoolTogether v3 - Reference Frontend.
 
 The newest UI for communicating with the (unreleased) v3 PoolTogether protocol. 
 
