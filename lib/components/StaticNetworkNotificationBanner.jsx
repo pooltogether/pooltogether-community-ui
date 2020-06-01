@@ -24,10 +24,10 @@ export const StaticNetworkNotificationBanner = ({
 
   return <div
     className={classnames(
-      'text-white text-xs sm:text-base lg:text-lg sm:px-6 py-2 sm:py-3',
+      'text-xs sm:text-base lg:text-lg sm:px-6 py-2 sm:py-3',
       {
-        'bg-red-800': chainId !== 42 && chainId !== 31337,
-        'bg-purple-1000': chainId === 42 || chainId === 31337,
+        'text-white bg-red-800': chainId !== 42 && chainId !== 31337,
+        'text-purple-400 bg-purple-1000': chainId === 42 || chainId === 31337,
       }
     )}
   >
