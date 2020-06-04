@@ -132,7 +132,7 @@ body {
 }
 
 .page-bg {
-  @apply bg-lightPurple-900;
+  @apply bg-lightPurple-1000;
 }
 
 .section-min-height {
