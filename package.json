@@ -14,6 +14,7 @@
     "@pooltogether/etherplex": "^0.2.0",
     "@pooltogether/pooltogether-contracts": "3.0.0-alpha.17",
     "autoprefixer": "^9.8.0",
+    "bn.js": "4.11.0",
     "classnames": "^2.2.6",
     "ethers": "^4.0.47",
     "feather-icons-react": "^0.4.1",
@@ -25,7 +26,9 @@
     "react-device-detect": "^1.12.1",
     "react-dom": "16.13.1",
     "react-toastify": "^5.5.0",
-    "tailwindcss": "^1.4.6"
+    "request": "2.34",
+    "tailwindcss": "^1.4.6",
+    "webpack": "4"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^9.4.2"
