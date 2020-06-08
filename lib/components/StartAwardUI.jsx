@@ -17,6 +17,7 @@ const handleStartAwardSubmit = async (
       gasLimit: 200000
     }
   ]
+  console.log({ contractAddress})
 
   await sendTx(
     setTx,

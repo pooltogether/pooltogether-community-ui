@@ -131,7 +131,7 @@ export const PoolUI = (
         <div
           className='mb-6'
         >
-          Contract address:
+          Pool Manager contract address:
           <br /> <EtherscanAddressLink
             address={poolAddresses.poolManager}
             networkName={networkName}

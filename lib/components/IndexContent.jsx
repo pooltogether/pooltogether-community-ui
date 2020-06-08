@@ -34,7 +34,7 @@ export const IndexContent = (
         as={`/pools/kovan/${kovanDaiPoolManagerContractAddress}`}
       >
         <a
-          className='-mx-6 px-6 sm:px-4 sm:mx-0 lg:mr-4 mb-2 pt-2 pb-3 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
+          className='-mx-6 sm:mx-0 lg:-mx-2 w-10/12 sm:w-full lg:w-1/2 px-6 sm:px-4 lg:mr-4 mb-2 pt-2 pb-3 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
         >
           <span className='text-blue-200 text-base'>Demo Kovan DAI Pool</span>
           <br/>
@@ -47,7 +47,7 @@ export const IndexContent = (
         as={`/pools/kovan/${kovanUsdcPoolManagerContractAddress}`}
       >
         <a
-          className='-ml-6 px-6 sm:px-4 sm:mx-0 mb-2 mr-2 pt-2 pb-3 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
+          className='-ml-6 sm:mx-0 lg:-mx-2 w-10/12 sm:w-full lg:w-1/2 px-6 sm:px-4 mb-2 mr-2 pt-2 pb-3 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
         >
           <span className='text-blue-200 text-base'>Demo Kovan USDC Pool</span>
           <br />
@@ -60,7 +60,7 @@ export const IndexContent = (
         as={`/pools/kovan/${kovanUsdtPoolManagerContractAddress}`}
       >
         <a
-          className='-ml-6 px-6 sm:px-4 sm:mx-0 mb-2 mr-2 pt-2 pb-3 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
+          className='-ml-6 sm:mx-0 lg:-mx-2 w-10/12 sm:w-full lg:w-1/2 px-6 sm:px-4 mb-2 mr-2 pt-2 pb-3 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
         >
           <span className='text-blue-200 text-base'>Demo Kovan Tether Pool</span>
           <br />
@@ -130,7 +130,7 @@ export const IndexContent = (
         <label
           htmlFor='contractAddress'
           className='text-purple-300 hover:text-white trans mt-0'
-        >Pool's contract address:</label>
+        >Pool's manager contract address:</label>
         <Input
           required
           id='contractAddress'

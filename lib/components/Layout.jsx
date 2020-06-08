@@ -57,7 +57,9 @@ export const Layout = (props) => {
               <a
                 href='https://docs.pooltogether.com/contracts/prize-pool'
                 className='trans'
-              >View documentation</a>
+              >
+                📝 View documentation
+              </a>
             </div>
             
             {React.cloneElement(children, {
