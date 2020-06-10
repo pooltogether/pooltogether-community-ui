@@ -26,7 +26,7 @@
     "react-device-detect": "^1.12.1",
     "react-dom": "16.13.1",
     "react-toastify": "^5.5.0",
-    "request": "2.34",
+    "request": "2.88",
     "rollup": "1.12.0",
     "tailwindcss": "^1.4.6",
     "webpack": "4"
