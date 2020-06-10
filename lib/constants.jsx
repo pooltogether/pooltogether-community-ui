@@ -1,4 +1,6 @@
-export const ADDRESSES = {
+export const SUPPORTED_NETWORKS = [3, 42, 31337, 1234]
+
+export const CONTRACT_ADDRESSES = {
   1: {
     POOL_MANAGER_CONTRACT_ADDRESS: ''
   },

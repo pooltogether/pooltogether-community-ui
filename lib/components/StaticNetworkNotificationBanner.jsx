@@ -1,7 +1,9 @@
 import React, { useContext } from 'react'
 import classnames from 'classnames'
 
+import { SUPPORTED_NETWORKS } from 'lib/constants'
 import { WalletContext } from 'lib/components/WalletContextProvider'
+import { chainIdToName } from 'lib/utils/chainIdToName'
 
 export const StaticNetworkNotificationBanner = ({
 }) => {
@@ -14,27 +16,28 @@ export const StaticNetworkNotificationBanner = ({
   }
 
   chainId = _onboard.getState().appNetworkId
+  const networkName = chainIdToName(chainId)
+
+  const networkSupported = SUPPORTED_NETWORKS.includes(chainId)
 
   let networkWords = 'mainnet 🥵'
-  if (chainId === 42) {
-    networkWords = `the Kovan testnet 👍`
-  } else if (chainId === 31337) {
-    networkWords = `local 👍`
+  if (networkSupported) {
+    networkWords = `the ${networkName} testnet 👍`
   }
 
   return <div
     className={classnames(
-      'text-xs sm:text-base lg:text-lg sm:px-6 py-2 sm:py-3',
+      'text-sm sm:text-base lg:text-lg sm:px-6 py-2 sm:py-3',
       {
-        'text-white bg-red-800': chainId !== 42 && chainId !== 31337,
-        'text-purple-400 bg-purple-1000': chainId === 42 || chainId === 31337,
+        'text-white bg-red-800': !networkSupported,
+        'text-purple-400 bg-purple-1000': networkSupported,
       }
     )}
   >
     <div
-      className='text-center px-4 pb-1 sm:pb-0'
+      className='text-center'
     >
-      This works on Kovan and localhost.
+      This works on Ropsten, Kovan and localhost.
       Your wallet is currently set to <span className='font-bold'>{networkWords}</span>
     </div>
   </div>

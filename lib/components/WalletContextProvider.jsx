@@ -79,7 +79,6 @@ const initializeOnboard = (setOnboardState) => {
   _onboard = Onboard({
     // dappId: '2cbf96ae-2e31-4b16-bb75-b28c430bb1b1',
     networkId: nameToChainId(networkName),
-    // networkId: 42,
     darkMode: true,
     walletSelect: {
       wallets: WALLETS_CONFIG,
@@ -92,7 +91,7 @@ const initializeOnboard = (setOnboardState) => {
       },
       balance: async (balance) => {
         console.log('new balance!')
-        console.log({ balance})
+        console.log({ balance })
         setOnboardState(previousState => ({
           ...previousState,
           onboard: _onboard,
@@ -101,7 +100,7 @@ const initializeOnboard = (setOnboardState) => {
       },
       network: async (n) => {
         debug('network change')
-        debug(n)
+        debug('new network id', n)
         await _onboard.config({ networkId: n })
         setOnboardState(previousState => ({
           ...previousState,
@@ -109,7 +108,7 @@ const initializeOnboard = (setOnboardState) => {
         }))
       },
       wallet: w => {
-        debug({w})
+        debug({ w })
         if (!w.name) {
           disconnectWallet(setOnboardState)
         } else {
@@ -126,7 +125,7 @@ const initializeOnboard = (setOnboardState) => {
 const doConnectWallet = async (walletType, setOnboardState) => {
   await _onboard.walletSelect(walletType)
   const currentState = _onboard.getState()
-  debug({ currentState})
+  debug({ currentState })
 
   if (currentState.wallet.type) {
     debug("run walletCheck")
@@ -213,7 +212,7 @@ export const WalletContextProvider = (props) => {
     initializeOnboard(setOnboardState)
 
     onPageLoad(setOnboardState)
-    
+
     setOnboardState(previousState => ({
       ...previousState,
       onboard: _onboard
@@ -227,7 +226,7 @@ export const WalletContextProvider = (props) => {
   }
 
   debug('re-render')
-  
+
   return <WalletContext.Provider
     value={{
       handleConnectWallet,
