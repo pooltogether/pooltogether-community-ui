@@ -11,7 +11,6 @@ import { UserStats } from 'lib/components/UserStats'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { useInterval } from 'lib/hooks/useInterval'
 import { fetchChainData } from 'lib/utils/fetchChainData'
-import { getEthBalance } from 'lib/utils/getEthBalance'
 import { poolToast } from 'lib/utils/poolToast'
 
 const renderErrorMessage = (
@@ -84,7 +83,10 @@ export const PoolUI = (
   }, [provider, usersAddress, poolAddresses])
 
   useEffect(() => {
-    getEthBalance(walletContext, setEthBalance)
+    const balance = walletContext.state.onboard.getState().balance
+    if (balance) {
+      setEthBalance(ethers.utils.bigNumberify(balance))
+    }
   }, [walletContext])
 
   if (poolAddresses.error || genericChainValues.error || usersChainValues.error) {

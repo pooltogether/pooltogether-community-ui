@@ -1,14 +1,21 @@
 // import App from 'next/app'
 import React, { useState } from 'react'
 import { ethers } from 'ethers'
-import Onboard from '@pooltogether/bnc-onboard'
+import Onboard from 'bnc-onboard'
 import Cookies from 'js-cookie'
+
+import { nameToChainId } from 'lib/utils/nameToChainId'
 
 const debug = require('debug')('WalletContextProvider')
 
 const INFURA_KEY = process.env.NEXT_JS_INFURA_KEY
 const FORTMATIC_KEY = process.env.NEXT_JS_FORTMATIC_API_KEY
 const SELECTED_WALLET_COOKIE_KEY = 'selectedWallet'
+// let networkName = 'mainnet'
+let networkName = 'kovan'
+const RPC_URL = (networkName && INFURA_KEY) ?
+  `https://${networkName}.infura.io/v3/${INFURA_KEY}` :
+  'http://localhost:8545'
 
 let cookieOptions = { sameSite: 'strict' }
 if (process.env.NEXT_JS_DOMAIN_NAME) {
@@ -20,7 +27,7 @@ if (process.env.NEXT_JS_DOMAIN_NAME) {
 
 const WALLETS_CONFIG = [
   { walletName: "coinbase", preferred: true },
-  // { walletName: "trust", preferred: true, rpcUrl: RPC_URL },
+  { walletName: "trust", preferred: true, rpcUrl: RPC_URL },
   { walletName: "metamask", preferred: true },
   { walletName: "dapper" },
   // {
@@ -30,17 +37,16 @@ const WALLETS_CONFIG = [
   //   rpcUrl: RPC_URL,
   //   preferred: true
   // },
-  // {
-  //   walletName: 'ledger',
-  //   rpcUrl: RPC_URL,
-  //   preferred: true
-  // },
+  {
+    walletName: 'ledger',
+    rpcUrl: RPC_URL,
+    preferred: true
+  },
   {
     walletName: "fortmatic",
     apiKey: FORTMATIC_KEY,
     preferred: true
   },
-  // rpcUrl: process.env.NEXT_JS_FORTMATIC_CUSTOM_NODE_URL,
   {
     walletName: "authereum",
     preferred: true
@@ -53,7 +59,15 @@ const WALLETS_CONFIG = [
   { walletName: "torus" },
   { walletName: "status" },
   { walletName: "unilogin" },
-  // { walletName: "imToken", rpcUrl: RPC_URL }
+  {
+    walletName: "walletLink",
+    rpcUrl: RPC_URL,
+    preferred: true
+  },
+  {
+    walletName: "imToken",
+    rpcUrl: RPC_URL
+  }
 ]
 
 export const WalletContext = React.createContext()
@@ -61,9 +75,11 @@ export const WalletContext = React.createContext()
 let _onboard
 
 const initializeOnboard = (setOnboardState) => {
+  console.log(nameToChainId(networkName))
   _onboard = Onboard({
-    dappId: '2cbf96ae-2e31-4b16-bb75-b28c430bb1b1',
-    networkId: 42,
+    // dappId: '2cbf96ae-2e31-4b16-bb75-b28c430bb1b1',
+    networkId: nameToChainId(networkName),
+    // networkId: 42,
     darkMode: true,
     walletSelect: {
       wallets: WALLETS_CONFIG,
@@ -73,6 +89,15 @@ const initializeOnboard = (setOnboardState) => {
         debug('address change')
         debug(a)
         setAddress(setOnboardState)
+      },
+      balance: async (balance) => {
+        console.log('new balance!')
+        console.log({ balance})
+        setOnboardState(previousState => ({
+          ...previousState,
+          onboard: _onboard,
+          timestamp: Date.now(),
+        }))
       },
       network: async (n) => {
         debug('network change')

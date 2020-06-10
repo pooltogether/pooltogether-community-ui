@@ -10,17 +10,16 @@
     "distrelease": "yarn build"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.9.2",
-    "@pooltogether/bnc-onboard": "^1.7.8",
     "@pooltogether/etherplex": "^0.2.0",
     "@pooltogether/pooltogether-contracts": "3.0.0-alpha.17",
     "autoprefixer": "^9.8.0",
     "bn.js": "4.11.0",
+    "bnc-onboard": "^1.9.4",
     "classnames": "^2.2.6",
     "ethers": "^4.0.47",
     "feather-icons-react": "^0.4.1",
     "js-cookie": "^2.2.1",
-    "next": "9.4.2",
+    "next": "9.4.4",
     "next-images": "^1.4.0",
     "postcss-easy-import": "^3.0.0",
     "react": "16.13.1",
@@ -33,6 +32,6 @@
     "webpack": "4"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^9.4.2"
+    "@next/bundle-analyzer": "^9.4.4"
   }
 }

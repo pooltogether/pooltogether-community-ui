@@ -58,7 +58,7 @@ export const Layout = (props) => {
                 href='https://docs.pooltogether.com/contracts/prize-pool'
                 className='trans'
               >
-                📝 View documentation
+                View documentation
               </a>
             </div>
             
