@@ -20,7 +20,9 @@ export const IndexContent = (
   }
 
   return <>
-    <div
+{/*
+
+<div
       className='text-lg sm:text-xl lg:text-2xl mb-4'
     >
       1. View one of the demo pools:
@@ -69,7 +71,6 @@ export const IndexContent = (
       </Link>
     </div>
 
-
     <hr/>
 
     <div
@@ -77,6 +78,7 @@ export const IndexContent = (
     >
       2. Or enter a pool to view it's details:
     </div>
+*/}
 
     <div
       className='bg-purple-1000 -mx-8 sm:-mx-0 py-4 px-8 sm:p-10 pb-16 rounded-xl lg:w-3/4 text-base sm:text-lg mb-20'
