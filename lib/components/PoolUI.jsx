@@ -151,7 +151,7 @@ export const PoolUI = (
       </div>
 
       <div
-        className='relative bg-purple-1000 px-4 sm:px-8 lg:px-20 py-8 sm:py-10 text-center rounded-lg my-4'
+        className='relative bg-purple-1200 px-4 sm:px-8 lg:px-20 py-8 sm:py-10 text-center rounded-lg my-4'
       >
         {ethBalance && ethBalance.eq(0) && <>
           <FormLockedOverlay
