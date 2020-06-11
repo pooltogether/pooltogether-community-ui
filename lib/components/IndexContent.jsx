@@ -23,8 +23,6 @@ export const IndexContent = (
     setNetwork(e.target.value)
   }
 
-  console.log({walletNetwork})
-
   return <>
 
     {walletNetwork === 42 && <>

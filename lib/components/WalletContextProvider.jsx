@@ -90,8 +90,6 @@ const initializeOnboard = (setOnboardState) => {
         setAddress(setOnboardState)
       },
       balance: async (balance) => {
-        console.log('new balance!')
-        console.log({ balance })
         setOnboardState(previousState => ({
           ...previousState,
           onboard: _onboard,
