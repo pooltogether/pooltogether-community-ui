@@ -33,17 +33,21 @@ export const WithdrawForm = (props) => {
   const handleWithdrawTypeChange = (e) => {
     setWithdrawType(e.target.value)
   }
+
+  const {
+    erc20Decimals,
+  } = genericChainValues || {}
   
   const poolIsLocked = genericChainValues.isRngRequested
   const tokenSymbol = genericChainValues.erc20Symbol || 'TOKEN'
 
   let instantTotal = ethers.utils.bigNumberify(0)
   if (withdrawAmount && exitFee && withdrawType === 'instant') {
-    instantTotal = ethers.utils.parseEther(withdrawAmount).sub(exitFee)
+    instantTotal = ethers.utils.parseUnits(withdrawAmount, erc20Decimals).sub(exitFee)
   }
 
   const overBalance = withdrawAmount && usersTicketBalance && usersTicketBalance.lt(
-    ethers.utils.parseEther(withdrawAmount)
+    ethers.utils.parseUnits(withdrawAmount, erc20Decimals)
   )
   
   return <>
@@ -146,8 +150,8 @@ export const WithdrawForm = (props) => {
 
       {overBalance && <>
         <div className='text-yellow-400'>
-          You only have {displayAmountInEther(usersTicketBalance)} tickets.
-          <br />The maximum you can withdraw is {displayAmountInEther(usersTicketBalance, { precision: 2 })} {tokenSymbol}.
+          You only have {displayAmountInEther(usersTicketBalance, { decimals: erc20Decimals })} tickets.
+          <br />The maximum you can withdraw is {displayAmountInEther(usersTicketBalance, { precision: 2, decimals: erc20Decimals })} {tokenSymbol}.
         </div>
       </>}
 

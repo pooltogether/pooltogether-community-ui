@@ -21,6 +21,10 @@ export const DepositForm = (props) => {
     usersERC20Balance,
   } = usersChainValues || {}
 
+  const {
+    erc20Decimals,
+  } = genericChainValues || {}
+
   const poolIsLocked = genericChainValues.isRngRequested
   const tokenSymbol = genericChainValues.erc20Symbol || 'TOKEN'
 
@@ -31,7 +35,7 @@ export const DepositForm = (props) => {
   }
 
   const overBalance = depositAmount && usersERC20Balance && usersERC20Balance.lt(
-    ethers.utils.parseEther(depositAmount)
+    ethers.utils.parseUnits(depositAmount, erc20Decimals)
   )
 
   return <>
@@ -99,8 +103,8 @@ export const DepositForm = (props) => {
 
       {overBalance && <>
         <div className='text-yellow-400'>
-          You only have {displayAmountInEther(usersERC20Balance)} {tokenSymbol}.
-          <br />The maximum you can deposit is {displayAmountInEther(usersERC20Balance, { precision: 2 })}.
+          You only have {displayAmountInEther(usersERC20Balance, { decimals: erc20Decimals })} {tokenSymbol}.
+          <br />The maximum you can deposit is {displayAmountInEther(usersERC20Balance, { precision: 2, decimals: erc20Decimals })}.
         </div>
       </>}
 

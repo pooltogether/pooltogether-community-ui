@@ -19,11 +19,11 @@ export const FormLockedOverlay = ({
         `flex flex-col items-center absolute text-center p-4 lg:p-10 rounded-lg`
       )}
       style={{
-        backgroundColor: 'rgba(33, 24, 72, 0.975)',
-        top: 4,
-        right: 4,
-        bottom: 4,
-        left: 4,
+        backgroundColor: 'rgba(43, 24, 72, 0.975)',
+        top: 3,
+        right: 3,
+        bottom: 3,
+        left: 3,
       }}
     >
       <div

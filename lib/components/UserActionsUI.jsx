@@ -17,7 +17,7 @@ export const UserActionsUI = (props) => {
           'text-left text-base sm:text-lg mb-4',
         )}
         style={{
-          backgroundColor: 'rgba(64, 28, 109, 0.4)'
+          backgroundColor: 'rgba(64, 28, 109, 0.7)'
         }}
       >
         {props.usersChainValues.usersERC20Allowance.gt(0) ?
@@ -35,7 +35,7 @@ export const UserActionsUI = (props) => {
           'text-left text-base sm:text-lg mb-4',
         )}
         style={{
-          backgroundColor: 'rgba(64, 28, 109, 0.4)'
+          backgroundColor: 'rgba(64, 28, 109, 0.7)'
         }}
       >
         <WithdrawUI
@@ -50,7 +50,7 @@ export const UserActionsUI = (props) => {
         'text-left text-base sm:text-lg mb-4',
       )}
       style={{
-        backgroundColor: 'rgba(64, 28, 109, 0.4)'
+        backgroundColor: 'rgba(64, 28, 109, 0.7)'
       }}
     >
       <SweepTimelockedUI
