@@ -123,7 +123,6 @@ export const PoolUI = (
     walletContext.handleConnectWallet()
   }
 
-  console.log({ genericChainValues})
   const tokenSvg = genericChainValues.erc20Symbol === 'DAI' ?
     DaiSvg :
     genericChainValues.erc20Symbol === 'USDC' ?

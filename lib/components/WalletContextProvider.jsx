@@ -75,9 +75,7 @@ export const WalletContext = React.createContext()
 let _onboard
 
 const initializeOnboard = (setOnboardState) => {
-  console.log(nameToChainId(networkName))
   _onboard = Onboard({
-    // dappId: '2cbf96ae-2e31-4b16-bb75-b28c430bb1b1',
     networkId: nameToChainId(networkName),
     darkMode: true,
     walletSelect: {

@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import Link from 'next/link'
 
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { WalletInfo } from 'lib/components/WalletInfo'
@@ -23,16 +24,20 @@ export const Nav = (props) => {
         <div
           className='w-2/5 lg:w-1/5 justify-start h-full flex items-center truncate'
         >
-          <a
+          <Link
             href='/'
-            title={'Back to home'}
+            as='/'
           >
-            <img
-              alt={`PoolTogether Logo`}
-              src={PoolLogo}
-              className='mr-auto lg:m-0 w-16 sm:w-16'
-            />
-          </a>
+            <a
+              title={'Back to home'}
+            >
+              <img
+                alt={`PoolTogether Logo`}
+                src={PoolLogo}
+                className='mr-auto lg:m-0 w-16 sm:w-16'
+              />
+            </a>
+          </Link>
         </div>
 
         <div

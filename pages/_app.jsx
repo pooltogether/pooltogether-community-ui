@@ -1,4 +1,7 @@
 import React from 'react'
+import dynamic from 'next/dynamic'
+
+import { Layout } from 'lib/components/Layout'
 
 import 'react-toastify/dist/ReactToastify.css'
 import 'assets/styles/index.css'
@@ -10,10 +13,21 @@ import 'assets/styles/utils.css'
 import 'assets/styles/animations.css'
 import 'assets/styles/transitions.css'
 
+const DynamicWalletContextProvider = dynamic(() =>
+  import('lib/components/WalletContextProvider').then(mod => mod.WalletContextProvider),
+  { ssr: false }
+)
+
 function MyApp({ Component, pageProps }) {
-  return <Component
-    {...pageProps}
-  />
+  return <>
+    <DynamicWalletContextProvider>
+      <Layout>
+        <Component
+          {...pageProps}
+        />
+      </Layout>
+    </DynamicWalletContextProvider>
+  </>
 }
 
 export default MyApp
