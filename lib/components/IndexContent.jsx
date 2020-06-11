@@ -6,6 +6,10 @@ import { Input } from 'lib/components/Input'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { getDemoPoolContractAddress } from 'lib/utils/getDemoPoolContractAddress'
 
+import DaiSvg from 'assets/images/dai.svg'
+import UsdcSvg from 'assets/images/usdc.svg'
+import UsdtSvg from 'assets/images/usdt.svg'
+
 export const IndexContent = (
   props,
 ) => {
@@ -40,11 +44,17 @@ export const IndexContent = (
           as={`/pools/kovan/${kovanDaiPoolManagerContractAddress}`}
         >
           <a
-            className='-mx-6 sm:mx-0 lg:-mx-2 w-10/12 sm:w-full lg:w-1/2 px-6 sm:px-4 lg:mr-4 mb-2 pt-2 pb-3 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
+            className='-mx-6 sm:mx-0 lg:-mx-2 w-full lg:w-1/2 px-6 sm:px-4 lg:mr-4 mb-2 py-2 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
           >
-            <span className='text-blue-200 text-base'>Demo Kovan DAI Pool</span>
-            <br/>
-            {kovanDaiPoolManagerContractAddress}
+            <div className='flex items-center'>
+              <img src={DaiSvg} className='inline-block w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 mr-2' />
+
+              <div>
+                <span className='text-blue-200 text-base'>Demo Kovan DAI Pool</span>
+                <br/>
+                <span className='text-xxs sm:text-base inline-block -t-1 relative'>{kovanDaiPoolManagerContractAddress}</span>
+              </div>
+            </div>
           </a>
         </Link>
 
@@ -53,11 +63,17 @@ export const IndexContent = (
           as={`/pools/kovan/${kovanUsdcPoolManagerContractAddress}`}
         >
           <a
-            className='-ml-6 sm:mx-0 lg:-mx-2 w-10/12 sm:w-full lg:w-1/2 px-6 sm:px-4 mb-2 mr-2 pt-2 pb-3 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
+            className='-mx-6 sm:mx-0 lg:-mx-2 w-full lg:w-1/2 px-6 sm:px-4 lg:mr-4 mb-2 py-2 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
           >
-            <span className='text-blue-200 text-base'>Demo Kovan USDC Pool</span>
-            <br />
-            {kovanUsdcPoolManagerContractAddress}
+            <div className='flex items-center'>
+              <img src={UsdcSvg} className='inline-block w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 mr-2' />
+
+              <div>
+                <span className='text-blue-200 text-base'>Demo Kovan USDC Pool</span>
+                <br />
+                <span className='text-xxs sm:text-base inline-block -t-1 relative'>{kovanUsdcPoolManagerContractAddress}</span>
+              </div>
+            </div>
           </a>
         </Link>
 
@@ -66,11 +82,17 @@ export const IndexContent = (
           as={`/pools/kovan/${kovanUsdtPoolManagerContractAddress}`}
         >
           <a
-            className='-ml-6 sm:mx-0 lg:-mx-2 w-10/12 sm:w-full lg:w-1/2 px-6 sm:px-4 mb-2 mr-2 pt-2 pb-3 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
+            className='-mx-6 sm:mx-0 lg:-mx-2 w-full lg:w-1/2 px-6 sm:px-4 lg:mr-4 mb-2 py-2 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
           >
-            <span className='text-blue-200 text-base'>Demo Kovan Tether Pool</span>
-            <br />
-            {kovanUsdtPoolManagerContractAddress}
+            <div className='flex items-center'>
+              <img src={UsdtSvg} className='inline-block w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 mr-2' />
+
+              <div>
+                <span className='text-blue-200 text-base'>Demo Kovan Tether Pool</span>
+                <br />
+                <span className='text-xxs sm:text-base inline-block -t-1 relative'>{kovanUsdtPoolManagerContractAddress}</span>
+              </div>
+            </div>
           </a>
         </Link>
       </div>
@@ -95,14 +117,16 @@ export const IndexContent = (
           window.location.href = `/pools/${network}/${contractAddress}`
         }}
       >
-        <label
-          htmlFor='kovan-radio'
-          className='text-purple-300 hover:text-white trans mt-0'
-        >Network the Pool is on:</label>
-
         <div
           className='radio-input-fieldset mb-6'
         >
+          <label
+            htmlFor='kovan-radio'
+            className='text-purple-300 hover:text-white trans mt-0'
+          >
+            Network the Pool is on:
+          </label>
+
           <div
             className='radio-input-group w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
           >

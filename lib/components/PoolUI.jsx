@@ -13,6 +13,10 @@ import { useInterval } from 'lib/hooks/useInterval'
 import { fetchChainData } from 'lib/utils/fetchChainData'
 import { poolToast } from 'lib/utils/poolToast'
 
+import DaiSvg from 'assets/images/dai.svg'
+import UsdcSvg from 'assets/images/usdc.svg'
+import UsdtSvg from 'assets/images/usdt.svg'
+
 const renderErrorMessage = (
   address,
   type,
@@ -119,6 +123,13 @@ export const PoolUI = (
     walletContext.handleConnectWallet()
   }
 
+  console.log({ genericChainValues})
+  const tokenSvg = genericChainValues.erc20Symbol === 'DAI' ?
+    DaiSvg :
+    genericChainValues.erc20Symbol === 'USDC' ?
+      UsdcSvg :
+      UsdtSvg
+
   return <>
     {genericChainValues.loading ?
       <div
@@ -130,6 +141,11 @@ export const PoolUI = (
       </div>
     : <>
       <div className='bg-purple-1200 px-4 sm:px-8 lg:px-20 py-8 sm:py-10 mb-4 text-center rounded-lg'>
+        <img
+          src={tokenSvg}
+          className='inline-block w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mb-2'
+        />
+        
         <div
           className='mb-6'
         >
