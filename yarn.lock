@@ -1588,10 +1588,10 @@
   dependencies:
     mkdirp "^0.5.0"
 
-"@pooltogether/pooltogether-contracts@3.0.0-alpha.17":
-  version "3.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.0.0-alpha.17.tgz#8ed0da5bc7b3529273fbf5ccf3c0a4bafdb898be"
-  integrity sha512-6wMA+D794MG0CRETVKAEOBjhtvZi8MCviOR5pDnGTWeR81OZAr0+lRbFGaQqW7ATZA3dFv0XQtcyAnQluJxNcg==
+"@pooltogether/pooltogether-contracts@3.0.0-alpha.19":
+  version "3.0.0-alpha.19"
+  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.0.0-alpha.19.tgz#adb7a635b831f84d686a130a8b4f5aeb12e5c399"
+  integrity sha512-WC4E3HWvuYSbtshLBIPxddfqltptqiXH93QEQE/VUnNSFMFWqJy0QNV4Iw06gx65cH7p0qagNiF6Zm8+/HJHYA==
   dependencies:
     "@opengsn/gsn" "^0.9.0"
     "@openzeppelin/contracts-ethereum-package" "^3.0.0"
@@ -1605,7 +1605,7 @@
     ethers "^4.0.47"
     sortition-sum-tree-factory "^0.1.0"
 
-"@pooltogether/uniform-random-number@pooltogether/uniform-random-number#solidity-0.6":
+"@pooltogether/uniform-random-number@github:pooltogether/uniform-random-number#solidity-0.6":
   version "0.1.0"
   resolved "https://codeload.github.com/pooltogether/uniform-random-number/tar.gz/fae15110b26db8494531fec2a787f60afb74e688"
 
