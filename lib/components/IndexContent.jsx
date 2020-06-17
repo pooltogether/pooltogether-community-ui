@@ -19,9 +19,9 @@ export const IndexContent = (
   const [network, setNetwork] = useState('kovan')
   const [contractAddress, setContractAddress] = useState('')
 
-  const kovanDaiPoolManagerContractAddress = getDemoPoolContractAddress('kovan', 'dai')
-  const kovanUsdcPoolManagerContractAddress = getDemoPoolContractAddress('kovan', 'usdc')
-  const kovanUsdtPoolManagerContractAddress = getDemoPoolContractAddress('kovan', 'usdt')
+  const kovanDaiPrizePoolContractAddress = getDemoPoolContractAddress('kovan', 'dai')
+  const kovanUsdcPrizePoolContractAddress = getDemoPoolContractAddress('kovan', 'usdc')
+  const kovanUsdtPrizePoolContractAddress = getDemoPoolContractAddress('kovan', 'usdt')
 
   const handleNetworkChange = (e) => {
     setNetwork(e.target.value)
@@ -40,8 +40,8 @@ export const IndexContent = (
         className='text-xs sm:text-lg lg:text-xl'
       >
         <Link
-          href='/pools/[networkName]/[poolManagerAddress]'
-          as={`/pools/kovan/${kovanDaiPoolManagerContractAddress}`}
+          href='/pools/[networkName]/[prizePoolAddress]'
+          as={`/pools/kovan/${kovanDaiPrizePoolContractAddress}`}
         >
           <a
             className='-mx-6 sm:mx-0 lg:-mx-2 w-full lg:w-1/2 px-6 sm:px-4 lg:mr-4 mb-2 py-2 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
@@ -52,15 +52,15 @@ export const IndexContent = (
               <div>
                 <span className='text-blue-200 text-base'>Demo Kovan DAI Pool</span>
                 <br/>
-                <span className='text-xxs sm:text-base inline-block -t-1 relative'>{kovanDaiPoolManagerContractAddress}</span>
+                <span className='text-xxs sm:text-base inline-block -t-1 relative'>{kovanDaiPrizePoolContractAddress}</span>
               </div>
             </div>
           </a>
         </Link>
 
         <Link
-          href='/pools/[networkName]/[poolManagerAddress]'
-          as={`/pools/kovan/${kovanUsdcPoolManagerContractAddress}`}
+          href='/pools/[networkName]/[prizePoolAddress]'
+          as={`/pools/kovan/${kovanUsdcPrizePoolContractAddress}`}
         >
           <a
             className='-mx-6 sm:mx-0 lg:-mx-2 w-full lg:w-1/2 px-6 sm:px-4 lg:mr-4 mb-2 py-2 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
@@ -71,15 +71,15 @@ export const IndexContent = (
               <div>
                 <span className='text-blue-200 text-base'>Demo Kovan USDC Pool</span>
                 <br />
-                <span className='text-xxs sm:text-base inline-block -t-1 relative'>{kovanUsdcPoolManagerContractAddress}</span>
+                <span className='text-xxs sm:text-base inline-block -t-1 relative'>{kovanUsdcPrizePoolContractAddress}</span>
               </div>
             </div>
           </a>
         </Link>
 
         <Link
-          href='/pools/[networkName]/[poolManagerAddress]'
-          as={`/pools/kovan/${kovanUsdtPoolManagerContractAddress}`}
+          href='/pools/[networkName]/[prizePoolAddress]'
+          as={`/pools/kovan/${kovanUsdtPrizePoolContractAddress}`}
         >
           <a
             className='-mx-6 sm:mx-0 lg:-mx-2 w-full lg:w-1/2 px-6 sm:px-4 lg:mr-4 mb-2 py-2 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
@@ -90,7 +90,7 @@ export const IndexContent = (
               <div>
                 <span className='text-blue-200 text-base'>Demo Kovan Tether Pool</span>
                 <br />
-                <span className='text-xxs sm:text-base inline-block -t-1 relative'>{kovanUsdtPoolManagerContractAddress}</span>
+                <span className='text-xxs sm:text-base inline-block -t-1 relative'>{kovanUsdtPrizePoolContractAddress}</span>
               </div>
             </div>
           </a>

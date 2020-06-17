@@ -22,7 +22,7 @@ const renderErrorMessage = (
   type,
   message
 ) => {
-  const errorMsg = `Error fetching ${type} for Pool Manager with address: ${address}: ${message}. (maybe wrong Ethereum network?)`
+  const errorMsg = `Error fetching ${type} for prize pool with address: ${address}: ${message}. (maybe wrong Ethereum network?)`
 
   console.error(errorMsg)
   poolToast.error(errorMsg)
@@ -33,7 +33,8 @@ export const PoolUI = (
 ) => {
   const router = useRouter()
   const networkName = router.query.networkName
-  const poolManager = router.query.poolManagerAddress
+  const prizePool = router.query.prizePoolAddress
+  console.log(router.query)
 
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
@@ -41,24 +42,25 @@ export const PoolUI = (
 
   const [ethBalance, setEthBalance] = useState(ethers.utils.bigNumberify(0))
   const [poolAddresses, setPoolAddresses] = useState({
-    poolManager
+    prizePool
   })
   const [genericChainValues, setGenericChainValues] = useState({
     loading: true,
-    erc20Symbol: 'TOKEN',
+    tokenSymbol: 'TOKEN',
     poolTotalSupply: '1234',
   })
 
   const [usersChainValues, setUsersChainValues] = useState({
     loading: true,
     usersTicketBalance: ethers.utils.bigNumberify(0),
-    usersERC20Allowance: ethers.utils.bigNumberify(0),
-    usersERC20Balance: ethers.utils.bigNumberify(0),
+    usersTokenAllowance: ethers.utils.bigNumberify(0),
+    usersTokenBalance: ethers.utils.bigNumberify(0),
   })
 
 
+  console.log({ prizePool})
   try {
-    ethers.utils.getAddress(poolManager)
+    ethers.utils.getAddress(prizePool)
   } catch (e) {
     return 'Incorrectly formatted Ethereum address!'
   }
@@ -95,15 +97,15 @@ export const PoolUI = (
 
   if (poolAddresses.error || genericChainValues.error || usersChainValues.error) {
     if (poolAddresses.error) {
-      renderErrorMessage(poolManager, 'pool addresses', poolAddresses.errorMessage)
+      renderErrorMessage(prizePool, 'pool addresses', poolAddresses.errorMessage)
     }
 
     if (genericChainValues.error) {
-      renderErrorMessage(poolManager, 'generic chain values', genericChainValues.errorMessage)
+      renderErrorMessage(prizePool, 'generic chain values', genericChainValues.errorMessage)
     }
 
     if (usersChainValues.error) {
-      renderErrorMessage(poolManager, `user's chain values`, usersChainValues.errorMessage)
+      renderErrorMessage(prizePool, `user's chain values`, usersChainValues.errorMessage)
     }
 
     // router.push(
@@ -123,9 +125,9 @@ export const PoolUI = (
     walletContext.handleConnectWallet()
   }
 
-  const tokenSvg = genericChainValues.erc20Symbol === 'DAI' ?
+  const tokenSvg = genericChainValues.tokenSymbol === 'DAI' ?
     DaiSvg :
-    genericChainValues.erc20Symbol === 'USDC' ?
+    genericChainValues.tokenSymbol === 'USDC' ?
       UsdcSvg :
       UsdtSvg
 
@@ -148,12 +150,12 @@ export const PoolUI = (
         <div
           className='mb-6'
         >
-          Pool Manager contract address:
+          Prize Pool contract address:
           <br /> <EtherscanAddressLink
-            address={poolAddresses.poolManager}
+            address={poolAddresses.prizePool}
             networkName={networkName}
           >
-            {poolAddresses.poolManager}
+            {poolAddresses.prizePool}
           </EtherscanAddressLink>
         </div>
 
