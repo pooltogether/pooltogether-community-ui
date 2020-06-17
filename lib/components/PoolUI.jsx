@@ -34,7 +34,6 @@ export const PoolUI = (
   const router = useRouter()
   const networkName = router.query.networkName
   const prizePool = router.query.prizePoolAddress
-  console.log(router.query)
 
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
@@ -57,8 +56,6 @@ export const PoolUI = (
     usersTokenBalance: ethers.utils.bigNumberify(0),
   })
 
-
-  console.log({ prizePool})
   try {
     ethers.utils.getAddress(prizePool)
   } catch (e) {

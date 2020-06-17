@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { ethers } from 'ethers'
 
-import TicketAbi from '@pooltogether/pooltogether-contracts/abis/Ticket'
+import CompoundPeriodicPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPeriodicPrizePool'
 
 import { DepositForm } from 'lib/components/DepositForm'
 import { TxMessage } from 'lib/components/TxMessage'
@@ -12,6 +12,7 @@ import { sendTx } from 'lib/utils/sendTx'
 const handleDepositSubmit = async (
   setTx,
   provider,
+  usersAddress,
   contractAddress,
   depositAmount,
   decimals
@@ -24,6 +25,7 @@ const handleDepositSubmit = async (
   }
 
   const params = [
+    usersAddress,
     ethers.utils.parseUnits(depositAmount, decimals),
     [], // bytes calldata
     {
@@ -35,7 +37,7 @@ const handleDepositSubmit = async (
     setTx,
     provider,
     contractAddress,
-    TicketAbi,
+    CompoundPeriodicPrizePoolAbi,
     'mintTickets',
     params,
     'Deposit',
@@ -45,6 +47,7 @@ const handleDepositSubmit = async (
 export const DepositUI = (props) => {
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
+  const usersAddress = walletContext._onboard.getState().address
 
   const [depositAmount, setDepositAmount] = useState('')
 
@@ -68,9 +71,10 @@ export const DepositUI = (props) => {
           handleDepositSubmit(
             setTx,
             provider,
-            props.poolAddresses.ticket,
+            usersAddress,
+            props.poolAddresses.prizePool,
             depositAmount,
-            props.genericChainValues.erc20Decimals
+            props.genericChainValues.tokenDecimals
           )
         }}
         vars={{

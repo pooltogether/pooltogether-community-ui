@@ -57,36 +57,6 @@ export const PoolRelatedAddressesUI = (props) => {
 
       <StatContainer>
         <BlueLineStat
-          title='yieldService()'
-          value={<>
-            <EtherscanAddressLink
-              address={poolAddresses.yieldService}
-              networkName={networkName}
-              size='xxs'
-            >
-              {poolAddresses.yieldService}
-            </EtherscanAddressLink>
-          </>}
-        />
-      </StatContainer>
-
-      <StatContainer>
-        <BlueLineStat
-          title='timelock()'
-          value={<>
-            <EtherscanAddressLink
-              address={poolAddresses.timelock}
-              networkName={networkName}
-              size='xxs'
-            >
-              {poolAddresses.timelock}
-            </EtherscanAddressLink>
-          </>}
-        />
-      </StatContainer>
-
-      <StatContainer>
-        <BlueLineStat
           title='sponsorship()'
           value={<>
             <EtherscanAddressLink
@@ -120,11 +90,11 @@ export const PoolRelatedAddressesUI = (props) => {
           title='erc20 token()'
           value={<>
             <EtherscanAddressLink
-              address={poolAddresses.erc20}
+              address={poolAddresses.token}
               networkName={networkName}
               size='xxs'
             >
-              {poolAddresses.erc20}
+              {poolAddresses.token}
             </EtherscanAddressLink>
           </>}
         />

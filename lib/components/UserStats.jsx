@@ -13,16 +13,16 @@ export const UserStats = (props) => {
   } = props
   
   const {
-    erc20Decimals,
+    tokenDecimals,
   } = genericChainValues
 
   const {
-    usersERC20Balance,
-    usersERC20Allowance,
+    usersTokenBalance,
+    usersTokenAllowance,
     usersTicketBalance,
   } = usersChainValues
 
-  const decimals = erc20Decimals
+  const decimals = tokenDecimals
 
   return <>
     <div
@@ -44,15 +44,15 @@ export const UserStats = (props) => {
 
       <StatContainer>
         <BlueLineStat
-          title={`Your ${genericChainValues.erc20Symbol || 'TOKEN'} balance`}
-          value={displayAmountInEther(usersERC20Balance, { precision: 2, decimals })}
+          title={`Your ${genericChainValues.tokenSymbol || 'TOKEN'} balance`}
+          value={displayAmountInEther(usersTokenBalance, { precision: 2, decimals })}
         />
       </StatContainer>
 
       <StatContainer>
         <BlueLineStat
-          title={`${genericChainValues.erc20Symbol || 'TOKEN'} Allowance`}
-          value={displayAmountInEther(usersERC20Allowance, { precision: 0, decimals })}
+          title={`${genericChainValues.tokenSymbol || 'TOKEN'} Allowance`}
+          value={displayAmountInEther(usersTokenAllowance, { precision: 0, decimals })}
         />
       </StatContainer>
 

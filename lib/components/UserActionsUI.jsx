@@ -20,7 +20,7 @@ export const UserActionsUI = (props) => {
         //   backgroundColor: 'rgba(64, 28, 109, 0.7)'
         // }}
       >
-        {props.usersChainValues.usersERC20Allowance.gt(0) ?
+        {props.usersChainValues.usersTokenAllowance.gt(0) ?
           <DepositUI
             {...props}
           /> :

@@ -53,9 +53,9 @@ export const UnlockDepositUI = (props) => {
           handleUnlockSubmit(
             setTx,
             provider,
-            props.poolAddresses.erc20,
-            props.poolAddresses.ticket,
-            props.genericChainValues.erc20Decimals,
+            props.poolAddresses.token,
+            props.poolAddresses.prizePool,
+            props.genericChainValues.tokenDecimals,
           )
         }}
       />

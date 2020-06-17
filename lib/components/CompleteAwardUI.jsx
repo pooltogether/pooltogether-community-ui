@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 
-import PeriodicPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PeriodicPrizePool'
+import CompoundPeriodicPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPeriodicPrizePool'
 
 import { Button } from 'lib/components/Button'
 import { TxMessage } from 'lib/components/TxMessage'
@@ -22,7 +22,7 @@ const handleCompleteAwardSubmit = async (
     setTx,
     provider,
     contractAddress,
-    PeriodicPrizePoolAbi,
+    CompoundPeriodicPrizePoolAbi,
     'completeAward',
     params,
     'Complete Award',

@@ -13,10 +13,10 @@ export const SweepTimelockedForm = (props) => {
   } = props
 
   const {
-    erc20Decimals
+    tokenDecimals
   } = genericChainValues
   
-  const tokenSymbol = genericChainValues.erc20Symbol || 'TOKEN'
+  const tokenSymbol = genericChainValues.tokenSymbol || 'TOKEN'
 
   return <>
     <form
@@ -39,7 +39,7 @@ export const SweepTimelockedForm = (props) => {
 
       {!disabled && <>
         <div className='text-yellow-400'>
-          You have {displayAmountInEther(usersTimelockBalance, { decimals: erc20Decimals })} {tokenSymbol} scheduled for withdrawal after the interest has matured.
+          You have {displayAmountInEther(usersTimelockBalance, { decimals: tokenDecimals })} {tokenSymbol} scheduled for withdrawal after the interest has matured.
           {/* TODO: Unable to get timelockBalanceAvailableAt working */}
         </div>
       </>}

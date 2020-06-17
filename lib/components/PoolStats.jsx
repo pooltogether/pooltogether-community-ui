@@ -42,7 +42,7 @@ export const PoolStats = (props) => {
       <StatContainer>
         <BlueLineStat
           title='Total ticket supply'
-          value={`${displayAmountInEther(genericChainValues.ticketTotalSupply, { precision: 2 })} ${genericChainValues.erc20Symbol || 'TOKEN'}`}
+          value={`${displayAmountInEther(genericChainValues.ticketTotalSupply, { precision: 2 })} ${genericChainValues.tokenSymbol || 'TOKEN'}`}
         />
       </StatContainer>
 
@@ -53,7 +53,7 @@ export const PoolStats = (props) => {
             <span className='text-purple-600 italic'>
               (estimate)
             </span></div>}
-          value={`$${displayAmountInEther(genericChainValues.estimateRemainingPrize, { precision: 0 })} ${genericChainValues.erc20Symbol || 'TOKEN'}`}
+          value={`$${displayAmountInEther(genericChainValues.estimateRemainingPrize, { precision: 0 })} ${genericChainValues.tokenSymbol || 'TOKEN'}`}
         />
       </StatContainer>
 
