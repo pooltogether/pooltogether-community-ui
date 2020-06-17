@@ -176,6 +176,23 @@ export const IndexContent = (
               className='text-purple-300 relative pl-6 py-3'
             >mainnet</label>
           </div>
+
+          <div
+            className='radio-input-group w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
+          >
+            <input
+              id='local-radio'
+              name='radio'
+              type='radio'
+              onChange={handleNetworkChange}
+              value='local'
+              checked={network === 'local'}
+            />
+            <label
+              htmlFor='local-radio'
+              className='text-purple-300 relative pl-6 py-3'
+            >local</label>
+          </div>
         </div>
         
 
@@ -185,7 +202,9 @@ export const IndexContent = (
           <label
             htmlFor='contractAddress'
             className='text-purple-300 hover:text-white trans mt-0'
-          >Pool's manager contract address:</label>
+          >
+            Prize Pool contract address:
+          </label>
           <Input
             required
             id='contractAddress'
