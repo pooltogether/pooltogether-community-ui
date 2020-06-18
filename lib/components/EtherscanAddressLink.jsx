@@ -29,11 +29,10 @@ export const EtherscanAddressLink = (props) => {
       rel='noopener noreferrer'
       title='View on Etherscan'
     >
-      {children}
-      {/* <br /><FeatherIcon
-        icon='arrow-up-right'
+      {children}  <FeatherIcon
+        icon='external-link'
         className='is-etherscan-arrow inline-block'
-      /> */}
+      />
     </a>
   </>
 }

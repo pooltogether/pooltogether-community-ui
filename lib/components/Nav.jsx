@@ -30,6 +30,7 @@ export const Nav = (props) => {
           >
             <a
               title={'Back to home'}
+              className='border-0'
             >
               <img
                 alt={`PoolTogether Logo`}

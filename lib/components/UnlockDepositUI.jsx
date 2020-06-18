@@ -42,6 +42,11 @@ export const UnlockDepositUI = (props) => {
 
   const txInFlight = tx.inWallet || tx.sent
 
+  const resetState = (e) => {
+    e.preventDefault()
+    setTx({})
+  }
+
   return <>
     {!txInFlight ? <>
       <DepositForm
@@ -63,6 +68,7 @@ export const UnlockDepositUI = (props) => {
       <TxMessage
         txType='Unlock Token Deposits'
         tx={tx}
+        handleReset={resetState}
       />
     </>}
     

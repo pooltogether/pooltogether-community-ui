@@ -1,11 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
-import { Button } from 'lib/components/Button'
 import { EtherscanTxLink } from 'lib/components/EtherscanTxLink'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { shortenAddress } from 'lib/utils/shortenAddress'
+import { WalletContext } from 'lib/components/WalletContextProvider'
 
 export const TxMessage = (props) => {
+  const walletContext = useContext(WalletContext)
+  const { _onboard } = walletContext || {}
+  const chainId = _onboard.getState().appNetworkId
+
   const {
     tx,
     txType,
@@ -42,7 +46,7 @@ export const TxMessage = (props) => {
 
         {txInWallet && <>
           <div
-            className='mb-2 text-orange-400 text-base sm:text-lg lg:text-2xl'
+            className='mb-2 text-yellow-400 text-base sm:text-lg lg:text-xl'
           >
             Please confirm the transaction in your wallet ...
           </div>
@@ -50,7 +54,7 @@ export const TxMessage = (props) => {
 
         {txSent && <>
           <div
-            className='mb-2 text-orange-400 text-base sm:text-lg lg:text-2xl'
+            className='mb-2 text-yellow-400 text-base sm:text-lg lg:text-xl'
           >
             Waiting for confirmations ...
           </div>
@@ -75,8 +79,17 @@ export const TxMessage = (props) => {
             There was an error with the transaction
           </div>
 
-          <div className='my-3'>
-            Click the link below to see the result on Etherscan or check the JS console.
+          <div className='my-3 text-purple-400'>
+            {tx && tx.hash ? <>
+              {<EtherscanTxLink
+                chainId={chainId}
+                hash={tx.hash}
+              >
+                See the result on Etherscan
+              </EtherscanTxLink>} or check the JS console.
+            </> : <>
+              Transaction Signature Denied
+            </>}
           </div>
         </>}
 
@@ -95,7 +108,7 @@ export const TxMessage = (props) => {
         >
           {tx.hash && <>
             {<EtherscanTxLink
-              chainId={42}
+              chainId={chainId}
               hash={tx.hash}
             >
               {shortenAddress(tx.hash)}
@@ -105,7 +118,7 @@ export const TxMessage = (props) => {
 
 
         {handleReset && txCompleted && <>
-          <div className='my-3 text-center'>
+          <div className='mt-10 text-center'>
             <button
               className='font-bold rounded-full text-green-300 border-2 sm:border-4 border-green-300 hover:text-white hover:bg-lightPurple-1000 text-xxs sm:text-base pt-2 pb-2 px-3 sm:px-6 trans'
               onClick={handleReset}

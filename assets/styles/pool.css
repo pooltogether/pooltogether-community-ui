@@ -54,11 +54,11 @@ h3 {
 }
 
 a {
-  @apply text-purple-600 no-underline;
+  @apply text-purple-500 no-underline border-b-2 border-purple-800;
 }
 
 a:hover {
-  @apply text-cyan-400;
+  @apply text-cyan-400 border-purple-700;
 }
 
 a[disabled],
@@ -336,4 +336,16 @@ input[type="text"] {
   .question-button--container {
     top: -2px;
   }
+}
+
+.footer a {
+  @apply text-purple-500 no-underline border-0;
+}
+
+.footer a:hover {
+  @apply text-cyan-400 border-b-2 border-purple-700;
+}
+
+.footer .img-link:hover {
+  @apply border-0 no-underline;
 }

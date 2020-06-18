@@ -87,7 +87,7 @@ export const Footer = () => {
             className='flex sm:justify-between w-full'
           >
             <a
-              className='inline-block trans mr-3 lg:mr-0 lg:ml-4 w-5 h-5 '
+              className='img-link inline-block trans mr-3 lg:mr-0 lg:ml-4 w-5 h-5 '
               href={twitterHref}
               target='_blank'
               rel='noreferrer noopener'
@@ -100,7 +100,7 @@ export const Footer = () => {
             </a>
 
             <a
-              className='inline-block trans mr-3 lg:mr-0 lg:ml-4 w-5 h-5 '
+              className='img-link inline-block trans mr-3 lg:mr-0 lg:ml-4 w-5 h-5 '
               href='https://discord.gg/hxPhPDW'
               target='_blank'
               rel='noreferrer noopener'
@@ -113,7 +113,7 @@ export const Footer = () => {
             </a>
 
             <a
-              className='inline-block trans mr-3 lg:mr-0 lg:ml-4 w-5 h-5 '
+              className='img-link inline-block trans mr-3 lg:mr-0 lg:ml-4 w-5 h-5 '
               href='https://github.com/pooltogether'
               target='_blank'
               rel='noreferrer noopener'
@@ -126,7 +126,7 @@ export const Footer = () => {
             </a>
 
             <a
-              className='inline-block trans mr-3 lg:mr-0 lg:ml-4 w-5 h-5 '
+              className='img-link inline-block trans mr-3 lg:mr-0 lg:ml-4 w-5 h-5 '
               href='https://medium.com/pooltogether'
               target='_blank'
               rel='noreferrer noopener'

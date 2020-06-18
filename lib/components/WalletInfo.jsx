@@ -39,11 +39,11 @@ export const WalletInfo = () => {
   if (address && walletName) {
     innerContent = <>
       <div className='leading-snug text-purple-500 trans'>
-        <a
+        <span
           className='text-purple-500 hover:text-purple-300 overflow-ellipsis block w-full no-underline'
         >
           {shortenAddress(address)}
-        </a>
+        </span>
 
         <span
           className='block sm:inline-block rounded-lg sm:text-purple-500 capitalize'
