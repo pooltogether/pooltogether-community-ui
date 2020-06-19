@@ -5,6 +5,7 @@ import { Button } from 'lib/components/Button'
 import { Input } from 'lib/components/Input'
 import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 import { RadioInputGroup } from 'lib/components/RadioInputGroup'
+import { TextInputGroup } from 'lib/components/TextInputGroup'
 
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 
@@ -98,14 +99,12 @@ export const WithdrawForm = (props) => {
         ]}
       />
 
-      <label
-        htmlFor='withdrawAmount'
-        className='trans text-purple-300 hover:text-white'
-      >
-        Withdraw amount <span className='text-purple-600 italic'> (in {tokenSymbol})</span>
-      </label>
-      <Input
+
+      <TextInputGroup
         id='withdrawAmount'
+        label={<>
+          Withdraw amount <span className='text-purple-600 italic'> (in {genericChainValues.tokenSymbol || 'TOKEN'})</span>
+        </>}
         required
         type='number'
         pattern='\d+'
@@ -115,7 +114,9 @@ export const WithdrawForm = (props) => {
 
       {exitFee && withdrawType === 'instant' && <>
         <div className='text-yellow-400'>
-          You will receive {displayAmountInEther(instantTotal)} {tokenSymbol} now and forfeit {displayAmountInEther(exitFee)} as interest
+          You will receive {displayAmountInEther(
+            instantTotal, { decimals: tokenDecimals }
+          )} {tokenSymbol} now and forfeit {displayAmountInEther(exitFee)} as interest
         </div>
 
         {exitFee.eq(0) && <>

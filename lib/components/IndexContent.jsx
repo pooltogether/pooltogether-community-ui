@@ -3,8 +3,8 @@ import Link from 'next/link'
 
 import { Button } from 'lib/components/Button'
 import { FormPanel } from 'lib/components/FormPanel'
-import { Input } from 'lib/components/Input'
 import { RadioInputGroup } from 'lib/components/RadioInputGroup'
+import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { getDemoPoolContractAddress } from 'lib/utils/getDemoPoolContractAddress'
 
@@ -146,23 +146,15 @@ export const IndexContent = (
           />
           
 
-
-          <div
-            className='fieldset py-2'
-          >
-            <label
-              htmlFor='contractAddress'
-              className='text-purple-300 hover:text-white trans mt-0'
-            >
+          <TextInputGroup
+            id='contractAddress'
+            label={<>
               Prize Pool contract address:
-            </label>
-            <Input
-              required
-              id='contractAddress'
-              onChange={(e) => setContractAddress(e.target.value)}
-              value={contractAddress}
-            />
-          </div>
+            </>}
+            required
+            onChange={(e) => setContractAddress(e.target.value)}
+            value={contractAddress}
+          />
 
           <div
             className='my-5'

@@ -19,7 +19,7 @@ export const TextInputGroup = (
 
   return <>
     <div
-      className='input-fieldset mb-6'
+      className='input-fieldset py-2 mb-6'
     >
       <label
         htmlFor={id}
@@ -37,7 +37,7 @@ export const TextInputGroup = (
         id={id}
         required={required}
         disabled={disabled}
-        type={type}
+        type={type || 'text'}
         pattern={pattern}
         onChange={onChange}
         value={value}
