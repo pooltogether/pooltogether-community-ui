@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Button } from 'lib/components/Button'
 import { FormPanel } from 'lib/components/FormPanel'
 import { Input } from 'lib/components/Input'
+import { RadioInputGroup } from 'lib/components/RadioInputGroup'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { getDemoPoolContractAddress } from 'lib/utils/getDemoPoolContractAddress'
 
@@ -119,83 +120,31 @@ export const IndexContent = (
             window.location.href = `/pools/${network}/${contractAddress}`
           }}
         >
-          <div
-            className='radio-input-fieldset mb-6'
-          >
-            <label
-              htmlFor='kovan-radio'
-              className='text-purple-300 hover:text-white trans mt-0'
-            >
-              Network the Pool is on:
-            </label>
-
-            <div
-              className='radio-input-group trans w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
-            >
-              <input
-                id='kovan-radio'
-                name='radio'
-                type='radio'
-                onChange={handleNetworkChange}
-                value='kovan'
-                checked={network === 'kovan'}
-              />
-              <label
-                htmlFor='kovan-radio'
-                className='text-purple-300 relative pl-6 py-3'
-              >kovan</label>
-            </div>
-            <div
-              className='radio-input-group trans w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
-            >
-              <input
-                id='ropsten-radio'
-                name='radio'
-                type='radio'
-                onChange={handleNetworkChange}
-                value='ropsten'
-                checked={network === 'ropsten'}
-              />
-              <label
-                htmlFor='ropsten-radio'
-                className='text-purple-300 relative pl-6 py-3'
-              >ropsten</label>
-            </div>
-
-            <div
-              className='radio-input-group trans w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
-            >
-              <input
-                id='mainnet-radio'
-                name='radio'
-                type='radio'
-                onChange={handleNetworkChange}
-                value='mainnet'
-                checked={network === 'mainnet'}
-              />
-              <label
-                htmlFor='mainnet-radio'
-                className='text-purple-300 relative pl-6 py-3'
-              >mainnet</label>
-            </div>
-
-            <div
-              className='radio-input-group trans w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
-            >
-              <input
-                id='local-radio'
-                name='radio'
-                type='radio'
-                onChange={handleNetworkChange}
-                value='local'
-                checked={network === 'local'}
-              />
-              <label
-                htmlFor='local-radio'
-                className='text-purple-300 relative pl-6 py-3'
-              >local</label>
-            </div>
-          </div>
+          <RadioInputGroup
+            label='Network the Pool is on:'
+            name='network'
+            onChange={handleNetworkChange}
+            value={network}
+            radios={[
+              {
+                value: 'kovan',
+                label: 'kovan'
+              },
+              {
+                value: 'ropsten',
+                label: 'ropsten'
+              },
+              {
+                value: 'mainnet',
+                label: 'mainnet'
+              },
+              {
+                value: 'local',
+                label: 'local'
+              }
+            ]}
+          />
+          
 
 
           <div

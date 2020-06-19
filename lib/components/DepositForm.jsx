@@ -1,10 +1,9 @@
 import React from 'react'
-import classnames from 'classnames'
 import { ethers } from 'ethers'
 
 import { Button } from 'lib/components/Button'
 import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
-import { Input } from 'lib/components/Input'
+import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 
 export const DepositForm = (props) => {
@@ -77,22 +76,11 @@ export const DepositForm = (props) => {
         Deposit:
       </div>
 
-      
-
-      <label
-        htmlFor='depositAmount'
-        className={classnames(
-          'trans',
-          {
-            'text-purple-700 cursor-not-allowed': disabled,
-            'text-purple-300 hover:text-white': !disabled,
-          }
-        )}
-      >
-        Deposit amount <span className='text-purple-600 italic'> (in {genericChainValues.tokenSymbol || 'TOKEN'})</span>
-      </label>
-      <Input
+      <TextInputGroup
         id='depositAmount'
+        label={<>
+          Deposit amount <span className='text-purple-600 italic'> (in {genericChainValues.tokenSymbol || 'TOKEN'})</span>
+        </>}
         required
         disabled={disabled}
         type='number'

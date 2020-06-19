@@ -4,6 +4,7 @@ import { ethers } from 'ethers'
 import { Button } from 'lib/components/Button'
 import { Input } from 'lib/components/Input'
 import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
+import { RadioInputGroup } from 'lib/components/RadioInputGroup'
 
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 
@@ -79,45 +80,23 @@ export const WithdrawForm = (props) => {
 1) SCHEDULE: receive $1000 DAI once enough interest has been provided to the prize
 2) INSTANT: pay $1.90 to withdraw right now and forfeit the interest that would go towards the prize`}
       /> */}
-      <label
-        htmlFor='kovan-radio'
-        className='text-purple-300 hover:text-white trans mt-0'
-      >
-        What type of withdraw?
-      </label> 
-      <div
-        className='radio-input-group trans w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
-      >
-        <input
-          id='scheduled-radio'
-          name='radio'
-          type='radio'
-          onChange={handleWithdrawTypeChange}
-          value='scheduled'
-          checked={withdrawType === 'scheduled'}
-        />
-        <label
-          htmlFor='scheduled-radio'
-          className='text-purple-300 relative pl-6 py-3'
-        >scheduled</label>
-      </div>
 
-      <div
-        className='radio-input-group trans w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
-      >
-        <input
-          id='instant-radio'
-          name='radio'
-          type='radio'
-          onChange={handleWithdrawTypeChange}
-          value='instant'
-          checked={withdrawType === 'instant'}
-        />
-        <label
-          htmlFor='instant-radio'
-          className='text-purple-300 relative pl-6 py-3'
-        >instant</label>
-      </div>
+      <RadioInputGroup
+        label='What type of withdraw?'
+        name='withdrawType'
+        onChange={handleWithdrawTypeChange}
+        value={withdrawType}
+        radios={[
+          {
+            value: 'scheduled',
+            label: 'scheduled'
+          },
+          {
+            value: 'instant',
+            label: 'instant'
+          }
+        ]}
+      />
 
       <label
         htmlFor='withdrawAmount'
