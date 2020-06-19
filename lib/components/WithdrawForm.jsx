@@ -86,7 +86,7 @@ export const WithdrawForm = (props) => {
         What type of withdraw?
       </label> 
       <div
-        className='radio-input-group w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
+        className='radio-input-group trans w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
       >
         <input
           id='scheduled-radio'
@@ -103,7 +103,7 @@ export const WithdrawForm = (props) => {
       </div>
 
       <div
-        className='radio-input-group w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
+        className='radio-input-group trans w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
       >
         <input
           id='instant-radio'

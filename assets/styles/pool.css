@@ -208,6 +208,10 @@ input[type="text"] {
   position: relative;
 }
 
+.radio-input-group:hover {
+  background-color: #421C90;
+}
+
 .radio-input-group label {
   width: 100%;
   display: block;

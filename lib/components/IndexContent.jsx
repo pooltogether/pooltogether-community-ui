@@ -130,7 +130,7 @@ export const IndexContent = (
             </label>
 
             <div
-              className='radio-input-group w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
+              className='radio-input-group trans w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
             >
               <input
                 id='kovan-radio'
@@ -146,7 +146,7 @@ export const IndexContent = (
               >kovan</label>
             </div>
             <div
-              className='radio-input-group w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
+              className='radio-input-group trans w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
             >
               <input
                 id='ropsten-radio'
@@ -163,7 +163,7 @@ export const IndexContent = (
             </div>
 
             <div
-              className='radio-input-group w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
+              className='radio-input-group trans w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
             >
               <input
                 id='mainnet-radio'
@@ -180,7 +180,7 @@ export const IndexContent = (
             </div>
 
             <div
-              className='radio-input-group w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
+              className='radio-input-group trans w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
             >
               <input
                 id='local-radio'
