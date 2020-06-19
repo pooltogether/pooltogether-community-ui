@@ -18,8 +18,7 @@ export const PoolStats = (props) => {
   useEffect(() => {
     const set = () => {
       setSecondsToPrizeAtMount(
-        genericChainValues.prizePeriodRemainingSeconds.toString(),
-        10
+        parseInt(genericChainValues.prizePeriodRemainingSeconds.toString(), 10)
       )
       setMountedAt(parseInt(Date.now() / 1000, 10))
     }
