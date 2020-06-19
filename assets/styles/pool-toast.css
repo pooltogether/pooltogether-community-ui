@@ -57,7 +57,7 @@
 }
 
 .pool-toast.Toastify__toast-container--top-center {
-  left: 0;
+  left: 50%;
   margin-left: 0;
   max-width: 1228px;
   bottom: 90px;
@@ -67,15 +67,6 @@
 @screen sm {
   .pool-toast.Toastify__toast-container--top-center {
     top: 50px;
-    left: 50%;
-    margin-left: -40%;  
-  }
-}
-
-@screen lg {
-  .pool-toast.Toastify__toast-container--top-center {
-    left: 70%;
-    margin-left: -50%;
   }
 }
 

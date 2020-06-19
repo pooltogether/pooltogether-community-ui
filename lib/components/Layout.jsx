@@ -62,9 +62,13 @@ export const Layout = (props) => {
               </a>
             </div>
             
-            {React.cloneElement(children, {
-              ...props,
-            })}
+            <div
+              className='px-4 sm:px-8 lg:px-12 my-4'
+            >
+              {React.cloneElement(children, {
+                ...props,
+              })}
+            </div>
           </div>
 
           <div
