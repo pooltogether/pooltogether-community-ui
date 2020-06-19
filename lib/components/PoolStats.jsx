@@ -49,7 +49,7 @@ export const PoolStats = (props) => {
         <BlueLineStat
           title={<div className='flex flex-col leading-tight'>
             next prize
-            <span className='text-purple-600 italic'>
+            <span className='text-purple-700 italic'>
               (estimate)
             </span></div>}
           value={`$${displayAmountInEther(genericChainValues.estimateRemainingPrize, { precision: 0 })} ${genericChainValues.tokenSymbol || 'TOKEN'}`}

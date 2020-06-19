@@ -39,13 +39,13 @@ export const Layout = (props) => {
 
 
           <div
-            className='relative flex flex-col flex-grow h-full z-10 px-4 sm:px-8 lg:px-12 text-white'
+            className='relative flex flex-col flex-grow h-full z-10 text-white'
             style={{
               flex: 1
             }}
           >
             <div
-              className='mt-10 mb-10 lg:w-2/3'
+              className='px-4 sm:px-8 lg:px-12 my-10 lg:w-2/3'
             >
               <img src={PoolIcon} className='inline-block w-10 h-10 ml-2 mb-2 sm:mb-0' />
               <div

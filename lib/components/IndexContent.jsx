@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import Link from 'next/link'
 
 import { Button } from 'lib/components/Button'
+import { FormPanel } from 'lib/components/FormPanel'
 import { Input } from 'lib/components/Input'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { getDemoPoolContractAddress } from 'lib/utils/getDemoPoolContractAddress'
@@ -107,9 +108,7 @@ export const IndexContent = (
 
     </>}
 
-    <div
-      className='bg-purple-1300 -mx-8 sm:-mx-0 py-4 px-8 sm:p-10 pb-16 rounded-xl lg:w-3/4 text-base sm:text-lg mb-20'
-    >
+    <FormPanel>
       <form
         onSubmit={(e) => {
           e.preventDefault()
@@ -194,7 +193,7 @@ export const IndexContent = (
             >local</label>
           </div>
         </div>
-        
+
 
         <div
           className='fieldset py-2'
@@ -223,7 +222,7 @@ export const IndexContent = (
           </Button>
         </div>
       </form>
-    </div>
+    </FormPanel>
   
   </>
 }

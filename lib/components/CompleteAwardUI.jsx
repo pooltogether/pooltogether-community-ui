@@ -61,7 +61,7 @@ export const CompleteAwardUI = (props) => {
       {genericChainValues.canCompleteAward && <>
         <Button
           onClick={handleClick}
-          color='green'
+          color='orange'
           size='sm'
         >
           Complete Award

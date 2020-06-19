@@ -42,7 +42,7 @@ const getBackgroundColorClasses = (backgroundColorClasses, color, isText) => {
     case 'green':
       return 'bg-green-500 hover:bg-green-400 active:bg-green-400'
     case 'pink':
-      return 'bg-pink-600 hover:bg-pink-400 active:bg-pink-700'
+      return 'bg-pink-400 hover:bg-pink-300 active:bg-pink-300'
     case 'blue':
       return 'bg-blue-600 hover:bg-blue-500 active:bg-blue-700'
     case 'purple':

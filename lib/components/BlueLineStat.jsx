@@ -22,7 +22,7 @@ export const BlueLineStat = ({
     </div>
 
     <div
-      className='flex justify-center font-bold text-green-300 text-lg sm:text-xl lg:text-2xl mb-2'
+      className='flex justify-center font-bold text-green-300 text-lg sm:text-xl lg:text-2xl mb-2 glow'
     >
       {value}
     </div>

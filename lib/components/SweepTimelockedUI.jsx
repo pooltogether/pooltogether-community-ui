@@ -47,10 +47,11 @@ export const SweepTimelockedUI = (props) => {
   })
 
   const {
-    usersTimelockBalance
+    usersTimelockBalance,
+    usersTimelockBalanceAvailableAt
   } = usersChainValues || {}
-  const userHasTimelockedFunds = usersTimelockBalance && usersTimelockBalance.gt(0)
 
+  const userHasTimelockedFunds = usersTimelockBalance && usersTimelockBalance.gt(0)
   const txInFlight = tx.inWallet || tx.sent
 
   const resetState = (e) => {
@@ -62,8 +63,9 @@ export const SweepTimelockedUI = (props) => {
     {!txInFlight ? <>
       <SweepTimelockedForm
         {...props}
-        disabled={!userHasTimelockedFunds}
+        hasFundsToSweep={!userHasTimelockedFunds}
         usersTimelockBalance={usersTimelockBalance}
+        usersTimelockBalanceAvailableAt={parseInt(usersTimelockBalanceAvailableAt, 10)}
         handleSubmit={(e) => {
           e.preventDefault()
 

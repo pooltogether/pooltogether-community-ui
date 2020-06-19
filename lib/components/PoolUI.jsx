@@ -138,7 +138,7 @@ export const PoolUI = (
         Fetching chain values ...
       </div>
     : <>
-      <div className='bg-purple-1200 px-4 sm:px-8 lg:px-10 py-8 sm:py-10 mb-4 text-center rounded-lg'>
+      <div className='px-4 sm:px-8 lg:px-10 py-4 sm:py-6 text-center rounded-lg'>
         <img
           src={tokenSvg}
           className='inline-block w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mb-2'
@@ -164,8 +164,10 @@ export const PoolUI = (
         />
       </div>
 
+      <hr />
+
       <div
-        className='relative bg-purple-1200 px-4 sm:px-8 lg:px-10 py-8 sm:py-10 text-center rounded-lg my-4'
+        className='relative py-4 sm:py-6 text-center rounded-lg'
       >
         {ethBalance && ethBalance.eq(0) && <>
           <FormLockedOverlay

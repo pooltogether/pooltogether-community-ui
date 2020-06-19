@@ -34,7 +34,7 @@ body {
 hr {
   border: 0;
   height: 0;
-  border-top: 3px solid rgba(120, 70, 220, 0.1);
+  border-top: 3px solid rgba(60, 8, 165, 0.3);
   border-bottom: none;
   background: transparent;
   margin: 20px auto;
@@ -348,4 +348,24 @@ input[type="text"] {
 
 .footer .img-link:hover {
   @apply border-0 no-underline;
+}
+
+.glow {
+  text-shadow: 0 0 2px rgba(6, 255, 150, 0.29), 0 0 4px rgba(14, 207, 216, 0.38)
+}
+
+.pt-panel {
+  width: calc(100% + 64px);
+}
+
+@screen sm {
+  .pt-panel {
+    width: 100%;
+  }
+}
+
+@screen lg {
+  .pt-panel {
+    width: 100%;
+  }
 }

@@ -1,9 +1,9 @@
 import React from 'react'
-import classnames from 'classnames'
 
-import { UnlockDepositUI } from 'lib/components/UnlockDepositUI'
+import { FormPanel } from 'lib/components/FormPanel'
 import { DepositUI } from 'lib/components/DepositUI'
 import { SweepTimelockedUI } from 'lib/components/SweepTimelockedUI'
+import { UnlockDepositUI } from 'lib/components/UnlockDepositUI'
 import { WithdrawUI } from 'lib/components/WithdrawUI'
 
 export const UserActionsUI = (props) => {
@@ -11,15 +11,7 @@ export const UserActionsUI = (props) => {
     <div
       className='flex flex-col sm:flex-row'
     >
-      <div
-        className={classnames(
-          'relative sm:-l-2 px-6 py-5 rounded-xl w-full sm:w-1/2',
-          'text-left text-base sm:text-lg mb-4 bg-purple-1100',
-        )}
-        // style={{
-        //   backgroundColor: 'rgba(64, 28, 109, 0.7)'
-        // }}
-      >
+      <FormPanel>
         {props.usersChainValues.usersTokenAllowance.gt(0) ?
           <DepositUI
             {...props}
@@ -28,35 +20,20 @@ export const UserActionsUI = (props) => {
             {...props}
           />
         }
-      </div>
-      <div
-        className={classnames(
-          'relative sm:-r-2 px-6 py-5 rounded-xl w-full sm:w-1/2',
-          'text-left text-base sm:text-lg mb-4 bg-purple-1100',
-        )}
-        // style={{
-        //   backgroundColor: 'rgba(64, 28, 109, 0.7)'
-        // }}
-      >
+      </FormPanel>
+      
+      <FormPanel>
         <WithdrawUI
           {...props}
         />
-      </div>
+      </FormPanel>
     </div>  
 
-    <div
-      className={classnames(
-        'relative sm:-l-2 px-6 py-5 rounded-xl w-full sm:w-1/2',
-        'text-left text-base sm:text-lg mb-4',
-      )}
-      style={{
-        backgroundColor: 'rgba(64, 28, 109, 0.7)'
-      }}
-    >
+    <FormPanel>
       <SweepTimelockedUI
         {...props}
       />
-    </div>  
+    </FormPanel>
   </>
 }
 

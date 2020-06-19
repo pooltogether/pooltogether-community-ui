@@ -6,23 +6,28 @@ import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 
 export const SweepTimelockedForm = (props) => {
   const {
-    disabled,
+    hasFundsToSweep,
     genericChainValues,
     handleSubmit,
     usersTimelockBalance,
+    usersTimelockBalanceAvailableAt,
   } = props
 
   const {
     tokenDecimals
   } = genericChainValues
   
+  const now = parseInt(Date.now() / 1000, 10)
+  const fundsReadyInSeconds = (usersTimelockBalanceAvailableAt - now)
+  const buttonDisabled = fundsReadyInSeconds > 0
+
   const tokenSymbol = genericChainValues.tokenSymbol || 'TOKEN'
 
   return <>
     <form
       onSubmit={handleSubmit}
     >
-      {disabled && <FormLockedOverlay
+      {hasFundsToSweep && <FormLockedOverlay
         topMarginClass='mt-0'
         title='Sweep Timelocked Funds'
       >
@@ -37,10 +42,15 @@ export const SweepTimelockedForm = (props) => {
         Sweep Timelocked Funds:
       </div>
 
-      {!disabled && <>
+      {!hasFundsToSweep && <>
         <div className='text-yellow-400'>
           You have {displayAmountInEther(usersTimelockBalance, { decimals: tokenDecimals })} {tokenSymbol} scheduled for withdrawal after the interest has matured.
-          {/* TODO: Unable to get timelockBalanceAvailableAt working */}
+        </div>
+      </>}
+
+      {fundsReadyInSeconds > 0 && <>
+        <div className='text-orange-500'>
+          Your funds will be available in {fundsReadyInSeconds} seconds.
         </div>
       </>}
       
@@ -49,6 +59,7 @@ export const SweepTimelockedForm = (props) => {
       >
         <Button
           color='green'
+          disabled={buttonDisabled}
         >
           Sweep
         </Button>
