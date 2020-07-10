@@ -19,12 +19,12 @@ export const TextInputGroup = (
 
   return <>
     <div
-      className='input-fieldset py-2 mb-6'
+      className='input-fieldset py-2 mb-0'
     >
       <label
         htmlFor={id}
         className={classnames(
-          'trans',
+          'mt-0 trans',
           {
             'text-purple-700 cursor-not-allowed': disabled,
             'text-purple-300 hover:text-white': !disabled,
