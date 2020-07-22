@@ -143,7 +143,7 @@ export const PoolUI = (
           src={tokenSvg}
           className='inline-block w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mb-2'
         />
-        
+
         <div
           className='mb-6'
         >
@@ -205,7 +205,7 @@ export const PoolUI = (
             </div>
           </>
         </FormLockedOverlay>}
-        
+
         <UserStats
           genericChainValues={genericChainValues}
           usersChainValues={usersChainValues}

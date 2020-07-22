@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 
-import CompoundPeriodicPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPeriodicPrizePool'
+import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
 
 import { SweepTimelockedForm } from 'lib/components/SweepTimelockedForm'
 import { TxMessage } from 'lib/components/TxMessage'
@@ -24,7 +24,7 @@ const handleSweepTimelockedSubmit = async (
     setTx,
     provider,
     contractAddress,
-    CompoundPeriodicPrizePoolAbi,
+    CompoundPrizePoolAbi,
     'sweep',
     params,
     'Sweep Timelocked Funds'
@@ -84,7 +84,6 @@ export const SweepTimelockedUI = (props) => {
         handleReset={resetState}
       />
     </>}
-    
+
   </>
 }
-

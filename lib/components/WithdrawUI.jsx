@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { ethers } from 'ethers'
 import { useRouter } from 'next/router'
 
-import CompoundPeriodicPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPeriodicPrizePool'
+import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
 
 import { useDebounce } from 'lib/hooks/useDebounce'
 import { WithdrawForm } from 'lib/components/WithdrawForm'
@@ -43,7 +43,7 @@ const handleWithdrawSubmit = async (
     setTx,
     provider,
     contractAddress,
-    CompoundPeriodicPrizePoolAbi,
+    CompoundPrizePoolAbi,
     method,
     params,
     'Withdraw'
@@ -131,7 +131,6 @@ export const WithdrawUI = (props) => {
         handleReset={resetState}
       />
     </>}
-    
+
   </>
 }
-

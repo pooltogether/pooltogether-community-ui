@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 
-import CompoundPeriodicPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPeriodicPrizePool'
+import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
 
 import { Button } from 'lib/components/Button'
 import { TxMessage } from 'lib/components/TxMessage'
@@ -22,7 +22,7 @@ const handleStartAwardSubmit = async (
     setTx,
     provider,
     contractAddress,
-    CompoundPeriodicPrizePoolAbi,
+    CompoundPrizePoolAbi,
     'startAward',
     params,
     'Start Award',
@@ -75,7 +75,6 @@ export const StartAwardUI = (props) => {
         resetButtonText='Hide this'
       />
     </>}
-    
+
   </>
 }
-

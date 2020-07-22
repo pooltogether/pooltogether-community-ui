@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 
-import CompoundPeriodicPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPeriodicPrizePool'
+import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
 
 import { Button } from 'lib/components/Button'
 import { TxMessage } from 'lib/components/TxMessage'
@@ -22,7 +22,7 @@ const handleCompleteAwardSubmit = async (
     setTx,
     provider,
     contractAddress,
-    CompoundPeriodicPrizePoolAbi,
+    CompoundPrizePoolAbi,
     'completeAward',
     params,
     'Complete Award',
@@ -36,7 +36,7 @@ export const CompleteAwardUI = (props) => {
 
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
-  
+
   const [tx, setTx] = useState({})
 
   const txInFlight = tx.inWallet || tx.sent && !tx.completed
@@ -75,7 +75,6 @@ export const CompleteAwardUI = (props) => {
         resetButtonText='Hide this'
       />
     </>}
-    
+
   </>
 }
-
