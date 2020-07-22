@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "reinstall": "rm -rf node_modules/ && rm -f yarn.lock && yarn",
     "dev": "next dev",
     "build": "next build && next export && yarn postexport",
     "start": "next start",
@@ -11,7 +12,7 @@
   },
   "dependencies": {
     "@pooltogether/etherplex": "^0.2.0",
-    "@pooltogether/pooltogether-contracts": "3.0.0-alpha.22",
+    "@pooltogether/pooltogether-contracts": "3.0.0-alpha.26",
     "autoprefixer": "^9.8.1",
     "bn.js": "4.11.0",
     "bnc-onboard": "^1.9.6",
