@@ -11,8 +11,8 @@
     "distrelease": "yarn build"
   },
   "dependencies": {
-    "@pooltogether/etherplex": "^0.2.0",
-    "@pooltogether/pooltogether-contracts": "3.0.0-alpha.26",
+    "@pooltogether/etherplex": "^0.2.3",
+    "@pooltogether/pooltogether-contracts": "^3.0.0-alpha.28",
     "autoprefixer": "^9.8.1",
     "bn.js": "4.11.0",
     "bnc-onboard": "^1.9.6",
@@ -27,6 +27,7 @@
     "react-device-detect": "^1.13.1",
     "react-dom": "16.13.1",
     "react-toastify": "^6.0.5",
+    "react-tooltip-lite": "^1.12.0",
     "request": "2.88.2",
     "rollup": "2.17.1",
     "tailwindcss": "^1.4.6",

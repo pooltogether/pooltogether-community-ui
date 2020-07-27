@@ -16,8 +16,12 @@ const handleWithdrawSubmit = async (
   setTx,
   provider,
   contractAddress,
+  ticketAddress,
+  usersAddress,
   withdrawAmount,
   withdrawType,
+  maxExitFee,
+  sponsoredExitFee,
   decimals
 ) => {
   if (
@@ -28,16 +32,23 @@ const handleWithdrawSubmit = async (
   }
 
   const params = [
+    usersAddress,
     ethers.utils.parseUnits(withdrawAmount, decimals),
-    [],
-    {
-      gasLimit: 500000
-    }
+    ticketAddress,
   ]
 
-  const method = withdrawType === 'instant' ?
-    'redeemTicketsInstantly' :
-    'redeemTicketsWithTimelock'
+  let method = 'withdrawWithTimelockFrom'
+  if (withdrawType === 'instant') {
+    method = 'withdrawInstantlyFrom'
+    params.push(
+      ethers.utils.parseEther(sponsoredExitFee),
+      ethers.utils.parseEther(maxExitFee)
+    )
+  }
+
+  params.push({
+    gasLimit: 500000
+  })
 
   await sendTx(
     setTx,
@@ -54,12 +65,16 @@ export const WithdrawUI = (props) => {
   const router = useRouter()
   const networkName = router.query.networkName
   const prizePool = props.poolAddresses.prizePool
+  const prizeStrategy = props.poolAddresses.prizeStrategy
+  const ticketAddress = props.poolAddresses.ticket
 
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
   const usersAddress = walletContext._onboard.getState().address
 
-  const [exitFee, setExitFee] = useState('')
+  const [exitFee, setExitFee] = useState({})
+  const [sponsoredExitFee, setSponsoredExitFee] = useState('0')
+  const [maxExitFee, setMaxExitFee] = useState('1')
   const [withdrawAmount, setWithdrawAmount] = useState('')
   const [withdrawType, setWithdrawType] = useState('scheduled')
 
@@ -71,10 +86,11 @@ export const WithdrawUI = (props) => {
         const result = await fetchExitFee(
           networkName,
           usersAddress,
-          prizePool,
-          debouncedWithdrawAmount
+          prizeStrategy,
+          ticketAddress,
+          ethers.utils.parseEther(debouncedWithdrawAmount)
         )
-        setExitFee(result.exitFee)
+        setExitFee(result)
       } else {
         setExitFee(null)
       }
@@ -109,17 +125,25 @@ export const WithdrawUI = (props) => {
           handleWithdrawSubmit(
             setTx,
             provider,
-            props.poolAddresses.prizePool,
+            prizePool,
+            ticketAddress,
+            usersAddress,
             withdrawAmount,
             withdrawType,
+            maxExitFee,
+            sponsoredExitFee,
             props.genericChainValues.tokenDecimals
           )
         }}
         vars={{
+          maxExitFee,
+          sponsoredExitFee,
           withdrawAmount,
           withdrawType,
         }}
         stateSetters={{
+          setMaxExitFee,
+          setSponsoredExitFee,
           setWithdrawAmount,
           setWithdrawType,
         }}

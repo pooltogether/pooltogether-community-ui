@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 
-import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
+import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/PrizeStrategy'
 
 import { Button } from 'lib/components/Button'
 import { TxMessage } from 'lib/components/TxMessage'
@@ -22,7 +22,7 @@ const handleStartAwardSubmit = async (
     setTx,
     provider,
     contractAddress,
-    CompoundPrizePoolAbi,
+    PrizeStrategyAbi,
     'startAward',
     params,
     'Start Award',
@@ -52,7 +52,7 @@ export const StartAwardUI = (props) => {
     handleStartAwardSubmit(
       setTx,
       provider,
-      props.poolAddresses.prizePool,
+      props.poolAddresses.prizeStrategy,
     )
   }
 

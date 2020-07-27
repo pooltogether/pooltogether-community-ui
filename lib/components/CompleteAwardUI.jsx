@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 
-import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
+import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/PrizeStrategy'
 
 import { Button } from 'lib/components/Button'
 import { TxMessage } from 'lib/components/TxMessage'
@@ -14,7 +14,7 @@ const handleCompleteAwardSubmit = async (
 ) => {
   const params = [
     {
-      gasLimit: 600000
+      gasLimit: 300000
     }
   ]
 
@@ -22,7 +22,7 @@ const handleCompleteAwardSubmit = async (
     setTx,
     provider,
     contractAddress,
-    CompoundPrizePoolAbi,
+    PrizeStrategyAbi,
     'completeAward',
     params,
     'Complete Award',
@@ -52,7 +52,7 @@ export const CompleteAwardUI = (props) => {
     handleCompleteAwardSubmit(
       setTx,
       provider,
-      props.poolAddresses.prizePool,
+      props.poolAddresses.prizeStrategy,
     )
   }
 

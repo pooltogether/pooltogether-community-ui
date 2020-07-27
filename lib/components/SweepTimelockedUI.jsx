@@ -25,7 +25,7 @@ const handleSweepTimelockedSubmit = async (
     provider,
     contractAddress,
     CompoundPrizePoolAbi,
-    'sweep',
+    'sweepTimelockBalances',
     params,
     'Sweep Timelocked Funds'
   )
