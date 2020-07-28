@@ -12,7 +12,7 @@ import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 
 export const WithdrawForm = (props) => {
   const {
-    exitFee,
+    exitFees,
     genericChainValues,
     handleSubmit,
     vars,
@@ -23,6 +23,13 @@ export const WithdrawForm = (props) => {
   const {
     usersTicketBalance,
   } = usersChainValues || {}
+
+  const {
+    instantCredit,
+    instantFee,
+    timelockCredit,
+    timelockDuration,
+  } = exitFees || {}
 
   const {
     maxExitFee,
@@ -48,25 +55,10 @@ export const WithdrawForm = (props) => {
   const poolIsLocked = genericChainValues.isRngRequested
   const tokenSymbol = genericChainValues.tokenSymbol || 'TOKEN'
 
-  let instantExitFee = ethers.utils.bigNumberify(0)
-  let instantBurnedCredit = ethers.utils.bigNumberify(0)
-  let scheduleDuration = ethers.utils.bigNumberify(0)
-  let scheduleBurnedCredit = ethers.utils.bigNumberify(0)
-  if (exitFee) {
-    if (exitFee.instantWithdrawalFee) {
-      instantExitFee = exitFee.instantWithdrawalFee.remainingFee
-      instantBurnedCredit = exitFee.instantWithdrawalFee.burnedCredit
-    }
-    if (exitFee.timelockDurationAndFee) {
-      scheduleDuration = exitFee.timelockDurationAndFee.durationSeconds
-      scheduleBurnedCredit = exitFee.timelockDurationAndFee.burnedCredit
-    }
-  }
-
   let instantTotal = ethers.utils.bigNumberify(0)
   if (withdrawAmount) {
-    if (instantExitFee.gt(0) && withdrawType === 'instant') {
-      instantTotal = ethers.utils.parseUnits(withdrawAmount, tokenDecimals).sub(instantExitFee)
+    if (instantFee && instantFee.gt(0) && withdrawType === 'instant') {
+      instantTotal = ethers.utils.parseUnits(withdrawAmount, tokenDecimals).sub(instantFee)
     } else {
       instantTotal = ethers.utils.parseUnits(withdrawAmount, tokenDecimals)
     }
@@ -143,7 +135,7 @@ export const WithdrawForm = (props) => {
         </div>
       </>}
 
-      {!overBalance && instantExitFee && withdrawType === 'instant' && <>
+      {!overBalance && instantFee && withdrawType === 'instant' && <>
         <TextInputGroup
           id='maxExitFee'
           label={<>
@@ -171,13 +163,13 @@ export const WithdrawForm = (props) => {
         <div className='text-yellow-400'>
           You will receive {displayAmountInEther(instantTotal, { decimals: tokenDecimals })} {tokenSymbol} now&nbsp;
           {
-            instantExitFee.eq(0)
-              ? <>and burn {displayAmountInEther(instantBurnedCredit)} from your credit</>
-              : <>and forfeit {displayAmountInEther(instantExitFee, { decimals: tokenDecimals })} as interest</>
+            instantFee.eq(0)
+              ? <>and burn {displayAmountInEther(instantCredit)} from your credit</>
+              : <>and forfeit {displayAmountInEther(instantFee, { decimals: tokenDecimals })} as interest</>
           }
         </div>
 
-        {instantExitFee.eq(0) && <>
+        {instantFee.eq(0) && <>
           Why is the fairness fee $0?
           <br/>
           The fairness fee is based on the previous prize and other factors (see documentation or contract code).
@@ -186,13 +178,13 @@ export const WithdrawForm = (props) => {
         </>}
       </>}
 
-      {!overBalance && scheduleDuration && withdrawType !== 'instant' && <>
+      {!overBalance && timelockDuration && withdrawType !== 'instant' && <>
         <div className='text-yellow-400'>
           You will receive {displayAmountInEther(instantTotal, { decimals: tokenDecimals })} {tokenSymbol}&nbsp;
           {
-            scheduleDuration.eq(0)
-              ? <>now and burn {displayAmountInEther(scheduleBurnedCredit)} from your credit</>
-              : <>in {scheduleDuration} seconds</>
+            timelockDuration.eq(0)
+              ? <>now and burn {displayAmountInEther(timelockCredit)} from your credit</>
+              : <>in {timelockDuration.toString()} seconds</>
           }
         </div>
       </>}

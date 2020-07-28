@@ -72,7 +72,7 @@ export const WithdrawUI = (props) => {
   const provider = walletContext.state.provider
   const usersAddress = walletContext._onboard.getState().address
 
-  const [exitFee, setExitFee] = useState({})
+  const [exitFees, setExitFees] = useState({})
   const [sponsoredExitFee, setSponsoredExitFee] = useState('0')
   const [maxExitFee, setMaxExitFee] = useState('1')
   const [withdrawAmount, setWithdrawAmount] = useState('')
@@ -90,9 +90,9 @@ export const WithdrawUI = (props) => {
           ticketAddress,
           ethers.utils.parseEther(debouncedWithdrawAmount)
         )
-        setExitFee(result)
+        setExitFees(result)
       } else {
-        setExitFee(null)
+        setExitFees(null)
       }
     }
 
@@ -118,7 +118,7 @@ export const WithdrawUI = (props) => {
     {!txInFlight ? <>
       <WithdrawForm
         {...props}
-        exitFee={exitFee}
+        exitFees={exitFees}
         handleSubmit={(e) => {
           e.preventDefault()
 
