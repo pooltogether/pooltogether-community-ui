@@ -48,7 +48,6 @@ export const WithdrawForm = (props) => {
   const poolIsLocked = genericChainValues.isRngRequested
   const tokenSymbol = genericChainValues.tokenSymbol || 'TOKEN'
 
-  // console.log({exitFee})
   let instantExitFee = ethers.utils.bigNumberify(0)
   let instantBurnedCredit = ethers.utils.bigNumberify(0)
   let scheduleDuration = ethers.utils.bigNumberify(0)
