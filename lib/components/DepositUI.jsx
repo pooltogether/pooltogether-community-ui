@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { ethers } from 'ethers'
 
-import CompoundPeriodicPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPeriodicPrizePool'
+import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
 
 import { DepositForm } from 'lib/components/DepositForm'
 import { TxMessage } from 'lib/components/TxMessage'
@@ -14,6 +14,7 @@ const handleDepositSubmit = async (
   provider,
   usersAddress,
   contractAddress,
+  ticketAddress,
   depositAmount,
   decimals
 ) => {
@@ -27,7 +28,7 @@ const handleDepositSubmit = async (
   const params = [
     usersAddress,
     ethers.utils.parseUnits(depositAmount, decimals),
-    [], // bytes calldata
+    ticketAddress,
     {
       gasLimit: 700000
     }
@@ -37,8 +38,8 @@ const handleDepositSubmit = async (
     setTx,
     provider,
     contractAddress,
-    CompoundPeriodicPrizePoolAbi,
-    'mintTickets',
+    CompoundPrizePoolAbi,
+    'depositTo',
     params,
     'Deposit',
   )
@@ -48,6 +49,7 @@ export const DepositUI = (props) => {
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
   const usersAddress = walletContext._onboard.getState().address
+  const ticketAddress = props.poolAddresses.ticket
 
   const [depositAmount, setDepositAmount] = useState('')
 
@@ -73,6 +75,7 @@ export const DepositUI = (props) => {
             provider,
             usersAddress,
             props.poolAddresses.prizePool,
+            ticketAddress,
             depositAmount,
             props.genericChainValues.tokenDecimals
           )
@@ -91,7 +94,6 @@ export const DepositUI = (props) => {
         handleReset={resetState}
       />
     </>}
-    
+
   </>
 }
-

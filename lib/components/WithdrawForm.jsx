@@ -7,11 +7,12 @@ import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 import { RadioInputGroup } from 'lib/components/RadioInputGroup'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 
+import { PTHint } from 'lib/components/PTHint'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 
 export const WithdrawForm = (props) => {
   const {
-    exitFee,
+    exitFees,
     genericChainValues,
     handleSubmit,
     vars,
@@ -24,10 +25,21 @@ export const WithdrawForm = (props) => {
   } = usersChainValues || {}
 
   const {
+    instantCredit,
+    instantFee,
+    timelockCredit,
+    timelockDuration,
+  } = exitFees || {}
+
+  const {
+    maxExitFee,
+    sponsoredExitFee,
     withdrawAmount,
     withdrawType,
   } = vars
   const {
+    setMaxExitFee,
+    setSponsoredExitFee,
     setWithdrawAmount,
     setWithdrawType,
   } = stateSetters
@@ -39,19 +51,23 @@ export const WithdrawForm = (props) => {
   const {
     tokenDecimals,
   } = genericChainValues || {}
-  
+
   const poolIsLocked = genericChainValues.isRngRequested
   const tokenSymbol = genericChainValues.tokenSymbol || 'TOKEN'
 
   let instantTotal = ethers.utils.bigNumberify(0)
-  if (withdrawAmount && exitFee && withdrawType === 'instant') {
-    instantTotal = ethers.utils.parseUnits(withdrawAmount, tokenDecimals).sub(exitFee)
+  if (withdrawAmount) {
+    if (instantFee && instantFee.gt(0) && withdrawType === 'instant') {
+      instantTotal = ethers.utils.parseUnits(withdrawAmount, tokenDecimals).sub(instantFee)
+    } else {
+      instantTotal = ethers.utils.parseUnits(withdrawAmount, tokenDecimals)
+    }
   }
 
   const overBalance = withdrawAmount && usersTicketBalance && usersTicketBalance.lt(
     ethers.utils.parseUnits(withdrawAmount, tokenDecimals)
   )
-  
+
   return <>
     <form
       onSubmit={handleSubmit}
@@ -76,11 +92,11 @@ export const WithdrawForm = (props) => {
         Withdraw:
       </div>
       {/* can't get this tooltip to render in the proper place atm: */}
-      {/* <PTHint
+      <PTHint
         tip={`To maintain fairness your funds need to contribute interest towards the prize each week. You can:
 1) SCHEDULE: receive $1000 DAI once enough interest has been provided to the prize
 2) INSTANT: pay $1.90 to withdraw right now and forfeit the interest that would go towards the prize`}
-      /> */}
+      />
 
       <RadioInputGroup
         label='What type of withdraw?'
@@ -112,14 +128,48 @@ export const WithdrawForm = (props) => {
         value={withdrawAmount}
       />
 
-      {exitFee && withdrawType === 'instant' && <>
+      {overBalance && <>
         <div className='text-yellow-400'>
-          You will receive {displayAmountInEther(
-            instantTotal, { decimals: tokenDecimals }
-          )} {tokenSymbol} now and forfeit {displayAmountInEther(exitFee)} as interest
+          You only have {displayAmountInEther(usersTicketBalance, { decimals: tokenDecimals })} tickets.
+          <br />The maximum you can withdraw is {displayAmountInEther(usersTicketBalance, { precision: 2, decimals: tokenDecimals })} {tokenSymbol}.
+        </div>
+      </>}
+
+      {!overBalance && instantFee && withdrawType === 'instant' && <>
+        <TextInputGroup
+          id='maxExitFee'
+          label={<>
+            Max Exit Fee <span className='text-purple-600 italic'> (in {genericChainValues.tokenSymbol || 'TOKEN'})</span>
+          </>}
+          required
+          type='number'
+          pattern='\d+'
+          onChange={(e) => setMaxExitFee(e.target.value)}
+          value={maxExitFee}
+        />
+
+        <TextInputGroup
+          id='sponsoredExitFee'
+          label={<>
+            Sponsored Exit Fee <span className='text-purple-600 italic'> (in {genericChainValues.tokenSymbol || 'TOKEN'})</span>
+          </>}
+          required
+          type='number'
+          pattern='\d+'
+          onChange={(e) => setSponsoredExitFee(e.target.value)}
+          value={sponsoredExitFee}
+        />
+
+        <div className='text-yellow-400'>
+          You will receive {displayAmountInEther(instantTotal, { decimals: tokenDecimals })} {tokenSymbol} now&nbsp;
+          {
+            instantFee.eq(0)
+              ? <>and burn {displayAmountInEther(instantCredit)} from your credit</>
+              : <>and forfeit {displayAmountInEther(instantFee, { decimals: tokenDecimals })} as interest</>
+          }
         </div>
 
-        {exitFee.eq(0) && <>
+        {instantFee.eq(0) && <>
           Why is the fairness fee $0?
           <br/>
           The fairness fee is based on the previous prize and other factors (see documentation or contract code).
@@ -128,10 +178,14 @@ export const WithdrawForm = (props) => {
         </>}
       </>}
 
-      {overBalance && <>
+      {!overBalance && timelockDuration && withdrawType !== 'instant' && <>
         <div className='text-yellow-400'>
-          You only have {displayAmountInEther(usersTicketBalance, { decimals: tokenDecimals })} tickets.
-          <br />The maximum you can withdraw is {displayAmountInEther(usersTicketBalance, { precision: 2, decimals: tokenDecimals })} {tokenSymbol}.
+          You will receive {displayAmountInEther(instantTotal, { decimals: tokenDecimals })} {tokenSymbol}&nbsp;
+          {
+            timelockDuration.eq(0)
+              ? <>now and burn {displayAmountInEther(timelockCredit)} from your credit</>
+              : <>in {timelockDuration.toString()} seconds</>
+          }
         </div>
       </>}
 
