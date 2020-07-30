@@ -1,4 +1,3 @@
-
-.bn-onboard-custom .bn-onboard-modal {
-  z-index: 1000;
+.bn-onboard-custom.bn-onboard-modal {
+  z-index: 1000000;
 }
