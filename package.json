@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@pooltogether/etherplex": "^0.2.3",
-    "@pooltogether/pooltogether-contracts": "^3.0.0-alpha.28",
+    "@pooltogether/pooltogether-contracts": "^3.0.0-alpha.30",
     "autoprefixer": "^9.8.1",
     "bn.js": "4.11.0",
     "bnc-onboard": "^1.9.6",
