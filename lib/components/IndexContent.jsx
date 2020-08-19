@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react'
 import Link from 'next/link'
+import { find, findKey, map, upperFirst } from 'lodash'
 
 import { Button } from 'lib/components/Button'
 import { FormPanel } from 'lib/components/FormPanel'
@@ -32,8 +33,8 @@ export const IndexContent = (
   const [network, setNetwork] = useState('kovan')
   const [contractAddress, setContractAddress] = useState('')
 
-  const demoNetworkName = _.findKey(demoPools, {chainId: walletNetwork})
-  const demoPool = _.find(demoPools, {chainId: walletNetwork})
+  const demoNetworkName = findKey(demoPools, {chainId: walletNetwork})
+  const demoPool = find(demoPools, {chainId: walletNetwork})
 
   const handleNetworkChange = (e) => {
     setNetwork(e.target.value)
@@ -51,7 +52,7 @@ export const IndexContent = (
         <div
           className='text-xs sm:text-lg lg:text-xl'
         >
-          {_.map(demoPool.assets, assetType => {
+          {map(demoPool.assets, assetType => {
             const prizePoolContractAddress = getDemoPoolContractAddress(demoNetworkName, assetType)
             return (
               <Link
@@ -66,7 +67,7 @@ export const IndexContent = (
                     <img src={demoAssetTypes[assetType].logo} className='inline-block w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 mr-2' />
 
                     <div>
-                      <span className='text-blue-200 text-base'>Demo {_.upperFirst(demoNetworkName)} {demoAssetTypes[assetType].label} Pool</span>
+                      <span className='text-blue-200 text-base'>Demo {upperFirst(demoNetworkName)} {demoAssetTypes[assetType].label} Pool</span>
                       <br/>
                       <span className='text-xxs sm:text-base inline-block -t-1 relative'>{prizePoolContractAddress}</span>
                     </div>
