@@ -53,8 +53,9 @@ export const IndexContent = (
         >
           {_.map(demoPool.assets, assetType => {
             const prizePoolContractAddress = getDemoPoolContractAddress(demoNetworkName, assetType)
-            return (<>
+            return (
               <Link
+                key={`${demoNetworkName}-${assetType}`}
                 href='/pools/[networkName]/[prizePoolAddress]'
                 as={`/pools/${demoNetworkName}/${prizePoolContractAddress}`}
               >
@@ -72,7 +73,7 @@ export const IndexContent = (
                   </div>
                 </a>
               </Link>
-            </>)
+            )
           })}
         </div>
 

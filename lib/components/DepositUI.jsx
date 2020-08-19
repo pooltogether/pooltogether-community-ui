@@ -31,7 +31,7 @@ const handleDepositSubmit = async (
     ticketAddress,
     [],
     {
-      gasLimit: 700000
+      gasLimit: 400000
     }
   ]
 

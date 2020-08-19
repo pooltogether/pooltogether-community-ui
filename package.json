@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "reinstall": "rm -rf node_modules/ && rm -f yarn.lock && yarn",
+    "clean": "rm -rf .next",
     "dev": "next dev",
     "build": "next build && next export && yarn postexport",
     "start": "next start",
