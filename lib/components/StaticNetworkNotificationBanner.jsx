@@ -37,7 +37,7 @@ export const StaticNetworkNotificationBanner = ({
     <div
       className='text-center'
     >
-      This works on Ropsten, Kovan and localhost.
+      This works on Ropsten, Rinkeby, Kovan and localhost.
       Your wallet is currently set to <span className='font-bold'>{networkWords}</span>
     </div>
   </div>

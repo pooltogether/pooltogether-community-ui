@@ -29,8 +29,9 @@ const handleDepositSubmit = async (
     usersAddress,
     ethers.utils.parseUnits(depositAmount, decimals),
     ticketAddress,
+    [],
     {
-      gasLimit: 700000
+      gasLimit: 400000
     }
   ]
 
