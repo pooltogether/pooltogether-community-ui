@@ -9,9 +9,11 @@ import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { getDemoPoolContractAddress } from 'lib/utils/getDemoPoolContractAddress'
 
+import BatSvg from 'assets/images/bat.svg'
 import DaiSvg from 'assets/images/dai.svg'
 import UsdcSvg from 'assets/images/usdc.svg'
 import UsdtSvg from 'assets/images/usdt.svg'
+import ZrxSvg from 'assets/images/zrx.svg'
 
 const demoAssetTypes = {
   dai  : {label: 'DAI',  logo: DaiSvg},

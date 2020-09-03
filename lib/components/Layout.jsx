@@ -47,11 +47,13 @@ export const Layout = (props) => {
             <div
               className='px-4 sm:px-8 lg:px-12 my-10 lg:w-2/3'
             >
-              <img src={PoolIcon} className='inline-block w-10 h-10 ml-2 mb-2 sm:mb-0' />
-              <div
-                className='text-blue-400 title text-base sm:text-3xl'
-              >
-                v3.0 - Reference Pool Frontend
+              <div className='flex items-center'>
+                <div
+                  className='text-blue-400 title text-xl sm:text-3xl'
+                >
+                  v3.0 - Reference Pool Frontend
+                </div>
+                <img src={PoolIcon} className='inline-block w-6 h-6 sm:w-10 sm:h-10 ml-2 mb-2 sm:mb-0' />
               </div>
 
               <a

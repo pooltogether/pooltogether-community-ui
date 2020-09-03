@@ -16,7 +16,7 @@
     "@pooltogether/pooltogether-contracts": "^3.0.0-alpha.30",
     "autoprefixer": "^9.8.1",
     "bn.js": "4.11.0",
-    "bnc-onboard": "^1.9.6",
+    "bnc-onboard": "^1.13.0",
     "classnames": "^2.2.6",
     "ethers": "^4.0.47",
     "feather-icons-react": "^0.4.1",
@@ -31,7 +31,7 @@
     "react-tooltip-lite": "^1.12.0",
     "request": "2.88.2",
     "rollup": "2.17.1",
-    "tailwindcss": "^1.4.6",
+    "tailwindcss": "^1.7.6",
     "webpack": "4"
   },
   "devDependencies": {

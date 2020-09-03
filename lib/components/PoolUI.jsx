@@ -13,9 +13,11 @@ import { useInterval } from 'lib/hooks/useInterval'
 import { fetchChainData } from 'lib/utils/fetchChainData'
 import { poolToast } from 'lib/utils/poolToast'
 
+import BatSvg from 'assets/images/bat.svg'
 import DaiSvg from 'assets/images/dai.svg'
 import UsdcSvg from 'assets/images/usdc.svg'
 import UsdtSvg from 'assets/images/usdt.svg'
+import ZrxSvg from 'assets/images/zrx.svg'
 
 const renderErrorMessage = (
   address,
@@ -55,13 +57,6 @@ export const PoolUI = (
     usersTokenAllowance: ethers.utils.bigNumberify(0),
     usersTokenBalance: ethers.utils.bigNumberify(0),
   })
-
-  try {
-    ethers.utils.getAddress(prizePool)
-  } catch (e) {
-    return 'Incorrectly formatted Ethereum address!'
-  }
-
 
   useInterval(() => {
     fetchChainData(
@@ -116,17 +111,33 @@ export const PoolUI = (
     return null
   }
 
+
+  try {
+    ethers.utils.getAddress(prizePool)
+  } catch (e) {
+    return 'Incorrectly formatted Ethereum address!'
+  }
+
   const handleConnect = (e) => {
     e.preventDefault()
 
     walletContext.handleConnectWallet()
   }
 
-  const tokenSvg = genericChainValues.tokenSymbol === 'DAI' ?
-    DaiSvg :
-    genericChainValues.tokenSymbol === 'USDC' ?
-      UsdcSvg :
-      UsdtSvg
+  const tokenSymbol = genericChainValues.tokenSymbol
+
+  let tokenSvg = DaiSvg
+  if (tokenSymbol === 'BAT') {
+    tokenSvg = BatSvg
+  } else if (tokenSymbol === 'USDC') {
+    tokenSvg = UsdcSvg
+  } else if (tokenSymbol === 'USDT') {
+    tokenSvg = UsdtSvg
+  } else if (tokenSymbol === 'USDC') {
+    tokenSvg = UsdtSvg
+  } else if (tokenSymbol === 'ZRX') {
+    tokenSvg = ZrxSvg
+  }
 
   return <>
     {genericChainValues.loading ?
