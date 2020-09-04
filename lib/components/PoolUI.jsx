@@ -17,6 +17,7 @@ import BatSvg from 'assets/images/bat.svg'
 import DaiSvg from 'assets/images/dai.svg'
 import UsdcSvg from 'assets/images/usdc.svg'
 import UsdtSvg from 'assets/images/usdt.svg'
+import WbtcSvg from 'assets/images/wbtc.svg'
 import ZrxSvg from 'assets/images/zrx.svg'
 
 const renderErrorMessage = (
@@ -135,6 +136,8 @@ export const PoolUI = (
     tokenSvg = UsdtSvg
   } else if (tokenSymbol === 'USDC') {
     tokenSvg = UsdtSvg
+  } else if (tokenSymbol === 'WBTC') {
+    tokenSvg = WbtcSvg
   } else if (tokenSymbol === 'ZRX') {
     tokenSvg = ZrxSvg
   }
