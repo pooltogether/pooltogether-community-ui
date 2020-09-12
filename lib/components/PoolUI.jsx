@@ -208,10 +208,10 @@ export const PoolUI = (
             </div>
 
             <div
-              className='mt-3 sm:mt-5 mb-5'
+                className='flex justify-center mt-3 sm:mt-5 mb-5'
             >
               <button
-                className='font-bold rounded-full text-green border-2 sm:border-4 border-green-300 hover:text-white hover:bg-lightPurple-1000 text-xxs sm:text-base pt-2 pb-2 px-3 sm:px-6 trans'
+                  className='font-bold rounded-full text-green border-2 sm:border-4 border-green hover:text-white hover:bg-purple text-xxs sm:text-base pt-2 pb-2 px-3 sm:px-6 trans'
                 onClick={handleConnect}
               >
                 Connect Wallet
