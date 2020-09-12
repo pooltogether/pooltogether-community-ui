@@ -44,6 +44,20 @@ export const IndexContent = (
     setNetwork(e.target.value)
   }
 
+  let networkDemoPools = []
+  
+  demoPool?.assets.forEach(assetType => {
+    const address = getDemoPoolContractAddress(demoNetworkName, assetType)
+
+    if (address) {
+      networkDemoPools.push({
+        assetType,
+        address: getDemoPoolContractAddress(demoNetworkName, assetType)
+      })
+    }
+  })
+  
+
   return <>
 
       {demoPool && <>
@@ -54,32 +68,38 @@ export const IndexContent = (
         </div>
 
         <div
-          className='flex flex-col sm:flex-row sm:flex-wrap -mx-4 mb-8 text-xs sm:text-lg lg:text-xl'
+          className='flex justify-center flex-col sm:flex-row sm:flex-wrap -mx-4 mb-8 text-xs sm:text-lg lg:text-xl'
         >
-          {map(demoPool.assets, assetType => {
-            const prizePoolContractAddress = getDemoPoolContractAddress(demoNetworkName, assetType)
-            return (
-              <Link
-                key={`${demoNetworkName}-${assetType}`}
-                href='/pools/[networkName]/[prizePoolAddress]'
-                as={`/pools/${demoNetworkName}/${prizePoolContractAddress}`}
-              >
-                <a
-                  className='w-full sm:w-1/2 lg:w-1/3 px-4 border-2 border-transparent hover:border-transparent'
+          {networkDemoPools?.length === 0 ? <>
+            <div className='text-center text-caption uppercase text-sm font-bold text-default rounded-lg bg-default p-4'>
+              No demo pools deployed to this network yet...
+            </div>
+          </> : <>
+            {map(networkDemoPools, pool => {
+              return (
+                <Link
+                  key={`${demoNetworkName}-${pool.assetType}`}
+                  href='/pools/[networkName]/[prizePoolAddress]'
+                  as={`/pools/${demoNetworkName}/${pool.address}`}
                 >
-                  <div className='flex items-center mb-2 py-2 px-4 inline-block bg-card hover:bg-card-selected trans border-2 border-highlight-3 hover:border-highlight-2 border-dashed rounded-lg '>
-                    <img src={demoAssetTypes[assetType].logo} className='inline-block w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 mr-2' />
+                  <a
+                    className='w-full sm:w-1/2 lg:w-1/3 px-4 border-2 border-transparent hover:border-transparent'
+                  >
+                    <div className='flex items-center mb-2 py-2 px-4 inline-block bg-card hover:bg-card-selected trans border-2 border-highlight-3 hover:border-highlight-2 border-dashed rounded-lg '>
+                      <img src={demoAssetTypes[pool.assetType]?.logo} className='inline-block w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 mr-2' />
 
-                    <div>
-                      <span className='text-blue text-base'>{upperFirst(demoNetworkName)} {demoAssetTypes[assetType].label} Pool</span>
-                      <br/>
-                      <span className='text-xxs sm:text-base inline-block -t-1 relative text-accent-3'>{shorten(prizePoolContractAddress)} <span className='uppercase text-accent-3 opacity-50'>TESTNET DEMO</span></span>
+                      <div>
+                        <span className='text-blue text-base'>{upperFirst(demoNetworkName)} {demoAssetTypes[pool.assetType]?.label} Pool</span>
+                        <br />
+                        <span className='text-xxs sm:text-base inline-block -t-1 relative text-accent-3'>{shorten(pool.address)} <span className='uppercase text-accent-3 opacity-50'>TESTNET DEMO</span></span>
+                      </div>
                     </div>
-                  </div>
-                </a>
-              </Link>
-            )
-          })}
+                  </a>
+                </Link>
+              )
+            })}
+          </>}
+          
         </div>
 
         <hr/>
