@@ -46,7 +46,7 @@ export const WalletInfo = () => {
         </span>
 
         <span
-          className='block sm:inline-block rounded-lg sm:text-default capitalize'
+          className='block sm:inline-block rounded-lg text-default capitalize'
         >
           {walletName} {networkName}
         </span>

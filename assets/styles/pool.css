@@ -411,7 +411,7 @@ input[type="text"] {
 }
 
 .footer a {
-  @apply text-highlight-3 no-underline border-0;
+  @apply text-accent-3 no-underline border-0;
 }
 
 .footer a:hover {

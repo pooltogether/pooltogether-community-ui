@@ -34,7 +34,7 @@ export const RadioInputGroup = (
       className='radio-input-fieldset mb-6'
     >
       <label
-        className='text-highlight-1 hover:text-white trans mt-0'
+        className='text-white hover:text-highlight-1 trans mt-0'
       >
         {label}
       </label>

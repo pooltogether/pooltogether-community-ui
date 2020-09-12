@@ -27,7 +27,7 @@ export const TextInputGroup = (
           'mt-0 trans',
           {
             'text-purple cursor-not-allowed': disabled,
-            'text-highlight-1 hover:text-white': !disabled,
+            'text-white hover:text-white': !disabled,
           }
         )}
       >

@@ -30,7 +30,7 @@ export const StaticNetworkNotificationBanner = ({
       'text-sm sm:text-base lg:text-lg sm:px-6 py-2 sm:py-3',
       {
         'text-white bg-red': !networkSupported,
-        'text-highlight-2 bg-purple': networkSupported,
+        'text-default bg-purple': networkSupported,
       }
     )}
   >

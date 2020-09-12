@@ -76,6 +76,7 @@ let _onboard
 
 const initializeOnboard = (setOnboardState) => {
   _onboard = Onboard({
+    hideBranding: true,
     networkId: nameToChainId(networkName),
     darkMode: true,
     walletSelect: {

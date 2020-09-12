@@ -59,121 +59,124 @@ export const IndexContent = (
   
 
   return <>
-
-      {demoPool && <>
-        <div
-          className='text-lg sm:text-xl lg:text-2xl mb-4'
-        >
-          1. View one of the demo pools:
-        </div>
-
-        <div
-          className='flex justify-center flex-col sm:flex-row sm:flex-wrap -mx-4 mb-8 text-xs sm:text-lg lg:text-xl'
-        >
-          {networkDemoPools?.length === 0 ? <>
-            <div className='text-center text-caption uppercase text-sm font-bold text-default rounded-lg bg-default p-4'>
-              No demo pools deployed to this network yet...
-            </div>
-          </> : <>
-            {map(networkDemoPools, pool => {
-              return (
-                <Link
-                  key={`${demoNetworkName}-${pool.assetType}`}
-                  href='/pools/[networkName]/[prizePoolAddress]'
-                  as={`/pools/${demoNetworkName}/${pool.address}`}
-                >
-                  <a
-                    className='w-full sm:w-1/2 lg:w-1/3 px-4 border-2 border-transparent hover:border-transparent'
-                  >
-                    <div className='flex items-center mb-2 py-2 px-4 inline-block bg-card hover:bg-card-selected trans border-2 border-highlight-3 hover:border-highlight-2 border-dashed rounded-lg '>
-                      <img src={demoAssetTypes[pool.assetType]?.logo} className='inline-block w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 mr-2' />
-
-                      <div>
-                        <span className='text-blue text-base'>{upperFirst(demoNetworkName)} {demoAssetTypes[pool.assetType]?.label} Pool</span>
-                        <br />
-                        <span className='text-xxs sm:text-base inline-block -t-1 relative text-accent-3'>{shorten(pool.address)} <span className='uppercase text-accent-3 opacity-50'>TESTNET DEMO</span></span>
-                      </div>
-                    </div>
-                  </a>
-                </Link>
-              )
-            })}
-          </>}
-          
-        </div>
-
-        <hr/>
-
-        <div
-          className='text-lg sm:text-xl lg:text-2xl mb-4'
-        >
-          2. Or enter a pool to view it's details:
-        </div>
-
-      </>}
-
     <div
-      className='-mx-16 sm:-mx-20 lg:-mx-24 px-12'
+      className='lg:w-3/4 lg:mx-auto'
     >
-      <FormPanel>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault()
-
-            window.location.href = `/pools/${network}/${contractAddress}`
-          }}
-        >
-          <RadioInputGroup
-            label='Network the Pool is on:'
-            name='network'
-            onChange={handleNetworkChange}
-            value={network}
-            radios={[
-              {
-                value: 'kovan',
-                label: 'Kovan'
-              },
-              {
-                value: 'ropsten',
-                label: 'Ropsten'
-              },
-              {
-                value: 'rinkeby',
-                label: 'Rinkeby'
-              },
-              {
-                value: 'mainnet',
-                label: 'Mainnet'
-              },
-              {
-                value: 'local',
-                label: 'Local'
-              }
-            ]}
-          />
-
-
-          <TextInputGroup
-            id='contractAddress'
-            label={<>
-              Prize Pool contract address:
-            </>}
-            required
-            onChange={(e) => setContractAddress(e.target.value)}
-            value={contractAddress}
-          />
+        {demoPool && <>
+          <div
+            className='text-lg sm:text-xl lg:text-2xl mb-4'
+          >
+            1. View one of the demo pools:
+          </div>
 
           <div
-            className='my-5'
+            className='flex justify-center flex-col sm:flex-row sm:flex-wrap -mx-4 mb-8 text-xs sm:text-lg lg:text-xl'
           >
-            <Button
-              color='green'
-            >
-              View Pool
-            </Button>
+            {networkDemoPools?.length === 0 ? <>
+              <div className='text-center text-caption uppercase text-sm font-bold text-default rounded-lg bg-default p-4'>
+                No demo pools deployed to this network yet...
+              </div>
+            </> : <>
+              {map(networkDemoPools, pool => {
+                return (
+                  <Link
+                    key={`${demoNetworkName}-${pool.assetType}`}
+                    href='/pools/[networkName]/[prizePoolAddress]'
+                    as={`/pools/${demoNetworkName}/${pool.address}`}
+                  >
+                    <a
+                      className='w-full sm:w-1/2 lg:w-1/3 px-4 border-2 border-transparent hover:border-transparent'
+                    >
+                      <div className='flex items-center mb-2 py-2 px-4 inline-block bg-card hover:bg-card-selected trans border-2 border-highlight-3 hover:border-highlight-2 border-dashed rounded-lg '>
+                        <img src={demoAssetTypes[pool.assetType]?.logo} className='inline-block w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 mr-2' />
+
+                        <div>
+                          <span className='text-blue text-base'>{upperFirst(demoNetworkName)} {demoAssetTypes[pool.assetType]?.label} Pool</span>
+                          <br />
+                          <span className='text-xxs sm:text-base inline-block -t-1 relative text-accent-3'>{shorten(pool.address)} <span className='uppercase text-accent-3 opacity-50'>TESTNET DEMO</span></span>
+                        </div>
+                      </div>
+                    </a>
+                  </Link>
+                )
+              })}
+            </>}
+            
           </div>
-        </form>
-      </FormPanel>
+
+          <hr/>
+
+          <div
+            className='text-lg sm:text-xl lg:text-2xl mb-4'
+          >
+            2. Or enter a pool to view it's details:
+          </div>
+
+        </>}
+
+      <div
+        className='-mx-16 sm:-mx-20 lg:-mx-24 px-12'
+      >
+        <FormPanel>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+
+              window.location.href = `/pools/${network}/${contractAddress}`
+            }}
+          >
+            <RadioInputGroup
+              label='Network the Pool is on:'
+              name='network'
+              onChange={handleNetworkChange}
+              value={network}
+              radios={[
+                {
+                  value: 'kovan',
+                  label: 'Kovan'
+                },
+                {
+                  value: 'ropsten',
+                  label: 'Ropsten'
+                },
+                {
+                  value: 'rinkeby',
+                  label: 'Rinkeby'
+                },
+                {
+                  value: 'mainnet',
+                  label: 'Mainnet'
+                },
+                {
+                  value: 'local',
+                  label: 'Local'
+                }
+              ]}
+            />
+
+
+            <TextInputGroup
+              id='contractAddress'
+              label={<>
+                Prize Pool contract address:
+              </>}
+              required
+              onChange={(e) => setContractAddress(e.target.value)}
+              value={contractAddress}
+            />
+
+            <div
+              className='my-5'
+            >
+              <Button
+                color='green'
+              >
+                View Pool
+              </Button>
+            </div>
+          </form>
+        </FormPanel>
+      </div>
     </div>
 
   </>
