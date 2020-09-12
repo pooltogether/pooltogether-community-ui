@@ -13,12 +13,12 @@ import { useInterval } from 'lib/hooks/useInterval'
 import { fetchChainData } from 'lib/utils/fetchChainData'
 import { poolToast } from 'lib/utils/poolToast'
 
-import BatSvg from 'assets/images/bat.svg'
-import DaiSvg from 'assets/images/dai.svg'
-import UsdcSvg from 'assets/images/usdc.svg'
-import UsdtSvg from 'assets/images/usdt.svg'
-import WbtcSvg from 'assets/images/wbtc.svg'
-import ZrxSvg from 'assets/images/zrx.svg'
+import BatSvg from 'assets/images/bat-new-transparent.png'
+import DaiSvg from 'assets/images/dai-new-transparent.png'
+import UsdcSvg from 'assets/images/usdc-new-transparent.png'
+import UsdtSvg from 'assets/images/usdt-new-transparent.png'
+import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
+import ZrxSvg from 'assets/images/zrx-new-transparent.png'
 
 const renderErrorMessage = (
   address,
