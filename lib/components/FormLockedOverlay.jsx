@@ -27,7 +27,7 @@ export const FormLockedOverlay = ({
       }}
     >
       <div
-        className={`${topMarginClass} rounded-lg text-center mx-auto px-3 sm:px-6 py-4 sm:py-6 text-base sm:text-lg text-purple-200 w-10/12 sm:w-3/4`}
+        className={`${topMarginClass} rounded-lg text-center mx-auto px-3 sm:px-6 py-4 sm:py-6 text-base sm:text-lg text-default w-10/12 sm:w-3/4`}
         style={{
           backgroundColor: 'rgba(70, 30, 125, 1)'
         }}

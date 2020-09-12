@@ -22,7 +22,7 @@ export const RadioInputGroup = (
       />
       <label
         htmlFor={id}
-        className='text-purple-300 relative pl-6 py-3'
+        className='text-highlight-1 relative pl-6 py-3'
       >
         {radio.label}
       </label>
@@ -34,7 +34,7 @@ export const RadioInputGroup = (
       className='radio-input-fieldset mb-6'
     >
       <label
-        className='text-purple-300 hover:text-white trans mt-0'
+        className='text-highlight-1 hover:text-white trans mt-0'
       >
         {label}
       </label>

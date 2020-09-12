@@ -26,8 +26,8 @@ export const TextInputGroup = (
         className={classnames(
           'mt-0 trans',
           {
-            'text-purple-700 cursor-not-allowed': disabled,
-            'text-purple-300 hover:text-white': !disabled,
+            'text-purple cursor-not-allowed': disabled,
+            'text-highlight-1 hover:text-white': !disabled,
           }
         )}
       >

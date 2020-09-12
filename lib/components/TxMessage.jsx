@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 
 import { EtherscanTxLink } from 'lib/components/EtherscanTxLink'
 import { LoadingDots } from 'lib/components/LoadingDots'
-import { shortenAddress } from 'lib/utils/shortenAddress'
+import { shorten } from 'lib/utils/shorten'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 
 export const TxMessage = (props) => {
@@ -46,7 +46,7 @@ export const TxMessage = (props) => {
 
         {txInWallet && <>
           <div
-            className='mb-2 text-yellow-400 text-base sm:text-lg lg:text-xl'
+            className='mb-2 text-yellow text-base sm:text-lg lg:text-xl'
           >
             Please confirm the transaction in your wallet ...
           </div>
@@ -54,7 +54,7 @@ export const TxMessage = (props) => {
 
         {txSent && <>
           <div
-            className='mb-2 text-yellow-400 text-base sm:text-lg lg:text-xl'
+            className='mb-2 text-yellow text-base sm:text-lg lg:text-xl'
           >
             Waiting for confirmations ...
           </div>
@@ -66,7 +66,7 @@ export const TxMessage = (props) => {
 
         {txCompleted && !txError && <>
           <div
-            className='mb-2 text-green-300 text-base sm:text-lg lg:text-xl'
+            className='mb-2 text-green text-base sm:text-lg lg:text-xl'
           >
             Transaction successful!
           </div>
@@ -79,7 +79,7 @@ export const TxMessage = (props) => {
             There was an error with the transaction
           </div>
 
-          <div className='my-3 text-purple-400'>
+          <div className='my-3 text-highlight-2'>
             {tx && tx.hash ? <>
               {<EtherscanTxLink
                 chainId={chainId}
@@ -111,7 +111,7 @@ export const TxMessage = (props) => {
               chainId={chainId}
               hash={tx.hash}
             >
-              {shortenAddress(tx.hash)}
+              {shorten(tx.hash)}
             </EtherscanTxLink>}
           </>}
         </div>
@@ -120,7 +120,7 @@ export const TxMessage = (props) => {
         {handleReset && txCompleted && <>
           <div className='mt-10 text-center'>
             <button
-              className='font-bold rounded-full text-green-300 border-2 sm:border-4 border-green-300 hover:text-white hover:bg-lightPurple-1000 text-xxs sm:text-base pt-2 pb-2 px-3 sm:px-6 trans'
+              className='font-bold rounded-full text-green border-2 sm:border-4 border-green-300 hover:text-white hover:bg-lightPurple-1000 text-xxs sm:text-base pt-2 pb-2 px-3 sm:px-6 trans'
               onClick={handleReset}
             >
               {resetButtonText || 'Reset form'}

@@ -55,12 +55,12 @@ export const Layout = (props) => {
             >
               <div className='flex flex-col items-center  justify-center'>
                 <div
-                  className='text-blue-400 title text-xl sm:text-3xl'
+                  className='text-default title text-xl sm:text-3xl'
                 >
                   PoolTogether - Reference Frontend 
                 </div>
                 <div
-                  className='text-blue-700 title text-base sm:text-2xl'
+                  className='text-primary title text-base sm:text-2xl'
                 >
                   v3.0.0-alpha.31
                 </div>
@@ -68,7 +68,7 @@ export const Layout = (props) => {
               </div>
 
               <a
-                href='https://docs.pooltogether.com/contracts/prize-pool'
+                href='https://docs.pooltogether.com'
                 className='trans text-xs sm:text-base'
               >
                 View documentation

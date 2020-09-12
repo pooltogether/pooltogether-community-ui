@@ -21,7 +21,7 @@ export const PoolRelatedAddressesUI = (props) => {
           setShowPoolAddresses(true)
         }}
         className={classnames(
-          `mt-2 animated text-purple-500 hover:text-green-300 trans text-xxs sm:text-base lg:text-base no-underline border-b-2 border-purple-800 hover:border-purple-700`,
+          `mt-2 animated text-highlight-3 hover:text-green trans text-xxs sm:text-base lg:text-base no-underline border-b-2 border-purple-800 hover:border-purple-700`,
           {
             'fadeOut': showPoolAddresses,
           }

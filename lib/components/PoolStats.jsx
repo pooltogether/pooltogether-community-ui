@@ -91,10 +91,10 @@ export const PoolStats = (props) => {
             Ticket Symbol &amp; Name
           </>,
           content: <>
-            <h3>
+            <h5>
               ${genericChainValues.ticketSymbol}
-              <br /><span className='text-blue-700'>{genericChainValues.ticketName}</span>
-            </h3>
+              <br /><span className='text-blue'>{genericChainValues.ticketName}</span>
+            </h5>
           </>
         },
         {
@@ -128,10 +128,10 @@ export const PoolStats = (props) => {
             Sponsorship Symbol &amp; Name
           </>,
           content: <>
-            <h3>
+            <h5>
               ${genericChainValues.sponsorshipSymbol}
-              <br /><span className='text-blue-700'>{genericChainValues.sponsorshipName}</span>
-            </h3>
+              <br /><span className='text-blue'>{genericChainValues.sponsorshipName}</span>
+            </h5>
           </>
         },
         {

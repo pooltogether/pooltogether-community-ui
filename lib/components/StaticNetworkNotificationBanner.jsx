@@ -29,8 +29,8 @@ export const StaticNetworkNotificationBanner = ({
     className={classnames(
       'text-sm sm:text-base lg:text-lg sm:px-6 py-2 sm:py-3',
       {
-        'text-white bg-red-800': !networkSupported,
-        'text-purple-400 bg-purple-1000': networkSupported,
+        'text-white bg-red': !networkSupported,
+        'text-highlight-2 bg-purple': networkSupported,
       }
     )}
   >

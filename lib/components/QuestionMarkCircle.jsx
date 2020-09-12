@@ -4,7 +4,7 @@ import classnames from 'classnames'
 export const QuestionMarkCircle = (props) => {
   const { white } = props
 
-  let defaultClasses = 'bg-blue-700 text-white'
+  let defaultClasses = 'bg-blue text-white'
   if (white) {
     defaultClasses = 'bg-transparent text-white border-white border-2'
   }

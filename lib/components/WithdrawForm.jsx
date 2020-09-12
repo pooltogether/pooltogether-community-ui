@@ -126,7 +126,7 @@ export const WithdrawForm = (props) => {
       <TextInputGroup
         id='withdrawAmount'
         label={<>
-          Withdraw amount <span className='text-purple-600 italic'> (in ${genericChainValues.ticketSymbol || 'TICK'} tickets)</span>
+          Withdraw amount <span className='text-default italic'> (in ${genericChainValues.ticketSymbol || 'TICK'} tickets)</span>
         </>}
         required
         type='number'
@@ -136,7 +136,7 @@ export const WithdrawForm = (props) => {
       />
 
       {overBalance && <>
-        <div className='text-yellow-400'>
+        <div className='text-yellow'>
           You only have {displayAmountInEther(usersTicketBalance, { decimals: tokenDecimals })} tickets.
           <br />The maximum you can withdraw is {displayAmountInEther(usersTicketBalance, { precision: 2, decimals: tokenDecimals })} {tokenSymbol}.
         </div>
@@ -146,7 +146,7 @@ export const WithdrawForm = (props) => {
         {/* <TextInputGroup
           id='maxExitFee'
           label={<>
-            Max Exit Fee <span className='text-purple-600 italic'> (in {genericChainValues.tokenSymbol || 'TOKEN'})</span>
+            Max Exit Fee <span className='text-default italic'> (in {genericChainValues.tokenSymbol || 'TOKEN'})</span>
           </>}
           required
           type='number'
@@ -155,7 +155,7 @@ export const WithdrawForm = (props) => {
           value={maxExitFee}
         />
  */}
-        <div className='text-yellow-400'>
+        <div className='text-yellow'>
           You will receive {displayAmountInEther(instantTotal, { decimals: tokenDecimals })} {tokenSymbol} now&nbsp;
           {
             instantFee.eq(0)
@@ -165,21 +165,24 @@ export const WithdrawForm = (props) => {
         </div>
 
         {instantFee.eq(0) && <>
-          <br />
-          Why is the fairness fee $0?
-          <br /><br />
-          The fairness fee is based on the previous prize and other factors (see documentation or contract code).
-          <br /><br />
-          You may want to pay fairness fee's on behalf of your users and/or hide the fairness fee when it's $0.
+          <div
+            className='text-sm text-default my-6'
+          >
+            <em className='text-white'>Why is the fairness fee $0?</em>
+            <br /><br />
+            The fairness fee is based on the previous prize and other factors (see documentation or contract code).
+            <br /><br />
+            You may want to pay fairness fee's on behalf of your users and/or hide the fairness fee when it's $0.
+          </div>
         </>}
       </>}
 
       {!overBalance && timelockDuration && withdrawType !== 'instant' && <>
-        <div className='text-yellow-400'>
+        <div className='text-yellow'>
           You will receive {displayAmountInEther(instantTotal, { decimals: tokenDecimals })} {tokenSymbol}&nbsp;
           {
             timelockDuration.eq(0)
-              ? <>now and burn {displayAmountInEther(timelockCredit)} from your credit</>
+              ? <>now and burn {displayAmountInEther(timelockCredit)} {tokenSymbol} from your credit</>
               : <>in {timelockDuration.toString()} seconds</>
           }
         </div>

@@ -8,6 +8,7 @@ import { RadioInputGroup } from 'lib/components/RadioInputGroup'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { getDemoPoolContractAddress } from 'lib/utils/getDemoPoolContractAddress'
+import { shorten } from 'lib/utils/shorten'
 
 import BatSvg from 'assets/images/bat-new-transparent.png'
 import DaiSvg from 'assets/images/dai-new-transparent.png'
@@ -53,7 +54,7 @@ export const IndexContent = (
         </div>
 
         <div
-          className='text-xs sm:text-lg lg:text-xl'
+          className='flex flex-col sm:flex-row sm:flex-wrap -mx-4 mb-8 text-xs sm:text-lg lg:text-xl'
         >
           {map(demoPool.assets, assetType => {
             const prizePoolContractAddress = getDemoPoolContractAddress(demoNetworkName, assetType)
@@ -64,15 +65,15 @@ export const IndexContent = (
                 as={`/pools/${demoNetworkName}/${prizePoolContractAddress}`}
               >
                 <a
-                  className='-mx-6 sm:mx-0 lg:-mx-2 w-full lg:w-1/2 px-6 sm:px-4 lg:mr-4 mb-2 py-2 inline-block bg-purple-1100 hover:bg-purple-1000 trans border-2 border-purple-700 rounded-lg hover:border-purple-500'
+                  className='w-full sm:w-1/2 lg:w-1/3 px-4 border-2 border-transparent hover:border-transparent'
                 >
-                  <div className='flex items-center'>
+                  <div className='flex items-center mb-2 py-2 px-4 inline-block bg-card hover:bg-card-selected trans border-2 border-highlight-3 hover:border-highlight-2 border-dashed rounded-lg '>
                     <img src={demoAssetTypes[assetType].logo} className='inline-block w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 mr-2' />
 
                     <div>
-                      <span className='text-blue-200 text-base'>Demo {upperFirst(demoNetworkName)} {demoAssetTypes[assetType].label} Pool</span>
+                      <span className='text-blue text-base'>{upperFirst(demoNetworkName)} {demoAssetTypes[assetType].label} Pool</span>
                       <br/>
-                      <span className='text-xxs sm:text-base inline-block -t-1 relative'>{prizePoolContractAddress}</span>
+                      <span className='text-xxs sm:text-base inline-block -t-1 relative text-accent-3'>{shorten(prizePoolContractAddress)} <span className='uppercase text-accent-3 opacity-50'>TESTNET DEMO</span></span>
                     </div>
                   </div>
                 </a>

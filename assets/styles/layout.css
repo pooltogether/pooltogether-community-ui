@@ -98,12 +98,12 @@ body {
 
 @screen lg {
   .pool-container {
-    max-width: 1448px;
+    max-width: 1460px;
   }
 }
 
 .pool-max-width {
-  max-width: 1448px; 
+  max-width: 1460px; 
 }
 
 .modal-max-width {

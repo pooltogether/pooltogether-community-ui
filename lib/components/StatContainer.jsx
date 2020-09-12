@@ -5,7 +5,7 @@ export const StatContainer = ({
 }) => {
   return <>
     <div
-      // bg-purple-1100
+      // bg-darkened
       className='w-full sm:w-5/12 flex-grow rounded-lg my-1 px-4 trans'
     >
       {children}

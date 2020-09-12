@@ -14,7 +14,7 @@ export function Input(props) {
     value,
   } = props
 
-  const defaultClasses = 'text-white font-headline border-2 border-transparent bg-purple-1000 hover:bg-purple-900 active:bg-purple-900 focus:bg-purple-900 trans rounded-full focus:outline-none focus:outline-none leading-none px-6 py-2 lg:py-2'
+  const defaultClasses = 'text-white font-headline border-2 border-transparent bg-card-selected hover:bg-purple active:bg-purple focus:bg-purple trans rounded-full focus:outline-none focus:outline-none leading-none px-6 py-2 lg:py-2'
 
   if (roundedClasses === undefined) {
     roundedClasses = 'rounded'

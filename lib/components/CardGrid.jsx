@@ -8,10 +8,10 @@ export const Card = (props) => {
     className='w-full sm:w-1/2 lg:w-1/3 px-4'
   >
     <div
-      className='text-left mt-2 sm:mt-10 py-4 sm:py-6 px-8 bg-purple-1100 rounded-lg card-min-height-desktop'
+      className='text-left mt-2 sm:mt-10 py-4 sm:py-6 px-8 bg-card rounded-lg card-min-height-desktop'
     >
       <div
-        className='text-caption uppercase text-xs sm:text-sm text-purple-400'
+        className='text-caption uppercase text-xs sm:text-sm text-default'
       >
         {icon && <img
           src={icon}

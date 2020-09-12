@@ -79,7 +79,7 @@ export const DepositForm = (props) => {
       <TextInputGroup
         id='depositAmount'
         label={<>
-          Deposit amount <span className='text-purple-600 italic'> (in {genericChainValues.tokenSymbol || 'TOKEN'})</span>
+          Deposit amount <span className='text-default italic'> (in {genericChainValues.tokenSymbol || 'TOKEN'})</span>
         </>}
         required
         disabled={disabled}
@@ -90,7 +90,7 @@ export const DepositForm = (props) => {
       />
 
       {overBalance && <>
-        <div className='text-yellow-400'>
+        <div className='text-yellow'>
           You only have {displayAmountInEther(usersTokenBalance, { decimals: tokenDecimals })} {tokenSymbol}.
           <br />The maximum you can deposit is {displayAmountInEther(usersTokenBalance, { precision: 2, decimals: tokenDecimals })}.
         </div>

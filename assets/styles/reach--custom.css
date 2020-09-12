@@ -4,9 +4,9 @@ reach-portal {
 }
 
 [data-reach-tooltip] {
-  /* @apply text-white bg-black; */
-  box-shadow: 0 -10px 10px -1px rgba(0, 0, 0, .1),
-    0 20px 20px -3px rgba(0, 0, 0, .1), rgba(14, 16, 40, 0.2) 0px 15px 30px;
+  @apply text-white bg-default;
+  box-shadow: 0 -10px 10px -1px rgba(0, 0, 0, .3),
+    0 20px 20px -3px rgba(0, 0, 0, .1), rgba(14, 16, 40, 0.5) 0px 15px 30px;
   border: 0;
   padding: 1.25rem 2rem;
   margin-top: 70px;

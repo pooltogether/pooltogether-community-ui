@@ -33,10 +33,10 @@ export const UserStats = (props) => {
       )}
     >
       {/* <div
-        className='w-full sm:w-1/3 flex-grow rounded-lg px-4 py-1 my-1 bg-purple-1100 opacity-80 hover:opacity-100 trans'
+        className='w-full sm:w-1/3 flex-grow rounded-lg px-4 py-1 my-1 bg-darkened opacity-80 hover:opacity-100 trans'
       >
         <strong
-          className='text-purple-400'
+          className='text-highlight-2'
         >ETH Balance:</strong>
         <br />
         {displayAmountInEther(ethBalance, { precision: 2 })}
