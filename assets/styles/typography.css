@@ -1,0 +1,145 @@
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@font-face {
+    font-family: 'DM Mono';
+    src: url('/fonts/DMMono-Regular.woff2') format('woff2'),
+        url('/fonts/DMMono-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Titillium Web';
+    src: url('/fonts/TitilliumWeb-Regular.woff2') format('woff2'),
+        url('/fonts/TitilliumWeb-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Titillium Web';
+    src: url('/fonts/TitilliumWeb-Bold.woff2') format('woff2'),
+        url('/fonts/TitilliumWeb-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+html, body, table {
+  -webkit-tap-highlight-color: transparent;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "pnum" 1, "tnum" 0, "onum" 0, "lnum" 0, "dlig" 0;
+}
+
+body {
+  @apply font-sans-regular tracking-wide;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-bold mt-0 mb-0;
+}
+
+h1 {
+  @apply text-2xl;
+}
+
+@screen sm {
+  h1 {
+    @apply text-4xl;
+  }
+}
+
+@screen lg {
+  h1 {
+    @apply text-6xl;
+  }
+}
+
+h2 {
+  @apply text-xl;
+}
+
+@screen sm {
+  h2 {
+    @apply text-3xl;
+  }
+}
+
+@screen lg {
+  h2 {
+    @apply text-5xl;
+  }
+}
+
+h3 {
+  @apply text-2xl;
+}
+
+@screen sm {
+  h3 {
+    @apply text-2xl;
+  }
+}
+
+@screen lg {
+  h3 {
+    @apply text-3xl;
+  }
+}
+
+h4 {
+  @apply text-lg;
+}
+
+@screen sm {
+  h4 {
+    @apply text-xl;
+  }
+}
+
+@screen lg {
+  h4 {
+    @apply text-2xl;
+  }
+}
+
+h5 {
+  @apply text-base;
+}
+
+@screen sm {
+  h5 {
+    @apply text-lg;
+  }
+}
+
+@screen lg {
+  h5 {
+    @apply text-xl;
+  }
+}
+
+h6 {
+  @apply text-base;
+}
+
+@screen sm {
+  h6 {
+    /* @apply text-sm; */
+  }
+}
+
+@screen lg {
+  h6 {
+    /* @apply text-base; */
+  }
+}

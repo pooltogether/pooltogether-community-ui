@@ -86,7 +86,7 @@ body {
 
 @screen lg {
   .nav-and-footer-container {
-    max-width: 1132px;
+    max-width: 1352px;
   }
 }
 
@@ -98,12 +98,12 @@ body {
 
 @screen lg {
   .pool-container {
-    max-width: 1228px;
+    max-width: 1448px;
   }
 }
 
 .pool-max-width {
-  max-width: 1228px; 
+  max-width: 1448px; 
 }
 
 .modal-max-width {

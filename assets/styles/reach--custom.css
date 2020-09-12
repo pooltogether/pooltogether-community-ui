@@ -1,0 +1,27 @@
+/* TOOLTIPS / PTHINTS */
+reach-portal {
+  z-index: 3000;
+}
+
+[data-reach-tooltip] {
+  /* @apply text-white bg-black; */
+  box-shadow: 0 -10px 10px -1px rgba(0, 0, 0, .1),
+    0 20px 20px -3px rgba(0, 0, 0, .1), rgba(14, 16, 40, 0.2) 0px 15px 30px;
+  border: 0;
+  padding: 1.25rem 2rem;
+  margin-top: 70px;
+  border-radius: 8px;
+  pointer-events: initial;
+  max-width: 16rem;
+  white-space: initial;
+  z-index: 1823774099;
+
+  /* top: 228px !important;
+  left: 28px !important; */
+}
+
+@screen sm {
+  [data-reach-tooltip] {
+    max-width: 30rem;
+  }
+}

@@ -1,7 +1,7 @@
 {
-  "name": "ripcord",
-  "version": "0.1.0",
-  "private": true,
+  "name": "pooltogether-pool-ui",
+  "version": "3.0.0-alpha.31",
+  "private": false,
   "scripts": {
     "reinstall": "rm -rf node_modules/ && rm -f yarn.lock && yarn",
     "clean": "rm -rf .next",
@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "@pooltogether/etherplex": "^0.2.3",
-    "@pooltogether/pooltogether-contracts": "^3.0.0-alpha.30",
+    "@pooltogether/pooltogether-contracts": "^3.0.0-alpha.31",
+    "@reach/tooltip": "0.10.5",
     "autoprefixer": "^9.8.1",
     "bn.js": "4.11.0",
     "bnc-onboard": "^1.13.0",
@@ -28,7 +29,6 @@
     "react-device-detect": "^1.13.1",
     "react-dom": "16.13.1",
     "react-toastify": "^6.0.5",
-    "react-tooltip-lite": "^1.12.0",
     "request": "2.88.2",
     "rollup": "2.17.1",
     "tailwindcss": "^1.7.6",

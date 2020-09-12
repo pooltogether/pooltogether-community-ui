@@ -68,18 +68,6 @@ export const Footer = () => {
             help
           </a>
 
-          <span className='block mb-2 sm:mb-0 text-purple-900'>
-            Pool icon by <a
-              href='https://www.flaticon.com/authors/freepik'
-              title='Freepik'
-              target='_blank'
-              className='text-purple-900 hover:text-purple-800'
-            >
-              Freepik
-            </a>
-          </span>
-
-          
         </div>
 
         <div className='mt-3 sm:mt-0 mb-2 sm:mb-0'>

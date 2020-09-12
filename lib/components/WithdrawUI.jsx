@@ -21,7 +21,6 @@ const handleWithdrawSubmit = async (
   withdrawAmount,
   withdrawType,
   maxExitFee,
-  sponsoredExitFee,
   decimals
 ) => {
   if (
@@ -41,13 +40,12 @@ const handleWithdrawSubmit = async (
   if (withdrawType === 'instant') {
     method = 'withdrawInstantlyFrom'
     params.push(
-      ethers.utils.parseEther(sponsoredExitFee),
       ethers.utils.parseEther(maxExitFee)
     )
   }
 
   // TX "data" param
-  params.push([])
+  // params.push([])
 
   // TX overrides
   params.push({gasLimit: 350000})
@@ -67,7 +65,6 @@ export const WithdrawUI = (props) => {
   const router = useRouter()
   const networkName = router.query.networkName
   const prizePool = props.poolAddresses.prizePool
-  const prizeStrategy = props.poolAddresses.prizeStrategy
   const ticketAddress = props.poolAddresses.ticket
 
   const walletContext = useContext(WalletContext)
@@ -75,7 +72,6 @@ export const WithdrawUI = (props) => {
   const usersAddress = walletContext._onboard.getState().address
 
   const [exitFees, setExitFees] = useState({})
-  const [sponsoredExitFee, setSponsoredExitFee] = useState('0')
   const [maxExitFee, setMaxExitFee] = useState('1')
   const [withdrawAmount, setWithdrawAmount] = useState('')
   const [withdrawType, setWithdrawType] = useState('scheduled')
@@ -88,7 +84,7 @@ export const WithdrawUI = (props) => {
         const result = await fetchExitFee(
           networkName,
           usersAddress,
-          prizeStrategy,
+          prizePool,
           ticketAddress,
           ethers.utils.parseEther(debouncedWithdrawAmount)
         )
@@ -133,19 +129,16 @@ export const WithdrawUI = (props) => {
             withdrawAmount,
             withdrawType,
             maxExitFee,
-            sponsoredExitFee,
             props.genericChainValues.tokenDecimals
           )
         }}
         vars={{
           maxExitFee,
-          sponsoredExitFee,
           withdrawAmount,
           withdrawType,
         }}
         stateSetters={{
           setMaxExitFee,
-          setSponsoredExitFee,
           setWithdrawAmount,
           setWithdrawType,
         }}

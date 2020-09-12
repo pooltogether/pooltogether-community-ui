@@ -54,7 +54,7 @@ h3 {
 }
 
 a {
-  @apply text-purple-500 no-underline border-b-2 border-purple-800;
+  @apply text-purple-500 no-underline border-b-2 border-purple-1000;
 }
 
 a:hover {
@@ -354,9 +354,9 @@ input[type="text"] {
   @apply border-0 no-underline;
 }
 
-.glow {
+/* .glow {
   text-shadow: 0 0 2px rgba(6, 255, 150, 0.15), 0 0 4px rgba(14, 207, 216, 0.23)
-}
+} */
 
 .pt-panel {
   width: calc(100% + 64px);
@@ -371,5 +371,11 @@ input[type="text"] {
 @screen lg {
   .pt-panel {
     width: 100%;
+  }
+}
+
+@screen sm {
+  .card-min-height-desktop {
+    min-height: 144px
   }
 }

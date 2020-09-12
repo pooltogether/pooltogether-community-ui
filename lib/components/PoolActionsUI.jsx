@@ -11,13 +11,13 @@ export const PoolActionsUI = (props) => {
   }
 
   return <>
-    <PoolStats
-      {...props}
-    />
     <StartAwardUI
       {...props}
     />
     <CompleteAwardUI
+      {...props}
+    />
+    <PoolStats
       {...props}
     />
     <PoolRelatedAddressesUI

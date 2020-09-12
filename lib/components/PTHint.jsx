@@ -1,96 +1,93 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import Tooltip from 'react-tooltip-lite'
+import React, { useState, cloneElement } from 'react'
+import classnames from 'classnames'
+import { useTooltip, TooltipPopup } from '@reach/tooltip'
 
-export const PTHint = class _PTHint extends Component {
-  static propTypes = {
-    children: PropTypes.object,
-    tip: PropTypes.string.isRequired,
-    className: PropTypes.string
+import { QuestionMarkCircle } from 'lib/components/QuestionMarkCircle'
+
+// Center the tooltip, but collisions will win
+const custom = (triggerRect, tooltipRect) => {
+  const triggerCenter = triggerRect.left + triggerRect.width / 2;
+  const left = triggerCenter - tooltipRect.width / 2;
+  const maxLeft = window.innerWidth - tooltipRect.width - 2;
+
+  console.log(Math.min(Math.max(2, left), maxLeft) + window.scrollX)
+  console.log(triggerRect.top + 8)
+
+  return {
+    left: Math.min(Math.max(2, left), maxLeft) + window.scrollX,
+    top: 60 + window.scrollY,
+  };
+};
+
+export const PTHint = (props) => {
+  const { children, className, title } = props
+  let { tip } = props
+
+  const [trigger, tooltip] = useTooltip()
+
+  const [isVisible, setIsVisible] = useState(false)
+
+  const show = (e) => {
+    setIsVisible(true)
   }
 
-  state = { tipOpen: false }
-
-  showTip = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-
-    this.setState({ tipOpen: true })
+  const hide = (e) => {
+    setIsVisible(false)
   }
 
-  hideTip = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-
-    this.setState({ tipOpen: false })
+  const toggleVisible = (e) => {
+    setIsVisible(!isVisible)
   }
 
-  toggleTip = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-
-    this.setState({ tipOpen: !this.state.tipOpen })
-  }
-
-  render () {
-    const {
-      children,
-      childrenClassName,
-      tip,
-      className
-    } = this.props
-
-    let buttonText
-
-    const cn = className || ''
-    const ccn = childrenClassName || 'cursor-pointer trans'
-    const childrenProvided = children
-
-    if (childrenProvided) {
-      buttonText = children
-    } else {
-      buttonText = <span
-        className='flex items-center justify-center inline-block bg-white rounded-full w-4 h-4 text-blue-500 text-center font-bold'
+  if (title) {
+    tip = <>
+      <div
+        className='-mx-8 bg-black px-8 py-4 -mt-6 rounded-t-lg'
       >
-        <span
-          className='relative text-xs'
-          style={{
-            top: -1,
-            left: '0.03rem'
-          }}
+        <h5
+          className='text-green-400'
         >
-          ?
-        </span>
-      </span>
-    }
+          {title}
+        </h5>
+      </div>
 
-    return <>
-      <span
-        onMouseEnter={this.showTip}
-        onMouseLeave={this.hideTip}
-        onTouchStart={this.toggleTip}
-        className={ccn}
+      <div
+        className='pt-4'
       >
-        {buttonText}
-      </span>
-
-      <Tooltip
-        content={tip}
-        className={cn}
-        isOpen={this.state.tipOpen}
-        distance={200}
-        forceDirection={false}
-        content={
-          <span
-            className='flex flex-col items-center justify-center h-full'
-          >
-            {tip}
-          </span>
-        }
-      >
-        <></>
-      </Tooltip>
+        {tip}
+      </div>
     </>
-
   }
+
+  return <>
+    <div
+      className={classnames(
+        className,
+        'relative cursor-pointer',
+      )}
+    >
+      <div
+        {...trigger}
+        onMouseEnter={show}
+        onMouseOut={hide}
+        onTouchStart={toggleVisible}
+        className={classnames(
+          'cursor-pointer h-full w-full l-0 r-0 t-0 b-0 absolute',
+        )}
+        style={{
+          zIndex: 12314082
+        }}
+      />
+
+      {children ? children : <QuestionMarkCircle />}
+    </div>
+
+
+    <TooltipPopup
+      {...tooltip}
+      isVisible={isVisible}
+      label={tip}
+      position={custom}
+    />
+  </>
 }

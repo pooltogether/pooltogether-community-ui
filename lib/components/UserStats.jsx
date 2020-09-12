@@ -44,22 +44,28 @@ export const UserStats = (props) => {
 
       <StatContainer>
         <BlueLineStat
-          title={`Your ${genericChainValues.tokenSymbol || 'TOKEN'} balance`}
-          value={displayAmountInEther(usersTokenBalance, { precision: 2, decimals })}
+          title={`Your balance`}
+          value={<>
+            {displayAmountInEther(usersTokenBalance, { precision: 2, decimals })}&nbsp;<span className='text-blue-700'> {genericChainValues.tokenSymbol || 'TOKEN'}</span>
+          </>}
         />
       </StatContainer>
 
       <StatContainer>
         <BlueLineStat
-          title={`${genericChainValues.tokenSymbol || 'TOKEN'} Allowance`}
-          value={displayAmountInEther(usersTokenAllowance, { precision: 0, decimals })}
+          title={`Allowance`}
+          value={<>
+            {displayAmountInEther(usersTokenAllowance, { precision: 0, decimals })}&nbsp;<span className='text-blue-700'>{genericChainValues.tokenSymbol || 'TOKEN'}</span>
+          </>}
         />
       </StatContainer>
 
       <StatContainer>
         <BlueLineStat
           title={`Your ticket balance`}
-          value={displayAmountInEther(usersTicketBalance, { precision: 2, decimals })}
+          value={<>
+            {displayAmountInEther(usersTicketBalance, { precision: 2, decimals })}&nbsp;<span className='text-blue-700'>{genericChainValues.ticketSymbol || 'TICKET'}</span>
+          </>}
         />
       </StatContainer>
 

@@ -10,7 +10,7 @@ module.exports = {
     // this gives us regular (mobile), sm (641px - 1281px) and lg (1281px+)
     screens: {
       'sm': '801px',
-      'lg': '1281px'
+      'lg': '1381px'
     },
     extend: {
       boxShadow: {
@@ -74,7 +74,8 @@ module.exports = {
         '12xl': '8.5rem'
       },
       fontFamily: {
-        'sans-regular': ['Soleil', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'],
+        'sans-regular': ['Titillium Web', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'],
+        'number': ['DM Mono', 'Courier', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'],
         'headline': ['omnes-pro', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'],
         'sans': ['Roboto', 'Helvetica', 'Arial', 'sans-serif'],
       },

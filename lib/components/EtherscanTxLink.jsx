@@ -16,7 +16,7 @@ export const EtherscanTxLink = (props) => {
   return <>
     <a
       href={url}
-      className={`no-underline ${className}`}
+      className={`no-underline ${className} font-number`}
       target='_blank'
       rel='noopener noreferrer'
       title='View on Etherscan'

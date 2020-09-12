@@ -87,7 +87,7 @@ export const PoolRelatedAddressesUI = (props) => {
 
       <StatContainer>
         <BlueLineStat
-          title='erc20 token()'
+          title='underlying erc20 token()'
           value={<>
             <EtherscanAddressLink
               address={poolAddresses.token}

@@ -33,13 +33,11 @@ export const WithdrawForm = (props) => {
 
   const {
     maxExitFee,
-    sponsoredExitFee,
     withdrawAmount,
     withdrawType,
   } = vars
   const {
     setMaxExitFee,
-    setSponsoredExitFee,
     setWithdrawAmount,
     setWithdrawType,
   } = stateSetters
@@ -91,15 +89,24 @@ export const WithdrawForm = (props) => {
       >
         Withdraw:
       </div>
-      {/* can't get this tooltip to render in the proper place atm: */}
-      <PTHint
-        tip={`To maintain fairness your funds need to contribute interest towards the prize each week. You can:
-1) SCHEDULE: receive $1000 DAI once enough interest has been provided to the prize
-2) INSTANT: pay $1.90 to withdraw right now and forfeit the interest that would go towards the prize`}
-      />
 
       <RadioInputGroup
-        label='What type of withdraw?'
+        label={<>
+          What type of withdraw? <PTHint
+            title='On fairness fees'
+            tip={<>
+              <div className='my-2 text-xs sm:text-sm'>
+                To maintain fairness your funds need to contribute interest towards the prize each week. You can:
+          </div>
+              <div className='my-2 text-xs sm:text-sm'>
+                1) SCHEDULE: receive $1000 DAI once enough interest has been provided to the prize
+          </div>
+              <div className='my-2 text-xs sm:text-sm'>
+                2) INSTANT: pay $1.90 to withdraw right now and forfeit the interest that would go towards the prize
+          </div>
+            </>}
+          />
+        </>}
         name='withdrawType'
         onChange={handleWithdrawTypeChange}
         value={withdrawType}
@@ -113,13 +120,13 @@ export const WithdrawForm = (props) => {
             label: 'instant'
           }
         ]}
-      />
+      /> 
 
 
       <TextInputGroup
         id='withdrawAmount'
         label={<>
-          Withdraw amount <span className='text-purple-600 italic'> (in {genericChainValues.tokenSymbol || 'TOKEN'})</span>
+          Withdraw amount <span className='text-purple-600 italic'> (in ${genericChainValues.ticketSymbol || 'TICK'} tickets)</span>
         </>}
         required
         type='number'
@@ -136,7 +143,7 @@ export const WithdrawForm = (props) => {
       </>}
 
       {!overBalance && instantFee && withdrawType === 'instant' && <>
-        <TextInputGroup
+        {/* <TextInputGroup
           id='maxExitFee'
           label={<>
             Max Exit Fee <span className='text-purple-600 italic'> (in {genericChainValues.tokenSymbol || 'TOKEN'})</span>
@@ -147,19 +154,7 @@ export const WithdrawForm = (props) => {
           onChange={(e) => setMaxExitFee(e.target.value)}
           value={maxExitFee}
         />
-
-        <TextInputGroup
-          id='sponsoredExitFee'
-          label={<>
-            Sponsored Exit Fee <span className='text-purple-600 italic'> (in {genericChainValues.tokenSymbol || 'TOKEN'})</span>
-          </>}
-          required
-          type='number'
-          pattern='\d+'
-          onChange={(e) => setSponsoredExitFee(e.target.value)}
-          value={sponsoredExitFee}
-        />
-
+ */}
         <div className='text-yellow-400'>
           You will receive {displayAmountInEther(instantTotal, { decimals: tokenDecimals })} {tokenSymbol} now&nbsp;
           {
@@ -170,11 +165,12 @@ export const WithdrawForm = (props) => {
         </div>
 
         {instantFee.eq(0) && <>
+          <br />
           Why is the fairness fee $0?
-          <br/>
+          <br /><br />
           The fairness fee is based on the previous prize and other factors (see documentation or contract code).
-          <br/>
-          You may want to pay fairness fee's for your users and/or hide the fairness fee when it's $0.
+          <br /><br />
+          You may want to pay fairness fee's on behalf of your users and/or hide the fairness fee when it's $0.
         </>}
       </>}
 

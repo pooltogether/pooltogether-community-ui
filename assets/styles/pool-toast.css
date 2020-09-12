@@ -2,7 +2,7 @@
   background: transparent;
   margin: 0 auto;
   left: 1%;
-  max-width: 1228px;
+  max-width: 1448px;
   min-width: 50%;
   padding: 1rem;
   text-align: center;
@@ -21,7 +21,7 @@
 }
 
 .pool-toast.Toastify__toast-container {
-  max-width: 1228px;
+  max-width: 1448px;
   height: 50px; 
   width: 100%;
 }
@@ -52,14 +52,14 @@
 @screen lg {
   .pool-toast .Toastify__toast {
     min-width: auto;
-    max-width: 1228px;
+    max-width: 1448px;
   }
 }
 
 .pool-toast.Toastify__toast-container--top-center {
   left: 50%;
   margin-left: 0;
-  max-width: 1228px;
+  max-width: 1448px;
   bottom: 90px;
   top: auto;
 }

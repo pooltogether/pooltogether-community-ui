@@ -3,6 +3,7 @@ import { Slide, ToastContainer } from 'react-toastify'
 
 import { Footer } from 'lib/components/Footer'
 import { Meta } from 'lib/components/Meta'
+// import { PTHint } from 'lib/components/PTHint'
 import { Nav } from 'lib/components/Nav'
 import { StaticNetworkNotificationBanner } from 'lib/components/StaticNetworkNotificationBanner'
 
@@ -36,7 +37,12 @@ export const Layout = (props) => {
           >
             <Nav />
           </div>
-
+          {/* <PTHint
+            title='On fairness fees'
+            tip={`To maintain fairness your funds need to contribute interest towards the prize each week. You can:
+1) SCHEDULE: receive $1000 DAI once enough interest has been provided to the prize
+2) INSTANT: pay $1.90 to withdraw right now and forfeit the interest that would go towards the prize`}
+          /> */}
 
           <div
             className='relative flex flex-col flex-grow h-full z-10 text-white'
@@ -45,20 +51,25 @@ export const Layout = (props) => {
             }}
           >
             <div
-              className='px-4 sm:px-8 lg:px-12 my-10 lg:w-2/3'
+              className='px-4 sm:px-8 lg:px-12 my-10 text-center'
             >
-              <div className='flex items-center'>
+              <div className='flex flex-col items-center  justify-center'>
                 <div
                   className='text-blue-400 title text-xl sm:text-3xl'
                 >
-                  v3.0 - Reference Pool Frontend
+                  PoolTogether - Reference Frontend 
                 </div>
-                <img src={PoolIcon} className='inline-block w-6 h-6 sm:w-10 sm:h-10 ml-2 mb-2 sm:mb-0' />
+                <div
+                  className='text-blue-700 title text-base sm:text-2xl'
+                >
+                  v3.0.0-alpha.31
+                </div>
+                {/* <img src={PoolIcon} className='inline-block w-6 h-6 sm:w-10 sm:h-10 ml-2 mb-2 sm:mb-0' /> */}
               </div>
 
               <a
                 href='https://docs.pooltogether.com/contracts/prize-pool'
-                className='trans'
+                className='trans text-xs sm:text-base'
               >
                 View documentation
               </a>

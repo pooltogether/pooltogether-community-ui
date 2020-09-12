@@ -18,13 +18,13 @@ export const EtherscanAddressLink = (props) => {
 
   let textSizeClasses = 'text-xs sm:text-base lg:text-lg'
   if (size === 'xxs') {
-    textSizeClasses = 'text-xxs sm:text-xxxs lg:text-xs'
+    textSizeClasses = 'text-xxs sm:text-xs lg:text-sm'
   }
 
   return <>
     <a
       href={url}
-      className={`trans no-underline ${textSizeClasses} ${className}`}
+      className={`trans no-underline ${textSizeClasses} ${className} font-number`}
       target='_blank'
       rel='noopener noreferrer'
       title='View on Etherscan'

@@ -3,6 +3,7 @@ import classnames from 'classnames'
 
 import { useInterval } from 'lib/hooks/useInterval'
 import { BlueLineStat } from 'lib/components/BlueLineStat'
+import { CardGrid } from 'lib/components/CardGrid'
 import { StatContainer } from 'lib/components/StatContainer'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 
@@ -32,53 +33,136 @@ export const PoolStats = (props) => {
   }, 1000)
 
   return <>
-    <div
-      className={classnames(
-        'flex flex-col sm:flex-row sm:flex-wrap justify-center items-center',
-        'mt-2 mb-4 rounded-xl text-base sm:text-lg',
-      )}
-    >
-      <StatContainer>
-        <BlueLineStat
-          title='Total ticket supply'
-          value={`${displayAmountInEther(genericChainValues.ticketTotalSupply, { precision: 2 })} ${genericChainValues.tokenSymbol || 'TOKEN'}`}
-        />
-      </StatContainer>
+    <CardGrid
+      cardGroupId='manage-pool-cards'
+      cards={[
+        {
+          icon: null,
+          title: <>
+            Decimal precision
+          </>,
+          content: <>
+            <h3>
+              {genericChainValues.tokenDecimals || '18'}
+            </h3>
+          </>
+        },
+        {
+          icon: null,
+          title: <>
+            Total ticket supply
+          </>,
+          content: <>
+            <h3>
+              {displayAmountInEther(
+                genericChainValues.ticketTotalSupply, { precision: 2, decimals: genericChainValues.tokenDecimals }
+              )} {genericChainValues.tokenSymbol || 'TOKEN'}
+            </h3>
+          </>
+        },
+        {
+          icon: null,
+          title: <>
+            next prize (estimate)
+          </>,
+          content: <>
+            <h3>
+              {displayAmountInEther(
+                genericChainValues.estimateRemainingPrize,
+                { precision: 0 }
+              )} {genericChainValues.tokenSymbol || 'TOKEN'}
+            </h3>
+          </>
+        },
+        {
+          icon: null,
+          title: <>
+            Seconds until rewardable
+          </>,
+          content: <>
+            <h3>
+              {secondsRemainingNow}
+            </h3>
+          </>
+        },
+        {
+          icon: null,
+          title: <>
+            Ticket Symbol &amp; Name
+          </>,
+          content: <>
+            <h3>
+              ${genericChainValues.ticketSymbol}
+              <br /><span className='text-blue-700'>{genericChainValues.ticketName}</span>
+            </h3>
+          </>
+        },
+        {
+          icon: null,
+          title: <>
+            Ticket Credit Rate (% per second)
+          </>,
+          content: <>
+            <h3>
+              {displayAmountInEther(
+                genericChainValues.ticketCreditRateMantissa,
+                { precision: 10 }
+              )}
+            </h3>
+          </>
+        },
+        {
+          icon: null,
+          title: <>
+            Ticket Credit Limit
+          </>,
+          content: <>
+            <h3>
+              {displayAmountInEther(genericChainValues.ticketCreditLimitMantissa.mul(100), { precision: 2 })}%
+            </h3>
+          </>
+        },
+        {
+          icon: null,
+          title: <>
+            Sponsorship Symbol &amp; Name
+          </>,
+          content: <>
+            <h3>
+              ${genericChainValues.sponsorshipSymbol}
+              <br /><span className='text-blue-700'>{genericChainValues.sponsorshipName}</span>
+            </h3>
+          </>
+        },
+        {
+          icon: null,
+          title: <>
+            Max Exit Fee
+          </>,
+          content: <>
+            <h3>
+              {displayAmountInEther(genericChainValues.maxExitFeeMantissa.mul(100), { precision: 2 })}%
+            </h3>
+          </>
+        },
+        
+      ]}
+    />
 
-      <StatContainer>
-        <BlueLineStat
-          title={<div className='flex flex-col leading-tight'>
-            next prize
-            <span className='text-purple-700 italic'>
-              (estimate)
-            </span></div>}
-          value={`$${displayAmountInEther(genericChainValues.estimateRemainingPrize, { precision: 0 })} ${genericChainValues.tokenSymbol || 'TOKEN'}`}
-        />
-      </StatContainer>
 
-      <StatContainer>
-        <BlueLineStat
-          title='Seconds until rewardable'
-          value={secondsRemainingNow}
-        />
-      </StatContainer>
-
-      <StatContainer>
-        <BlueLineStat
-          title='Ticket Name &amp; Symbol'
-          value={`${genericChainValues.ticketSymbol}: ${genericChainValues.ticketName}`}
-        />
-      </StatContainer>
-
-      <StatContainer>
-        <BlueLineStat
-          title='Sponsorship Name &amp; Symbol'
-          value={`${genericChainValues.sponsorshipSymbol}: ${genericChainValues.sponsorshipName}`}
-        />
-      </StatContainer>
-
-    </div>
-    
   </>
 }
 
+
+
+// (<a
+//   href='https://docs.pooltogether.com/tutorials/withdrawing-from-a-prize-pool#withdrawing-funds-instantly'
+//   target='_blank'
+//   rel='noreferrer nofollow'
+// >exitFeeMantissa</a>)
+
+// (<a
+//   href='https://docs.pooltogether.com/tutorials/withdrawing-from-a-prize-pool#withdrawing-funds-instantly'
+//   target='_blank'
+//   rel='noreferrer nofollow'
+// >creditRateMantissa</a>)
