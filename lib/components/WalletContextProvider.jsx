@@ -26,10 +26,9 @@ if (process.env.NEXT_JS_DOMAIN_NAME) {
 }
 
 const WALLETS_CONFIG = [
+  { walletName: "metamask", preferred: true },
   { walletName: "coinbase", preferred: true },
   { walletName: "trust", preferred: true, rpcUrl: RPC_URL },
-  { walletName: "metamask", preferred: true },
-  { walletName: "dapper" },
   // {
   //   walletName: 'trezor',
   //   appUrl: APP_URL,
@@ -49,7 +48,6 @@ const WALLETS_CONFIG = [
   },
   {
     walletName: "authereum",
-    preferred: true
   },
   {
     walletName: "walletConnect",
@@ -59,6 +57,7 @@ const WALLETS_CONFIG = [
   { walletName: "torus" },
   { walletName: "status" },
   { walletName: "unilogin" },
+  { walletName: "dapper" },
   {
     walletName: "walletLink",
     rpcUrl: RPC_URL,
@@ -66,7 +65,8 @@ const WALLETS_CONFIG = [
   },
   {
     walletName: "imToken",
-    rpcUrl: RPC_URL
+    rpcUrl: RPC_URL,
+    preferred: true
   }
 ]
 
