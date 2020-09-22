@@ -29,13 +29,13 @@ const WALLETS_CONFIG = [
   { walletName: "metamask", preferred: true },
   { walletName: "coinbase", preferred: true },
   { walletName: "trust", preferred: true, rpcUrl: RPC_URL },
-  // {
-  //   walletName: 'trezor',
-  //   appUrl: APP_URL,
-  //   email: CONTACT_EMAIL,
-  //   rpcUrl: RPC_URL,
-  //   preferred: true
-  // },
+  {
+    walletName: 'trezor',
+    appUrl: 'https://app.pooltogether.com',
+    email: 'hello@pooltogether.com',
+    rpcUrl: RPC_URL,
+    preferred: true
+  },
   {
     walletName: 'ledger',
     rpcUrl: RPC_URL,
@@ -56,7 +56,6 @@ const WALLETS_CONFIG = [
   },
   { walletName: "torus" },
   { walletName: "status" },
-  { walletName: "unilogin" },
   { walletName: "dapper" },
   {
     walletName: "walletLink",
@@ -67,6 +66,10 @@ const WALLETS_CONFIG = [
     walletName: "imToken",
     rpcUrl: RPC_URL,
     preferred: true
+  },
+  {
+    walletName: "huobiwallet",
+    rpcUrl: RPC_URL
   }
 ]
 
