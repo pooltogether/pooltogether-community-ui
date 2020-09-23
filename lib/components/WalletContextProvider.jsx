@@ -10,7 +10,10 @@ const debug = require('debug')('WalletContextProvider')
 
 const INFURA_KEY = process.env.NEXT_JS_INFURA_KEY
 const FORTMATIC_KEY = process.env.NEXT_JS_FORTMATIC_API_KEY
+const PORTIS_KEY = process.env.NEXT_JS_PORTIS_API_KEY
+
 const SELECTED_WALLET_COOKIE_KEY = 'selectedWallet'
+
 // let networkName = 'mainnet'
 let networkName = 'kovan'
 const RPC_URL = (networkName && INFURA_KEY) ?
@@ -26,9 +29,9 @@ if (process.env.NEXT_JS_DOMAIN_NAME) {
 }
 
 const WALLETS_CONFIG = [
-  { walletName: "metamask", preferred: true },
-  { walletName: "coinbase", preferred: true },
-  { walletName: "trust", preferred: true, rpcUrl: RPC_URL },
+  { walletName: 'metamask', preferred: true },
+  { walletName: 'coinbase', preferred: true },
+  { walletName: 'trust', preferred: true, rpcUrl: RPC_URL },
   {
     walletName: 'trezor',
     appUrl: 'https://app.pooltogether.com',
@@ -42,35 +45,37 @@ const WALLETS_CONFIG = [
     preferred: true
   },
   {
-    walletName: "fortmatic",
+    walletName: 'fortmatic',
     apiKey: FORTMATIC_KEY,
     preferred: true
   },
   {
-    walletName: "authereum",
-  },
-  {
-    walletName: "walletConnect",
+    walletName: 'walletConnect',
     infuraKey: INFURA_KEY,
     preferred: true
   },
-  { walletName: "torus" },
-  { walletName: "status" },
-  { walletName: "dapper" },
   {
-    walletName: "walletLink",
+    walletName: 'walletLink',
     rpcUrl: RPC_URL,
     preferred: true
   },
   {
-    walletName: "imToken",
+    walletName: 'imToken',
     rpcUrl: RPC_URL,
     preferred: true
   },
   {
-    walletName: "huobiwallet",
+    walletName: 'huobiwallet',
     rpcUrl: RPC_URL
-  }
+  },
+  {
+    walletName: 'portis',
+    apiKey: PORTIS_KEY,
+  },
+  { walletName: 'authereum' },
+  { walletName: 'dapper' },
+  { walletName: 'status' },
+  { walletName: 'torus' },
 ]
 
 export const WalletContext = React.createContext()
