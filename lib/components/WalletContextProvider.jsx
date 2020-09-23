@@ -1,7 +1,7 @@
 // import App from 'next/app'
 import React, { useState } from 'react'
 import { ethers } from 'ethers'
-import Onboard from 'bnc-onboard'
+import Onboard from '@pooltogether/bnc-onboard'
 import Cookies from 'js-cookie'
 
 import { nameToChainId } from 'lib/utils/nameToChainId'
