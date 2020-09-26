@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import classnames from 'classnames'
 
 import { useInterval } from 'lib/hooks/useInterval'
-import { BlueLineStat } from 'lib/components/BlueLineStat'
 import { CardGrid } from 'lib/components/CardGrid'
-import { StatContainer } from 'lib/components/StatContainer'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
+import { calculateEstimatedPoolPrize } from 'lib/utils/calculateEstimatedPoolPrize'
 
 export const PoolStats = (props) => {
   const {
@@ -15,6 +13,7 @@ export const PoolStats = (props) => {
   const [mountedAt, setMountedAt] = useState(0)
   const [secondsToPrizeAtMount, setSecondsToPrizeAtMount] = useState(0)
   const [secondsRemainingNow, setSecondsRemainingNow] = useState('--')
+  const [estimatedPrize, setEstimatedPrize] = useState(0)
 
   useEffect(() => {
     const set = () => {
@@ -25,6 +24,15 @@ export const PoolStats = (props) => {
     }
     set()
   }, [genericChainValues.canCompleteAward])
+
+  useEffect(() => {
+    const estimatedPoolPrize = calculateEstimatedPoolPrize({
+      totalSupply: genericChainValues.poolTotalSupply || 0,
+      supplyRatePerBlock: genericChainValues.supplyRatePerBlock || 0,
+      remainingBlocks: genericChainValues.estimateRemainingBlocksToPrize || 0,
+    })
+    setEstimatedPrize(estimatedPoolPrize)
+  }, [genericChainValues.poolTotalSupply, genericChainValues.supplyRatePerBlock, genericChainValues.estimateRemainingBlocksToPrize])
 
   useInterval(() => {
     const diffInSeconds = parseInt(Date.now() / 1000, 10) - mountedAt
@@ -68,7 +76,7 @@ export const PoolStats = (props) => {
           content: <>
             <h3>
               {displayAmountInEther(
-                genericChainValues.estimateRemainingPrize,
+                estimatedPrize,
                 { precision: 0 }
               )} {genericChainValues.tokenSymbol || 'TOKEN'}
             </h3>
@@ -145,7 +153,7 @@ export const PoolStats = (props) => {
             </h3>
           </>
         },
-        
+
       ]}
     />
 

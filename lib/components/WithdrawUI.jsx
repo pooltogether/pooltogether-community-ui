@@ -44,9 +44,6 @@ const handleWithdrawSubmit = async (
     )
   }
 
-  // TX "data" param
-  // params.push([])
-
   // TX overrides
   params.push({gasLimit: 350000})
 
