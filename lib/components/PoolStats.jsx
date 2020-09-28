@@ -10,6 +10,24 @@ export const PoolStats = (props) => {
     genericChainValues,
   } = props
 
+  const {
+    prizePeriodRemainingSeconds,
+    canCompleteAward,
+    poolTotalSupply,
+    supplyRatePerBlock,
+    estimateRemainingBlocksToPrize,
+    tokenDecimals,
+    tokenSymbol,
+    ticketTotalSupply,
+    ticketName,
+    ticketSymbol,
+    ticketCreditRateMantissa,
+    ticketCreditLimitMantissa,
+    sponsorshipName,
+    sponsorshipSymbol,
+    maxExitFeeMantissa,
+  } = genericChainValues
+
   const [mountedAt, setMountedAt] = useState(0)
   const [secondsToPrizeAtMount, setSecondsToPrizeAtMount] = useState(0)
   const [secondsRemainingNow, setSecondsRemainingNow] = useState('--')
@@ -18,21 +36,21 @@ export const PoolStats = (props) => {
   useEffect(() => {
     const set = () => {
       setSecondsToPrizeAtMount(
-        parseInt(genericChainValues.prizePeriodRemainingSeconds.toString(), 10)
+        parseInt(prizePeriodRemainingSeconds.toString(), 10)
       )
       setMountedAt(parseInt(Date.now() / 1000, 10))
     }
     set()
-  }, [genericChainValues.canCompleteAward])
+  }, [canCompleteAward])
 
   useEffect(() => {
     const estimatedPoolPrize = calculateEstimatedPoolPrize({
-      totalSupply: genericChainValues.poolTotalSupply || 0,
-      supplyRatePerBlock: genericChainValues.supplyRatePerBlock || 0,
-      remainingBlocks: genericChainValues.estimateRemainingBlocksToPrize || 0,
+      totalSupply: poolTotalSupply || 0,
+      supplyRatePerBlock: supplyRatePerBlock || 0,
+      remainingBlocks: estimateRemainingBlocksToPrize || 0,
     })
     setEstimatedPrize(estimatedPoolPrize)
-  }, [genericChainValues.poolTotalSupply, genericChainValues.supplyRatePerBlock, genericChainValues.estimateRemainingBlocksToPrize])
+  }, [poolTotalSupply, supplyRatePerBlock, estimateRemainingBlocksToPrize])
 
   useInterval(() => {
     const diffInSeconds = parseInt(Date.now() / 1000, 10) - mountedAt
@@ -51,7 +69,7 @@ export const PoolStats = (props) => {
           </>,
           content: <>
             <h3>
-              {genericChainValues.tokenDecimals || '18'}
+              {tokenDecimals || '18'}
             </h3>
           </>
         },
@@ -63,8 +81,8 @@ export const PoolStats = (props) => {
           content: <>
             <h3>
               {displayAmountInEther(
-                genericChainValues.ticketTotalSupply, { precision: 2, decimals: genericChainValues.tokenDecimals }
-              )} {genericChainValues.tokenSymbol || 'TOKEN'}
+                ticketTotalSupply, { precision: 2, decimals: tokenDecimals }
+              )} {tokenSymbol || 'TOKEN'}
             </h3>
           </>
         },
@@ -78,7 +96,7 @@ export const PoolStats = (props) => {
               {displayAmountInEther(
                 estimatedPrize,
                 { precision: 0 }
-              )} {genericChainValues.tokenSymbol || 'TOKEN'}
+              )} {tokenSymbol || 'TOKEN'}
             </h3>
           </>
         },
@@ -100,8 +118,8 @@ export const PoolStats = (props) => {
           </>,
           content: <>
             <h5>
-              ${genericChainValues.ticketSymbol}
-              <br /><span className='text-blue'>{genericChainValues.ticketName}</span>
+              ${ticketSymbol}
+              <br /><span className='text-blue'>{ticketName}</span>
             </h5>
           </>
         },
@@ -113,7 +131,7 @@ export const PoolStats = (props) => {
           content: <>
             <h3>
               {displayAmountInEther(
-                genericChainValues.ticketCreditRateMantissa,
+                ticketCreditRateMantissa,
                 { precision: 10 }
               )}
             </h3>
@@ -126,7 +144,7 @@ export const PoolStats = (props) => {
           </>,
           content: <>
             <h3>
-              {displayAmountInEther(genericChainValues.ticketCreditLimitMantissa.mul(100), { precision: 2 })}%
+              {displayAmountInEther(ticketCreditLimitMantissa.mul(100), { precision: 2 })}%
             </h3>
           </>
         },
@@ -137,8 +155,8 @@ export const PoolStats = (props) => {
           </>,
           content: <>
             <h5>
-              ${genericChainValues.sponsorshipSymbol}
-              <br /><span className='text-blue'>{genericChainValues.sponsorshipName}</span>
+              ${sponsorshipSymbol}
+              <br /><span className='text-purple-800'>{sponsorshipName}</span>
             </h5>
           </>
         },
@@ -149,7 +167,7 @@ export const PoolStats = (props) => {
           </>,
           content: <>
             <h3>
-              {displayAmountInEther(genericChainValues.maxExitFeeMantissa.mul(100), { precision: 2 })}%
+              {displayAmountInEther(maxExitFeeMantissa.mul(100), { precision: 2 })}%
             </h3>
           </>
         },

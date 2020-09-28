@@ -22,10 +22,12 @@ export const DepositForm = (props) => {
 
   const {
     tokenDecimals,
+    isRngRequested
   } = genericChainValues || {}
 
-  const poolIsLocked = genericChainValues.isRngRequested
+  const poolIsLocked = isRngRequested
   const tokenSymbol = genericChainValues.tokenSymbol || 'TOKEN'
+
 
   let depositAmount, setDepositAmount
   if (vars && stateSetters) {
@@ -79,7 +81,7 @@ export const DepositForm = (props) => {
       <TextInputGroup
         id='depositAmount'
         label={<>
-          Deposit amount <span className='text-default italic'> (in {genericChainValues.tokenSymbol || 'TOKEN'})</span>
+          Deposit amount <span className='text-default italic'> (in {tokenSymbol || 'TOKEN'})</span>
         </>}
         required
         disabled={disabled}

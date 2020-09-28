@@ -70,7 +70,7 @@ const getTextSizeClasses = (textSizeClasses, isText, size) => {
     case '2xl':
       return `text-2xl sm:text-3xl lg:text-4xl`
     default:
-      return `text-base sm:text-lg lg:text-xl`
+      return `text-base sm:text-base lg:text-xl`
   }
 }
 

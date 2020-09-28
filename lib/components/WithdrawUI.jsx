@@ -142,7 +142,7 @@ export const WithdrawUI = (props) => {
       />
     </> : <>
       <TxMessage
-        txType='Withdraw to Pool'
+        txType='Withdraw'
         tx={tx}
         handleReset={resetState}
       />
