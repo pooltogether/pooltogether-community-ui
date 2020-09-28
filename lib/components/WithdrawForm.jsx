@@ -47,11 +47,13 @@ export const WithdrawForm = (props) => {
   }
 
   const {
+    isRngRequested,
     tokenDecimals,
   } = genericChainValues || {}
 
-  const poolIsLocked = genericChainValues.isRngRequested
+  const poolIsLocked = isRngRequested
   const tokenSymbol = genericChainValues.tokenSymbol || 'TOKEN'
+  const ticketSymbol = genericChainValues.ticketSymbol || 'TICK'
 
   let instantTotal = ethers.utils.bigNumberify(0)
   if (withdrawAmount) {
@@ -81,7 +83,7 @@ export const WithdrawForm = (props) => {
       {!poolIsLocked && usersTicketBalance && usersTicketBalance.lte(0) && <FormLockedOverlay
         title='Withdraw'
       >
-        You have no tickets to withdraw. Deposit some {genericChainValues.tokenSymbol || 'TOKEN'} first!
+        You have no tickets to withdraw. Deposit some {tokenSymbol} first!
       </FormLockedOverlay>}
 
       <div
@@ -126,7 +128,7 @@ export const WithdrawForm = (props) => {
       <TextInputGroup
         id='withdrawAmount'
         label={<>
-          Withdraw amount <span className='text-default italic'> (in ${genericChainValues.ticketSymbol || 'TICK'} tickets)</span>
+          Withdraw amount <span className='text-default italic'> (in ${ticketSymbol} tickets)</span>
         </>}
         required
         type='number'
@@ -146,7 +148,7 @@ export const WithdrawForm = (props) => {
         {/* <TextInputGroup
           id='maxExitFee'
           label={<>
-            Max Exit Fee <span className='text-default italic'> (in {genericChainValues.tokenSymbol || 'TOKEN'})</span>
+            Max Exit Fee <span className='text-default italic'> (in {tokenSymbol})</span>
           </>}
           required
           type='number'

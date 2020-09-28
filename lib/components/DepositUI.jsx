@@ -25,11 +25,12 @@ const handleDepositSubmit = async (
     return
   }
 
+  const referrer = ethers.constants.AddressZero // TODO
   const params = [
     usersAddress,
     ethers.utils.parseUnits(depositAmount, decimals),
     ticketAddress,
-    '0x0000000000000000000000000000000000000000',
+    referrer,
     {
       gasLimit: 600000
     }

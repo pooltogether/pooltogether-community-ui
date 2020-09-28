@@ -35,6 +35,14 @@ const handleUnlockSubmit = async (
 }
 
 export const UnlockDepositUI = (props) => {
+  const {
+    genericChainValues
+  } = props
+
+  const {
+    tokenDecimals
+  } = genericChainValues
+  
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
 
@@ -60,7 +68,7 @@ export const UnlockDepositUI = (props) => {
             provider,
             props.poolAddresses.token,
             props.poolAddresses.prizePool,
-            props.genericChainValues.tokenDecimals,
+            tokenDecimals,
           )
         }}
       />

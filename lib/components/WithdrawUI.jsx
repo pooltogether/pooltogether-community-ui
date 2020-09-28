@@ -44,9 +44,6 @@ const handleWithdrawSubmit = async (
     )
   }
 
-  // TX "data" param
-  // params.push([])
-
   // TX overrides
   params.push({gasLimit: 350000})
 
@@ -145,7 +142,7 @@ export const WithdrawUI = (props) => {
       />
     </> : <>
       <TxMessage
-        txType='Withdraw to Pool'
+        txType='Withdraw'
         tx={tx}
         handleReset={resetState}
       />

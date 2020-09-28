@@ -7,6 +7,8 @@ import { Meta } from 'lib/components/Meta'
 import { Nav } from 'lib/components/Nav'
 import { StaticNetworkNotificationBanner } from 'lib/components/StaticNetworkNotificationBanner'
 
+import packageJson from '../../package.json'
+
 import PoolIcon from 'assets/images/holidays.svg'
 
 export const Layout = (props) => {
@@ -16,7 +18,7 @@ export const Layout = (props) => {
   return <>
     <Meta />
 
-    
+
     <div
       className='flex flex-col w-full'
       style={{
@@ -57,12 +59,12 @@ export const Layout = (props) => {
                 <div
                   className='text-default title text-xl sm:text-3xl'
                 >
-                  PoolTogether - Reference Frontend 
+                  PoolTogether - Reference Frontend
                 </div>
                 <div
                   className='text-primary title text-base sm:text-2xl'
                 >
-                  v3.0.0-alpha.31
+                  v{packageJson.version}
                 </div>
                 {/* <img src={PoolIcon} className='inline-block w-6 h-6 sm:w-10 sm:h-10 ml-2 mb-2 sm:mb-0' /> */}
               </div>
@@ -74,7 +76,7 @@ export const Layout = (props) => {
                 View documentation
               </a>
             </div>
-            
+
             <div
               className='px-4 sm:px-8 lg:px-12 my-4'
             >
@@ -93,7 +95,7 @@ export const Layout = (props) => {
 
       </div>
     </div>
-    
+
     <ToastContainer
       className='pool-toast'
       position='top-center'
