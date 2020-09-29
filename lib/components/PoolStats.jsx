@@ -45,10 +45,6 @@ export const PoolStats = (props) => {
     set()
   }, [canCompleteAward])
 
-  // console.log({ poolTotalSupply: poolTotalSupply.toString()})
-  // console.log({ supplyRatePerBlock: supplyRatePerBlock.toString()})
-  // console.log({ estimateRemainingBlocksToPrize: estimateRemainingBlocksToPrize.toString()})
-
   useEffect(() => {
     const estimatedPoolPrize = calculateEstimatedPoolPrize({
       totalSupply: poolTotalSupply || 0,
