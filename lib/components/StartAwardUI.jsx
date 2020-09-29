@@ -34,6 +34,12 @@ export const StartAwardUI = (props) => {
     genericChainValues
   } = props
 
+  const {
+    canCompleteAward,
+    canStartAward,
+    isRngRequested,
+  } = genericChainValues
+
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
 
@@ -57,8 +63,14 @@ export const StartAwardUI = (props) => {
   }
 
   return <>
+    {!canStartAward && !isRngRequested && !canCompleteAward && <>
+      <div className='my-4'>
+        <span className='text-default'>Pool status:</span> <div className='font-bold'>Open for deposits ...</div>
+      </div>
+    </>}
+    
     {!txInFlight ? <>
-      {genericChainValues.canStartAward && <>
+      {canStartAward && <>
         <Button
           onClick={handleClick}
           color='blue'

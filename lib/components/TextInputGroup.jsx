@@ -20,7 +20,7 @@ export const TextInputGroup = (
 
   return <>
     <div
-      className='input-fieldset py-2 mb-0'
+      className='input-fieldset py-2 mb-0 text-sm'
     >
 
       <div
@@ -35,8 +35,9 @@ export const TextInputGroup = (
         <label
           htmlFor={id}
           className={classnames(
-            'mt-0 trans',
+            'pl-4 mt-0 trans text-default',
             {
+              'w-full': !rightLabel,
               'text-purple cursor-not-allowed': disabled,
               'text-white hover:text-white': !disabled,
             }
@@ -48,7 +49,7 @@ export const TextInputGroup = (
         {rightLabel && <>
           <label
             className={classnames(
-              'mt-0 pb-1 sm:pr-8 sm:pl-2 trans text-right w-1/2',
+              'mt-0 pb-1 sm:pr-4 sm:pl-2 trans text-right w-1/2',
               {
                 'font-bold text-primary cursor-not-allowed': disabled,
                 'font-bold text-default-soft hover:text-default': !disabled,

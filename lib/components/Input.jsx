@@ -50,18 +50,10 @@ export function Input(props) {
     <input
       {...newProps}
       autoFocus={autoFocus && isBrowser}
-      // readOnly={this.props.readOnly}
-      // onFocus={(e) => { this.setState({ inputFocused: true }) }}
-      // onBlur={(e) => { this.setState({ inputFocused: false }) }}
       value={value}
       className={classnames(
         className,
-        'w-full sm:w-10/12 font-headline rounded-full focus:outline-none leading-none pl-6',
-        {
-          // 'text-red-400': this.props.inputHigherThanBalance,
-          // 'text-white': !this.props.inputHigherThanBalance,
-          // 'opacity-50': this.props.disabled
-        }
+        'w-full font-headline rounded-full focus:outline-none leading-none pl-6',
       )}
     />
 

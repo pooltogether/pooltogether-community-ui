@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 
 import { useInterval } from 'lib/hooks/useInterval'
 import { CardGrid } from 'lib/components/CardGrid'
-import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { calculateEstimatedPoolPrize } from 'lib/utils/calculateEstimatedPoolPrize'
+import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
+import { numberWithCommas } from 'lib/utils/numberWithCommas'
 
 export const PoolStats = (props) => {
   const {
@@ -33,7 +34,7 @@ export const PoolStats = (props) => {
   const [mountedAt, setMountedAt] = useState(0)
   const [secondsToPrizeAtMount, setSecondsToPrizeAtMount] = useState(0)
   const [secondsRemainingNow, setSecondsRemainingNow] = useState('--')
-  const [estimatedPrize, setEstimatedPrize] = useState(0)
+  const [estimatePrize, setEstimatePrize] = useState(0)
 
   useEffect(() => {
     const set = () => {
@@ -46,14 +47,14 @@ export const PoolStats = (props) => {
   }, [canCompleteAward])
 
   useEffect(() => {
-    const estimatedPoolPrize = calculateEstimatedPoolPrize({
-      totalSupply: poolTotalSupply || 0,
-      supplyRatePerBlock: supplyRatePerBlock || 0,
-      remainingBlocks: estimateRemainingBlocksToPrize || 0,
-      awardBalance: awardBalance || 0,
+    const estimatePoolPrize = calculateEstimatedPoolPrize({
+      totalSupply: poolTotalSupply,
+      supplyRatePerBlock: supplyRatePerBlock,
+      remainingBlocks: estimateRemainingBlocksToPrize,
+      awardBalance: awardBalance,
     })
 
-    setEstimatedPrize(estimatedPoolPrize)
+    setEstimatePrize(estimatePoolPrize)
   }, [poolTotalSupply, supplyRatePerBlock, estimateRemainingBlocksToPrize, awardBalance])
 
   useInterval(() => {
@@ -97,8 +98,8 @@ export const PoolStats = (props) => {
           </>,
           content: <>
             <h3>
-              {displayAmountInEther(
-                estimatedPrize,
+              {numberWithCommas(
+                estimatePrize,
                 { precision: 2 }
               )} {tokenSymbol}
             </h3>

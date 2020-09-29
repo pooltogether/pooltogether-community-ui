@@ -10,7 +10,7 @@ export const RadioInputGroup = (
 
     return <div
       key={`radios-${radio.value}`}
-      className='radio-input-group trans w-full sm:w-10/12 text-base sm:text-xl lg:text-2xl'
+      className='radio-input-group trans w-full sm:w-10/12 text-base sm:text-lg'
     >
       <input
         id={id}
@@ -22,7 +22,7 @@ export const RadioInputGroup = (
       />
       <label
         htmlFor={id}
-        className='text-highlight-1 relative pl-6 py-3'
+        className='text-default relative pl-6 py-3'
       >
         {radio.label}
       </label>
