@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@pooltogether/bnc-onboard": "1.13.1-a",
+    "@pooltogether/current-pool-data": "^3.0.0-alpha.34",
     "@pooltogether/etherplex": "^0.2.3",
     "@pooltogether/pooltogether-contracts": "3.0.0-alpha.34",
     "@reach/tooltip": "0.10.5",

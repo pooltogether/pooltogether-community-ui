@@ -5,6 +5,7 @@ import { Button } from 'lib/components/Button'
 import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
+import { numberWithCommas } from 'lib/utils/numberWithCommas'
 
 export const DepositForm = (props) => {
   const {
@@ -35,9 +36,18 @@ export const DepositForm = (props) => {
     setDepositAmount = stateSetters.setDepositAmount
   }
 
-  const overBalance = depositAmount && usersTokenBalance && usersTokenBalance.lt(
-    ethers.utils.parseUnits(depositAmount, tokenDecimals)
-  )
+  let depositAmountBN
+  let overBalance = false
+  try {
+    depositAmountBN = ethers.utils.parseUnits(depositAmount || '0', tokenDecimals)
+    overBalance = depositAmountBN && usersTokenBalance && usersTokenBalance.lt(
+      depositAmountBN
+    )
+  } catch (e) {
+    console.error(e)
+  }
+
+  const tokenBal = ethers.utils.formatUnits(usersTokenBalance, tokenDecimals)
 
   return <>
     <form
@@ -78,18 +88,37 @@ export const DepositForm = (props) => {
         Deposit:
       </div>
 
-      <TextInputGroup
-        id='depositAmount'
-        label={<>
-          Deposit amount <span className='text-default italic'> (in {tokenSymbol || 'TOKEN'})</span>
-        </>}
-        required
-        disabled={disabled}
-        type='number'
-        pattern='\d+'
-        onChange={(e) => setDepositAmount(e.target.value)}
-        value={depositAmount}
-      />
+      <div
+        className='w-full mx-auto'
+      >
+        <TextInputGroup
+          id='depositAmount'
+          name='depositAmount'
+          label={<>
+            Deposit amount <span className='text-default italic'> (in {tokenSymbol})</span>
+          </>}
+          required
+          disabled={disabled}
+          type='number'
+          pattern='\d+'
+          onChange={(e) => setDepositAmount(e.target.value)}
+          value={depositAmount}
+          
+          rightLabel={tokenSymbol && <>
+            <button
+              type='button'
+              className='font-bold'
+              onClick={(e) => {
+                e.preventDefault()
+                setDepositAmount(tokenBal)
+              }}
+            >
+              {/* Balance:  */}
+              MAX - {numberWithCommas(tokenBal, { precision: 4 })} {tokenSymbol}
+            </button>
+          </>}
+        />
+      </div>
 
       {overBalance && <>
         <div className='text-yellow'>

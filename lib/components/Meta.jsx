@@ -4,8 +4,8 @@ export const Meta = ({ title }) => {
   const defaultTitle = 'PoolTogether - V3 Reference Pool Frontend'
   title = title ? `${title} - ${defaultTitle}` : defaultTitle
 
-  const url = `https://v3-reference.pooltogether.com`
-  const description = `Deposit and withdraw to V3 Pools with this UI`
+  const url = `https://reference-app.pooltogether.com`
+  const description = `Deposit and withdraw to V3 Pools`
   const keywords = 'ethereum'
   const twitterHandle = '@PoolTogether_'
 
