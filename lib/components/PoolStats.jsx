@@ -33,7 +33,7 @@ export const PoolStats = (props) => {
   const [mountedAt, setMountedAt] = useState(0)
   const [secondsToPrizeAtMount, setSecondsToPrizeAtMount] = useState(0)
   const [secondsRemainingNow, setSecondsRemainingNow] = useState('--')
-  const [estimatePrize, setEstimatePrize] = useState(0)
+  const [prizeEstimate, setPrizeEstimate] = useState(0)
 
   useEffect(() => {
     const set = () => {
@@ -47,14 +47,14 @@ export const PoolStats = (props) => {
 
   useEffect(() => {
     const estimatedPoolPrize = calculateEstimatedPoolPrize({
+      tokenDecimals,
       awardBalance,
       poolTotalSupply,
       supplyRatePerBlock,
       prizePeriodRemainingSeconds,
-      tokenDecimals,
     })
 
-    setEstimatedPrize(estimatedPoolPrize)
+    setPrizeEstimate(estimatedPoolPrize)
   }, [poolTotalSupply, supplyRatePerBlock, prizePeriodRemainingSeconds, awardBalance])
 
   useInterval(() => {
@@ -99,7 +99,7 @@ export const PoolStats = (props) => {
           content: <>
             <h3>
               {numberWithCommas(
-                estimatePrize,
+                prizeEstimate,
                 { precision: 2 }
               )} {tokenSymbol}
             </h3>
