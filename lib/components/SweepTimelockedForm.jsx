@@ -3,6 +3,7 @@ import React from 'react'
 import { Button } from 'lib/components/Button'
 import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
+import { numberWithCommas } from 'lib/utils/numberWithCommas'
 
 export const SweepTimelockedForm = (props) => {
   const {
@@ -43,14 +44,14 @@ export const SweepTimelockedForm = (props) => {
       </div>
 
       {!hasFundsToSweep && <>
-        <div className='text-yellow'>
+        <div className='text-green'>
           You have {displayAmountInEther(usersTimelockBalance, { decimals: tokenDecimals })} {tokenSymbol} scheduled for withdrawal after the interest has matured.
         </div>
       </>}
 
       {fundsReadyInSeconds > 0 && <>
         <div className='text-orange'>
-          Your funds will be available in {fundsReadyInSeconds} seconds.
+          Your funds will be available in {numberWithCommas(fundsReadyInSeconds, { precision: 0 })} seconds.
         </div>
       </>}
       

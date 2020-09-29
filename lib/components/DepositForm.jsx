@@ -107,7 +107,6 @@ export const DepositForm = (props) => {
           rightLabel={tokenSymbol && <>
             <button
               type='button'
-              className='font-bold'
               onClick={(e) => {
                 e.preventDefault()
                 setDepositAmount(tokenBal)

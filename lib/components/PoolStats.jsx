@@ -11,6 +11,7 @@ export const PoolStats = (props) => {
   } = props
 
   const {
+    awardBalance,
     prizePeriodRemainingSeconds,
     canCompleteAward,
     poolTotalSupply,
@@ -44,14 +45,20 @@ export const PoolStats = (props) => {
     set()
   }, [canCompleteAward])
 
+  // console.log({ poolTotalSupply: poolTotalSupply.toString()})
+  // console.log({ supplyRatePerBlock: supplyRatePerBlock.toString()})
+  // console.log({ estimateRemainingBlocksToPrize: estimateRemainingBlocksToPrize.toString()})
+
   useEffect(() => {
     const estimatedPoolPrize = calculateEstimatedPoolPrize({
       totalSupply: poolTotalSupply || 0,
       supplyRatePerBlock: supplyRatePerBlock || 0,
       remainingBlocks: estimateRemainingBlocksToPrize || 0,
+      awardBalance: awardBalance || 0,
     })
+
     setEstimatedPrize(estimatedPoolPrize)
-  }, [poolTotalSupply, supplyRatePerBlock, estimateRemainingBlocksToPrize])
+  }, [poolTotalSupply, supplyRatePerBlock, estimateRemainingBlocksToPrize, awardBalance])
 
   useInterval(() => {
     const diffInSeconds = parseInt(Date.now() / 1000, 10) - mountedAt

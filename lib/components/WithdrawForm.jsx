@@ -2,13 +2,13 @@ import React from 'react'
 import { ethers } from 'ethers'
 
 import { Button } from 'lib/components/Button'
-import { Input } from 'lib/components/Input'
 import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 import { RadioInputGroup } from 'lib/components/RadioInputGroup'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 
 import { PTHint } from 'lib/components/PTHint'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
+import { numberWithCommas } from 'lib/utils/numberWithCommas'
 
 export const WithdrawForm = (props) => {
   const {
@@ -25,19 +25,17 @@ export const WithdrawForm = (props) => {
   } = usersChainValues || {}
 
   const {
-    instantCredit,
-    instantFee,
-    timelockCredit,
-    timelockDuration,
+    burnedCredit,
+    exitFee,
+    timelockDurationSeconds,
   } = exitFees || {}
 
   const {
-    maxExitFee,
     withdrawAmount,
     withdrawType,
   } = vars
+
   const {
-    setMaxExitFee,
     setWithdrawAmount,
     setWithdrawType,
   } = stateSetters
@@ -57,16 +55,25 @@ export const WithdrawForm = (props) => {
 
   let instantTotal = ethers.utils.bigNumberify(0)
   if (withdrawAmount) {
-    if (instantFee && instantFee.gt(0) && withdrawType === 'instant') {
-      instantTotal = ethers.utils.parseUnits(withdrawAmount, tokenDecimals).sub(instantFee)
+    if (exitFee && exitFee.gt(0) && withdrawType === 'instant') {
+      instantTotal = ethers.utils.parseUnits(withdrawAmount, tokenDecimals).sub(exitFee)
     } else {
       instantTotal = ethers.utils.parseUnits(withdrawAmount, tokenDecimals)
     }
   }
 
-  const overBalance = withdrawAmount && usersTicketBalance && usersTicketBalance.lt(
-    ethers.utils.parseUnits(withdrawAmount, tokenDecimals)
-  )
+  let withdrawAmountBN
+  let overBalance = false
+  try {
+    withdrawAmountBN = ethers.utils.parseUnits(withdrawAmount || '0', tokenDecimals)
+    overBalance = withdrawAmount && usersTicketBalance && usersTicketBalance.lt(
+      withdrawAmountBN
+    )
+  } catch (e) {
+    console.error(e)
+  }
+
+  const ticketBal = ethers.utils.formatUnits(usersTicketBalance, tokenDecimals)
 
   return <>
     <form
@@ -99,13 +106,13 @@ export const WithdrawForm = (props) => {
             tip={<>
               <div className='my-2 text-xs sm:text-sm'>
                 To maintain fairness your funds need to contribute interest towards the prize each week. You can:
-          </div>
+              </div>
               <div className='my-2 text-xs sm:text-sm'>
                 1) SCHEDULE: receive $1000 DAI once enough interest has been provided to the prize
-          </div>
+              </div>
               <div className='my-2 text-xs sm:text-sm'>
                 2) INSTANT: pay $1.90 to withdraw right now and forfeit the interest that would go towards the prize
-          </div>
+              </div>
             </>}
           />
         </>}
@@ -127,14 +134,28 @@ export const WithdrawForm = (props) => {
 
       <TextInputGroup
         id='withdrawAmount'
+        name='withdrawAmount'
         label={<>
-          Withdraw amount <span className='text-default italic'> (in ${ticketSymbol} tickets)</span>
+          Withdraw amount <span className='text-default italic'> (in {tokenSymbol})</span>
         </>}
         required
         type='number'
         pattern='\d+'
         onChange={(e) => setWithdrawAmount(e.target.value)}
         value={withdrawAmount}
+
+        rightLabel={tokenSymbol && <>
+          <button
+            type='button'
+            onClick={(e) => {
+              e.preventDefault()
+              setWithdrawAmount(ticketBal)
+            }}
+          >
+            {/* Balance:  */}
+              MAX - {numberWithCommas(ticketBal, { precision: 4 })} {tokenSymbol}
+          </button>
+        </>}
       />
 
       {overBalance && <>
@@ -144,7 +165,7 @@ export const WithdrawForm = (props) => {
         </div>
       </>}
 
-      {!overBalance && instantFee && withdrawType === 'instant' && <>
+      {!overBalance && exitFee && withdrawType === 'instant' && <>
         {/* <TextInputGroup
           id='maxExitFee'
           label={<>
@@ -160,13 +181,13 @@ export const WithdrawForm = (props) => {
         <div className='text-yellow'>
           You will receive {displayAmountInEther(instantTotal, { decimals: tokenDecimals })} {tokenSymbol} now&nbsp;
           {
-            instantFee.eq(0)
-              ? <>and burn {displayAmountInEther(instantCredit)} from your credit</>
-              : <>and forfeit {displayAmountInEther(instantFee, { decimals: tokenDecimals })} as interest</>
+            exitFee.eq(0)
+              ? <>and burn {displayAmountInEther(burnedCredit, { decimals: tokenDecimals })} from your credit</>
+              : <>and forfeit {displayAmountInEther(exitFee, { decimals: tokenDecimals })} {tokenSymbol} as interest</>
           }
         </div>
 
-        {instantFee.eq(0) && <>
+        {exitFee.eq(0) && <>
           <div
             className='text-sm text-default my-6'
           >
@@ -179,13 +200,13 @@ export const WithdrawForm = (props) => {
         </>}
       </>}
 
-      {!overBalance && timelockDuration && withdrawType !== 'instant' && <>
+      {!overBalance && timelockDurationSeconds && withdrawType !== 'instant' && <>
         <div className='text-yellow'>
           You will receive {displayAmountInEther(instantTotal, { decimals: tokenDecimals })} {tokenSymbol}&nbsp;
           {
-            timelockDuration.eq(0)
+            timelockDurationSeconds.eq(0)
               ? <>now and burn {displayAmountInEther(timelockCredit)} {tokenSymbol} from your credit</>
-              : <>in {timelockDuration.toString()} seconds</>
+              : <>in {numberWithCommas(timelockDurationSeconds, { precision: 0 }).toString()} seconds</>
           }
         </div>
       </>}

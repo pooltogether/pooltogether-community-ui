@@ -39,13 +39,11 @@ const handleWithdrawSubmit = async (
   let method = 'withdrawWithTimelockFrom'
   if (withdrawType === 'instant') {
     method = 'withdrawInstantlyFrom'
-    params.push(
-      ethers.utils.parseEther(maxExitFee)
-    )
+    params.push(maxExitFee)
   }
 
   // TX overrides
-  params.push({gasLimit: 350000})
+  params.push({ gasLimit: 400000 })
 
   await sendTx(
     setTx,
@@ -59,8 +57,13 @@ const handleWithdrawSubmit = async (
 }
 
 export const WithdrawUI = (props) => {
+  const { genericChainValues } = props
+
+  const { tokenDecimals } = genericChainValues
+
   const router = useRouter()
   const networkName = router.query.networkName
+
   const prizePool = props.poolAddresses.prizePool
   const ticketAddress = props.poolAddresses.ticket
 
@@ -69,7 +72,8 @@ export const WithdrawUI = (props) => {
   const usersAddress = walletContext._onboard.getState().address
 
   const [exitFees, setExitFees] = useState({})
-  const [maxExitFee, setMaxExitFee] = useState('1')
+  const maxExitFee = exitFees?.exitFee
+
   const [withdrawAmount, setWithdrawAmount] = useState('')
   const [withdrawType, setWithdrawType] = useState('scheduled')
 
@@ -83,7 +87,7 @@ export const WithdrawUI = (props) => {
           usersAddress,
           prizePool,
           ticketAddress,
-          ethers.utils.parseEther(debouncedWithdrawAmount)
+          ethers.utils.parseEther(debouncedWithdrawAmount, tokenDecimals)
         )
         setExitFees(result)
       } else {
@@ -126,7 +130,7 @@ export const WithdrawUI = (props) => {
             withdrawAmount,
             withdrawType,
             maxExitFee,
-            props.genericChainValues.tokenDecimals
+            tokenDecimals
           )
         }}
         vars={{
@@ -135,7 +139,6 @@ export const WithdrawUI = (props) => {
           withdrawType,
         }}
         stateSetters={{
-          setMaxExitFee,
           setWithdrawAmount,
           setWithdrawType,
         }}
