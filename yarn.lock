@@ -1270,10 +1270,10 @@
     walletlink "^2.0.2"
     web3-provider-engine "^15.0.4"
 
-"@pooltogether/current-pool-data@^3.0.0-alpha.34":
-  version "3.0.0-alpha.34"
-  resolved "https://registry.yarnpkg.com/@pooltogether/current-pool-data/-/current-pool-data-3.0.0-alpha.34.tgz#c2050f1ad728899b04261b4cc4be0bc63403ebb9"
-  integrity sha512-CSDZv8LfpF3A6hmZDImpKa5KkGNeRWeretx21Te/rN8eoBgkLpRrAwfDmrSB9LLmnPLMeuebF0YKym5W6JtqOw==
+"@pooltogether/current-pool-data@^3.0.0-alpha.36":
+  version "3.0.0-alpha.36"
+  resolved "https://registry.yarnpkg.com/@pooltogether/current-pool-data/-/current-pool-data-3.0.0-alpha.36.tgz#b61c8a12e7c93bf75fbadfd3b9399cd6c6cd38be"
+  integrity sha512-Li1g86cgSv0hFkJD5TBNlsYz6KyjiT17i6V6UakOU5Rm9cNU5JKAy1Rj33mypfYlUovRKXyC1fo6eJBiXTdWzg==
 
 "@pooltogether/etherplex@^0.2.3":
   version "0.2.3"
@@ -1285,10 +1285,10 @@
     lodash.merge "^4.6.2"
     zen-observable-ts "^0.8.20"
 
-"@pooltogether/pooltogether-contracts@3.0.0-alpha.34":
-  version "3.0.0-alpha.34"
-  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.0.0-alpha.34.tgz#01f6b2064c34ae6d62cacc7c08ef3f1a98ac36c3"
-  integrity sha512-ImY83i4wRq7wm2d38KhwdMge94+Q4Lt8H4CQBOrUrjosW9nzua0eO2gs1UbjsENH7y6B6Cioq1z2Bk7t6LMTtw==
+"@pooltogether/pooltogether-contracts@^3.0.0-alpha.36":
+  version "3.0.0-alpha.36"
+  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.0.0-alpha.36.tgz#421e6c2b5238cbf6eaf4e48613d24bf5349dbfae"
+  integrity sha512-+6EJIYeILsuBqwuX8eMG8WmXVtglrm22jMsGLfJscKNe8DWN4UTpt1FgtO98wGnXCE/3sRk77rsGjewCuxWUhA==
 
 "@portis/web3-provider-engine@1.1.2":
   version "1.1.2"
