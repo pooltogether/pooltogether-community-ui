@@ -11,6 +11,21 @@
     "postexport": "node post-export.js",
     "distrelease": "yarn build"
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "lib/**/*.{ts,js}"
+    ],
+    "coverageReporters": [
+      "text",
+      "html"
+    ],
+    "moduleNameMapper": {
+      "^lib/(.*)$": "<rootDir>/lib/$1",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$": "identity-obj-proxy"
+    },
+    "verbose": true
+  },
   "dependencies": {
     "@pooltogether/bnc-onboard": "1.13.1-a",
     "@pooltogether/current-pool-data": "3.0.0-alpha.36",
@@ -18,10 +33,12 @@
     "@pooltogether/pooltogether-contracts": "3.0.0-alpha.36",
     "@reach/tooltip": "0.10.5",
     "autoprefixer": "^9.8.1",
+    "babel-jest": "^26.3.0",
     "bn.js": "4.11.0",
     "classnames": "^2.2.6",
     "ethers": "^4.0.47",
     "feather-icons-react": "^0.4.1",
+    "jest": "^26.4.2",
     "js-cookie": "^2.2.1",
     "next": "9.4.4",
     "next-images": "^1.4.0",
