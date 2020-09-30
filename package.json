@@ -6,6 +6,7 @@
     "reinstall": "rm -rf node_modules/ && yarn",
     "clean": "rm -rf .next",
     "dev": "next dev",
+    "test": "jest",
     "build": "next build && next export && yarn postexport",
     "start": "next start",
     "postexport": "node post-export.js",

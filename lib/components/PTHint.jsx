@@ -60,7 +60,7 @@ export const PTHint = (props) => {
     <div
       className={classnames(
         className,
-        'relative cursor-pointer',
+        'inline-block relative cursor-pointer',
       )}
     >
       <div
@@ -69,7 +69,7 @@ export const PTHint = (props) => {
         onMouseOut={hide}
         onTouchStart={toggleVisible}
         className={classnames(
-          'cursor-pointer h-full w-full l-0 r-0 t-0 b-0 absolute',
+          'cursor-pointer h-full l-0 r-0 t-0 b-0 absolute',
         )}
         style={{
           zIndex: 12314082

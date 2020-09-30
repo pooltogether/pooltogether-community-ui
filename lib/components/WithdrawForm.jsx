@@ -101,20 +101,22 @@ export const WithdrawForm = (props) => {
 
       <RadioInputGroup
         label={<>
-          What type of withdraw? <PTHint
-            title='On fairness fees'
-            tip={<>
-              <div className='my-2 text-xs sm:text-sm'>
-                To maintain fairness your funds need to contribute interest towards the prize each week. You can:
-              </div>
-              <div className='my-2 text-xs sm:text-sm'>
-                1) SCHEDULE: receive $1000 DAI once enough interest has been provided to the prize
-              </div>
-              <div className='my-2 text-xs sm:text-sm'>
-                2) INSTANT: pay $1.90 to withdraw right now and forfeit the interest that would go towards the prize
-              </div>
-            </>}
-          />
+          <div className='text-sm'>
+            What type of withdraw? <PTHint
+              title='On fairness fees'
+              tip={<>
+                <div className='my-2 text-xs sm:text-sm'>
+                  To maintain fairness your funds need to contribute interest towards the prize each week. You can:
+                </div>
+                <div className='my-2 text-xs sm:text-sm'>
+                  1) SCHEDULE: receive $1000 DAI once enough interest has been provided to the prize
+                </div>
+                <div className='my-2 text-xs sm:text-sm'>
+                  2) INSTANT: pay $1.90 to withdraw right now and forfeit the interest that would go towards the prize
+                </div>
+              </>}
+            />
+          </div>
         </>}
         name='withdrawType'
         onChange={handleWithdrawTypeChange}

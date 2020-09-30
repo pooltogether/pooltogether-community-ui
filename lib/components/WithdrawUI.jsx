@@ -87,7 +87,7 @@ export const WithdrawUI = (props) => {
           usersAddress,
           prizePool,
           ticketAddress,
-          ethers.utils.parseEther(debouncedWithdrawAmount, tokenDecimals)
+          ethers.utils.parseUnits(debouncedWithdrawAmount, tokenDecimals)
         )
         setExitFees(result)
       } else {
