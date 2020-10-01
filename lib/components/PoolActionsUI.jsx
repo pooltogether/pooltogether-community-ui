@@ -11,12 +11,16 @@ export const PoolActionsUI = (props) => {
   }
 
   return <>
-    <StartAwardUI
-      {...props}
-    />
-    <CompleteAwardUI
-      {...props}
-    />
+    <div className='my-4'>
+      <StartAwardUI
+        {...props}
+      />
+      <CompleteAwardUI
+        {...props}
+      />
+    </div>
+
+
     <PoolStats
       {...props}
     />

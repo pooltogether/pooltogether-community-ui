@@ -62,7 +62,7 @@ export const Layout = (props) => {
                   PoolTogether - Reference Frontend
                 </div>
                 <div
-                  className='text-primary title text-base sm:text-2xl'
+                  className='text-primary-soft title text-base sm:text-2xl'
                 >
                   v{packageJson.version}
                 </div>

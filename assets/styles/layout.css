@@ -66,7 +66,7 @@ body {
 @screen sm {
   .pool-container,
   .nav-and-footer-container {
-    max-width: 788px;
+    max-width: 1224px;
 
     margin-left: auto;
     margin-right: auto;
@@ -80,7 +80,7 @@ body {
 
 @screen sm {
   .nav-and-footer-container {
-    max-width: 788px;
+    max-width: 1224px;
   }
 }
 
@@ -92,7 +92,7 @@ body {
 
 @screen sm {
   .pool-container {
-    max-width: 788px;
+    max-width: 1224px;
   }
 }
 

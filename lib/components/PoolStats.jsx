@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 
+import { DEFAULT_TOKEN_PRECISION } from 'lib/constants'
 import { useInterval } from 'lib/hooks/useInterval'
 import { CardGrid } from 'lib/components/CardGrid'
-import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { calculateEstimatedPoolPrize } from 'lib/utils/calculateEstimatedPoolPrize'
+import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 
 export const PoolStats = (props) => {
   const {
@@ -16,7 +17,6 @@ export const PoolStats = (props) => {
     canCompleteAward,
     poolTotalSupply,
     supplyRatePerBlock,
-    tokenDecimals,
     ticketTotalSupply,
     ticketName,
     ticketSymbol,
@@ -27,12 +27,13 @@ export const PoolStats = (props) => {
     maxExitFeeMantissa,
   } = genericChainValues
 
+  const tokenDecimals = genericChainValues.tokenDecimals || DEFAULT_TOKEN_PRECISION
   const tokenSymbol = genericChainValues.tokenSymbol || 'TOKEN'
 
   const [mountedAt, setMountedAt] = useState(0)
   const [secondsToPrizeAtMount, setSecondsToPrizeAtMount] = useState(0)
   const [secondsRemainingNow, setSecondsRemainingNow] = useState('--')
-  const [estimatedPrize, setEstimatedPrize] = useState(0)
+  const [prizeEstimate, setPrizeEstimate] = useState(0)
 
   useEffect(() => {
     const set = () => {
@@ -46,13 +47,14 @@ export const PoolStats = (props) => {
 
   useEffect(() => {
     const estimatedPoolPrize = calculateEstimatedPoolPrize({
+      tokenDecimals,
       awardBalance,
       poolTotalSupply,
       supplyRatePerBlock,
-      prizePeriodRemainingSeconds
+      prizePeriodRemainingSeconds,
     })
 
-    setEstimatedPrize(estimatedPoolPrize)
+    setPrizeEstimate(estimatedPoolPrize)
   }, [poolTotalSupply, supplyRatePerBlock, prizePeriodRemainingSeconds, awardBalance])
 
   useInterval(() => {
@@ -68,37 +70,13 @@ export const PoolStats = (props) => {
         {
           icon: null,
           title: <>
-            Decimal precision
-          </>,
-          content: <>
-            <h3>
-              {tokenDecimals || '18'}
-            </h3>
-          </>
-        },
-        {
-          icon: null,
-          title: <>
-            Total ticket supply
-          </>,
-          content: <>
-            <h3>
-              {displayAmountInEther(
-                ticketTotalSupply, { precision: 2, decimals: tokenDecimals }
-              )} {tokenSymbol}
-            </h3>
-          </>
-        },
-        {
-          icon: null,
-          title: <>
             next prize (estimate)
           </>,
           content: <>
             <h3>
               {displayAmountInEther(
-                estimatedPrize,
-                { precision: 2 }
+                prizeEstimate,
+                { precision: 2, decimals: tokenDecimals }
               )} {tokenSymbol}
             </h3>
           </>
@@ -111,6 +89,33 @@ export const PoolStats = (props) => {
           content: <>
             <h3>
               {secondsRemainingNow}
+            </h3>
+          </>
+        },
+        {
+          icon: null,
+          title: <>
+            Decimal precision
+          </>,
+          content: <>
+            <h3>
+              {tokenDecimals}
+            </h3>
+          </>
+        },
+        {
+          icon: null,
+          title: <>
+            Total ticket supply
+          </>,
+          content: <>
+            <h3>
+              {displayAmountInEther(
+                ticketTotalSupply, {
+                precision: 2,
+                decimals: tokenDecimals
+              }
+              )} {tokenSymbol}
             </h3>
           </>
         },

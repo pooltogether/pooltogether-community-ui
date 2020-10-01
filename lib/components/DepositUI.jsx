@@ -92,7 +92,7 @@ export const DepositUI = (props) => {
       />
     </> : <>
       <TxMessage
-        txType='Deposit to Pool'
+        txType='Deposit'
         tx={tx}
         handleReset={resetState}
       />
