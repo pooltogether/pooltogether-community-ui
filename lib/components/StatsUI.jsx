@@ -5,21 +5,18 @@ import { PoolRelatedAddressesUI } from 'lib/components/PoolRelatedAddressesUI'
 import { PoolStats } from 'lib/components/PoolStats'
 import { StartAwardUI } from 'lib/components/StartAwardUI'
 
-export const PoolActionsUI = (props) => {
-  if (!props.usersAddress) {
-    return null
-  }
-
+export const StatsUI = (props) => {
   return <>
-    <div className='my-4'>
-      <StartAwardUI
-        {...props}
-      />
-      <CompleteAwardUI
-        {...props}
-      />
-    </div>
-
+    {props.usersAddress && <>
+      <div className='my-4'>
+        <StartAwardUI
+          {...props}
+        />
+        <CompleteAwardUI
+          {...props}
+        />
+      </div>
+    </>}
 
     <PoolStats
       {...props}
