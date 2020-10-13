@@ -122,7 +122,8 @@ h3 {
 }
 
 a {
-  @apply text-highlight-3 no-underline border-b-2 border-purple-1000;
+  @apply text-highlight-3;
+  /* @apply text-highlight-3 no-underline border-b-2 border-purple-1000; */
 }
 
 a:hover {

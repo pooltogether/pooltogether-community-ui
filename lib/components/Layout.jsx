@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Slide, ToastContainer } from 'react-toastify'
+import { useRouter } from 'next/router'
 
 import { Footer } from 'lib/components/Footer'
 import { Meta } from 'lib/components/Meta'
 // import { PTHint } from 'lib/components/PTHint'
 import { Nav } from 'lib/components/Nav'
+import { Tabs, Tab } from 'lib/components/Tabs'
 import { StaticNetworkNotificationBanner } from 'lib/components/StaticNetworkNotificationBanner'
 
 import packageJson from '../../package.json'
@@ -15,9 +17,18 @@ export const Layout = (props) => {
   const {
     children
   } = props
+
+  const router = useRouter()
+  const [isSelected, setIsSelected] = useState('#stats')
+  console.log(router.asPath)
+
+  useEffect(() => {
+    console.log(router.asPath)
+    setIsSelected(window.location.hash)
+  }, [router.asPath])
+
   return <>
     <Meta />
-
 
     <div
       className='flex flex-col w-full'
@@ -53,16 +64,16 @@ export const Layout = (props) => {
             }}
           >
             <div
-              className='px-4 sm:px-8 lg:px-12 my-10 text-center'
+              className='px-4 sm:px-8 lg:px-12 my-2 text-center'
             >
               <div className='flex flex-col items-center  justify-center'>
                 <div
-                  className='text-default title text-xl sm:text-3xl'
+                  className='text-default title text-base sm:text-xl'
                 >
                   PoolTogether - Reference Frontend
                 </div>
                 <div
-                  className='text-primary-soft title text-base sm:text-2xl'
+                  className='text-primary-soft title text-xs sm:text-lg'
                 >
                   v{packageJson.version}
                 </div>
@@ -75,6 +86,34 @@ export const Layout = (props) => {
               >
                 View documentation
               </a>
+            </div>
+
+            <div
+              className='mt-16'
+            >
+              <Tabs>
+                <Tab
+                  router={router}
+                  isSelected={isSelected === '#stats'}
+                  href='#stats'
+                >
+                  Stats
+                </Tab>
+                <Tab
+                  router={router}
+                  isSelected={isSelected === '#interact'}
+                  href='#interact'
+                >
+                  Interact
+                </Tab>
+                <Tab
+                  router={router}
+                  isSelected={isSelected === '#admin'}
+                  href='#admin'
+                >
+                  Admin
+                </Tab>
+              </Tabs>
             </div>
 
             <div

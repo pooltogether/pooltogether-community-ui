@@ -24,7 +24,7 @@ export const EtherscanAddressLink = (props) => {
   return <>
     <a
       href={url}
-      className={`trans no-underline ${textSizeClasses} ${className} font-number`}
+      className={`trans ${textSizeClasses} ${className} font-number`}
       target='_blank'
       rel='noopener noreferrer'
       title='View on Etherscan'
