@@ -99,6 +99,21 @@ export const PoolRelatedAddressesUI = (props) => {
           </>}
         />
       </StatContainer>
+      
+      <StatContainer>
+        <BlueLineStat
+          title='rng()'
+          value={<>
+            <EtherscanAddressLink
+              address={poolAddresses.rng}
+              networkName={networkName}
+              size='xxs'
+            >
+              {poolAddresses.rng}
+            </EtherscanAddressLink>
+          </>}
+        />
+      </StatContainer>
 
     </div>
     
