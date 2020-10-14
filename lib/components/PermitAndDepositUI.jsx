@@ -60,13 +60,13 @@ const handleDepositSubmit = async (
   const referrer = ethers.constants.AddressZero // TODO
   const params = [
     tokenAddress,
-    // usersAddress,
-    // nonce,
-    // expiry,
-    // true,
-    // v,
-    // r,
-    // s,
+    usersAddress,
+    nonce,
+    expiry,
+    true,
+    v,
+    r,
+    s,
     contractAddress,
     usersAddress,
     ethers.utils.parseUnits(depositAmount, decimals),
@@ -77,14 +77,12 @@ const handleDepositSubmit = async (
     }
   ]
 
-  console.log({ params })
-
   await sendTx(
     setTx,
     provider,
     permitAddress,
     PermitAndDepositDaiAbi,
-    'depositTo',
+    'permitAndDepositTo',
     params,
     'Permit & Deposit',
   )

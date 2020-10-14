@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { DAI_MAINNET_ADDRESS } from 'lib/constants'
 import { FormPanel } from 'lib/components/FormPanel'
 import { DepositUI } from 'lib/components/DepositUI'
 import { PermitAndDepositUI } from 'lib/components/PermitAndDepositUI'
@@ -9,7 +10,7 @@ import { WithdrawUI } from 'lib/components/WithdrawUI'
 
 export const UserActionsUI = (props) => {
   let depositUI
-  if (props.poolAddresses && props.poolAddresses.token.toLowerCase() === '0x6b175474e89094c44da98b954eedeac495271d0f') {
+  if (props?.poolAddresses?.token?.toLowerCase() === DAI_MAINNET_ADDRESS) {
     depositUI = 
       <PermitAndDepositUI
           {...props}
