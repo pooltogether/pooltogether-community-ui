@@ -53,7 +53,9 @@ export const AdminUI = (
       >
         Balance drips:
       </h6>
-      <ListBalanceDrips />
+      <ListBalanceDrips
+        poolAddresses={poolAddresses}
+      />
       <ActivateBalanceDrip
         poolAddresses={poolAddresses}
       />

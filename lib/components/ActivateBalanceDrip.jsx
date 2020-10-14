@@ -1,17 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react'
 import classnames from 'classnames'
 import { ethers } from 'ethers'
+import { useRouter } from 'next/router'
 
 import ComptrollerAbi from '@pooltogether/pooltogether-contracts/abis/Comptroller'
 
 import { Button } from 'lib/components/Button'
-import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
+import { LoadingDots } from 'lib/components/LoadingDots'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
+import { fetchTokenChainData } from 'lib/utils/fetchTokenChainData'
 import { poolToast } from 'lib/utils/poolToast'
-import { numberWithCommas } from 'lib/utils/numberWithCommas'
 import { sendTx } from 'lib/utils/sendTx'
 
 // deactivateBalanceDrip(prizeStrategyAddress, controlledTokenAddress, erc20Address)
@@ -50,6 +51,7 @@ const handleActivateBalanceDripSubmit = async (
       gasLimit: 200000
     }
   ]
+  console.log({ params})
 
   await sendTx(
     setTx,
@@ -69,10 +71,14 @@ export const ActivateBalanceDrip = (props) => {
     // adminChainValues, ?
   } = props
 
+  const router = useRouter()
+  const networkName = router.query.networkName
+
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
+  const comptrollerAddress = props?.poolAddresses?.tokenListener
   const ticketAddress = props?.poolAddresses?.ticket
-  const prizeStrategyAddress = props?.poolAddresses?.prizeStrategyAddress
+  const prizeStrategyAddress = props?.poolAddresses?.prizeStrategy
 
   const [formVisible, setFormVisible] = useState(false)
   const [erc20TokenAddress, setErc20TokenAddress] = useState('')
@@ -92,29 +98,28 @@ export const ActivateBalanceDrip = (props) => {
     setTx({})
   }
 
-  // will need to query for decimals(), symbol(), name(), etc each time the erc20token address changes and
-  // when we have a legit eth address
-
   // Need a helper:
   // comptroller.balanceOf(erc20tokenAddress)
   // erc20 token transferToComptroller()
   // helper, copy this comptroller address and send token to comptroller
 
-  // const {
-  //   tokenDecimals,
-  // } = genericChainValues || {}
-  // const tokenSymbol = genericChainValues.tokenSymbol || 'TOKEN'
-
-  
   useEffect(() => {
     const fetchToken = async () => {
-      const tokenChainValues = await fetchTokenChainData(erc20tokenAddress)
+      setTokenChainValues({ loading: true })
+
+      const tokenChainValues = await fetchTokenChainData(
+        networkName,
+        comptrollerAddress,
+        erc20TokenAddress,
+      )
       
-      setTokenChainValues(tokenChainValues)
+      setTokenChainValues(
+        tokenChainValues
+      )
     }
     
     try {
-      ethers.utils.getAddress(erc20tokenAddress)
+      ethers.utils.getAddress(erc20TokenAddress)
 
       fetchToken()
     } catch (e) {
@@ -122,10 +127,11 @@ export const ActivateBalanceDrip = (props) => {
     }
   }, [erc20TokenAddress])
 
-  const erc20TokenName = tokenChainValues?.name
-  const erc20TokenSymbol = tokenChainValues?.symbol
-  const erc20TokenDecimals = tokenChainValues?.decimals
-
+  const erc20DetailsLoading = tokenChainValues?.loading
+  const erc20TokenName = tokenChainValues?.tokenName
+  const erc20TokenSymbol = tokenChainValues?.tokenSymbol
+  const erc20TokenDecimals = tokenChainValues?.tokenDecimals
+  const erc20TokenBalance = tokenChainValues?.tokenBalanceOf
 
   // let amountPerSecondBN
   // let overBalance = false
@@ -157,7 +163,9 @@ export const ActivateBalanceDrip = (props) => {
     )
   }
 
-  if (txInFlight) {
+  console.log(tx)
+
+  if (txInFlight || tx.completed) {
     return <TxMessage
       txType={txName}
       tx={tx}
@@ -201,35 +209,90 @@ export const ActivateBalanceDrip = (props) => {
         onSubmit={handleSubmit}
       >
         <div
-          className='w-full mx-auto'
+          className='flex flex-col sm:flex-row'
         >
-          <TextInputGroup
-            id='amountPerSecond'
-            name='amountPerSecond'
-            label={<>
-              Amount per second <span className='text-default italic'> (in {erc20TokenSymbol})</span>
-            </>}
-            required
-            type='number'
-            pattern='\d+'
-            onChange={(e) => setDepositAmount(e.target.value)}
-            value={amountPerSecond}
-          />
-        </div>
+          <div
+            className='sm:w-1/2 sm:pr-4'
+          >
+            <div
+              className='w-full mx-auto'
+            >
+              <TextInputGroup
+                id='erc20TokenAddress'
+                name='erc20TokenAddress'
+                label={<>
+                  ERC20 token address to drip
+              </>}
+                required
+                onChange={(e) => setErc20TokenAddress(e.target.value)}
+                value={erc20TokenAddress}
+              />
+            </div>
 
-        <div
-          className='w-full mx-auto'
-        >
-          <TextInputGroup
-            id='erc20TokenAddress'
-            name='erc20TokenAddress'
-            label={<>
-              ERC20 token address to drip
-          </>}
-            required
-            onChange={(e) => setDepositAmount(e.target.value)}
-            value={erc20TokenAddress}
-          />
+            <div
+              className='w-full mx-auto'
+            >
+              <TextInputGroup
+                id='amountPerSecond'
+                name='amountPerSecond'
+                label={<>
+                  Amount per second <span className='text-default italic'> {erc20TokenSymbol && <>(in {erc20TokenSymbol})</>}</span>
+                </>}
+                required
+                type='number'
+                pattern='\d+'
+                onChange={(e) => setAmountPerSecond(e.target.value)}
+                value={amountPerSecond}
+              />
+            </div>
+
+          </div>
+
+          <div
+            className='w-full sm:w-1/2 my-2 sm:my-0 sm:pl-4'
+          >
+            <div
+              className='font-bold text-xs mb-1'
+            >
+              Token details:
+            </div>
+
+            <div
+              className='flex flex-col w-full bg-primary rounded-lg py-2'
+              style={{ minHeight: 70 }}
+            >
+              {erc20DetailsLoading && <>
+                <LoadingDots />
+              </>}
+              {erc20TokenName && <>
+                <div
+                  className='text-sm font-bold'
+                >
+                  <div className='px-4 pt-1 pb-1'>
+                    <div className='uppercase text-default'>Name:</div> {erc20TokenName}
+                  </div>
+                  <div className='px-4 pt-1 pb-1'>
+                    <div className='uppercase text-default'>Symbol:</div> {erc20TokenSymbol}
+                  </div>
+                  <div className='px-4 pt-1 pb-1'>
+                    <div className='uppercase text-default'>Comptroller's balance:</div> {displayAmountInEther(erc20TokenBalance, {
+                      precision: 4, decimals: erc20TokenDecimals
+                    })}
+
+                    <div
+                      className='text-default-soft mt-2'
+                    >
+                      <span className='text-default'>INSTRUCTIONS:</span> Send enough of the ERC20 token to be dripped out by the Comptroller at: {comptrollerAddress}
+                    </div>
+                  </div>
+                </div>
+              </>}
+
+            </div>
+          </div>
+
+          
+
         </div>
 
         <Button
@@ -241,7 +304,9 @@ export const ActivateBalanceDrip = (props) => {
         >
           Activate
         </Button>
+
       </form>
+
     </div>  
   </>
 }
