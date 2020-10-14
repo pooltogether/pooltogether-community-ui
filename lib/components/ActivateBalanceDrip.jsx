@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import classnames from 'classnames'
 import { ethers } from 'ethers'
 
 import ComptrollerAbi from '@pooltogether/pooltogether-contracts/abis/Comptroller'
@@ -70,9 +71,10 @@ export const ActivateBalanceDrip = (props) => {
 
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
-  const ticketAddress = props.poolAddresses.ticket
-  const prizeStrategyAddress = props.poolAddresses.prizeStrategyAddress
+  const ticketAddress = props?.poolAddresses?.ticket
+  const prizeStrategyAddress = props?.poolAddresses?.prizeStrategyAddress
 
+  const [formVisible, setFormVisible] = useState(false)
   const [erc20TokenAddress, setErc20TokenAddress] = useState('')
   const [amountPerSecond, setAmountPerSecond] = useState('')
   const [tokenChainValues, setTokenChainValues] = useState({})
@@ -83,6 +85,7 @@ export const ActivateBalanceDrip = (props) => {
   const resetState = (e) => {
     e.preventDefault()
 
+    setFormVisible(false)
     setErc20TokenAddress('')
     setAmountPerSecond('')
 
@@ -104,11 +107,17 @@ export const ActivateBalanceDrip = (props) => {
 
   
   useEffect(() => {
-    if (erc20TokenAddress.valid) {
+    const fetchToken = async () => {
       const tokenChainValues = await fetchTokenChainData(erc20tokenAddress)
-
+      
       setTokenChainValues(tokenChainValues)
-    } else {
+    }
+    
+    try {
+      ethers.utils.getAddress(erc20tokenAddress)
+
+      fetchToken()
+    } catch (e) {
       setTokenChainValues({})
     }
   }, [erc20TokenAddress])
@@ -157,57 +166,82 @@ export const ActivateBalanceDrip = (props) => {
   }
 
   return <>
-    <form
-      onSubmit={handleSubmit}
+    <button
+      type='button'
+      onClick={(e) => {
+        e.preventDefault()
+
+        setFormVisible(true)
+      }}
+      className={classnames(
+        'mt-4 mb-1 text-green font-bold trans',
+        {
+          'hidden': formVisible
+        }
+      )}
     >
-      <div
-        className='font-bold mb-2 py-2 text-lg sm:text-xl lg:text-2xl'
-      >
-        Activate balance drip:
-      </div>
+      Activate a new balance drip
+    </button>
 
-      <div
-        className='w-full mx-auto'
+    <div
+      className={classnames(
+        'trans',
+        {
+          'hidden': !formVisible
+        }
+      )}
+    >
+      <h6
+        className='mt-8 mb-1'
       >
-        <TextInputGroup
-          id='amountPerSecond'
-          name='amountPerSecond'
-          label={<>
-            Amount per second <span className='text-default italic'> (in {erc20TokenSymbol})</span>
+        New balance drip:
+      </h6>
+
+      <form
+        onSubmit={handleSubmit}
+      >
+        <div
+          className='w-full mx-auto'
+        >
+          <TextInputGroup
+            id='amountPerSecond'
+            name='amountPerSecond'
+            label={<>
+              Amount per second <span className='text-default italic'> (in {erc20TokenSymbol})</span>
+            </>}
+            required
+            type='number'
+            pattern='\d+'
+            onChange={(e) => setDepositAmount(e.target.value)}
+            value={amountPerSecond}
+          />
+        </div>
+
+        <div
+          className='w-full mx-auto'
+        >
+          <TextInputGroup
+            id='erc20TokenAddress'
+            name='erc20TokenAddress'
+            label={<>
+              ERC20 token address to drip
           </>}
-          required
-          type='number'
-          pattern='\d+'
-          onChange={(e) => setDepositAmount(e.target.value)}
-          value={amountPerSecond}
-        />
-      </div>
+            required
+            onChange={(e) => setDepositAmount(e.target.value)}
+            value={erc20TokenAddress}
+          />
+        </div>
 
-      <div
-        className='w-full mx-auto'
-      >
-        <TextInputGroup
-          id='erc20TokenAddress'
-          name='erc20TokenAddress'
-          label={<>
-            ERC20 token address to drip
-          </>}
-          required
-          onChange={(e) => setDepositAmount(e.target.value)}
-          value={erc20TokenAddress}
-        />
-      </div>
-
-      <div
-        className='my-5'
-      >
         <Button
           // disabled={overBalance}
+          className='mt-2'
+          paddingClasses='py-2'
+          size='sm'
           color='green'
         >
           Activate
         </Button>
-      </div>
-    </form>
+      </form>
+    </div>  
   </>
 }

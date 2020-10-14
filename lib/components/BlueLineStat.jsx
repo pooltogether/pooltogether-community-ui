@@ -8,7 +8,8 @@ export const BlueLineStat = ({
     <div
       className='flex items-center justify-center font-headline text-white text-xs sm:text-sm lg:text-lg'
     >
-      <span
+      {title}
+      {/* <span
         className='inline-block w-5 bg-blue mr-2'
         style={{
           height: 2
@@ -18,11 +19,11 @@ export const BlueLineStat = ({
         style={{
           height: 2
         }}
-      ></span>
+      ></span> */}
     </div>
 
     <div
-      className='flex justify-center font-bold text-green text-lg sm:text-xl lg:text-2xl mb-2 glow'
+      className='flex justify-center font-bold text-green text-lg sm:text-xl lg:text-2xl mt-1 mb-1 glow'
     >
       {value}
     </div>

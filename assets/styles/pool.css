@@ -19,6 +19,7 @@
   --color-bg-highlight-4: #5af5db;
   --color-bg-highlight-5: #4C1FA0;
   --color-bg-red: #aa0b0b;
+  --color-bg-light-red: #bd0505;
   --color-bg-green: #3EF3D4;
   --color-bg-yellow: #FF9303;
   --color-bg-blue: #4565FF;
@@ -179,6 +180,10 @@ form:after {
   .pt-button {
     min-width: 220px;
   }
+}
+
+button {
+  @apply tracking-wide;
 }
 
 button[disabled] {

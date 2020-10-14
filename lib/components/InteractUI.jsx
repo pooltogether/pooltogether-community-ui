@@ -33,10 +33,10 @@ export const InteractUI = (
 
   return <>
     <div
-      className='relative py-4 sm:py-6 text-center rounded-lg'
+      className='relative py-4 sm:py-6 text-center'
     >
       {usersAddress && <>
-        <div className='my-4'>
+        <div className='my-4 p-10 bg-card rounded-lg mb-10'>
           <StartAwardUI
             {...props}
           />

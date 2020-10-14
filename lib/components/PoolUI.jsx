@@ -92,6 +92,13 @@ export const PoolUI = (
   }, [walletContext])
 
   const [isSelected, setIsSelected] = useState('#stats')
+
+  useEffect(() => {
+    if (window.location.hash) {
+      setIsSelected(window.location.hash)
+    }
+  }, [])
+
   const changeHash = (hash) => {
     setIsSelected(hash)
 
@@ -226,7 +233,7 @@ export const PoolUI = (
             />
           </ContentPane>
 
-          <ContentPane isSelected={isSelected === 'interact'}>
+          <ContentPane isSelected={isSelected === '#interact'}>
             <InteractUI
               genericChainValues={genericChainValues}
               poolAddresses={poolAddresses}
@@ -234,8 +241,10 @@ export const PoolUI = (
             />
           </ContentPane>
           
-          <ContentPane isSelected={isSelected === 'admin'}>
-            <AdminUI />
+          <ContentPane isSelected={isSelected === '#admin'}>
+            <AdminUI
+              poolAddresses={poolAddresses}
+            />
           </ContentPane>
         </Content>
       </div>
