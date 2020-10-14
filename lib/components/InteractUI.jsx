@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 
+import { CompleteAwardUI } from 'lib/components/CompleteAwardUI'
+import { StartAwardUI } from 'lib/components/StartAwardUI'
 import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 import { UserActionsUI } from 'lib/components/UserActionsUI'
 import { UserStats } from 'lib/components/UserStats'
@@ -33,6 +35,17 @@ export const InteractUI = (
     <div
       className='relative py-4 sm:py-6 text-center rounded-lg'
     >
+      {usersAddress && <>
+        <div className='my-4'>
+          <StartAwardUI
+            {...props}
+          />
+          <CompleteAwardUI
+            {...props}
+          />
+        </div>
+      </>}
+
       {ethBalance && ethBalance.eq(0) && <>
         <FormLockedOverlay
           flexColJustifyClass='justify-start'

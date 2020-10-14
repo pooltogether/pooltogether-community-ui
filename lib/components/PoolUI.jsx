@@ -239,7 +239,7 @@ export const PoolUI = (
           </ContentPane>
         </Content>
       </div>
-
+{/* 
       <div
         className='relative py-4 sm:py-6 text-center rounded-lg'
       >
@@ -290,7 +290,7 @@ export const PoolUI = (
           poolAddresses={poolAddresses}
           usersChainValues={usersChainValues}
         />
-      </div>
+      </div> */}
     </>}
   </>
 }

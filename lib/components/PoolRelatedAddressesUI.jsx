@@ -11,10 +11,10 @@ export const PoolRelatedAddressesUI = (props) => {
     poolAddresses,
   } = props
 
-  const [showPoolAddresses, setShowPoolAddresses] = useState(false)
+  const [showPoolAddresses, setShowPoolAddresses] = useState(true)
 
   return <>
-    <div>
+    {/* <div>
       <button
         onClick={(e) => {
           e.preventDefault()
@@ -29,17 +29,20 @@ export const PoolRelatedAddressesUI = (props) => {
       >
         Show related pool addresses
       </button>
-    </div>
+    </div> */}
     <div
       className={classnames(
-        'flex flex-col sm:flex-row sm:flex-wrap justify-center items-center',
-        'mt-2 mb-4 rounded-xl text-base sm:text-lg animated faster',
+        'flex flex-col sm:flex-row sm:flex-wrap justify-center items-center text-center',
+        'mt-8 mb-4 rounded-xl text-base sm:text-lg animated faster',
         {
           'h-0 opacity-0 pointer-events-none': !showPoolAddresses, 
           'fadeIn': showPoolAddresses,
         }
       )}
     >
+      <h4>
+        Related contract addresses:
+      </h4>
       <StatContainer>
         <BlueLineStat
           title='ticket()'
