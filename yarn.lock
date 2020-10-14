@@ -1709,15 +1709,10 @@
     walletlink "^2.0.2"
     web3-provider-engine "^15.0.4"
 
-"@pooltogether/current-pool-data@3.0.0-alpha.40":
-  version "3.0.0-alpha.40"
-  resolved "https://registry.yarnpkg.com/@pooltogether/current-pool-data/-/current-pool-data-3.0.0-alpha.40.tgz#31079fd4cd7d3bbb124d6e430d175e41e35e357c"
-  integrity sha512-MbV51LYd0d5XEkiEywaZl/kj6OPYlWoX+EOitS2f75vQKPC1O8gEeHY2ZDRGhyN/+MQwSLT+Xav6MLMeGYnWZw==
-
-"@pooltogether/current-pool-data@^3.0.0-alpha.33":
-  version "3.0.0-alpha.33"
-  resolved "https://registry.yarnpkg.com/@pooltogether/current-pool-data/-/current-pool-data-3.0.0-alpha.33.tgz#d873e581148181d9d2ec0c7ef5b6cb9669bd419d"
-  integrity sha512-65L1gz+fGXDJ4z5LRnLnHQ+ogcL6cI/wjiSmOalJeTEt6aMrl9O0fMXI6gbAEi+n8iobrF62bkuBxCqU8OlMtQ==
+"@pooltogether/current-pool-data@3.0.0-alpha.43":
+  version "3.0.0-alpha.43"
+  resolved "https://registry.yarnpkg.com/@pooltogether/current-pool-data/-/current-pool-data-3.0.0-alpha.43.tgz#f6bd8e333c5e0ae33f0defa0dc92c8ff0f303de8"
+  integrity sha512-geT6tVccOUyrZ4r2SMqwjPa16VCaE4BJHI5Hbam1i1uf0mu8AwCtGhz4brXKK1tms488XSKN4JGNcakVF6VeAA==
 
 "@pooltogether/etherplex@^0.2.3":
   version "0.2.3"
@@ -1735,14 +1730,13 @@
   dependencies:
     "@openzeppelin/contracts-ethereum-package" "^3.0.0"
 
-"@pooltogether/pooltogether-contracts@3.0.0-alpha.41":
-  version "3.0.0-alpha.41"
-  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.0.0-alpha.41.tgz#4b4cca39c74a7f1dd3f352650ceb181ef3a8e83e"
-  integrity sha512-Jbxc7A8Nnh95yPBkF2UuhIdsxJK/48tZwdovKEWS1iRtTWBHXDbdjiJJsUwmGg2sZ3BkV5ynl4PaqmBsKlN3XQ==
+"@pooltogether/pooltogether-contracts@3.0.0-alpha.43":
+  version "3.0.0-alpha.43"
+  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.0.0-alpha.43.tgz#e1dc508828a3d53599723bdea72445e3b0f281ed"
+  integrity sha512-4qixAFg2PdNzVkwx6wWBQF6uInMXtqMqR11EF5L9Aj2KFZe5hNcCWJMRbZrUTWDVIoqPYvyP/DFcNjL6MnAgJQ==
   dependencies:
     "@opengsn/gsn" "^2.0.1"
     "@openzeppelin/contracts-ethereum-package" "3.0.0"
-    "@pooltogether/current-pool-data" "^3.0.0-alpha.33"
     "@pooltogether/fixed-point" pooltogether/fixed-point.git#0.1.0-upgradeable.1
     "@pooltogether/pooltogether-rng-contracts" "^1.0.0-alpha.7"
     "@pooltogether/uniform-random-number" pooltogether/uniform-random-number#solidity-0.6
