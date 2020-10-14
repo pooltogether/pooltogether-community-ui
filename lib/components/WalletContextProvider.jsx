@@ -15,7 +15,7 @@ const PORTIS_KEY = process.env.NEXT_JS_PORTIS_API_KEY
 const SELECTED_WALLET_COOKIE_KEY = 'selectedWallet'
 
 // let networkName = 'mainnet'
-let networkName = 'kovan'
+let networkName = 'rinkeby'
 const RPC_URL = (networkName && INFURA_KEY) ?
   `https://${networkName}.infura.io/v3/${INFURA_KEY}` :
   'http://localhost:8545'

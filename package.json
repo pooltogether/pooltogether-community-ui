@@ -1,6 +1,6 @@
 {
   "name": "pooltogether-pool-ui",
-  "version": "3.0.0-alpha.41",
+  "version": "3.0.0-alpha.43",
   "private": false,
   "scripts": {
     "reinstall": "rm -rf node_modules/ && yarn",
@@ -29,9 +29,9 @@
   },
   "dependencies": {
     "@pooltogether/bnc-onboard": "1.13.1-a",
-    "@pooltogether/current-pool-data": "3.0.0-alpha.40",
+    "@pooltogether/current-pool-data": "3.0.0-alpha.43",
     "@pooltogether/etherplex": "^0.2.3",
-    "@pooltogether/pooltogether-contracts": "3.0.0-alpha.41",
+    "@pooltogether/pooltogether-contracts": "3.0.0-alpha.43",
     "@reach/tooltip": "0.10.5",
     "autoprefixer": "^9.8.1",
     "babel-jest": "^26.3.0",
