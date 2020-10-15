@@ -1,15 +1,14 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import FeatherIcon from 'feather-icons-react'
 import { ethers } from 'ethers'
 import { useRouter } from 'next/router'
 
 import ComptrollerAbi from '@pooltogether/pooltogether-contracts/abis/Comptroller'
 
+import { LoadingDots } from 'lib/components/LoadingDots'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import { useInterval } from 'lib/hooks/useInterval'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
-import { fetchDripChainData } from 'lib/utils/fetchDripChainData'
-import { poolToast } from 'lib/utils/poolToast'
+import { fetchBalanceDripChainData } from 'lib/utils/fetchBalanceDripChainData'
 import { sendTx } from 'lib/utils/sendTx'
 
 // deactivateBalanceDrip(prizeStrategyAddress, controlledTokenAddress, erc20Address)
@@ -35,6 +34,16 @@ const handleDeactivateBalanceDrip = async (
     }
   ]
 
+  console.log(params)
+  console.log(setTx,
+    provider,
+    contractAddress,
+    ComptrollerAbi,
+    'deactivateBalanceDrip',
+    params,
+    txName,)
+  
+
   await sendTx(
     setTx,
     provider,
@@ -49,6 +58,7 @@ const handleDeactivateBalanceDrip = async (
 export const ListBalanceDrips = (props) => {
   const {
     genericChainValues,
+    poolAddresses,
     // adminChainValues, ?
   } = props
 
@@ -69,36 +79,43 @@ export const ListBalanceDrips = (props) => {
 
   const [dripValues, setDripValues] = useState({})
 
-  useInterval(() => {
-    const fetchDrips = async () => {
-      if (comptrollerAddress === ethers.constants.AddressZero) {
-        console.log('bailing')
-        console.warn(`TokenListener/Comptroller address still set to Address Zero, please update`)
-        // poolToast.error(`TokenListener/Comptroller address still set to Address Zero, please update`)
+  const fetchDrips = async () => {
+    if (comptrollerAddress === ethers.constants.AddressZero) {
+      console.warn(`TokenListener/Comptroller address still set to Address Zero, please update`)
 
-        return
-      }
-
-      setDripValues({ loading: true })
-
-      const dripChainValues = await fetchDripChainData(
-        networkName,
-        comptrollerAddress,
-        prizeStrategyAddress,
-        ticketAddress,
-      )
-      console.log(dripChainValues)
-
-      setDripValues(
-        dripChainValues
-      )
+      return
     }
 
+    if (!Array.isArray(dripValues.drips)) {
+      setDripValues({ loading: true })
+    }
+
+    const dripChainValues = await fetchBalanceDripChainData(
+      networkName,
+      comptrollerAddress,
+      prizeStrategyAddress,
+      ticketAddress,
+    )
+
+    setDripValues(
+      dripChainValues
+    )
+  }
+
+  // don't use useInterval! The parent PoolUI component is running an interval and this 
+  // re-render is being used here on the useEffect below
+  // useInterval(() => {
+  //   fetchDrips()
+  // }, 18000)
+  
+  useEffect(() => {
     fetchDrips()
-  }, 8000)
+  }, [poolAddresses])
 
   const dripsLoading = dripValues?.loading
   const drips = dripValues?.drips
+
+  // console.log(tx)
 
   const handleDeactivate = (erc20TokenAddress) => {
     handleDeactivateBalanceDrip(
@@ -123,33 +140,50 @@ export const ListBalanceDrips = (props) => {
         </tr>
       </thead>
       <tbody>
-        <tr>
-        {/* <tr key={dripData.id}> */}
-          <td className='px-4 pt-1 pb-1 text-left font-bold'>
-            Example
-          </td>
-          <td className='px-4 pt-1 pb-1 text-left'>
-            EXAMP
-          </td>
-          <td className='px-4 pt-1 pb-1 text-left'>
-            4.234
-          </td>
-          <td className='px-4 pt-1 pb-1 text-right'>
-            <button
-              type='button'
-              onClick={(e) => {
-                e.preventDefault()
-                handleDeactivate(erc20TokenAddress)
-              }}
-              className='bg-red p-1 rounded-full font-bold hover:bg-light-red mx-2'
+        {dripsLoading && <>
+          <tr><td><LoadingDots /></td></tr>
+        </>}
+
+        {(drips?.length === 0) && <>
+          <tr><td
+            className='px-4 py-3'
+          >No drips active...</td></tr>
+        </>}
+
+        {(drips?.length > 0) && <>
+          {drips.map(drip => {
+            return <tr
+              key={drip.id}
             >
-              <FeatherIcon
-                icon='x'
-                className='w-4 h-4 hover:text-white m-auto'
-              />
-            </button>
-          </td>
-        </tr>
+              <td className='px-4 py-3 text-left font-bold'>
+                {drip.tokenName}
+              </td>
+              <td className='px-4 py-3 text-left'>
+                {drip.tokenSymbol}
+              </td>
+              <td className='px-4 py-3 text-left'>
+                {displayAmountInEther(drip.tokenBalanceOf, {
+                  precision: 4, decimals: drip.tokenDecimals
+                })}
+              </td>
+              <td className='px-4 pt-1 pb-1 text-right'>
+                <button
+                  type='button'
+                  onClick={(e) => {
+                    e.preventDefault()
+                    handleDeactivate(drip.id)
+                  }}
+                  className='bg-red p-1 rounded-full font-bold hover:bg-light-red mx-2'
+                >
+                  <FeatherIcon
+                    icon='x'
+                    className='w-4 h-4 hover:text-white m-auto'
+                  />
+                </button>
+              </td>
+            </tr>
+          })}
+        </>}
       </tbody>
     </table>
 

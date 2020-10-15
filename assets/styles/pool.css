@@ -453,3 +453,32 @@ input[type="text"] {
     min-height: 144px
   }
 }
+
+
+.check {
+  stroke: #05e6c4;
+  fill: none;
+  height: 100%;
+  stroke-width: 12;
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  top: 4px;
+  left: 3px;
+  width: 100%;
+}
+
+@screen lg {
+  .check {
+    top: 5px;
+    left: 4px;
+  }
+}
+
+.check.checked {
+  animation: check 0.1s ease-out forwards;
+}
+
+@keyframes check {
+  0% { stroke-dashoffset: -150; }
+  100% { stroke-dashoffset: 0; }
+}

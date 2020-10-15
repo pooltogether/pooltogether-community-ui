@@ -245,6 +245,7 @@ export const PoolUI = (
           
           <ContentPane isSelected={isSelected === '#admin'}>
             <AdminUI
+              genericChainValues={genericChainValues}
               poolAddresses={poolAddresses}
             />
           </ContentPane>

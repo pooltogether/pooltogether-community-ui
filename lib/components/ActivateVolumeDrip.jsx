@@ -7,6 +7,7 @@ import ComptrollerAbi from '@pooltogether/pooltogether-contracts/abis/Comptrolle
 
 import { Button } from 'lib/components/Button'
 import { LoadingDots } from 'lib/components/LoadingDots'
+import { CheckboxInputGroup } from 'lib/components/CheckboxInputGroup'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
@@ -15,15 +16,7 @@ import { fetchTokenChainData } from 'lib/utils/fetchTokenChainData'
 import { poolToast } from 'lib/utils/poolToast'
 import { sendTx } from 'lib/utils/sendTx'
 
-// deactivateBalanceDrip(prizeStrategyAddress, controlledTokenAddress, erc20Address)
-// [1, 2, 3, 4, 5]
-// if deactivating 3, pass in 2's address for prevDripToken
-// or pass SENTINAL_ADDRESS if there are no other drips active
-// const SENTINAL = '0x0000000000000000000000000000000000000001'
-
-// activateBalanceDrip(prizeStrategyAddress, controlledTokenAddress, erc20Address, weiPerSecond)
-// Decimals: erc20 to give away's decimals
-const handleActivateBalanceDripSubmit = async (
+const handleActivateVolumeDripSubmit = async (
   txName,
   setTx,
   provider,
@@ -31,40 +24,53 @@ const handleActivateBalanceDripSubmit = async (
   prizeStrategyAddress,
   ticketAddress,
   erc20Address,
-  amountPerSecond,
+  isReferral,
+  periodSeconds,
+  dripAmount,
+  endTime,
   decimals
 ) => {
   if (
     !erc20Address ||
-    !amountPerSecond
+    !periodSeconds ||
+    !dripAmount
   ) {
-    poolToast.error(`ERC20 token address to drip and the amount (in ether) per second needs to be filled in`)
+    poolToast.error(`Please make sure all form fields are filled in`)
     return
+  }
+
+  if (!endTime) {
+    endTime = parseInt(periodSeconds, 10) + parseInt(Date.now() / 1000, 10)
   }
 
   const params = [
     prizeStrategyAddress,
     ticketAddress,
     erc20Address,
-    ethers.utils.parseUnits(amountPerSecond, decimals),
+    isReferral,
+    periodSeconds,
+    ethers.utils.parseUnits(dripAmount, decimals),
+    endTime,
     {
       gasLimit: 200000
     }
   ]
+
+  console.log(params)
 
   await sendTx(
     setTx,
     provider,
     contractAddress,
     ComptrollerAbi,
-    'activateBalanceDrip',
+    'activateVolumeDrip',
     params,
     txName,
   )
 }
 
 
-export const ActivateBalanceDrip = (props) => {
+export const ActivateVolumeDrip = (props) => {
   const {
     genericChainValues,
     // adminChainValues, ?
@@ -81,7 +87,10 @@ export const ActivateBalanceDrip = (props) => {
 
   const [formVisible, setFormVisible] = useState(false)
   const [erc20TokenAddress, setErc20TokenAddress] = useState('')
-  const [amountPerSecond, setAmountPerSecond] = useState('')
+  const [isReferral, setIsReferral] = useState('')
+  const [periodSeconds, setPeriodSeconds] = useState('')
+  const [dripAmount, setDripAmount] = useState('')
+  const [endTime, setEndTime] = useState('')
   const [tokenChainValues, setTokenChainValues] = useState({})
 
   const [tx, setTx] = useState({})
@@ -92,7 +101,6 @@ export const ActivateBalanceDrip = (props) => {
 
     setFormVisible(false)
     setErc20TokenAddress('')
-    setAmountPerSecond('')
 
     setTx({})
   }
@@ -127,24 +135,12 @@ export const ActivateBalanceDrip = (props) => {
   const erc20TokenDecimals = tokenChainValues?.tokenDecimals
   const erc20TokenBalance = tokenChainValues?.tokenBalanceOf
 
-  // let amountPerSecondBN
-  // let overBalance = false
-  // try {
-  //   amountPerSecondBN = ethers.utils.parseUnits(amountPerSecond || '0', tokenDecimals)
-  //   overBalance = amountPerSecondBN && usersTokenBalance && usersTokenBalance.lt(
-  //     amountPerSecondBN
-  //   )
-  // } catch (e) {
-  //   console.error(e)
-  // }
-
-  // const tokenBal = ethers.utils.formatUnits(usersTokenBalance, tokenDecimals)
-  const txName = 'Activate Balance Drip'
+  const txName = 'Activate Volume Drip'
 
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    handleActivateBalanceDripSubmit(
+    handleActivateVolumeDripSubmit(
       txName,
       setTx,
       provider,
@@ -152,7 +148,10 @@ export const ActivateBalanceDrip = (props) => {
       prizeStrategyAddress,
       ticketAddress,
       erc20TokenAddress,
-      amountPerSecond,
+      isReferral,
+      periodSeconds,
+      dripAmount,
+      endTime,
       erc20TokenDecimals
     )
   }
@@ -182,7 +181,7 @@ export const ActivateBalanceDrip = (props) => {
         }
       )}
     >
-      Activate a new balance drip
+      Activate a new volume drip
     </button>
 
     <div
@@ -196,7 +195,7 @@ export const ActivateBalanceDrip = (props) => {
       <h6
         className='mt-8 mb-1'
       >
-        New balance drip:
+        New volume drip:
       </h6>
 
       <form
@@ -227,18 +226,70 @@ export const ActivateBalanceDrip = (props) => {
               className='w-full mx-auto'
             >
               <TextInputGroup
-                id='amountPerSecond'
-                name='amountPerSecond'
+                id='periodSeconds'
+                name='periodSeconds'
+                label={<>
+                  Drip period <span className='text-default italic'>(in seconds)</span>
+                </>}
+                required
+                type='number'
+                pattern='\d+'
+                onChange={(e) => setPeriodSeconds(e.target.value)}
+                value={periodSeconds}
+              />
+            </div>
+
+            <div
+              className='w-full mx-auto'
+            >
+              <TextInputGroup
+                id='dripAmount'
+                name='dripAmount'
                 label={<>
                   Amount per second <span className='text-default italic'> {erc20TokenSymbol && <>(in {erc20TokenSymbol})</>}</span>
                 </>}
                 required
                 type='number'
                 pattern='\d+'
-                onChange={(e) => setAmountPerSecond(e.target.value)}
-                value={amountPerSecond}
+                onChange={(e) => setDripAmount(e.target.value)}
+                value={dripAmount}
               />
             </div>
+
+            <div
+              className='w-full mx-auto'
+            >
+              <TextInputGroup
+                id='endTime'
+                name='endTime'
+                label={<>
+                  End time <span className='text-default italic'>(in unix timestamp, leave blank for 'now + drip period')</span>
+                </>}
+                type='number'
+                pattern='\d+'
+                onChange={(e) => setEndTime(e.target.value)}
+                value={endTime}
+              />
+            </div>
+
+            <div
+              className='w-full mx-auto'
+            >
+              <CheckboxInputGroup
+                large
+                id='isReferral'
+                name='isReferral'
+                label='Is referral volume?'
+                title={'Is referral volume?'}
+                checked={isReferral}
+                handleClick={(e) => {
+                  e.preventDefault()
+
+                  setIsReferral(!isReferral)
+                }}
+              />
+            </div>
+
 
           </div>
 
@@ -270,12 +321,7 @@ export const ActivateBalanceDrip = (props) => {
                   </div>
                   <div className='px-4 pt-1 pb-1'>
                     <div
-                      className={classnames(
-                        'uppercase text-default',
-                        {
-                          'text-red': erc20TokenBalance?.eq(0)
-                        }
-                      )}
+                      className={'uppercase text-default'}
                     >Comptroller's balance:</div> <span
                       className={classnames(
                         {
