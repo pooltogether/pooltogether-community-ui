@@ -25,7 +25,7 @@ const VolumeDripRow = (props) => {
         {drip.tokenSymbol}
       </td>
       <td className='px-4 py-3 text-left'>
-        {displayAmountInEther(drip.tokenVolumeOf, {
+        {displayAmountInEther(drip.tokenBalanceOf, {
           precision: 4, decimals: drip.tokenDecimals
         })}
       </td>
