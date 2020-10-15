@@ -3,6 +3,7 @@ import FeatherIcon from 'feather-icons-react'
 
 import { formatEtherscanAddressUrl } from 'lib/utils/formatEtherscanAddressUrl'
 import { nameToChainId } from 'lib/utils/nameToChainId'
+import { shorten } from 'lib/utils/shorten'
 
 export const EtherscanAddressLink = (props) => {
   const {
@@ -24,12 +25,16 @@ export const EtherscanAddressLink = (props) => {
   return <>
     <a
       href={url}
-      className={`trans no-underline ${textSizeClasses} ${className} font-number`}
+      className={`trans ${textSizeClasses} ${className} font-number`}
       target='_blank'
       rel='noopener noreferrer'
       title='View on Etherscan'
     >
-      {children}  <FeatherIcon
+      <div className='inline-block xs:hidden'>
+        {shorten(children)}
+      </div><div className='hidden xs:inline-block'>
+        {children}
+      </div>  <FeatherIcon
         icon='external-link'
         className='is-etherscan-arrow inline-block'
       />

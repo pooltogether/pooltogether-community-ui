@@ -76,7 +76,7 @@ export const StartAwardUI = (props) => {
           color='blue'
           size='sm'
         >
-          Start Award
+          Start award
         </Button>
       </>}
     </> : <>

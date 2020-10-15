@@ -1,11 +1,16 @@
+// http://localhost:3000/pools/rinkeby/0xd1E58Db0d67DB3f28fFa412Db58aCeafA0fEF8fA#admin
+
 import React, { useContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import { useRouter } from 'next/router'
 
-import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
+import { AdminUI } from 'lib/components/AdminUI'
 import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
+import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 import { LoadingDots } from 'lib/components/LoadingDots'
-import { PoolActionsUI } from 'lib/components/PoolActionsUI'
+import { Content, ContentPane, Tabs, Tab } from 'lib/components/Tabs'
+import { InteractUI } from 'lib/components/InteractUI'
+import { StatsUI } from 'lib/components/StatsUI'
 import { UserActionsUI } from 'lib/components/UserActionsUI'
 import { UserStats } from 'lib/components/UserStats'
 import { WalletContext } from 'lib/components/WalletContextProvider'
@@ -25,7 +30,7 @@ const renderErrorMessage = (
   type,
   message
 ) => {
-  const errorMsg = `Error fetching ${type} for prize pool with address: ${address}: ${message}. (maybe wrong Ethereum network?)`
+  const errorMsg = `Error fetching ${type} for prize pool with address: ${address}: ${message}. (maybe wrong Ethereum network or your IP is being rate-limited?)`
 
   console.error(errorMsg)
   poolToast.error(errorMsg)
@@ -68,7 +73,7 @@ export const PoolUI = (
       setGenericChainValues,
       setUsersChainValues,
     )
-  }, 15000)
+  }, 25000)
 
   useEffect(() => {
     fetchChainData(
@@ -87,6 +92,24 @@ export const PoolUI = (
       setEthBalance(ethers.utils.bigNumberify(balance))
     }
   }, [walletContext])
+
+  const [isSelected, setIsSelected] = useState('#stats')
+
+  useEffect(() => {
+    if (window.location.hash) {
+      setIsSelected(window.location.hash)
+    }
+  }, [])
+
+  const changeHash = (hash) => {
+    setIsSelected(hash)
+
+    router.push(
+      `${router.route.split('#')[0]}${hash}`,
+      `${router.asPath.split('#')[0]}${hash}`,
+      { shallow: true }
+    )
+  } 
 
   if (poolAddresses.error || genericChainValues.error || usersChainValues.error) {
     if (poolAddresses.error) {
@@ -125,6 +148,7 @@ export const PoolUI = (
     walletContext.handleConnectWallet()
   }
 
+
   const tokenSymbol = genericChainValues.tokenSymbol
 
   let tokenSvg = DaiSvg
@@ -142,6 +166,7 @@ export const PoolUI = (
     tokenSvg = ZrxSvg
   }
 
+
   return <>
     {genericChainValues.loading ?
       <div
@@ -152,7 +177,8 @@ export const PoolUI = (
         Fetching chain values ...
       </div>
     : <>
-      <div className='px-4 py-4 sm:py-6 text-center rounded-lg'>
+
+      <div className='py-4 sm:py-6 text-center'>
         <img
           src={tokenSvg}
           className='inline-block w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mb-2'
@@ -169,17 +195,63 @@ export const PoolUI = (
             {poolAddresses.prizePool}
           </EtherscanAddressLink>
         </div>
-
-        <PoolActionsUI
-          genericChainValues={genericChainValues}
-          networkName={networkName}
-          poolAddresses={poolAddresses}
-          usersAddress={usersAddress}
-        />
       </div>
 
-      <hr />
 
+      <div
+        className='mt-8'
+      >
+        <Tabs>
+          <Tab
+            changeHash={changeHash}
+            selected={isSelected === '#stats'}
+            hash='#stats'
+          >
+            Stats
+          </Tab>
+          <Tab
+            changeHash={changeHash}
+            selected={isSelected === '#interact'}
+            hash='#interact'
+          >
+            Interact
+          </Tab>
+          <Tab
+            changeHash={changeHash}
+            selected={isSelected === '#admin'}
+            hash='#admin'
+          >
+            Admin
+          </Tab>
+        </Tabs>
+
+        <Content>
+          <ContentPane isSelected={isSelected === '#stats'}>
+            <StatsUI
+              genericChainValues={genericChainValues}
+              networkName={networkName}
+              poolAddresses={poolAddresses}
+              usersAddress={usersAddress}
+            />
+          </ContentPane>
+
+          <ContentPane isSelected={isSelected === '#interact'}>
+            <InteractUI
+              genericChainValues={genericChainValues}
+              poolAddresses={poolAddresses}
+              usersChainValues={usersChainValues}
+            />
+          </ContentPane>
+          
+          <ContentPane isSelected={isSelected === '#admin'}>
+            <AdminUI
+              genericChainValues={genericChainValues}
+              poolAddresses={poolAddresses}
+            />
+          </ContentPane>
+        </Content>
+      </div>
+{/* 
       <div
         className='relative py-4 sm:py-6 text-center rounded-lg'
       >
@@ -230,7 +302,7 @@ export const PoolUI = (
           poolAddresses={poolAddresses}
           usersChainValues={usersChainValues}
         />
-      </div>
+      </div> */}
     </>}
   </>
 }

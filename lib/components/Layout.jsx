@@ -9,15 +9,13 @@ import { StaticNetworkNotificationBanner } from 'lib/components/StaticNetworkNot
 
 import packageJson from '../../package.json'
 
-import PoolIcon from 'assets/images/holidays.svg'
-
 export const Layout = (props) => {
   const {
     children
   } = props
+
   return <>
     <Meta />
-
 
     <div
       className='flex flex-col w-full'
@@ -53,16 +51,16 @@ export const Layout = (props) => {
             }}
           >
             <div
-              className='px-4 sm:px-8 lg:px-12 my-10 text-center'
+              className='px-4 sm:px-8 lg:px-12 my-2 text-center'
             >
               <div className='flex flex-col items-center  justify-center'>
                 <div
-                  className='text-default title text-xl sm:text-3xl'
+                  className='text-default title text-base sm:text-xl'
                 >
                   PoolTogether - Reference Frontend
                 </div>
                 <div
-                  className='text-primary-soft title text-base sm:text-2xl'
+                  className='text-primary-soft title text-xs sm:text-lg'
                 >
                   v{packageJson.version}
                 </div>

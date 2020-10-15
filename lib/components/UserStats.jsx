@@ -37,7 +37,7 @@ export const UserStats = (props) => {
         <BlueLineStat
           title={`Your balance`}
           value={<>
-            {displayAmountInEther(usersTokenBalance, { precision: 2, decimals })}&nbsp;<span className='text-default-soft'> {tokenSymbol || 'TOKEN'}</span>
+            {displayAmountInEther(usersTokenBalance, { precision: 2, decimals })}&nbsp;<span className='text-default-soft opacity-60'> {tokenSymbol || 'TOKEN'}</span>
           </>}
         />
       </StatContainer>
@@ -46,7 +46,7 @@ export const UserStats = (props) => {
         <BlueLineStat
           title={`Allowance`}
           value={<>
-            {displayAmountInEther(usersTokenAllowance, { precision: 0, decimals })}&nbsp;<span className='text-default-soft'>{tokenSymbol || 'TOKEN'}</span>
+            {displayAmountInEther(usersTokenAllowance, { precision: 0, decimals })}&nbsp;<span className='text-default-soft opacity-60'>{tokenSymbol || 'TOKEN'}</span>
           </>}
         />
       </StatContainer>
@@ -55,7 +55,7 @@ export const UserStats = (props) => {
         <BlueLineStat
           title={`Your ticket balance`}
           value={<>
-            {displayAmountInEther(usersTicketBalance, { precision: 2, decimals })}&nbsp;<span className='text-default-soft'>{ticketSymbol || 'TICKET'}</span>
+            {displayAmountInEther(usersTicketBalance, { precision: 2, decimals })}&nbsp;<span className='text-default-soft opacity-60'>{ticketSymbol || 'TICKET'}</span>
           </>}
         />
       </StatContainer>

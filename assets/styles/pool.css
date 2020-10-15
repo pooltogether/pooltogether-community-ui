@@ -19,6 +19,7 @@
   --color-bg-highlight-4: #5af5db;
   --color-bg-highlight-5: #4C1FA0;
   --color-bg-red: #aa0b0b;
+  --color-bg-light-red: #bd0505;
   --color-bg-green: #3EF3D4;
   --color-bg-yellow: #FF9303;
   --color-bg-blue: #4565FF;
@@ -122,7 +123,8 @@ h3 {
 }
 
 a {
-  @apply text-highlight-3 no-underline border-b-2 border-purple-1000;
+  @apply text-highlight-3;
+  /* @apply text-highlight-3 no-underline border-b-2 border-purple-1000; */
 }
 
 a:hover {
@@ -178,6 +180,10 @@ form:after {
   .pt-button {
     min-width: 220px;
   }
+}
+
+button {
+  @apply tracking-wide;
 }
 
 button[disabled] {
@@ -446,4 +452,33 @@ input[type="text"] {
   .card-min-height-desktop {
     min-height: 144px
   }
+}
+
+
+.check {
+  stroke: #05e6c4;
+  fill: none;
+  height: 100%;
+  stroke-width: 12;
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  top: 4px;
+  left: 3px;
+  width: 100%;
+}
+
+@screen lg {
+  .check {
+    top: 5px;
+    left: 4px;
+  }
+}
+
+.check.checked {
+  animation: check 0.1s ease-out forwards;
+}
+
+@keyframes check {
+  0% { stroke-dashoffset: -150; }
+  100% { stroke-dashoffset: 0; }
 }
