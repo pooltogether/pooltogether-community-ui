@@ -9,6 +9,7 @@ import { WalletContext } from 'lib/components/WalletContextProvider'
 import { useInterval } from 'lib/hooks/useInterval'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { fetchDripChainData } from 'lib/utils/fetchDripChainData'
+import { poolToast } from 'lib/utils/poolToast'
 import { sendTx } from 'lib/utils/sendTx'
 
 // deactivateBalanceDrip(prizeStrategyAddress, controlledTokenAddress, erc20Address)
@@ -70,6 +71,14 @@ export const ListBalanceDrips = (props) => {
 
   useInterval(() => {
     const fetchDrips = async () => {
+      if (comptrollerAddress === ethers.constants.AddressZero) {
+        console.log('bailing')
+        console.warn(`TokenListener/Comptroller address still set to Address Zero, please update`)
+        // poolToast.error(`TokenListener/Comptroller address still set to Address Zero, please update`)
+
+        return
+      }
+
       setDripValues({ loading: true })
 
       const dripChainValues = await fetchDripChainData(
@@ -86,7 +95,7 @@ export const ListBalanceDrips = (props) => {
     }
 
     fetchDrips()
-  }, 5000)
+  }, 8000)
 
   const dripsLoading = dripValues?.loading
   const drips = dripValues?.drips
