@@ -157,8 +157,6 @@ export const ActivateBalanceDrip = (props) => {
     )
   }
 
-  // console.log(tx)
-
   if (txInFlight || tx.completed) {
     return <TxMessage
       txType={txName}

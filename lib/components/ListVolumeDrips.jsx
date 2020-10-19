@@ -5,14 +5,16 @@ import { useRouter } from 'next/router'
 
 import ComptrollerAbi from '@pooltogether/pooltogether-contracts/abis/Comptroller'
 
+import { SENTINEL_ADDRESS } from 'lib/constants'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
+import { extractPrevDripTokenAddress } from 'lib/utils/extractPrevDripTokenAddress'
 import { fetchVolumeDripChainData } from 'lib/utils/fetchVolumeDripChainData'
 import { sendTx } from 'lib/utils/sendTx'
 
 const VolumeDripRow = (props) => {
-  const { drip } = props
+  const { drip, handleDeactivate, isReferralVolumeDrips } = props
 
   return <>
     <tr
@@ -34,11 +36,12 @@ const VolumeDripRow = (props) => {
           type='button'
           onClick={(e) => {
             e.preventDefault()
-            handleDeactivate(drip.id)
+            handleDeactivate(drip.id, isReferralVolumeDrips)
           }}
           className='bg-red p-1 rounded-full font-bold hover:bg-light-red mx-2'
         >
           <FeatherIcon
+            strokeWidth='0.2rem'
             icon='x'
             className='w-4 h-4 hover:text-white m-auto'
           />
@@ -54,7 +57,6 @@ const VolumeDripTable = (props) => {
     dripsLoading,
     drips,
     isReferralVolumeDrips,
-    handleDeactivate,
   } = props
 
   return <>
@@ -79,21 +81,20 @@ const VolumeDripTable = (props) => {
         </>}
 
         {drips?.map(drip => <VolumeDripRow
-          handleDeactivate={handleDeactivate}
+          {...props}
+          key={`volume-row-${drip.id}`}
           drip={drip}
         />)}
-
       </tbody>
     </table>
   </>
 }
 
 
-// deactivateVolumeDrip(prizeStrategyAddress, controlledTokenAddress, erc20Address)
-// [1, 2, 3, 4, 5]
-// if deactivating 3, pass in 2's address for prevDripToken
-// or pass SENTINAL_ADDRESS if there are no other drips active
-// const SENTINAL = '0x0000000000000000000000000000000000000001'
+// if deactivating dripToken 3, pass in 2's address for prevDripToken
+// or pass SENTINEL_ADDRESS if there are no other drips active
+// const SENTINEL = '0x0000000000000000000000000000000000000001'
+// prevDripTokens: this is a separate array for referral volume drips vs. non-referral!
 const handleDeactivateVolumeDrip = async (
   txName,
   setTx,
@@ -101,17 +102,28 @@ const handleDeactivateVolumeDrip = async (
   contractAddress,
   prizeStrategyAddress,
   ticketAddress,
-  erc20Address,
+  dripTokenAddress,
+  isReferral,
+  prevDripTokens,
 ) => {
+  console.log(prevDripTokens)
+  console.log({dripTokenAddress})
+
+  const prevTokenAddress = extractPrevDripTokenAddress(prevDripTokens, dripTokenAddress) || SENTINEL_ADDRESS
+  console.log({ prevTokenAddress})
+
   const params = [
     prizeStrategyAddress,
     ticketAddress,
-    erc20Address,
+    dripTokenAddress,
+    isReferral,
+    prevTokenAddress,
     {
       gasLimit: 200000
     }
   ]
-
+  console.log({ params})
+  
   await sendTx(
     setTx,
     provider,
@@ -184,9 +196,7 @@ export const ListVolumeDrips = (props) => {
   const drips = dripValues?.drips
   const referralDrips = dripValues?.referralDrips
 
-  // console.log(tx)
-
-  const handleDeactivate = (erc20TokenAddress) => {
+  const handleDeactivate = (dripTokenAddress, isReferral) => {
     handleDeactivateVolumeDrip(
       txName,
       setTx,
@@ -194,7 +204,9 @@ export const ListVolumeDrips = (props) => {
       comptrollerAddress,
       prizeStrategyAddress,
       ticketAddress,
-      erc20TokenAddress,
+      dripTokenAddress,
+      !!isReferral,
+      isReferral ? referralDrips : drips,
     )
   }
 

@@ -56,8 +56,6 @@ const handleActivateVolumeDripSubmit = async (
     }
   ]
 
-  console.log(params)
-
   await sendTx(
     setTx,
     provider,
@@ -156,8 +154,6 @@ export const ActivateVolumeDrip = (props) => {
     )
   }
 
-  // console.log(tx)
-
   if (txInFlight || tx.completed) {
     return <TxMessage
       txType={txName}
@@ -246,7 +242,7 @@ export const ActivateVolumeDrip = (props) => {
                 id='dripAmount'
                 name='dripAmount'
                 label={<>
-                  Amount per second <span className='text-default italic'> {erc20TokenSymbol && <>(in {erc20TokenSymbol})</>}</span>
+                  Drip amount <span className='text-default italic'> (this is the total you will drip during the period {erc20TokenSymbol && <>in {erc20TokenSymbol}</>})</span>
                 </>}
                 required
                 type='number'

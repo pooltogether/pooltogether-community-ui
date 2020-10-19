@@ -5,17 +5,19 @@ import { useRouter } from 'next/router'
 
 import ComptrollerAbi from '@pooltogether/pooltogether-contracts/abis/Comptroller'
 
+import { SENTINEL_ADDRESS } from 'lib/constants'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
+import { extractPrevDripTokenAddress } from 'lib/utils/extractPrevDripTokenAddress'
 import { fetchBalanceDripChainData } from 'lib/utils/fetchBalanceDripChainData'
 import { sendTx } from 'lib/utils/sendTx'
 
 // deactivateBalanceDrip(prizeStrategyAddress, controlledTokenAddress, erc20Address)
 // [1, 2, 3, 4, 5]
 // if deactivating 3, pass in 2's address for prevDripToken
-// or pass SENTINAL_ADDRESS if there are no other drips active
-// const SENTINAL = '0x0000000000000000000000000000000000000001'
+// or pass SENTINEL_ADDRESS if there are no other drips active
+// const SENTINEL = '0x0000000000000000000000000000000000000001'
 const handleDeactivateBalanceDrip = async (
   txName,
   setTx,
@@ -23,26 +25,20 @@ const handleDeactivateBalanceDrip = async (
   contractAddress,
   prizeStrategyAddress,
   ticketAddress,
-  erc20Address,
+  dripTokenAddress,
+  prevDripTokens,
 ) => {
+  const prevTokenAddress = extractPrevDripTokenAddress(prevDripTokens, dripTokenAddress) || SENTINEL_ADDRESS
+
   const params = [
     prizeStrategyAddress,
     ticketAddress,
-    erc20Address,
+    dripTokenAddress,
+    prevTokenAddress,
     {
       gasLimit: 200000
     }
   ]
-
-  console.log(params)
-  console.log(setTx,
-    provider,
-    contractAddress,
-    ComptrollerAbi,
-    'deactivateBalanceDrip',
-    params,
-    txName,)
-  
 
   await sendTx(
     setTx,
@@ -114,10 +110,9 @@ export const ListBalanceDrips = (props) => {
 
   const dripsLoading = dripValues?.loading
   const drips = dripValues?.drips
+  console.log(drips)
 
-  // console.log(tx)
-
-  const handleDeactivate = (erc20TokenAddress) => {
+  const handleDeactivate = (dripTokenAddress) => {
     handleDeactivateBalanceDrip(
       txName,
       setTx,
@@ -125,7 +120,8 @@ export const ListBalanceDrips = (props) => {
       comptrollerAddress,
       prizeStrategyAddress,
       ticketAddress,
-      erc20TokenAddress,
+      dripTokenAddress,
+      drips,
     )
   }
 
@@ -171,11 +167,13 @@ export const ListBalanceDrips = (props) => {
                   type='button'
                   onClick={(e) => {
                     e.preventDefault()
+
                     handleDeactivate(drip.id)
                   }}
                   className='bg-red p-1 rounded-full font-bold hover:bg-light-red mx-2'
                 >
                   <FeatherIcon
+                    strokeWidth='0.2rem'
                     icon='x'
                     className='w-4 h-4 hover:text-white m-auto'
                   />
