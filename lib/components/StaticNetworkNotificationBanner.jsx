@@ -20,9 +20,9 @@ export const StaticNetworkNotificationBanner = ({
 
   const networkSupported = SUPPORTED_NETWORKS.includes(chainId)
 
-  let networkWords = 'mainnet (or unknown network) 🥵'
+  let networkWords = `${networkName} 🥵`
   if (networkSupported) {
-    networkWords = `the ${networkName} testnet 👍`
+    networkWords = `${networkName} 👍`
   }
 
   return <div
