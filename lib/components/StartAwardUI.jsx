@@ -14,7 +14,7 @@ const handleStartAwardSubmit = async (
 ) => {
   const params = [
     {
-      gasLimit: 120000
+      gasLimit: 300000
     }
   ]
 
@@ -68,7 +68,7 @@ export const StartAwardUI = (props) => {
         <span className='text-default'>Pool status:</span> <div className='font-bold'>Open for deposits ...</div>
       </div>
     </>}
-    
+
     {!txInFlight ? <>
       {canStartAward && <>
         <Button
