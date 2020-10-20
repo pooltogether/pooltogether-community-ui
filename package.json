@@ -29,9 +29,9 @@
   },
   "dependencies": {
     "@pooltogether/bnc-onboard": "1.13.1-a",
-    "@pooltogether/current-pool-data": "3.0.0-alpha.43b",
+    "@pooltogether/current-pool-data": "^3.0.0-rc.1b",
     "@pooltogether/etherplex": "^0.2.3",
-    "@pooltogether/pooltogether-contracts": "3.0.0-alpha.43",
+    "@pooltogether/pooltogether-contracts": "^3.0.0-rc.1",
     "@reach/tooltip": "0.10.5",
     "autoprefixer": "^9.8.1",
     "babel-jest": "^26.3.0",
