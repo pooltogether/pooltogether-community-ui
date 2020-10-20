@@ -18,6 +18,14 @@ export const StaticNetworkNotificationBanner = ({
   chainId = _onboard.getState().appNetworkId
   const networkName = chainIdToName(chainId)
 
+  const supportedNames = SUPPORTED_NETWORKS.reduce((names, networkId) => {
+    const name = chainIdToName(networkId)
+    if (name && names.indexOf(name) == -1) {
+      names.push(name)
+    }
+    return names
+  }, []).join(", ")
+
   const networkSupported = SUPPORTED_NETWORKS.includes(chainId)
 
   let networkWords = `${networkName} 🥵`
@@ -37,7 +45,7 @@ export const StaticNetworkNotificationBanner = ({
     <div
       className='text-center px-4'
     >
-      This works on Ropsten, Rinkeby and localhost.
+      This works on {supportedNames}.
       Your wallet is currently set to <span className='font-bold'>{networkWords}</span>
     </div>
   </div>
