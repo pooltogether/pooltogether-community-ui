@@ -43,7 +43,7 @@ const handleWithdrawSubmit = async (
   }
 
   // TX overrides
-  params.push({ gasLimit: 700000 })
+  params.push({ gasLimit: 800000 })
 
   await sendTx(
     setTx,
