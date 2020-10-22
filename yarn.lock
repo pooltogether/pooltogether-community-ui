@@ -1726,10 +1726,10 @@
   dependencies:
     "@openzeppelin/contracts-ethereum-package" "^3.0.0"
 
-"@pooltogether/pooltogether-contracts@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.0.0.tgz#3a472c7b237a07f046523cde3e7c5c7a1e0c2c43"
-  integrity sha512-rRVHByPzvC3uMXo3HvckjPYpsNSzLr2JjdS0ouRqEn/7LcWHWqKVVDUAad+dc38W5rs8j72kW5tqXI8uKvpqFg==
+"@pooltogether/pooltogether-contracts@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.0.1.tgz#e090725d2b1d7335aff73f0bee804c1ec32c99bb"
+  integrity sha512-UlrdRsPGCN0iTrzMNNeEhOOWzYYKl2sTvEn5ZNyK3paQPaWUQjeH6Ezf/eu0t2LBh32CCwOYqxbH6wVEENbw3A==
   dependencies:
     "@opengsn/gsn" "^2.0.1"
     "@openzeppelin/contracts-ethereum-package" "3.0.0"
