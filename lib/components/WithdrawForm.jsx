@@ -75,6 +75,8 @@ export const WithdrawForm = (props) => {
 
   const ticketBal = ethers.utils.formatUnits(usersTicketBalance, tokenDecimals)
 
+  const timelockCredit = '?'
+
   return <>
     <form
       onSubmit={handleSubmit}
