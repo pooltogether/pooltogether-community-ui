@@ -209,7 +209,7 @@ export const WithdrawForm = (props) => {
           You will receive {displayAmountInEther(instantTotal, { decimals: tokenDecimals })} {tokenSymbol}&nbsp;
           {
             timelockDurationSeconds.eq(0)
-              ? <>now and burn {displayAmountInEther(timelockCredit)} {tokenSymbol} from your credit</>
+              ? <>now and burn {timelockCredit} {tokenSymbol} from your credit</>
               : <>in {numberWithCommas(timelockDurationSeconds, { precision: 0 }).toString()} seconds</>
           }
         </div>
