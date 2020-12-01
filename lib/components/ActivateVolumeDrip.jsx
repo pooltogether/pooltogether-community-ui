@@ -48,8 +48,8 @@ const handleActivateVolumeDripSubmit = async (
     ethers.utils.parseUnits(dripAmount, decimals),
     endTime,
     {
-      gasLimit: 200000,
-    },
+      gasLimit: 200000
+    }
   ]
 
   await sendTx(
@@ -65,7 +65,7 @@ const handleActivateVolumeDripSubmit = async (
 
 export const ActivateVolumeDrip = (props) => {
   const {
-    genericChainValues,
+    genericChainValues
     // adminChainValues, ?
   } = props
 
@@ -161,7 +161,7 @@ export const ActivateVolumeDrip = (props) => {
           setFormVisible(true)
         }}
         className={classnames('mt-4 mb-1 text-green font-bold trans', {
-          hidden: formVisible,
+          hidden: formVisible
         })}
       >
         Activate a new volume drip
@@ -169,7 +169,7 @@ export const ActivateVolumeDrip = (props) => {
 
       <div
         className={classnames('trans', {
-          hidden: !formVisible,
+          hidden: !formVisible
         })}
       >
         <h6 className='mt-8 mb-1'>New volume drip:</h6>
@@ -270,11 +270,7 @@ export const ActivateVolumeDrip = (props) => {
                 className='flex flex-col w-full bg-primary rounded-lg py-2'
                 style={{ minHeight: 70 }}
               >
-                {erc20DetailsLoading && (
-                  <>
-                    <LoadingDots />
-                  </>
-                )}
+                {erc20DetailsLoading && <LoadingDots />}
                 {erc20TokenName && (
                   <>
                     <div className='text-sm font-bold'>
@@ -288,12 +284,12 @@ export const ActivateVolumeDrip = (props) => {
                         <div className={'uppercase text-default'}>Comptroller's balance:</div>{' '}
                         <span
                           className={classnames({
-                            'text-red': erc20TokenBalance?.eq(0),
+                            'text-red': erc20TokenBalance?.eq(0)
                           })}
                         >
                           {displayAmountInEther(erc20TokenBalance, {
                             precision: 4,
-                            decimals: erc20TokenDecimals,
+                            decimals: erc20TokenDecimals
                           })}
                         </span>
                         <div className='text-default-soft mt-2'>

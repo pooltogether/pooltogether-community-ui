@@ -47,8 +47,8 @@ const handleActivateBalanceDripSubmit = async (
     erc20Address,
     ethers.utils.parseUnits(amountPerSecond, decimals),
     {
-      gasLimit: 200000,
-    },
+      gasLimit: 200000
+    }
   ]
 
   await sendTx(
@@ -64,7 +64,7 @@ const handleActivateBalanceDripSubmit = async (
 
 export const ActivateBalanceDrip = (props) => {
   const {
-    genericChainValues,
+    genericChainValues
     // adminChainValues, ?
   } = props
 
@@ -167,7 +167,7 @@ export const ActivateBalanceDrip = (props) => {
           setFormVisible(true)
         }}
         className={classnames('mt-4 mb-1 text-green font-bold trans', {
-          hidden: formVisible,
+          hidden: formVisible
         })}
       >
         Activate a new balance drip
@@ -175,7 +175,7 @@ export const ActivateBalanceDrip = (props) => {
 
       <div
         className={classnames('trans', {
-          hidden: !formVisible,
+          hidden: !formVisible
         })}
       >
         <h6 className='mt-8 mb-1'>New balance drip:</h6>
@@ -187,7 +187,7 @@ export const ActivateBalanceDrip = (props) => {
                 <TextInputGroup
                   id='erc20TokenAddress'
                   name='erc20TokenAddress'
-                  label={<>ERC20 token address to drip</>}
+                  label={'ERC20 token address to drip'}
                   required
                   onChange={(e) => setErc20TokenAddress(e.target.value)}
                   value={erc20TokenAddress}
@@ -223,11 +223,7 @@ export const ActivateBalanceDrip = (props) => {
                 className='flex flex-col w-full bg-primary rounded-lg py-2'
                 style={{ minHeight: 70 }}
               >
-                {erc20DetailsLoading && (
-                  <>
-                    <LoadingDots />
-                  </>
-                )}
+                {erc20DetailsLoading && <LoadingDots />}
                 {erc20TokenName && (
                   <>
                     <div className='text-sm font-bold'>
@@ -240,19 +236,19 @@ export const ActivateBalanceDrip = (props) => {
                       <div className='px-4 pt-1 pb-1'>
                         <div
                           className={classnames('uppercase text-default', {
-                            'text-red': erc20TokenBalance?.eq(0),
+                            'text-red': erc20TokenBalance?.eq(0)
                           })}
                         >
                           Comptroller's balance:
                         </div>{' '}
                         <span
                           className={classnames({
-                            'text-red': erc20TokenBalance?.eq(0),
+                            'text-red': erc20TokenBalance?.eq(0)
                           })}
                         >
                           {displayAmountInEther(erc20TokenBalance, {
                             precision: 4,
-                            decimals: erc20TokenDecimals,
+                            decimals: erc20TokenDecimals
                           })}
                         </span>
                         <div className='text-default-soft mt-2'>

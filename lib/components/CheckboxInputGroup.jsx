@@ -14,48 +14,46 @@ export const CheckboxInputGroup = (props) => {
   const textClasses = 'text-sm sm:text-base lg:text-base'
 
   return (
-    <>
+    <div
+      className={classnames(defaultClasses, textClasses, marginClasses, roundedClasses, {
+        'text-green inner-lg': checked,
+        'text-accent-1 hover:text-green': !checked
+      })}
+      onClick={handleClick}
+    >
       <div
-        className={classnames(defaultClasses, textClasses, marginClasses, roundedClasses, {
-          'text-green inner-lg': checked,
-          'text-accent-1 hover:text-green': !checked,
-        })}
-        onClick={handleClick}
+        className={classnames('flex items-center justify-center mr-3 text-3xl leading-none mt-1')}
       >
         <div
-          className={classnames('flex items-center justify-center mr-3 text-3xl leading-none mt-1')}
+          className={classnames('flex items-center rounded-lg w-6 h-6 border-2 trans', {
+            'text-white bg-white border-secondary hover:border-secondary': checked,
+            'text-darkened bg-white border-secondary hover:border-primary': !checked
+          })}
         >
-          <div
-            className={classnames('flex items-center rounded-lg w-6 h-6 border-2 trans', {
-              'text-white bg-white border-secondary hover:border-secondary': checked,
-              'text-darkened bg-white border-secondary hover:border-primary': !checked,
+          <svg
+            className={classnames('relative check', {
+              checked: checked
             })}
+            width='135'
+            height='110'
+            viewBox='0 0 135 110'
           >
-            <svg
-              className={classnames('relative check', {
-                checked: checked,
-              })}
-              width='135'
-              height='110'
-              viewBox='0 0 135 110'
-            >
-              <path d='M96.8002 0L30.7002 66.1L0.200195 37.4' />
-            </svg>
-          </div>
+            <path d='M96.8002 0L30.7002 66.1L0.200195 37.4' />
+          </svg>
         </div>
-
-        <div className='font-normal text-left flex flex-col items-start justify-start leading-snug'>
-          {label}
-        </div>
-
-        {hint && (
-          <>
-            <PTHint title={title ? title : null} tip={hint}>
-              <QuestionMarkCircle white />
-            </PTHint>
-          </>
-        )}
       </div>
-    </>
+
+      <div className='font-normal text-left flex flex-col items-start justify-start leading-snug'>
+        {label}
+      </div>
+
+      {hint && (
+        <>
+          <PTHint title={title ? title : null} tip={hint}>
+            <QuestionMarkCircle white />
+          </PTHint>
+        </>
+      )}
+    </div>
   )
 }

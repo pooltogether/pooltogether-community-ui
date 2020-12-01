@@ -20,12 +20,10 @@ export const CardGrid = (props) => {
   const { cards, cardGroupId } = props
 
   return (
-    <>
-      <div className='flex flex-col sm:flex-row sm:flex-wrap -mx-4 mb-8'>
-        {cards.map((card, index) => {
-          return <Card key={`${cardGroupId}-card-${index}`} card={card} />
-        })}
-      </div>
-    </>
+    <div className='flex flex-col sm:flex-row sm:flex-wrap -mx-4 mb-8'>
+      {cards.map((card, index) => {
+        return <Card key={`${cardGroupId}-card-${index}`} card={card} />
+      })}
+    </div>
   )
 }

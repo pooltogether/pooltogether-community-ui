@@ -10,8 +10,8 @@ import { sendTx } from 'lib/utils/sendTx'
 const handleCompleteAwardSubmit = async (setTx, provider, contractAddress) => {
   const params = [
     {
-      gasLimit: 700000,
-    },
+      gasLimit: 700000
+    }
   ]
 
   await sendTx(
@@ -51,33 +51,27 @@ export const CompleteAwardUI = (props) => {
   return (
     <>
       {isRngRequested && !canCompleteAward && (
-        <>
-          <div className='my-4'>
-            <span className='text-default'>Pool status:</span>{' '}
-            <div className='font-bold'>Random number being calculated! Please wait ...</div>
-          </div>
-        </>
+        <div className='my-4'>
+          <span className='text-default'>Pool status:</span>{' '}
+          <div className='font-bold'>Random number being calculated! Please wait ...</div>
+        </div>
       )}
 
       {!txInFlight ? (
         <>
           {canCompleteAward && (
-            <>
-              <Button onClick={handleClick} color='orange' size='sm'>
-                Complete Award
-              </Button>
-            </>
+            <Button onClick={handleClick} color='orange' size='sm'>
+              Complete Award
+            </Button>
           )}
         </>
       ) : (
-        <>
-          <TxMessage
-            txType='Complete Award'
-            tx={tx}
-            handleReset={resetState}
-            resetButtonText='Hide this'
-          />
-        </>
+        <TxMessage
+          txType='Complete Award'
+          tx={tx}
+          handleReset={resetState}
+          resetButtonText='Hide this'
+        />
       )}
     </>
   )
