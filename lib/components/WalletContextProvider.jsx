@@ -16,15 +16,16 @@ const SELECTED_WALLET_COOKIE_KEY = 'selectedWallet'
 
 // let networkName = 'mainnet'
 let networkName = 'rinkeby'
-const RPC_URL = (networkName && INFURA_KEY) ?
-  `https://${networkName}.infura.io/v3/${INFURA_KEY}` :
-  'http://localhost:8545'
+const RPC_URL =
+  networkName && INFURA_KEY
+    ? `https://${networkName}.infura.io/v3/${INFURA_KEY}`
+    : 'http://localhost:8545'
 
 let cookieOptions = { sameSite: 'strict' }
 if (process.env.NEXT_JS_DOMAIN_NAME) {
   cookieOptions = {
     ...cookieOptions,
-    domain: `.${process.env.NEXT_JS_DOMAIN_NAME}`
+    domain: `.${process.env.NEXT_JS_DOMAIN_NAME}`,
   }
 }
 
@@ -37,36 +38,36 @@ const WALLETS_CONFIG = [
     appUrl: 'https://app.pooltogether.com',
     email: 'hello@pooltogether.com',
     rpcUrl: RPC_URL,
-    preferred: true
+    preferred: true,
   },
   {
     walletName: 'ledger',
     rpcUrl: RPC_URL,
-    preferred: true
+    preferred: true,
   },
   {
     walletName: 'fortmatic',
     apiKey: FORTMATIC_KEY,
-    preferred: true
+    preferred: true,
   },
   {
     walletName: 'walletConnect',
     infuraKey: INFURA_KEY,
-    preferred: true
+    preferred: true,
   },
   {
     walletName: 'walletLink',
     rpcUrl: RPC_URL,
-    preferred: true
+    preferred: true,
   },
   {
     walletName: 'imToken',
     rpcUrl: RPC_URL,
-    preferred: true
+    preferred: true,
   },
   {
     walletName: 'huobiwallet',
-    rpcUrl: RPC_URL
+    rpcUrl: RPC_URL,
   },
   {
     walletName: 'portis',
@@ -97,7 +98,7 @@ const initializeOnboard = (setOnboardState) => {
         setAddress(setOnboardState)
       },
       balance: async (balance) => {
-        setOnboardState(previousState => ({
+        setOnboardState((previousState) => ({
           ...previousState,
           onboard: _onboard,
           timestamp: Date.now(),
@@ -107,12 +108,12 @@ const initializeOnboard = (setOnboardState) => {
         debug('network change')
         debug('new network id', n)
         await _onboard.config({ networkId: n })
-        setOnboardState(previousState => ({
+        setOnboardState((previousState) => ({
           ...previousState,
-          network: n
+          network: n,
         }))
       },
-      wallet: w => {
+      wallet: (w) => {
         debug({ w })
         if (!w.name) {
           disconnectWallet(setOnboardState)
@@ -121,8 +122,8 @@ const initializeOnboard = (setOnboardState) => {
 
           setAddress(setOnboardState)
         }
-      }
-    }
+      },
+    },
   })
 }
 
@@ -133,41 +134,34 @@ const doConnectWallet = async (walletType, setOnboardState) => {
   debug({ currentState })
 
   if (currentState.wallet.type) {
-    debug("run walletCheck")
+    debug('run walletCheck')
     await _onboard.walletCheck()
-    debug("walletCheck done")
+    debug('walletCheck done')
     debug({ currentState: _onboard.getState() })
 
     // trigger re-render
-    setOnboardState(previousState => ({
+    setOnboardState((previousState) => ({
       ...previousState,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     }))
   }
 }
 
 const connectWallet = (w, setOnboardState) => {
-  Cookies.set(
-    SELECTED_WALLET_COOKIE_KEY,
-    w.name,
-    cookieOptions
-  )
+  Cookies.set(SELECTED_WALLET_COOKIE_KEY, w.name, cookieOptions)
 
-  setOnboardState(previousState => ({
+  setOnboardState((previousState) => ({
     ...previousState,
     address: undefined,
     wallet: w,
-    provider: new ethers.providers.Web3Provider(w.provider)
+    provider: new ethers.providers.Web3Provider(w.provider),
   }))
 }
 
 const disconnectWallet = (setOnboardState) => {
-  Cookies.remove(
-    SELECTED_WALLET_COOKIE_KEY,
-    cookieOptions
-  )
+  Cookies.remove(SELECTED_WALLET_COOKIE_KEY, cookieOptions)
 
-  setOnboardState(previousState => ({
+  setOnboardState((previousState) => ({
     ...previousState,
     address: undefined,
     wallet: undefined,
@@ -200,10 +194,10 @@ const setAddress = (setOnboardState) => {
     }
 
     // trigger re-render
-    setOnboardState(previousState => ({
+    setOnboardState((previousState) => ({
       ...previousState,
       address,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     }))
   } catch (e) {
     console.error(e)
@@ -218,9 +212,9 @@ export const WalletContextProvider = (props) => {
 
     onPageLoad(setOnboardState)
 
-    setOnboardState(previousState => ({
+    setOnboardState((previousState) => ({
       ...previousState,
-      onboard: _onboard
+      onboard: _onboard,
     }))
   }
 
@@ -232,13 +226,15 @@ export const WalletContextProvider = (props) => {
 
   debug('re-render')
 
-  return <WalletContext.Provider
-    value={{
-      handleConnectWallet,
-      state: onboardState,
-      _onboard
-    }}
-  >
-    {props.children}
-  </WalletContext.Provider>
+  return (
+    <WalletContext.Provider
+      value={{
+        handleConnectWallet,
+        state: onboardState,
+        _onboard,
+      }}
+    >
+      {props.children}
+    </WalletContext.Provider>
+  )
 }

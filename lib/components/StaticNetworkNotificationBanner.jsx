@@ -5,8 +5,7 @@ import { SUPPORTED_NETWORKS } from 'lib/constants'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { chainIdToName } from 'lib/utils/chainIdToName'
 
-export const StaticNetworkNotificationBanner = ({
-}) => {
+export const StaticNetworkNotificationBanner = ({}) => {
   let chainId
   const walletContext = useContext(WalletContext)
   const { _onboard } = walletContext || {}
@@ -24,7 +23,7 @@ export const StaticNetworkNotificationBanner = ({
       names.push(name)
     }
     return names
-  }, []).join(", ")
+  }, []).join(', ')
 
   const networkSupported = SUPPORTED_NETWORKS.includes(chainId)
 
@@ -33,20 +32,17 @@ export const StaticNetworkNotificationBanner = ({
     networkWords = `${networkName} 👍`
   }
 
-  return <div
-    className={classnames(
-      'text-sm sm:text-base lg:text-lg sm:px-6 py-2 sm:py-3',
-      {
+  return (
+    <div
+      className={classnames('text-sm sm:text-base lg:text-lg sm:px-6 py-2 sm:py-3', {
         'text-white bg-red': !networkSupported,
         'text-default bg-purple': networkSupported,
-      }
-    )}
-  >
-    <div
-      className='text-center px-4'
+      })}
     >
-      This works on {supportedNames}.
-      Your wallet is currently set to <span className='font-bold'>{networkWords}</span>
+      <div className='text-center px-4'>
+        This works on {supportedNames}. Your wallet is currently set to{' '}
+        <span className='font-bold'>{networkWords}</span>
+      </div>
     </div>
-  </div>
+  )
 }

@@ -23,18 +23,12 @@ const handleWithdrawSubmit = async (
   maxExitFee,
   decimals
 ) => {
-  if (
-    !withdrawAmount
-  ) {
+  if (!withdrawAmount) {
     poolToast.error(`Withdraw Amount needs to be filled in`)
     return
   }
 
-  const params = [
-    usersAddress,
-    ethers.utils.parseUnits(withdrawAmount, decimals),
-    ticketAddress,
-  ]
+  const params = [usersAddress, ethers.utils.parseUnits(withdrawAmount, decimals), ticketAddress]
 
   let method = 'withdrawWithTimelockFrom'
   if (withdrawType === 'instant') {
@@ -45,15 +39,7 @@ const handleWithdrawSubmit = async (
   // TX overrides
   params.push({ gasLimit: 800000 })
 
-  await sendTx(
-    setTx,
-    provider,
-    contractAddress,
-    CompoundPrizePoolAbi,
-    method,
-    params,
-    'Withdraw'
-  )
+  await sendTx(setTx, provider, contractAddress, CompoundPrizePoolAbi, method, params, 'Withdraw')
 }
 
 export const WithdrawUI = (props) => {
@@ -98,7 +84,6 @@ export const WithdrawUI = (props) => {
     t()
   }, [debouncedWithdrawAmount])
 
-
   const [tx, setTx] = useState({
     inWallet: false,
     sent: false,
@@ -113,43 +98,44 @@ export const WithdrawUI = (props) => {
     setTx({})
   }
 
-  return <>
-    {!txInFlight ? <>
-      <WithdrawForm
-        {...props}
-        exitFees={exitFees}
-        handleSubmit={(e) => {
-          e.preventDefault()
+  return (
+    <>
+      {!txInFlight ? (
+        <>
+          <WithdrawForm
+            {...props}
+            exitFees={exitFees}
+            handleSubmit={(e) => {
+              e.preventDefault()
 
-          handleWithdrawSubmit(
-            setTx,
-            provider,
-            prizePool,
-            ticketAddress,
-            usersAddress,
-            withdrawAmount,
-            withdrawType,
-            maxExitFee,
-            tokenDecimals
-          )
-        }}
-        vars={{
-          maxExitFee,
-          withdrawAmount,
-          withdrawType,
-        }}
-        stateSetters={{
-          setWithdrawAmount,
-          setWithdrawType,
-        }}
-      />
-    </> : <>
-      <TxMessage
-        txType='Withdraw'
-        tx={tx}
-        handleReset={resetState}
-      />
-    </>}
-
-  </>
+              handleWithdrawSubmit(
+                setTx,
+                provider,
+                prizePool,
+                ticketAddress,
+                usersAddress,
+                withdrawAmount,
+                withdrawType,
+                maxExitFee,
+                tokenDecimals
+              )
+            }}
+            vars={{
+              maxExitFee,
+              withdrawAmount,
+              withdrawType,
+            }}
+            stateSetters={{
+              setWithdrawAmount,
+              setWithdrawType,
+            }}
+          />
+        </>
+      ) : (
+        <>
+          <TxMessage txType='Withdraw' tx={tx} handleReset={resetState} />
+        </>
+      )}
+    </>
+  )
 }

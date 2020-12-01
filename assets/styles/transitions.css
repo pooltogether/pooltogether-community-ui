@@ -11,7 +11,7 @@
 }
 
 .anim-slow {
-  animation-duration: 1.0s !important;
+  animation-duration: 1s !important;
 }
 
 .anim-slowest {
@@ -23,7 +23,7 @@
 }
 
 .trans {
-  transition: all .2s ease-out;
+  transition: all 0.2s ease-out;
 }
 
 .trans-bg {
@@ -43,39 +43,39 @@
 }
 
 .trans-slower {
-  transition-duration: .75s;
+  transition-duration: 0.75s;
 }
 
 .trans-slow {
-  transition-duration: .5s;
+  transition-duration: 0.5s;
 }
 
 .trans-mediumer {
-  transition-duration: .425s;
+  transition-duration: 0.425s;
 }
 
 .trans-mediumest {
-  transition-duration: .35s;
+  transition-duration: 0.35s;
 }
 
 .trans-medium {
-  transition-duration: .225s;
+  transition-duration: 0.225s;
 }
 
 .trans-fast {
-  transition-duration: .15s;
+  transition-duration: 0.15s;
 }
 
 .trans-faster {
-  transition-duration: .075s;
+  transition-duration: 0.075s;
 }
 
 .trans-fastest {
-  transition-duration: .05s;
+  transition-duration: 0.05s;
 }
 
 .trans-elastic {
-	transition-timing-function: cubic-bezier(.75,-0.5,0,1.5);
+  transition-timing-function: cubic-bezier(0.75, -0.5, 0, 1.5);
 }
 
 .transition-fast {

@@ -7,17 +7,12 @@ import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { sendTx } from 'lib/utils/sendTx'
 
-const handleSweepTimelockedSubmit = async (
-  setTx,
-  provider,
-  contractAddress,
-  usersAddress,
-) => {
+const handleSweepTimelockedSubmit = async (setTx, provider, contractAddress, usersAddress) => {
   const params = [
     [usersAddress],
     {
-      gasLimit: 700000
-    }
+      gasLimit: 700000,
+    },
   ]
 
   await sendTx(
@@ -32,9 +27,7 @@ const handleSweepTimelockedSubmit = async (
 }
 
 export const SweepTimelockedUI = (props) => {
-  const {
-    usersChainValues,
-  } = props
+  const { usersChainValues } = props
 
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
@@ -46,10 +39,7 @@ export const SweepTimelockedUI = (props) => {
     completed: false,
   })
 
-  const {
-    usersTimelockBalance,
-    usersTimelockBalanceAvailableAt
-  } = usersChainValues || {}
+  const { usersTimelockBalance, usersTimelockBalanceAvailableAt } = usersChainValues || {}
 
   const userHasTimelockedFunds = usersTimelockBalance && usersTimelockBalance.gt(0)
   const txInFlight = tx.inWallet || tx.sent
@@ -59,31 +49,32 @@ export const SweepTimelockedUI = (props) => {
     setTx({})
   }
 
-  return <>
-    {!txInFlight ? <>
-      <SweepTimelockedForm
-        {...props}
-        hasFundsToSweep={!userHasTimelockedFunds}
-        usersTimelockBalance={usersTimelockBalance}
-        usersTimelockBalanceAvailableAt={parseInt(usersTimelockBalanceAvailableAt, 10)}
-        handleSubmit={(e) => {
-          e.preventDefault()
+  return (
+    <>
+      {!txInFlight ? (
+        <>
+          <SweepTimelockedForm
+            {...props}
+            hasFundsToSweep={!userHasTimelockedFunds}
+            usersTimelockBalance={usersTimelockBalance}
+            usersTimelockBalanceAvailableAt={parseInt(usersTimelockBalanceAvailableAt, 10)}
+            handleSubmit={(e) => {
+              e.preventDefault()
 
-          handleSweepTimelockedSubmit(
-            setTx,
-            provider,
-            props.poolAddresses.prizePool,
-            usersAddress,
-          )
-        }}
-      />
-    </> : <>
-      <TxMessage
-        txType='Sweep Timelocked Funds'
-        tx={tx}
-        handleReset={resetState}
-      />
-    </>}
-
-  </>
+              handleSweepTimelockedSubmit(
+                setTx,
+                provider,
+                props.poolAddresses.prizePool,
+                usersAddress
+              )
+            }}
+          />
+        </>
+      ) : (
+        <>
+          <TxMessage txType='Sweep Timelocked Funds' tx={tx} handleReset={resetState} />
+        </>
+      )}
+    </>
+  )
 }

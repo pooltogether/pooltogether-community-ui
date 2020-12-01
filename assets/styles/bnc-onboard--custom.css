@@ -24,13 +24,11 @@
 }
 
 .bg-body.theme-light .bn-onboard-custom .bn-onboard-modal-content {
-  box-shadow: 0 10px 25px -1px rgba(0, 0, 0, .1),
-    0 10px 10px 5px rgba(0, 0, 0, .04) !important;
+  box-shadow: 0 10px 25px -1px rgba(0, 0, 0, 0.1), 0 10px 10px 5px rgba(0, 0, 0, 0.04) !important;
 }
 
 .bn-onboard-custom .bn-onboard-modal-content {
-  box-shadow: 0 20px 30px 10px rgba(0, 0, 0, .3),
-    0 20px 20px -3px rgba(0, 0, 0, .05) !important;
+  box-shadow: 0 20px 30px 10px rgba(0, 0, 0, 0.3), 0 20px 20px -3px rgba(0, 0, 0, 0.05) !important;
   border-radius: 0 !important;
   max-width: 100% !important;
   padding: 32px !important;
@@ -48,7 +46,7 @@
 }
 
 .bn-onboard-custom .bn-onboard-modal-content-close {
-  border-radius:100%!important
+  border-radius: 100% !important;
 }
 
 .bn-onboard-custom .bn-onboard-modal-content-header {
@@ -61,7 +59,7 @@
 @screen sm {
   .bn-onboard-custom .bn-onboard-modal-content-header {
     margin: -2rem -2rem -0rem !important;
-  } 
+  }
 }
 
 .bn-onboard-custom.bn-onboard-modal-content-close {
@@ -81,39 +79,40 @@
 }
 
 .bn-onboard-custom .bn-onboard-modal-content-header-icon {
-  display:none
+  display: none;
 }
 
 .bn-onboard-custom .bn-onboard-icon-button {
   border-radius: 10px !important;
-  border: 2px solid #4C249F !important;
+  border: 2px solid #4c249f !important;
 }
 
 .bn-onboard-custom .bn-onboard-icon-button div {
-  width:25px;
-  height:25px
+  width: 25px;
+  height: 25px;
 }
 
-.bn-onboard-custom .bn-onboard-icon-button div img,.bn-onboard-custom .bn-onboard-icon-button div svg {
-  width:25px!important;
-  min-width:25px!important;
-  max-width:25px!important;
-  height:auto
+.bn-onboard-custom .bn-onboard-icon-button div img,
+.bn-onboard-custom .bn-onboard-icon-button div svg {
+  width: 25px !important;
+  min-width: 25px !important;
+  max-width: 25px !important;
+  height: auto;
 }
 
 .bn-onboard-custom .bn-onboard-icon-button span {
-  color:#002237!important;
-  margin-left:16px;
+  color: #002237 !important;
+  margin-left: 16px;
   /* font-weight:500!important */
 }
 
 .bn-onboard-custom .bn-onboard-custom.bn-onboard-dark-mode-background,
 .bn-onboard-custom .bn-onboard-custom.bn-onboard-dark-mode-background-hover:hover {
-  background:#4C249F !important
+  background: #4c249f !important;
 }
 
 .bn-onboard-custom.bn-onboard-selected-wallet {
-  background:#4C249F !important
+  background: #4c249f !important;
 }
 
 .bn-onboard-custom.bn-onboard-dark-mode-background.bn-onboard-prepare-error {
@@ -129,7 +128,7 @@
 }
 
 .bn-onboard-custom.bn-onboard-selected-wallet i {
-  color:#5af5db !important;
+  color: #5af5db !important;
   text-decoration: none !important;
   font-weight: 900 !important;
 }
@@ -141,14 +140,14 @@
 }
 
 .bn-onboard-custom .bn-onboard-select-wallet-info {
-  color:#784ffe!important;
-  transition:.3s
+  color: #784ffe !important;
+  transition: 0.3s;
 }
 
 .bn-onboard-custom .bn-onboard-modal-content-header-heading {
   font-size: 1rem !important;
   margin-left: 0;
-  color: #341762 !important
+  color: #341762 !important;
 }
 
 .bn-onboard-custom.bn-onboard-select-description {
@@ -161,17 +160,17 @@
 }
 
 .bn-onboard-custom.bn-onboard-dark-mode {
-  background: #341762 !important
+  background: #341762 !important;
 }
 
 .bn-onboard-custom.bn-onboard-dark-mode .bn-onboard-select-wallet-info {
-  color:#a472f7 !important;
+  color: #a472f7 !important;
   font-weight: 900 !important;
-  transition: 0.1s
+  transition: 0.1s;
 }
 
 .bn-onboard-custom.bn-onboard-dark-mode .bn-onboard-select-wallet-info:hover {
-  color:#fff !important;
+  color: #fff !important;
 }
 
 .bn-onboard-custom.bn-onboard-icon-display {
@@ -185,11 +184,11 @@
 
 .bn-onboard-custom.bn-onboard-dark-mode .bn-onboard-icon-button span,
 .bn-onboard-custom.bn-onboard-dark-mode .bn-onboard-modal-content-header-heading {
-  color:#fff !important;
+  color: #fff !important;
 }
 
 .bn-onboard-dark-mode-close-background:hover {
-  background:#21262b !important;
+  background: #21262b !important;
 }
 
 .bn-onboard-custom.bn-onboard-select-wallet-definition,
@@ -208,8 +207,7 @@
 
 @media only screen and (max-width: 450px) {
   .bn-onboard-custom.bn-onboard-modal-select-wallets {
-    box-shadow: inset 0 0 50px rgba(0, 0, 0, .1),
-      inset 0 0 5px rgba(0, 0, 0, .05);
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.1), inset 0 0 5px rgba(0, 0, 0, 0.05);
     margin: 0 -2rem 1.5rem -2rem !important;
     max-height: 400px !important;
     padding: 1rem 2rem !important;

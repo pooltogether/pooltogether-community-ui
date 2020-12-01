@@ -4,35 +4,38 @@
 }
 
 @font-face {
-    font-family: 'DM Mono';
-    src: url('/fonts/DMMono-Regular.woff2') format('woff2'),
-        url('/fonts/DMMono-Regular.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'DM Mono';
+  src: url('/fonts/DMMono-Regular.woff2') format('woff2'),
+    url('/fonts/DMMono-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Titillium Web';
-    src: url('/fonts/TitilliumWeb-Regular.woff2') format('woff2'),
-        url('/fonts/TitilliumWeb-Regular.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'Titillium Web';
+  src: url('/fonts/TitilliumWeb-Regular.woff2') format('woff2'),
+    url('/fonts/TitilliumWeb-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Titillium Web';
-    src: url('/fonts/TitilliumWeb-Bold.woff2') format('woff2'),
-        url('/fonts/TitilliumWeb-Bold.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'Titillium Web';
+  src: url('/fonts/TitilliumWeb-Bold.woff2') format('woff2'),
+    url('/fonts/TitilliumWeb-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
 }
 
-html, body, table {
+html,
+body,
+table {
   -webkit-tap-highlight-color: transparent;
-  font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "pnum" 1, "tnum" 0, "onum" 0, "lnum" 0, "dlig" 0;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1, 'pnum' 1, 'tnum' 0, 'onum' 0, 'lnum' 0,
+    'dlig' 0;
 }
 
 body {
