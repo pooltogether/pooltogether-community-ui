@@ -8,7 +8,7 @@
   width: 100%;
   z-index: 20000;
 
-  height: 50px; 
+  height: 50px;
   width: 100%;
 }
 
@@ -63,7 +63,7 @@
 
 .pool-toast .Toastify__toast--default:before {
   @apply shadow-3xl;
-  
+
   animation: cycleBackgroundPos 5000ms infinite;
   background: var(--flashyGradient);
   background-size: 400% auto;

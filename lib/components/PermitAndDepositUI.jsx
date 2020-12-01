@@ -24,26 +24,24 @@ const handleDepositSubmit = async (
   decimals,
   chainId
 ) => {
-  if (
-    !depositAmount
-  ) {
+  if (!depositAmount) {
     poolToast.error(`Deposit Amount needs to be filled in`)
     return
   }
-  
+
   const signer = await provider.getSigner()
   const permitAddress = CONTRACT_ADDRESSES[chainId].PermitAndDepositDai
   const dai = new ethers.Contract(tokenAddress, DaiAbi, provider)
   const nonce = await dai.nonces(usersAddress)
-  const expiry = (new Date()).getTime() + 1200000 // 20 minutes into future
+  const expiry = new Date().getTime() + 1200000 // 20 minutes into future
 
   const holder = await signer.getAddress()
 
   let permit = await signPermit(
     signer,
     {
-      name: "Dai Stablecoin",
-      version: "1",
+      name: 'Dai Stablecoin',
+      version: '1',
       chainId,
       verifyingContract: tokenAddress,
     },
@@ -52,7 +50,7 @@ const handleDepositSubmit = async (
       spender: permitAddress,
       nonce: nonce.toString(),
       expiry,
-      allowed: true
+      allowed: true,
     }
   )
   let { v, r, s } = ethers.utils.splitSignature(permit.sig)
@@ -73,8 +71,8 @@ const handleDepositSubmit = async (
     ticketAddress,
     referrer,
     {
-      gasLimit: 800000
-    }
+      gasLimit: 800000,
+    },
   ]
 
   await sendTx(
@@ -84,7 +82,7 @@ const handleDepositSubmit = async (
     PermitAndDepositDaiAbi,
     'permitAndDepositTo',
     params,
-    'Permit & Deposit',
+    'Permit & Deposit'
   )
 }
 
@@ -110,39 +108,40 @@ export const PermitAndDepositUI = (props) => {
     setTx({})
   }
 
-  return <>
-    {!txInFlight ? <>
-      <DepositForm
-        {...props}
-        genericChainValues={props.genericChainValues}
-        handleSubmit={(e) => {
-          e.preventDefault()
-          handleDepositSubmit(
-            setTx,
-            provider,
-            usersAddress,
-            props.poolAddresses.prizePool,
-            ticketAddress,
-            tokenAddress,
-            depositAmount,
-            props.genericChainValues.tokenDecimals,
-            chainId
-          )
-        }}
-        vars={{
-          depositAmount,
-        }}
-        stateSetters={{
-          setDepositAmount,
-        }}
-      />
-    </> : <>
-      <TxMessage
-        txType='Deposit'
-        tx={tx}
-        handleReset={resetState}
-      />
-    </>}
-
-  </>
+  return (
+    <>
+      {!txInFlight ? (
+        <>
+          <DepositForm
+            {...props}
+            genericChainValues={props.genericChainValues}
+            handleSubmit={(e) => {
+              e.preventDefault()
+              handleDepositSubmit(
+                setTx,
+                provider,
+                usersAddress,
+                props.poolAddresses.prizePool,
+                ticketAddress,
+                tokenAddress,
+                depositAmount,
+                props.genericChainValues.tokenDecimals,
+                chainId
+              )
+            }}
+            vars={{
+              depositAmount,
+            }}
+            stateSetters={{
+              setDepositAmount,
+            }}
+          />
+        </>
+      ) : (
+        <>
+          <TxMessage txType='Deposit' tx={tx} handleReset={resetState} />
+        </>
+      )}
+    </>
+  )
 }

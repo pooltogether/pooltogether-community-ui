@@ -3,7 +3,7 @@
 }
 
 .spinning {
-  animation: spinningAnim 2800ms infinite forwards cubic-bezier(0.5, 1.10, 0.36, 1.02);
+  animation: spinningAnim 2800ms infinite forwards cubic-bezier(0.5, 1.1, 0.36, 1.02);
 }
 
 @keyframes spinningAnim {
@@ -59,15 +59,13 @@
   animation: changeLetter 1s normal forwards ease-in-out;
 }
 
-
-
 .animated-light {
   overflow: hidden;
   position: relative;
 }
 
 .animated-light::before {
-  animation: animatedLight 2500ms infinite forwards cubic-bezier(0.5, 1.10, 0.36, 1.02);
+  animation: animatedLight 2500ms infinite forwards cubic-bezier(0.5, 1.1, 0.36, 1.02);
 }
 
 .animated-light::before {
@@ -79,7 +77,8 @@
   margin: 0;
   width: 2500px;
   height: 100vh;
-  background-image: linear-gradient(102deg,
+  background-image: linear-gradient(
+    102deg,
     rgba(150, 100, 200, 0) 0%,
     rgba(150, 100, 200, 0) 36%,
     rgba(150, 100, 200, 0.02) 43%,
@@ -101,25 +100,22 @@
 
 @keyframes animatedLight {
   0% {
-    transform:  scale3d(1, 1, 1) translate3d(0, 0, 0);
+    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
   }
   100% {
-    transform:  scale3d(1, 1, 1) translate3d(200%, 0, 0);
+    transform: scale3d(1, 1, 1) translate3d(200%, 0, 0);
   }
 }
 
-
-
-
 .animated-pill {
-  animation: pulseScale 5000ms infinite forwards cubic-bezier(0.5, 1.10, 0.36, 1.02);
+  animation: pulseScale 5000ms infinite forwards cubic-bezier(0.5, 1.1, 0.36, 1.02);
   overflow: hidden;
   position: relative;
   z-index: 1;
 }
 
 .animated-pill::before {
-  animation: animatedPill 3000ms infinite forwards cubic-bezier(0.5, 1.10, 0.36, 1.02);
+  animation: animatedPill 3000ms infinite forwards cubic-bezier(0.5, 1.1, 0.36, 1.02);
 }
 
 .animated-pill::before {
@@ -131,44 +127,43 @@
   margin: 0;
   width: 2000px;
   height: 200px;
-  background-image: linear-gradient(150deg,
+  background-image: linear-gradient(
+    150deg,
     rgba(190, 100, 200, 0) 0%,
     rgba(190, 100, 200, 0.2) 40%,
     rgba(190, 100, 200, 0.6) 50%,
     rgba(190, 100, 200, 0.1) 64%,
-    rgba(190, 100, 200, 0.0) 100%
+    rgba(190, 100, 200, 0) 100%
   );
   transform-origin: 100% 50%;
 }
 
 @keyframes animatedPill {
   0% {
-    transform:  scale3d(1, 1, 1) translate3d(0, 0, 0);
+    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
   }
   100% {
-    transform:  scale3d(1, 1, 1) translate3d(-200%, 0, 0);
+    transform: scale3d(1, 1, 1) translate3d(-200%, 0, 0);
   }
 }
 
 @keyframes pulseScale {
   0% {
-    transform:  scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
   }
   40% {
-    transform:  scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
   }
   50% {
-    transform:  scale3d(1.15, 1.15, 1);
+    transform: scale3d(1.15, 1.15, 1);
   }
   60% {
-    transform:  scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
   }
   100% {
-    transform:  scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
   }
 }
-
-
 
 .fade-out-and-up--enter {
   animation-iteration-count: 1;
@@ -179,11 +174,11 @@
 @keyframes fadeOutAndUpAnim {
   0% {
     opacity: 1;
-    transform:  scale3d(1, 1, 1) translate3d(0, 0, 0);
+    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
   }
   100% {
     opacity: 0;
-    transform:  scale3d(0.75, 0.75, 0.75) translate3d(0, -70px, 0);
+    transform: scale3d(0.75, 0.75, 0.75) translate3d(0, -70px, 0);
   }
 }
 
@@ -201,11 +196,11 @@
 @keyframes fadeInAndDown {
   0% {
     opacity: 0;
-    transform:  scale3d(0.75, 0.75, 0.75) translate3d(0, -70px, 0);
+    transform: scale3d(0.75, 0.75, 0.75) translate3d(0, -70px, 0);
   }
   100% {
     opacity: 1;
-    transform:  scale3d(1, 1, 1) translate3d(0, 0, 0);
+    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
   }
 }
 
@@ -217,7 +212,7 @@
   top: 15vh;
 }
 
-@keyframes gradientAnim { 
+@keyframes gradientAnim {
   0% {
     background-position: 0% 50%, -200px 0;
   }
@@ -250,7 +245,7 @@
 }
 
 .neuo-shine::before {
-  animation: neuoShine 2000ms forwards cubic-bezier(0.5, 1.10, 0.36, 1.02);
+  animation: neuoShine 2000ms forwards cubic-bezier(0.5, 1.1, 0.36, 1.02);
   animation-delay: 4000ms;
 }
 
@@ -263,7 +258,8 @@
   margin: 0;
   width: 2500px;
   height: 30vh;
-  background-image: linear-gradient(102deg,
+  background-image: linear-gradient(
+    102deg,
     rgba(150, 100, 200, 0) 0%,
     rgba(150, 100, 200, 0) 36%,
     rgba(150, 100, 200, 0.02) 43%,
@@ -279,16 +275,15 @@
 
 @keyframes neuoShine {
   0% {
-    transform:  scale3d(1, 1, 1) translate3d(0, 0, 0);
+    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
   }
   49% {
-    transform:  scale3d(1, 1, 1) translate3d(200%, 0, 0);
+    transform: scale3d(1, 1, 1) translate3d(200%, 0, 0);
   }
   50% {
-    transform:  scale3d(1, 1, 1) translate3d(0, 0, 0);
+    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
   }
   100% {
-    transform:  scale3d(1, 1, 1) translate3d(200%, 0, 0);
+    transform: scale3d(1, 1, 1) translate3d(200%, 0, 0);
   }
 }
-

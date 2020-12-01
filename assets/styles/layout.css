@@ -1,10 +1,11 @@
 * {
   box-sizing: border-box;
   margin: 0;
-  padding: 0
+  padding: 0;
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -103,7 +104,7 @@ body {
 }
 
 .pool-max-width {
-  max-width: 1460px; 
+  max-width: 1460px;
 }
 
 .modal-max-width {
@@ -140,7 +141,7 @@ body {
 }
 
 .scene {
-	margin: 0 auto;
+  margin: 0 auto;
   z-index: 3;
   width: 95%;
 }

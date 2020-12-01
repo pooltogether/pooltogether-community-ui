@@ -19,21 +19,21 @@ import 'assets/styles/typography.css'
 import 'assets/styles/bnc-onboard--custom.css'
 import 'assets/styles/reach--custom.css'
 
-const DynamicWalletContextProvider = dynamic(() =>
-  import('lib/components/WalletContextProvider').then(mod => mod.WalletContextProvider),
+const DynamicWalletContextProvider = dynamic(
+  () => import('lib/components/WalletContextProvider').then((mod) => mod.WalletContextProvider),
   { ssr: false }
 )
 
 function MyApp({ Component, pageProps }) {
-  return <>
-    <DynamicWalletContextProvider>
-      <Layout>
-        <Component
-          {...pageProps}
-        />
-      </Layout>
-    </DynamicWalletContextProvider>
-  </>
+  return (
+    <>
+      <DynamicWalletContextProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </DynamicWalletContextProvider>
+    </>
+  )
 }
 
 export default MyApp

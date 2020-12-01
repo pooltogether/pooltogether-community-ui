@@ -26,9 +26,10 @@ const handleDeactivateBalanceDrip = async (
   prizeStrategyAddress,
   ticketAddress,
   dripTokenAddress,
-  prevDripTokens,
+  prevDripTokens
 ) => {
-  const prevTokenAddress = extractPrevDripTokenAddress(prevDripTokens, dripTokenAddress) || SENTINEL_ADDRESS
+  const prevTokenAddress =
+    extractPrevDripTokenAddress(prevDripTokens, dripTokenAddress) || SENTINEL_ADDRESS
 
   const params = [
     prizeStrategyAddress,
@@ -36,8 +37,8 @@ const handleDeactivateBalanceDrip = async (
     dripTokenAddress,
     prevTokenAddress,
     {
-      gasLimit: 200000
-    }
+      gasLimit: 200000,
+    },
   ]
 
   await sendTx(
@@ -47,7 +48,7 @@ const handleDeactivateBalanceDrip = async (
     ComptrollerAbi,
     'deactivateBalanceDrip',
     params,
-    txName,
+    txName
   )
 }
 
@@ -90,20 +91,18 @@ export const ListBalanceDrips = (props) => {
       networkName,
       comptrollerAddress,
       prizeStrategyAddress,
-      ticketAddress,
+      ticketAddress
     )
 
-    setDripValues(
-      dripChainValues
-    )
+    setDripValues(dripChainValues)
   }
 
-  // don't use useInterval! The parent PoolUI component is running an interval and this 
+  // don't use useInterval! The parent PoolUI component is running an interval and this
   // re-render is being used here on the useEffect below
   // useInterval(() => {
   //   fetchDrips()
   // }, 18000)
-  
+
   useEffect(() => {
     fetchDrips()
   }, [poolAddresses])
@@ -121,69 +120,77 @@ export const ListBalanceDrips = (props) => {
       prizeStrategyAddress,
       ticketAddress,
       dripTokenAddress,
-      drips,
+      drips
     )
   }
 
-  return <>
-    <table className='table-fixed w-full bg-card-selected rounded-lg'>
-      <thead>
-        <tr className='opacity-80 text-default'>
-          <th className='bg-default w-1/4 px-4 pt-3 pb-2 text-left'>Token Name</th>
-          <th className='bg-default w-1/4 px-4 pt-3 pb-2 text-left font-bold'>Token Symbol</th>
-          <th className='bg-default w-1/4 px-4 pt-3 pb-2 text-left'>Comptroller's balance</th>
-          <th className='bg-default w-1/4 px-4 pt-3 pb-2'>&nbsp;</th>
-        </tr>
-      </thead>
-      <tbody>
-        {dripsLoading && <>
-          <tr><td><LoadingDots /></td></tr>
-        </>}
+  return (
+    <>
+      <table className='table-fixed w-full bg-card-selected rounded-lg'>
+        <thead>
+          <tr className='opacity-80 text-default'>
+            <th className='bg-default w-1/4 px-4 pt-3 pb-2 text-left'>Token Name</th>
+            <th className='bg-default w-1/4 px-4 pt-3 pb-2 text-left font-bold'>Token Symbol</th>
+            <th className='bg-default w-1/4 px-4 pt-3 pb-2 text-left'>Comptroller's balance</th>
+            <th className='bg-default w-1/4 px-4 pt-3 pb-2'>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody>
+          {dripsLoading && (
+            <>
+              <tr>
+                <td>
+                  <LoadingDots />
+                </td>
+              </tr>
+            </>
+          )}
 
-        {(drips?.length === 0) && <>
-          <tr><td
-            className='px-4 py-3'
-          >No drips active...</td></tr>
-        </>}
+          {drips?.length === 0 && (
+            <>
+              <tr>
+                <td className='px-4 py-3'>No drips active...</td>
+              </tr>
+            </>
+          )}
 
-        {(drips?.length > 0) && <>
-          {drips.map(drip => {
-            return <tr
-              key={drip.id}
-            >
-              <td className='px-4 py-3 text-left font-bold'>
-                {drip.tokenName}
-              </td>
-              <td className='px-4 py-3 text-left'>
-                {drip.tokenSymbol}
-              </td>
-              <td className='px-4 py-3 text-left'>
-                {displayAmountInEther(drip.tokenBalanceOf, {
-                  precision: 4, decimals: drip.tokenDecimals
-                })}
-              </td>
-              <td className='px-4 pt-1 pb-1 text-right'>
-                <button
-                  type='button'
-                  onClick={(e) => {
-                    e.preventDefault()
+          {drips?.length > 0 && (
+            <>
+              {drips.map((drip) => {
+                return (
+                  <tr key={drip.id}>
+                    <td className='px-4 py-3 text-left font-bold'>{drip.tokenName}</td>
+                    <td className='px-4 py-3 text-left'>{drip.tokenSymbol}</td>
+                    <td className='px-4 py-3 text-left'>
+                      {displayAmountInEther(drip.tokenBalanceOf, {
+                        precision: 4,
+                        decimals: drip.tokenDecimals,
+                      })}
+                    </td>
+                    <td className='px-4 pt-1 pb-1 text-right'>
+                      <button
+                        type='button'
+                        onClick={(e) => {
+                          e.preventDefault()
 
-                    handleDeactivate(drip.id)
-                  }}
-                  className='bg-red p-1 rounded-full font-bold hover:bg-light-red mx-2'
-                >
-                  <FeatherIcon
-                    strokeWidth='0.2rem'
-                    icon='x'
-                    className='w-4 h-4 hover:text-white m-auto'
-                  />
-                </button>
-              </td>
-            </tr>
-          })}
-        </>}
-      </tbody>
-    </table>
-
-  </>
+                          handleDeactivate(drip.id)
+                        }}
+                        className='bg-red p-1 rounded-full font-bold hover:bg-light-red mx-2'
+                      >
+                        <FeatherIcon
+                          strokeWidth='0.2rem'
+                          icon='x'
+                          className='w-4 h-4 hover:text-white m-auto'
+                        />
+                      </button>
+                    </td>
+                  </tr>
+                )
+              })}
+            </>
+          )}
+        </tbody>
+      </table>
+    </>
+  )
 }

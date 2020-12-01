@@ -11,39 +11,27 @@ import { WithdrawUI } from 'lib/components/WithdrawUI'
 export const UserActionsUI = (props) => {
   let depositUI
   if (props?.poolAddresses?.token?.toLowerCase() === DAI_MAINNET_ADDRESS) {
-    depositUI = 
-      <PermitAndDepositUI
-          {...props}
-        />
+    depositUI = <PermitAndDepositUI {...props} />
   } else {
-    depositUI = props.usersChainValues.usersTokenAllowance.gt(0) ?
-      <DepositUI
-        {...props}
-      /> :
-      <UnlockDepositUI
-        {...props}
-      />
+    depositUI = props.usersChainValues.usersTokenAllowance.gt(0) ? (
+      <DepositUI {...props} />
+    ) : (
+      <UnlockDepositUI {...props} />
+    )
   }
-  return <>
-    <div
-      className='flex flex-col sm:flex-row'
-    >
-      <FormPanel>
-        {depositUI}
-      </FormPanel>
-      
-      <FormPanel>
-        <WithdrawUI
-          {...props}
-        />
-      </FormPanel>
-    </div>  
+  return (
+    <>
+      <div className='flex flex-col sm:flex-row'>
+        <FormPanel>{depositUI}</FormPanel>
 
-    <FormPanel>
-      <SweepTimelockedUI
-        {...props}
-      />
-    </FormPanel>
-  </>
+        <FormPanel>
+          <WithdrawUI {...props} />
+        </FormPanel>
+      </div>
+
+      <FormPanel>
+        <SweepTimelockedUI {...props} />
+      </FormPanel>
+    </>
+  )
 }
-

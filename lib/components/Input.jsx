@@ -14,7 +14,8 @@ export function Input(props) {
     value,
   } = props
 
-  const defaultClasses = 'text-white font-headline border-2 border-transparent bg-card-selected hover:bg-purple active:bg-purple focus:bg-purple trans rounded-full focus:outline-none focus:outline-none leading-none px-6 py-2 lg:py-2'
+  const defaultClasses =
+    'text-white font-headline border-2 border-transparent bg-card-selected hover:bg-purple active:bg-purple focus:bg-purple trans rounded-full focus:outline-none focus:outline-none leading-none px-6 py-2 lg:py-2'
 
   if (roundedClasses === undefined) {
     roundedClasses = 'rounded'
@@ -33,9 +34,10 @@ export function Input(props) {
     marginClasses,
     textClasses,
     roundedClasses,
-    props.className, {
-    'text-red-500': isError,
-  }
+    props.className,
+    {
+      'text-red-500': isError,
+    }
   )
 
   const newProps = omit(props, [
@@ -43,19 +45,20 @@ export function Input(props) {
     'roundedClasses',
     'textClasses',
     'isError',
-    'isLight'
+    'isLight',
   ])
 
-  return <>
-    <input
-      {...newProps}
-      autoFocus={autoFocus && isBrowser}
-      value={value}
-      className={classnames(
-        className,
-        'w-full font-headline rounded-full focus:outline-none leading-none pl-6',
-      )}
-    />
-
-  </>
+  return (
+    <>
+      <input
+        {...newProps}
+        autoFocus={autoFocus && isBrowser}
+        value={value}
+        className={classnames(
+          className,
+          'w-full font-headline rounded-full focus:outline-none leading-none pl-6'
+        )}
+      />
+    </>
+  )
 }

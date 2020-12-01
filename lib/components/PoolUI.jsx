@@ -25,20 +25,14 @@ import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
 
-const renderErrorMessage = (
-  address,
-  type,
-  message
-) => {
+const renderErrorMessage = (address, type, message) => {
   const errorMsg = `Error fetching ${type} for prize pool with address: ${address}: ${message}. (maybe wrong Ethereum network or your IP is being rate-limited?)`
 
   console.error(errorMsg)
   poolToast.error(errorMsg)
 }
 
-export const PoolUI = (
-  props,
-) => {
+export const PoolUI = (props) => {
   const router = useRouter()
   const networkName = router.query.networkName
   const prizePool = router.query.prizePoolAddress
@@ -49,7 +43,7 @@ export const PoolUI = (
 
   const [ethBalance, setEthBalance] = useState(ethers.utils.bigNumberify(0))
   const [poolAddresses, setPoolAddresses] = useState({
-    prizePool
+    prizePool,
   })
   const [genericChainValues, setGenericChainValues] = useState({
     loading: true,
@@ -71,7 +65,7 @@ export const PoolUI = (
       poolAddresses,
       setPoolAddresses,
       setGenericChainValues,
-      setUsersChainValues,
+      setUsersChainValues
     )
   }, 25000)
 
@@ -82,7 +76,7 @@ export const PoolUI = (
       poolAddresses,
       setPoolAddresses,
       setGenericChainValues,
-      setUsersChainValues,
+      setUsersChainValues
     )
   }, [provider, usersAddress, poolAddresses])
 
@@ -104,12 +98,10 @@ export const PoolUI = (
   const changeHash = (hash) => {
     setIsSelected(hash)
 
-    router.push(
-      `${router.route.split('#')[0]}${hash}`,
-      `${router.asPath.split('#')[0]}${hash}`,
-      { shallow: true }
-    )
-  } 
+    router.push(`${router.route.split('#')[0]}${hash}`, `${router.asPath.split('#')[0]}${hash}`, {
+      shallow: true,
+    })
+  }
 
   if (poolAddresses.error || genericChainValues.error || usersChainValues.error) {
     if (poolAddresses.error) {
@@ -135,7 +127,6 @@ export const PoolUI = (
     return null
   }
 
-
   try {
     ethers.utils.getAddress(prizePool)
   } catch (e) {
@@ -147,7 +138,6 @@ export const PoolUI = (
 
     walletContext.handleConnectWallet()
   }
-
 
   const tokenSymbol = genericChainValues.tokenSymbol
 
@@ -166,92 +156,68 @@ export const PoolUI = (
     tokenSvg = ZrxSvg
   }
 
-
-  return <>
-    {genericChainValues.loading ?
-      <div
-        className='text-center text-xl'
-      >
-        <LoadingDots />
-        <br/>
-        Fetching chain values ...
-      </div>
-    : <>
-
-      <div className='py-4 sm:py-6 text-center'>
-        <img
-          src={tokenSvg}
-          className='inline-block w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mb-2'
-        />
-
-        <div
-          className='mb-6'
-        >
-          Prize Pool contract address:
-          <br /> <EtherscanAddressLink
-            address={poolAddresses.prizePool}
-            networkName={networkName}
-          >
-            {poolAddresses.prizePool}
-          </EtherscanAddressLink>
+  return (
+    <>
+      {genericChainValues.loading ? (
+        <div className='text-center text-xl'>
+          <LoadingDots />
+          <br />
+          Fetching chain values ...
         </div>
-      </div>
-
-
-      <div
-        className='mt-8'
-      >
-        <Tabs>
-          <Tab
-            changeHash={changeHash}
-            selected={isSelected === '#stats'}
-            hash='#stats'
-          >
-            Stats
-          </Tab>
-          <Tab
-            changeHash={changeHash}
-            selected={isSelected === '#interact'}
-            hash='#interact'
-          >
-            Interact
-          </Tab>
-          <Tab
-            changeHash={changeHash}
-            selected={isSelected === '#admin'}
-            hash='#admin'
-          >
-            Admin
-          </Tab>
-        </Tabs>
-
-        <Content>
-          <ContentPane isSelected={isSelected === '#stats'}>
-            <StatsUI
-              genericChainValues={genericChainValues}
-              networkName={networkName}
-              poolAddresses={poolAddresses}
-              usersAddress={usersAddress}
+      ) : (
+        <>
+          <div className='py-4 sm:py-6 text-center'>
+            <img
+              src={tokenSvg}
+              className='inline-block w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mb-2'
             />
-          </ContentPane>
 
-          <ContentPane isSelected={isSelected === '#interact'}>
-            <InteractUI
-              genericChainValues={genericChainValues}
-              poolAddresses={poolAddresses}
-              usersChainValues={usersChainValues}
-            />
-          </ContentPane>
-          
-          <ContentPane isSelected={isSelected === '#admin'}>
-            <AdminUI
-              genericChainValues={genericChainValues}
-              poolAddresses={poolAddresses}
-            />
-          </ContentPane>
-        </Content>
-      </div>
-{/* 
+            <div className='mb-6'>
+              Prize Pool contract address:
+              <br />{' '}
+              <EtherscanAddressLink address={poolAddresses.prizePool} networkName={networkName}>
+                {poolAddresses.prizePool}
+              </EtherscanAddressLink>
+            </div>
+          </div>
+
+          <div className='mt-8'>
+            <Tabs>
+              <Tab changeHash={changeHash} selected={isSelected === '#stats'} hash='#stats'>
+                Stats
+              </Tab>
+              <Tab changeHash={changeHash} selected={isSelected === '#interact'} hash='#interact'>
+                Interact
+              </Tab>
+              <Tab changeHash={changeHash} selected={isSelected === '#admin'} hash='#admin'>
+                Admin
+              </Tab>
+            </Tabs>
+
+            <Content>
+              <ContentPane isSelected={isSelected === '#stats'}>
+                <StatsUI
+                  genericChainValues={genericChainValues}
+                  networkName={networkName}
+                  poolAddresses={poolAddresses}
+                  usersAddress={usersAddress}
+                />
+              </ContentPane>
+
+              <ContentPane isSelected={isSelected === '#interact'}>
+                <InteractUI
+                  genericChainValues={genericChainValues}
+                  poolAddresses={poolAddresses}
+                  usersChainValues={usersChainValues}
+                />
+              </ContentPane>
+
+              <ContentPane isSelected={isSelected === '#admin'}>
+                <AdminUI genericChainValues={genericChainValues} poolAddresses={poolAddresses} />
+              </ContentPane>
+            </Content>
+          </div>
+          {/* 
       <div
         className='relative py-4 sm:py-6 text-center rounded-lg'
       >
@@ -303,6 +269,8 @@ export const PoolUI = (
           usersChainValues={usersChainValues}
         />
       </div> */}
-    </>}
-  </>
+        </>
+      )}
+    </>
+  )
 }

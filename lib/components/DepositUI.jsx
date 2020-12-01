@@ -18,9 +18,7 @@ const handleDepositSubmit = async (
   depositAmount,
   decimals
 ) => {
-  if (
-    !depositAmount
-  ) {
+  if (!depositAmount) {
     poolToast.error(`Deposit Amount needs to be filled in`)
     return
   }
@@ -32,10 +30,9 @@ const handleDepositSubmit = async (
     ticketAddress,
     referrer,
     {
-      gasLimit: 800000
-    }
+      gasLimit: 800000,
+    },
   ]
-
 
   await sendTx(
     setTx,
@@ -44,7 +41,7 @@ const handleDepositSubmit = async (
     CompoundPrizePoolAbi,
     'depositTo',
     params,
-    'Deposit',
+    'Deposit'
   )
 }
 
@@ -66,37 +63,38 @@ export const DepositUI = (props) => {
     setTx({})
   }
 
-  return <>
-    {!txInFlight ? <>
-      <DepositForm
-        {...props}
-        genericChainValues={props.genericChainValues}
-        handleSubmit={(e) => {
-          e.preventDefault()
-          handleDepositSubmit(
-            setTx,
-            provider,
-            usersAddress,
-            props.poolAddresses.prizePool,
-            ticketAddress,
-            depositAmount,
-            props.genericChainValues.tokenDecimals
-          )
-        }}
-        vars={{
-          depositAmount,
-        }}
-        stateSetters={{
-          setDepositAmount,
-        }}
-      />
-    </> : <>
-      <TxMessage
-        txType='Deposit'
-        tx={tx}
-        handleReset={resetState}
-      />
-    </>}
-
-  </>
+  return (
+    <>
+      {!txInFlight ? (
+        <>
+          <DepositForm
+            {...props}
+            genericChainValues={props.genericChainValues}
+            handleSubmit={(e) => {
+              e.preventDefault()
+              handleDepositSubmit(
+                setTx,
+                provider,
+                usersAddress,
+                props.poolAddresses.prizePool,
+                ticketAddress,
+                depositAmount,
+                props.genericChainValues.tokenDecimals
+              )
+            }}
+            vars={{
+              depositAmount,
+            }}
+            stateSetters={{
+              setDepositAmount,
+            }}
+          />
+        </>
+      ) : (
+        <>
+          <TxMessage txType='Deposit' tx={tx} handleReset={resetState} />
+        </>
+      )}
+    </>
+  )
 }

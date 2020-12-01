@@ -82,10 +82,6 @@
   }
 }
 
-
-
-
-
 .t-0 {
   top: 0;
 }
@@ -140,10 +136,6 @@
   }
 }
 
-
-
-
-
 .-r-1 {
   right: -0.25rem;
 }
@@ -167,7 +159,6 @@
 .-r-8 {
   right: -2rem;
 }
-
 
 @screen sm {
   .sm\:-r-1 {
@@ -213,8 +204,6 @@
   }
 }
 
-
-
 .r-0 {
   right: 0;
 }
@@ -243,8 +232,6 @@
   right: 2rem;
 }
 
-
-
 .b-1 {
   bottom: 0.25rem;
 }
@@ -268,7 +255,6 @@
 .b-8 {
   bottom: 2rem;
 }
-
 
 @screen sm {
   .sm\:b-1 {
@@ -294,7 +280,6 @@
   .sm\:b-8 {
     bottom: 2rem;
   }
-
 }
 
 @screen lg {
@@ -321,12 +306,7 @@
   .lg\:b-8 {
     bottom: 2rem;
   }
-
 }
-
-
-
-
 
 .-l-1 {
   left: -0.25rem;
@@ -352,7 +332,6 @@
   left: -2rem;
 }
 
-
 @screen sm {
   .sm\:-l-1 {
     left: -0.25rem;
@@ -377,7 +356,6 @@
   .sm\:-l-8 {
     left: -2rem;
   }
-
 }
 
 @screen lg {
@@ -404,14 +382,7 @@
   .lg\:-l-8 {
     left: -2rem;
   }
-
 }
-
-
-
-
-
-
 
 .b-0 {
   bottom: 0;
@@ -427,11 +398,10 @@
   overflow: hidden;
 }
 
-
 .min-width-auto {
   min-width: auto !important;
 }
 
 .scale-0 {
-  transform: scale3d(0,0,0);
+  transform: scale3d(0, 0, 0);
 }

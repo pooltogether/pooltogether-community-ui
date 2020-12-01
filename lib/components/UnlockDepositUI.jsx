@@ -8,41 +8,23 @@ import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { sendTx } from 'lib/utils/sendTx'
 
-const handleUnlockSubmit = async (
-  setTx,
-  provider,
-  contractAddress,
-  prizePoolAddress,
-  decimals,
-) => {
+const handleUnlockSubmit = async (setTx, provider, contractAddress, prizePoolAddress, decimals) => {
   const params = [
     prizePoolAddress,
     ethers.utils.parseUnits('1000000000', decimals),
     {
-      gasLimit: 200000
-    }
+      gasLimit: 200000,
+    },
   ]
 
-  await sendTx(
-    setTx,
-    provider,
-    contractAddress,
-    IERC20Abi,
-    'approve',
-    params,
-    'Unlock Deposits',
-  )
+  await sendTx(setTx, provider, contractAddress, IERC20Abi, 'approve', params, 'Unlock Deposits')
 }
 
 export const UnlockDepositUI = (props) => {
-  const {
-    genericChainValues
-  } = props
+  const { genericChainValues } = props
 
-  const {
-    tokenDecimals
-  } = genericChainValues
-  
+  const { tokenDecimals } = genericChainValues
+
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
 
@@ -55,31 +37,31 @@ export const UnlockDepositUI = (props) => {
     setTx({})
   }
 
-  return <>
-    {!txInFlight ? <>
-      <DepositForm
-        {...props}
-        disabled
-        handleSubmit={(e) => {
-          e.preventDefault()
+  return (
+    <>
+      {!txInFlight ? (
+        <>
+          <DepositForm
+            {...props}
+            disabled
+            handleSubmit={(e) => {
+              e.preventDefault()
 
-          handleUnlockSubmit(
-            setTx,
-            provider,
-            props.poolAddresses.token,
-            props.poolAddresses.prizePool,
-            tokenDecimals,
-          )
-        }}
-      />
-    </> : <>
-      <TxMessage
-        txType='Unlock Token Deposits'
-        tx={tx}
-        handleReset={resetState}
-      />
-    </>}
-    
-  </>
+              handleUnlockSubmit(
+                setTx,
+                provider,
+                props.poolAddresses.token,
+                props.poolAddresses.prizePool,
+                tokenDecimals
+              )
+            }}
+          />
+        </>
+      ) : (
+        <>
+          <TxMessage txType='Unlock Token Deposits' tx={tx} handleReset={resetState} />
+        </>
+      )}
+    </>
+  )
 }
-
