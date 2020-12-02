@@ -25,9 +25,10 @@ import UsdcSvg from 'assets/images/usdc-new-transparent.png'
 import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
-import { useFetchPoolAddresses } from 'lib/hooks/usePoolAddresses'
+import { usePoolAddresses } from 'lib/hooks/usePoolAddresses'
 import { usePrizePoolType } from 'lib/hooks/usePrizePoolType'
 import { nameToChainId } from 'lib/utils/nameToChainId'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 
 const renderErrorMessage = (address, type, message) => {
   const errorMsg = `Error fetching ${type} for prize pool with address: ${address}: ${message}. (maybe wrong Ethereum network or your IP is being rate-limited?)`
@@ -40,7 +41,17 @@ const renderErrorMessage = (address, type, message) => {
 export const erc20AwardsAtom = atom([])
 export const prizePoolTypeAtom = atom('')
 export const poolAddressesAtom = atom({})
+export const usersAddressAtom = atom('')
 export const networkAtom = atom({})
+export const poolChainValuesAtom = atom({
+  loading: true
+})
+export const userChainValuesAtom = atom({
+  loading: true,
+  usersTicketBalance: ethers.utils.bigNumberify(0),
+  usersTokenAllowance: ethers.utils.bigNumberify(0),
+  usersTokenBalance: ethers.utils.bigNumberify(0)
+})
 
 /**
  * Main wrapper for the UI views
@@ -61,16 +72,14 @@ export const PoolUI = (props) => {
     poolTotalSupply: '1234'
   })
 
-  const [usersChainValues, setUsersChainValues] = useState({
-    loading: true,
-    usersTicketBalance: ethers.utils.bigNumberify(0),
-    usersTokenAllowance: ethers.utils.bigNumberify(0),
-    usersTokenBalance: ethers.utils.bigNumberify(0)
-  })
-
   const [poolAddresses, setPoolAddresses] = useAtom(poolAddressesAtom)
+  const [_usersAddress, setUsersAddress] = useAtom(usersAddressAtom)
   const [erc20Awards, setErc20Awards] = useAtom(erc20AwardsAtom)
   const [network, setNetwork] = useAtom(networkAtom)
+  const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
+  const [userChainValues, setUserChainValues] = useAtom(userChainValuesAtom)
+
+  // TODO: Add back interval
 
   useEffect(() => {
     // TODO: Probably need to reset other atoms if this changes.
@@ -80,6 +89,10 @@ export const PoolUI = (props) => {
   }, [prizePool])
 
   useEffect(() => {
+    setUsersAddress(usersAddress)
+  }, [usersAddress])
+
+  useEffect(() => {
     setNetwork({
       name: networkName,
       id: nameToChainId(networkName)
@@ -87,22 +100,23 @@ export const PoolUI = (props) => {
   }, [networkName])
 
   usePrizePoolType()
-  useFetchPoolAddresses()
+  usePoolAddresses()
+  usePoolChainValues()
 
   useEffect(() => {
     const getExternalAwards = async () => {
-      if (genericChainValues.externalErc20Awards?.length >= 1) {
+      if (poolChainValues.externalErc20Awards?.length >= 1) {
         const erc20Awards = await fetchErc20AwardBalances(
           networkName,
           poolAddresses.prizePool,
-          genericChainValues.externalErc20Awards
+          poolChainValues.externalErc20Awards
         )
         setErc20Awards(erc20Awards)
       }
     }
 
     getExternalAwards()
-  }, [poolAddresses.prizePool, genericChainValues.externalErc20Awards])
+  }, [poolAddresses.prizePool, poolChainValues.externalErc20Awards])
 
   useEffect(() => {
     const balance = walletContext.state.onboard.getState().balance
@@ -127,17 +141,17 @@ export const PoolUI = (props) => {
     })
   }
 
-  if (poolAddresses.error || genericChainValues.error || usersChainValues.error) {
+  if (poolAddresses.error || poolChainValues.error || userChainValues.error) {
     if (poolAddresses.error) {
       renderErrorMessage(prizePool, 'pool addresses', poolAddresses.errorMessage)
     }
 
-    if (genericChainValues.error) {
-      renderErrorMessage(prizePool, 'generic chain values', genericChainValues.errorMessage)
+    if (poolChainValues.error) {
+      renderErrorMessage(prizePool, 'generic chain values', poolChainValues.errorMessage)
     }
 
-    if (usersChainValues.error) {
-      renderErrorMessage(prizePool, `user's chain values`, usersChainValues.errorMessage)
+    if (userChainValues.error) {
+      renderErrorMessage(prizePool, `user's chain values`, userChainValues.errorMessage)
     }
 
     // router.push(
@@ -163,7 +177,7 @@ export const PoolUI = (props) => {
     walletContext.handleConnectWallet()
   }
 
-  const tokenSymbol = genericChainValues.tokenSymbol
+  const tokenSymbol = poolChainValues.tokenSymbol
 
   let tokenSvg
   if (tokenSymbol === 'DAI') {
@@ -184,7 +198,7 @@ export const PoolUI = (props) => {
 
   return (
     <>
-      {genericChainValues.loading ? (
+      {poolChainValues.loading ? (
         <div className='text-center text-xl'>
           <LoadingDots />
           <br />
@@ -223,7 +237,7 @@ export const PoolUI = (props) => {
             <Content>
               <ContentPane isSelected={isSelected === '#stats'}>
                 <StatsUI
-                  genericChainValues={genericChainValues}
+                  genericChainValues={poolChainValues}
                   networkName={networkName}
                   poolAddresses={poolAddresses}
                   usersAddress={usersAddress}
@@ -232,69 +246,17 @@ export const PoolUI = (props) => {
 
               <ContentPane isSelected={isSelected === '#interact'}>
                 <InteractUI
-                  genericChainValues={genericChainValues}
+                  genericChainValues={poolChainValues}
                   poolAddresses={poolAddresses}
-                  usersChainValues={usersChainValues}
+                  usersChainValues={userChainValues}
                 />
               </ContentPane>
 
               <ContentPane isSelected={isSelected === '#admin'}>
-                <AdminUI genericChainValues={genericChainValues} poolAddresses={poolAddresses} />
+                <AdminUI genericChainValues={poolChainValues} poolAddresses={poolAddresses} />
               </ContentPane>
             </Content>
           </div>
-          {/* 
-      <div
-        className='relative py-4 sm:py-6 text-center rounded-lg'
-      >
-        {ethBalance && ethBalance.eq(0) && <>
-          <FormLockedOverlay
-            flexColJustifyClass='justify-start'
-            title={`Deposit & Withdraw`}
-            zLayerClass='z-30'
-          >
-            <>
-              Your ETH balance is 0.
-              <br />To interact with the contracts you will need ETH.
-            </>
-          </FormLockedOverlay>
-        </>}
-
-
-        {!usersAddress && <FormLockedOverlay
-          flexColJustifyClass='justify-start'
-          title={`Deposit & Withdraw`}
-          zLayerClass='z-30'
-        >
-          <>
-            <div>
-              To interact with the contracts first connect your wallet:
-            </div>
-
-            <div
-                className='flex justify-center mt-3 sm:mt-5 mb-5'
-            >
-              <button
-                  className='font-bold rounded-full text-green border-2 sm:border-4 border-green hover:text-white hover:bg-purple text-xxs sm:text-base pt-2 pb-2 px-3 sm:px-6 trans'
-                onClick={handleConnect}
-              >
-                Connect Wallet
-              </button>
-            </div>
-          </>
-        </FormLockedOverlay>}
-
-        <UserStats
-          genericChainValues={genericChainValues}
-          usersChainValues={usersChainValues}
-        />
-
-        <UserActionsUI
-          genericChainValues={genericChainValues}
-          poolAddresses={poolAddresses}
-          usersChainValues={usersChainValues}
-        />
-      </div> */}
         </>
       )}
     </>
