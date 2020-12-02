@@ -3,6 +3,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import { useRouter } from 'next/router'
+import { atom, useAtom } from 'jotai'
 
 import { AdminUI } from 'lib/components/AdminUI'
 import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
@@ -15,7 +16,7 @@ import { UserActionsUI } from 'lib/components/UserActionsUI'
 import { UserStats } from 'lib/components/UserStats'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { useInterval } from 'lib/hooks/useInterval'
-import { fetchChainData } from 'lib/utils/fetchChainData'
+import { fetchChainData, fetchErc20AwardBalances } from 'lib/utils/fetchChainData'
 import { poolToast } from 'lib/utils/poolToast'
 
 import BatSvg from 'assets/images/bat-new-transparent.png'
@@ -24,6 +25,9 @@ import UsdcSvg from 'assets/images/usdc-new-transparent.png'
 import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
+import { useFetchPoolAddresses } from 'lib/hooks/usePoolAddresses'
+import { usePrizePoolType } from 'lib/hooks/usePrizePoolType'
+import { nameToChainId } from 'lib/utils/nameToChainId'
 
 const renderErrorMessage = (address, type, message) => {
   const errorMsg = `Error fetching ${type} for prize pool with address: ${address}: ${message}. (maybe wrong Ethereum network or your IP is being rate-limited?)`
@@ -32,6 +36,15 @@ const renderErrorMessage = (address, type, message) => {
   poolToast.error(errorMsg)
 }
 
+// Jotai Atoms
+export const erc20AwardsAtom = atom([])
+export const prizePoolTypeAtom = atom('')
+export const poolAddressesAtom = atom({})
+export const networkAtom = atom({})
+
+/**
+ * Main wrapper for the UI views
+ */
 export const PoolUI = (props) => {
   const router = useRouter()
   const networkName = router.query.networkName
@@ -42,43 +55,54 @@ export const PoolUI = (props) => {
   const usersAddress = walletContext._onboard.getState().address
 
   const [ethBalance, setEthBalance] = useState(ethers.utils.bigNumberify(0))
-  const [poolAddresses, setPoolAddresses] = useState({
-    prizePool,
-  })
   const [genericChainValues, setGenericChainValues] = useState({
     loading: true,
     tokenSymbol: 'TOKEN',
-    poolTotalSupply: '1234',
+    poolTotalSupply: '1234'
   })
 
   const [usersChainValues, setUsersChainValues] = useState({
     loading: true,
     usersTicketBalance: ethers.utils.bigNumberify(0),
     usersTokenAllowance: ethers.utils.bigNumberify(0),
-    usersTokenBalance: ethers.utils.bigNumberify(0),
+    usersTokenBalance: ethers.utils.bigNumberify(0)
   })
 
-  useInterval(() => {
-    fetchChainData(
-      networkName,
-      usersAddress,
-      poolAddresses,
-      setPoolAddresses,
-      setGenericChainValues,
-      setUsersChainValues
-    )
-  }, 25000)
+  const [poolAddresses, setPoolAddresses] = useAtom(poolAddressesAtom)
+  const [erc20Awards, setErc20Awards] = useAtom(erc20AwardsAtom)
+  const [network, setNetwork] = useAtom(networkAtom)
 
   useEffect(() => {
-    fetchChainData(
-      networkName,
-      usersAddress,
-      poolAddresses,
-      setPoolAddresses,
-      setGenericChainValues,
-      setUsersChainValues
-    )
-  }, [provider, usersAddress, poolAddresses])
+    // TODO: Probably need to reset other atoms if this changes.
+    setPoolAddresses({
+      prizePool
+    })
+  }, [prizePool])
+
+  useEffect(() => {
+    setNetwork({
+      name: networkName,
+      id: nameToChainId(networkName)
+    })
+  }, [networkName])
+
+  usePrizePoolType()
+  useFetchPoolAddresses()
+
+  useEffect(() => {
+    const getExternalAwards = async () => {
+      if (genericChainValues.externalErc20Awards?.length >= 1) {
+        const erc20Awards = await fetchErc20AwardBalances(
+          networkName,
+          poolAddresses.prizePool,
+          genericChainValues.externalErc20Awards
+        )
+        setErc20Awards(erc20Awards)
+      }
+    }
+
+    getExternalAwards()
+  }, [poolAddresses.prizePool, genericChainValues.externalErc20Awards])
 
   useEffect(() => {
     const balance = walletContext.state.onboard.getState().balance
@@ -99,7 +123,7 @@ export const PoolUI = (props) => {
     setIsSelected(hash)
 
     router.push(`${router.route.split('#')[0]}${hash}`, `${router.asPath.split('#')[0]}${hash}`, {
-      shallow: true,
+      shallow: true
     })
   }
 
@@ -130,7 +154,7 @@ export const PoolUI = (props) => {
   try {
     ethers.utils.getAddress(prizePool)
   } catch (e) {
-    return 'Incorrectly formatted Ethereum address!'
+    return <>'Incorrectly formatted Ethereum address!'</>
   }
 
   const handleConnect = (e) => {
@@ -141,8 +165,10 @@ export const PoolUI = (props) => {
 
   const tokenSymbol = genericChainValues.tokenSymbol
 
-  let tokenSvg = DaiSvg
-  if (tokenSymbol === 'BAT') {
+  let tokenSvg
+  if (tokenSymbol === 'DAI') {
+    tokenSvg = DaiSvg
+  } else if (tokenSymbol === 'BAT') {
     tokenSvg = BatSvg
   } else if (tokenSymbol === 'USDC') {
     tokenSvg = UsdcSvg

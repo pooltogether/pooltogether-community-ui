@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 
+import { useAtom } from 'jotai'
 import { DEFAULT_TOKEN_PRECISION } from 'lib/constants'
 import { useInterval } from 'lib/hooks/useInterval'
 import { CardGrid } from 'lib/components/CardGrid'
 import { calculateEstimatedPoolPrize } from 'lib/utils/calculateEstimatedPoolPrize'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
+import { erc20AwardsAtom } from 'lib/components/PoolUI'
 
 export const PoolStats = (props) => {
   const { genericChainValues } = props
@@ -22,7 +24,7 @@ export const PoolStats = (props) => {
     ticketCreditLimitMantissa,
     sponsorshipName,
     sponsorshipSymbol,
-    maxExitFeeMantissa,
+    maxExitFeeMantissa
   } = genericChainValues
 
   const tokenDecimals = genericChainValues.tokenDecimals || DEFAULT_TOKEN_PRECISION
@@ -32,6 +34,8 @@ export const PoolStats = (props) => {
   const [secondsToPrizeAtMount, setSecondsToPrizeAtMount] = useState(0)
   const [secondsRemainingNow, setSecondsRemainingNow] = useState('--')
   const [prizeEstimate, setPrizeEstimate] = useState(0)
+
+  const [erc20Awards, setErc20Awards] = useAtom(erc20AwardsAtom)
 
   useEffect(() => {
     const set = () => {
@@ -47,7 +51,7 @@ export const PoolStats = (props) => {
       awardBalance,
       poolTotalSupply,
       supplyRatePerBlock,
-      prizePeriodRemainingSeconds,
+      prizePeriodRemainingSeconds
     })
 
     setPrizeEstimate(estimatedPoolPrize)
@@ -73,8 +77,15 @@ export const PoolStats = (props) => {
                   {displayAmountInEther(prizeEstimate, { precision: 2, decimals: tokenDecimals })}{' '}
                   {tokenSymbol}
                 </h3>
+                {erc20Awards.length >= 1 && (
+                  <ul>
+                    {erc20Awards.map((award) => (
+                      <li>{`${award.symbol}: ${award.formattedBalance}`}</li>
+                    ))}
+                  </ul>
+                )}
               </>
-            ),
+            )
           },
           {
             icon: null,
@@ -83,7 +94,7 @@ export const PoolStats = (props) => {
               <>
                 <h3>{secondsRemainingNow}</h3>
               </>
-            ),
+            )
           },
           {
             icon: null,
@@ -92,7 +103,7 @@ export const PoolStats = (props) => {
               <>
                 <h3>{tokenDecimals}</h3>
               </>
-            ),
+            )
           },
           {
             icon: null,
@@ -102,12 +113,12 @@ export const PoolStats = (props) => {
                 <h3>
                   {displayAmountInEther(ticketTotalSupply, {
                     precision: 2,
-                    decimals: tokenDecimals,
+                    decimals: tokenDecimals
                   })}{' '}
                   {tokenSymbol}
                 </h3>
               </>
-            ),
+            )
           },
           {
             icon: null,
@@ -120,7 +131,7 @@ export const PoolStats = (props) => {
                   <span className='text-blue'>{ticketName}</span>
                 </h5>
               </>
-            ),
+            )
           },
           {
             icon: null,
@@ -129,7 +140,7 @@ export const PoolStats = (props) => {
               <>
                 <h3>{displayAmountInEther(ticketCreditRateMantissa, { precision: 10 })}</h3>
               </>
-            ),
+            )
           },
           {
             icon: null,
@@ -140,7 +151,7 @@ export const PoolStats = (props) => {
                   {displayAmountInEther(ticketCreditLimitMantissa.mul(100), { precision: 2 })}%
                 </h3>
               </>
-            ),
+            )
           },
           {
             icon: null,
@@ -153,7 +164,7 @@ export const PoolStats = (props) => {
                   <span className='text-blue'>{sponsorshipName}</span>
                 </h5>
               </>
-            ),
+            )
           },
           {
             icon: null,
@@ -162,22 +173,10 @@ export const PoolStats = (props) => {
               <>
                 <h3>{displayAmountInEther(maxExitFeeMantissa.mul(100), { precision: 2 })}%</h3>
               </>
-            ),
-          },
+            )
+          }
         ]}
       />
     </>
   )
 }
-
-// (<a
-//   href='https://docs.pooltogether.com/tutorials/withdrawing-from-a-prize-pool#withdrawing-funds-instantly'
-//   target='_blank'
-//   rel='noreferrer nofollow'
-// >exitFeeMantissa</a>)
-
-// (<a
-//   href='https://docs.pooltogether.com/tutorials/withdrawing-from-a-prize-pool#withdrawing-funds-instantly'
-//   target='_blank'
-//   rel='noreferrer nofollow'
-// >creditRateMantissa</a>)
