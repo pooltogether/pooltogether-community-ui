@@ -3,7 +3,7 @@ import { useAtom } from 'jotai'
 
 import { CardGrid } from 'lib/components/CardGrid'
 import { erc20AwardsAtom, poolChainValuesAtom, prizePoolTypeAtom } from 'lib/components/PoolUI'
-import { DEFAULT_TOKEN_PRECISION, PrizePoolType } from 'lib/constants'
+import { DEFAULT_TOKEN_PRECISION, PRIZE_POOL_TYPE } from 'lib/constants'
 import { useInterval } from 'lib/hooks/useInterval'
 import { calculateEstimatedPoolPrize } from 'lib/utils/calculateEstimatedPoolPrize'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
@@ -178,7 +178,7 @@ export const AwardCard = (props) => {
 
   return (
     <>
-      {prizePoolType === PrizePoolType.compound && (
+      {prizePoolType === PRIZE_POOL_TYPE.compound && (
         <h3>
           {displayAmountInEther(prizeEstimate, { precision: 2, decimals: tokenDecimals })}{' '}
           {tokenSymbol}

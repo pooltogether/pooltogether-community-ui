@@ -1,5 +1,6 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
+import { Provider } from 'jotai'
 
 import { Layout } from 'lib/components/Layout'
 
@@ -24,16 +25,14 @@ const DynamicWalletContextProvider = dynamic(
   { ssr: false }
 )
 
-const JotaiProvider = dynamic(() => import('jotai').then((jt) => jt.Provider), { ssr: false })
-
 function MyApp ({ Component, pageProps }) {
   return (
     <DynamicWalletContextProvider>
-      <JotaiProvider>
+      <Provider>
         <Layout>
           <Component {...pageProps} />
         </Layout>
-      </JotaiProvider>
+      </Provider>
     </DynamicWalletContextProvider>
   )
 }

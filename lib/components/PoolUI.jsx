@@ -14,16 +14,17 @@ import { useInterval } from 'lib/hooks/useInterval'
 import { usePoolAddresses } from 'lib/hooks/usePoolAddresses'
 import { fetchPoolChainValues, usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { usePrizePoolType } from 'lib/hooks/usePrizePoolType'
-import { fetchUserChainData } from 'lib/hooks/useUserChainValues'
+import { fetchUserChainData, useUserChainValues } from 'lib/hooks/useUserChainValues'
 import { nameToChainId } from 'lib/utils/nameToChainId'
 import { poolToast } from 'lib/utils/poolToast'
-import { fetchErc20AwardBalances, useExternalErc20Awards } from 'lib/utils/useExternalErc20Awards'
+import { fetchErc20AwardBalances, useExternalErc20Awards } from 'lib/hooks/useExternalErc20Awards'
 import BatSvg from 'assets/images/bat-new-transparent.png'
 import DaiSvg from 'assets/images/dai-new-transparent.png'
 import UsdcSvg from 'assets/images/usdc-new-transparent.png'
 import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
+import { DATA_REFRESH_POLLING_INTERVAL } from 'lib/constants'
 
 // http://localhost:3000/pools/rinkeby/0xd1E58Db0d67DB3f28fFa412Db58aCeafA0fEF8fA#admin
 
@@ -64,20 +65,20 @@ export const PoolUI = (props) => {
   const usersAddress = walletContext._onboard.getState().address
 
   const [ethBalance, setEthBalance] = useAtom(ethBalanceAtom)
-  const [prizePoolType] = useAtom(prizePoolTypeAtom)
-  const [poolAddresses, setPoolAddresses] = useAtom(poolAddressesAtom)
   const [_usersAddress, setUsersAddress] = useAtom(usersAddressAtom)
-  const [erc20Awards, setErc20Awards] = useAtom(erc20AwardsAtom)
   const [network, setNetwork] = useAtom(networkAtom)
-  const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
-  const [userChainValues, setUserChainValues] = useAtom(userChainValuesAtom)
+
+  const [userChainValues, setUserChainValues] = useUserChainValues()
+  const [prizePoolType] = usePrizePoolType()
+  const [poolAddresses, setPoolAddresses] = usePoolAddresses()
+  const [poolChainValues, setPoolChainValues] = usePoolChainValues()
+  const [erc20Awards, setErc20Awards] = useExternalErc20Awards()
 
   useEffect(() => {
-    // TODO: Probably need to reset other atoms if this changes.
     setPoolAddresses({
       prizePool
     })
-  }, [prizePool])
+  }, [])
 
   useEffect(() => {
     setUsersAddress(usersAddress)
@@ -90,11 +91,6 @@ export const PoolUI = (props) => {
     })
   }, [networkName])
 
-  usePrizePoolType()
-  usePoolAddresses()
-  usePoolChainValues()
-  useExternalErc20Awards()
-
   // Keep chain values fresh
   useInterval(() => {
     fetchPoolChainValues(provider, poolAddresses, prizePoolType, setPoolChainValues)
@@ -105,7 +101,7 @@ export const PoolUI = (props) => {
       poolChainValues.externalErc20Awards,
       setErc20Awards
     )
-  }, 25000)
+  }, DATA_REFRESH_POLLING_INTERVAL)
 
   useEffect(() => {
     const balance = walletContext.state.onboard.getState().balance
