@@ -1,9 +1,10 @@
+import React, { useContext, useState } from 'react'
 import SingleRandomWinnerAbi from '@pooltogether/pooltogether-contracts/abis/SingleRandomWinner'
+
 import { Button } from 'lib/components/Button'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { sendTx } from 'lib/utils/sendTx'
-import React, { useContext, useState } from 'react'
 
 const handleCompleteAwardSubmit = async (setTx, provider, contractAddress) => {
   const params = [

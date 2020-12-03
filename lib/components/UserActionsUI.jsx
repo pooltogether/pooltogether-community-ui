@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { DepositUI } from 'lib/components/DepositUI'
 import { FormPanel } from 'lib/components/FormPanel'
 import { PermitAndDepositUI } from 'lib/components/PermitAndDepositUI'
@@ -5,7 +7,6 @@ import { SweepTimelockedUI } from 'lib/components/SweepTimelockedUI'
 import { UnlockDepositUI } from 'lib/components/UnlockDepositUI'
 import { WithdrawUI } from 'lib/components/WithdrawUI'
 import { DAI_MAINNET_ADDRESS } from 'lib/constants'
-import React from 'react'
 
 export const UserActionsUI = (props) => {
   let depositUI

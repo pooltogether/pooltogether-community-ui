@@ -1,10 +1,11 @@
+import React, { useContext, useState } from 'react'
 import IERC20Abi from '@pooltogether/pooltogether-contracts/abis/IERC20'
 import { ethers } from 'ethers'
+
 import { DepositForm } from 'lib/components/DepositForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { sendTx } from 'lib/utils/sendTx'
-import React, { useContext, useState } from 'react'
 
 const handleUnlockSubmit = async (setTx, provider, contractAddress, prizePoolAddress, decimals) => {
   const params = [

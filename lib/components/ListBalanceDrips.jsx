@@ -1,6 +1,9 @@
+import React, { useContext, useEffect, useState } from 'react'
 import ComptrollerAbi from '@pooltogether/pooltogether-contracts/abis/Comptroller'
 import { ethers } from 'ethers'
 import FeatherIcon from 'feather-icons-react'
+import { useRouter } from 'next/router'
+
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { SENTINEL_ADDRESS } from 'lib/constants'
@@ -8,8 +11,6 @@ import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { extractPrevDripTokenAddress } from 'lib/utils/extractPrevDripTokenAddress'
 import { fetchBalanceDripChainData } from 'lib/utils/fetchBalanceDripChainData'
 import { sendTx } from 'lib/utils/sendTx'
-import { useRouter } from 'next/router'
-import React, { useContext, useEffect, useState } from 'react'
 
 // deactivateBalanceDrip(prizeStrategyAddress, controlledTokenAddress, erc20Address)
 // [1, 2, 3, 4, 5]

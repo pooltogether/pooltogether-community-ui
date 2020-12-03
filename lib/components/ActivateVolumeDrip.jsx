@@ -1,6 +1,9 @@
+import React, { useContext, useEffect, useState } from 'react'
 import ComptrollerAbi from '@pooltogether/pooltogether-contracts/abis/Comptroller'
 import classnames from 'classnames'
 import { ethers } from 'ethers'
+import { useRouter } from 'next/router'
+
 import { Button } from 'lib/components/Button'
 import { CheckboxInputGroup } from 'lib/components/CheckboxInputGroup'
 import { LoadingDots } from 'lib/components/LoadingDots'
@@ -11,8 +14,6 @@ import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { fetchTokenChainData } from 'lib/utils/fetchTokenChainData'
 import { poolToast } from 'lib/utils/poolToast'
 import { sendTx } from 'lib/utils/sendTx'
-import { useRouter } from 'next/router'
-import React, { useContext, useEffect, useState } from 'react'
 
 const handleActivateVolumeDripSubmit = async (
   txName,

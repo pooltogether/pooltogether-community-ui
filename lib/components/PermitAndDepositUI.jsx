@@ -1,6 +1,8 @@
+import React, { useContext, useState } from 'react'
 import DaiAbi from '@pooltogether/pooltogether-contracts/abis/Dai'
 import PermitAndDepositDaiAbi from '@pooltogether/pooltogether-contracts/abis/PermitAndDepositDai'
 import { ethers } from 'ethers'
+
 import { DepositForm } from 'lib/components/DepositForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
@@ -8,7 +10,6 @@ import { CONTRACT_ADDRESSES } from 'lib/constants'
 import { poolToast } from 'lib/utils/poolToast'
 import { sendTx } from 'lib/utils/sendTx'
 import { signPermit } from 'lib/utils/signPermit'
-import React, { useContext, useState } from 'react'
 
 const handleDepositSubmit = async (
   setTx,

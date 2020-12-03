@@ -1,8 +1,9 @@
+import React from 'react'
+
 import { ActivateBalanceDrip } from 'lib/components/ActivateBalanceDrip'
 import { ActivateVolumeDrip } from 'lib/components/ActivateVolumeDrip'
 import { ListBalanceDrips } from 'lib/components/ListBalanceDrips'
 import { ListVolumeDrips } from 'lib/components/ListVolumeDrips'
-import React from 'react'
 
 export const AdminUI = (props) => {
   const { poolChainValues, poolAddresses } = props

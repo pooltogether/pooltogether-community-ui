@@ -1,13 +1,8 @@
-// http://localhost:3000/pools/rinkeby/0xd1E58Db0d67DB3f28fFa412Db58aCeafA0fEF8fA#admin
-
-import BatSvg from 'assets/images/bat-new-transparent.png'
-import DaiSvg from 'assets/images/dai-new-transparent.png'
-import UsdcSvg from 'assets/images/usdc-new-transparent.png'
-import UsdtSvg from 'assets/images/usdt-new-transparent.png'
-import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
-import ZrxSvg from 'assets/images/zrx-new-transparent.png'
+import React, { useContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import { atom, useAtom } from 'jotai'
+import { useRouter } from 'next/router'
+
 import { AdminUI } from 'lib/components/AdminUI'
 import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 import { InteractUI } from 'lib/components/InteractUI'
@@ -23,8 +18,14 @@ import { fetchUserChainData } from 'lib/hooks/useUserChainValues'
 import { nameToChainId } from 'lib/utils/nameToChainId'
 import { poolToast } from 'lib/utils/poolToast'
 import { fetchErc20AwardBalances, useExternalErc20Awards } from 'lib/utils/useExternalErc20Awards'
-import { useRouter } from 'next/router'
-import React, { useContext, useEffect, useState } from 'react'
+import BatSvg from 'assets/images/bat-new-transparent.png'
+import DaiSvg from 'assets/images/dai-new-transparent.png'
+import UsdcSvg from 'assets/images/usdc-new-transparent.png'
+import UsdtSvg from 'assets/images/usdt-new-transparent.png'
+import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
+import ZrxSvg from 'assets/images/zrx-new-transparent.png'
+
+// http://localhost:3000/pools/rinkeby/0xd1E58Db0d67DB3f28fFa412Db58aCeafA0fEF8fA#admin
 
 const renderErrorMessage = (address, type, message) => {
   const errorMsg = `Error fetching ${type} for prize pool with address: ${address}: ${message}. (maybe wrong Ethereum network or your IP is being rate-limited?)`

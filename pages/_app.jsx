@@ -1,6 +1,5 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
-// import { Provider } from 'jotai'
 
 import { Layout } from 'lib/components/Layout'
 

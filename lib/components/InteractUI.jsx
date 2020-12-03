@@ -1,11 +1,12 @@
+import React, { useContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
+
 import { CompleteAwardUI } from 'lib/components/CompleteAwardUI'
 import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 import { StartAwardUI } from 'lib/components/StartAwardUI'
 import { UserActionsUI } from 'lib/components/UserActionsUI'
 import { UserStats } from 'lib/components/UserStats'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import React, { useContext, useEffect, useState } from 'react'
 
 export const InteractUI = (props) => {
   const { poolChainValues, usersChainValues, poolAddresses } = props

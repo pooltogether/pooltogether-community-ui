@@ -1,8 +1,9 @@
+import React from 'react'
+
 import { Button } from 'lib/components/Button'
 import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
-import React from 'react'
 
 export const SweepTimelockedForm = (props) => {
   const {

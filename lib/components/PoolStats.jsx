@@ -1,11 +1,12 @@
+import React, { useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
+
 import { CardGrid } from 'lib/components/CardGrid'
 import { erc20AwardsAtom, poolChainValuesAtom, prizePoolTypeAtom } from 'lib/components/PoolUI'
 import { DEFAULT_TOKEN_PRECISION, PrizePoolType } from 'lib/constants'
 import { useInterval } from 'lib/hooks/useInterval'
 import { calculateEstimatedPoolPrize } from 'lib/utils/calculateEstimatedPoolPrize'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
-import React, { useEffect, useState } from 'react'
 
 export const PoolStats = (props) => {
   const { poolChainValues } = props
