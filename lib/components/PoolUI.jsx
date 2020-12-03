@@ -68,9 +68,9 @@ export const PoolUI = (props) => {
   const [_usersAddress, setUsersAddress] = useAtom(usersAddressAtom)
   const [network, setNetwork] = useAtom(networkAtom)
 
-  const [userChainValues, setUserChainValues] = useUserChainValues()
-  const [prizePoolType] = usePrizePoolType()
   const [poolAddresses, setPoolAddresses] = usePoolAddresses()
+  const [userChainValues, setUserChainValues] = useUserChainValues()
+  const [prizePoolType, setPrizePoolType] = usePrizePoolType()
   const [poolChainValues, setPoolChainValues] = usePoolChainValues()
   const [erc20Awards, setErc20Awards] = useExternalErc20Awards()
 
@@ -78,6 +78,21 @@ export const PoolUI = (props) => {
     setPoolAddresses({
       prizePool
     })
+
+    return () => {
+      setPoolAddresses({})
+      setErc20Awards([])
+      setUserChainValues({
+        loading: true,
+        usersTicketBalance: ethers.utils.bigNumberify(0),
+        usersTokenAllowance: ethers.utils.bigNumberify(0),
+        usersTokenBalance: ethers.utils.bigNumberify(0)
+      })
+      setPrizePoolType('')
+      setPoolChainValues({
+        loading: true
+      })
+    }
   }, [])
 
   useEffect(() => {
