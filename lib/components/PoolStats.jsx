@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react'
-
 import { useAtom } from 'jotai'
-import { DEFAULT_TOKEN_PRECISION } from 'lib/constants'
-import { useInterval } from 'lib/hooks/useInterval'
 import { CardGrid } from 'lib/components/CardGrid'
+import { erc20AwardsAtom, poolChainValuesAtom, prizePoolTypeAtom } from 'lib/components/PoolUI'
+import { DEFAULT_TOKEN_PRECISION, PrizePoolType } from 'lib/constants'
+import { useInterval } from 'lib/hooks/useInterval'
 import { calculateEstimatedPoolPrize } from 'lib/utils/calculateEstimatedPoolPrize'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
-import { erc20AwardsAtom } from 'lib/components/PoolUI'
+import React, { useEffect, useState } from 'react'
 
 export const PoolStats = (props) => {
   const { genericChainValues } = props
@@ -33,7 +32,6 @@ export const PoolStats = (props) => {
   const [mountedAt, setMountedAt] = useState(0)
   const [secondsToPrizeAtMount, setSecondsToPrizeAtMount] = useState(0)
   const [secondsRemainingNow, setSecondsRemainingNow] = useState('--')
-  const [prizeEstimate, setPrizeEstimate] = useState(0)
 
   const [erc20Awards, setErc20Awards] = useAtom(erc20AwardsAtom)
 
@@ -44,18 +42,6 @@ export const PoolStats = (props) => {
     }
     set()
   }, [canCompleteAward])
-
-  useEffect(() => {
-    const estimatedPoolPrize = calculateEstimatedPoolPrize({
-      tokenDecimals,
-      awardBalance,
-      poolTotalSupply,
-      supplyRatePerBlock,
-      prizePeriodRemainingSeconds
-    })
-
-    setPrizeEstimate(estimatedPoolPrize)
-  }, [poolTotalSupply, supplyRatePerBlock, prizePeriodRemainingSeconds, awardBalance])
 
   useInterval(() => {
     const diffInSeconds = parseInt(Date.now() / 1000, 10) - mountedAt
@@ -71,21 +57,7 @@ export const PoolStats = (props) => {
           {
             icon: null,
             title: <>next prize (estimate)</>,
-            content: (
-              <>
-                <h3>
-                  {displayAmountInEther(prizeEstimate, { precision: 2, decimals: tokenDecimals })}{' '}
-                  {tokenSymbol}
-                </h3>
-                {erc20Awards.length >= 1 && (
-                  <ul>
-                    {erc20Awards.map((award) => (
-                      <li>{`${award.symbol}: ${award.formattedBalance}`}</li>
-                    ))}
-                  </ul>
-                )}
-              </>
-            )
+            content: <AwardCard />
           },
           {
             icon: null,
@@ -177,6 +149,53 @@ export const PoolStats = (props) => {
           }
         ]}
       />
+    </>
+  )
+}
+
+export const AwardCard = (props) => {
+  const [prizeEstimate, setPrizeEstimate] = useState(0)
+  const [poolChainValues] = useAtom(poolChainValuesAtom)
+  const [erc20Awards] = useAtom(erc20AwardsAtom)
+  const [prizePoolType] = useAtom(prizePoolTypeAtom)
+
+  const {
+    awardBalance,
+    prizePeriodRemainingSeconds,
+    poolTotalSupply,
+    supplyRatePerBlock
+  } = poolChainValues
+
+  const tokenDecimals = poolChainValues.tokenDecimals || DEFAULT_TOKEN_PRECISION
+  const tokenSymbol = poolChainValues.tokenSymbol || 'TOKEN'
+
+  useEffect(() => {
+    const estimatedPoolPrize = calculateEstimatedPoolPrize({
+      tokenDecimals,
+      awardBalance,
+      poolTotalSupply,
+      supplyRatePerBlock,
+      prizePeriodRemainingSeconds
+    })
+
+    setPrizeEstimate(estimatedPoolPrize)
+  }, [poolTotalSupply, supplyRatePerBlock, prizePeriodRemainingSeconds, awardBalance])
+
+  return (
+    <>
+      {prizePoolType === PrizePoolType.compound && (
+        <h3>
+          {displayAmountInEther(prizeEstimate, { precision: 2, decimals: tokenDecimals })}{' '}
+          {tokenSymbol}
+        </h3>
+      )}
+      {erc20Awards.length >= 1 && (
+        <ul>
+          {erc20Awards.map((award, index) => (
+            <li key={index + award.symbol}>{`${award.symbol}: ${award.formattedBalance}`}</li>
+          ))}
+        </ul>
+      )}
     </>
   )
 }

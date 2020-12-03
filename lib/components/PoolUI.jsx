@@ -1,34 +1,30 @@
 // http://localhost:3000/pools/rinkeby/0xd1E58Db0d67DB3f28fFa412Db58aCeafA0fEF8fA#admin
 
-import React, { useContext, useEffect, useState } from 'react'
-import { ethers } from 'ethers'
-import { useRouter } from 'next/router'
-import { atom, useAtom } from 'jotai'
-
-import { AdminUI } from 'lib/components/AdminUI'
-import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
-import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
-import { LoadingDots } from 'lib/components/LoadingDots'
-import { Content, ContentPane, Tabs, Tab } from 'lib/components/Tabs'
-import { InteractUI } from 'lib/components/InteractUI'
-import { StatsUI } from 'lib/components/StatsUI'
-import { UserActionsUI } from 'lib/components/UserActionsUI'
-import { UserStats } from 'lib/components/UserStats'
-import { WalletContext } from 'lib/components/WalletContextProvider'
-import { useInterval } from 'lib/hooks/useInterval'
-import { fetchChainData, fetchErc20AwardBalances } from 'lib/utils/fetchChainData'
-import { poolToast } from 'lib/utils/poolToast'
-
 import BatSvg from 'assets/images/bat-new-transparent.png'
 import DaiSvg from 'assets/images/dai-new-transparent.png'
 import UsdcSvg from 'assets/images/usdc-new-transparent.png'
 import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
+import { ethers } from 'ethers'
+import { atom, useAtom } from 'jotai'
+import { AdminUI } from 'lib/components/AdminUI'
+import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
+import { InteractUI } from 'lib/components/InteractUI'
+import { LoadingDots } from 'lib/components/LoadingDots'
+import { StatsUI } from 'lib/components/StatsUI'
+import { Content, ContentPane, Tab, Tabs } from 'lib/components/Tabs'
+import { WalletContext } from 'lib/components/WalletContextProvider'
+import { useInterval } from 'lib/hooks/useInterval'
 import { usePoolAddresses } from 'lib/hooks/usePoolAddresses'
+import { fetchPoolChainValues, usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { usePrizePoolType } from 'lib/hooks/usePrizePoolType'
+import { fetchUserChainData } from 'lib/hooks/useUserChainValues'
+import { fetchErc20AwardBalances } from 'lib/utils/fetchChainData'
 import { nameToChainId } from 'lib/utils/nameToChainId'
-import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { poolToast } from 'lib/utils/poolToast'
+import { useRouter } from 'next/router'
+import React, { useContext, useEffect, useState } from 'react'
 
 const renderErrorMessage = (address, type, message) => {
   const errorMsg = `Error fetching ${type} for prize pool with address: ${address}: ${message}. (maybe wrong Ethereum network or your IP is being rate-limited?)`
@@ -38,6 +34,7 @@ const renderErrorMessage = (address, type, message) => {
 }
 
 // Jotai Atoms
+export const ethBalanceAtom = atom(ethers.utils.bigNumberify(0))
 export const erc20AwardsAtom = atom([])
 export const prizePoolTypeAtom = atom('')
 export const poolAddressesAtom = atom({})
@@ -65,21 +62,14 @@ export const PoolUI = (props) => {
   const provider = walletContext.state.provider
   const usersAddress = walletContext._onboard.getState().address
 
-  const [ethBalance, setEthBalance] = useState(ethers.utils.bigNumberify(0))
-  const [genericChainValues, setGenericChainValues] = useState({
-    loading: true,
-    tokenSymbol: 'TOKEN',
-    poolTotalSupply: '1234'
-  })
-
+  const [ethBalance, setEthBalance] = useAtom(ethBalanceAtom)
+  const [prizePoolType] = useAtom(prizePoolTypeAtom)
   const [poolAddresses, setPoolAddresses] = useAtom(poolAddressesAtom)
   const [_usersAddress, setUsersAddress] = useAtom(usersAddressAtom)
   const [erc20Awards, setErc20Awards] = useAtom(erc20AwardsAtom)
   const [network, setNetwork] = useAtom(networkAtom)
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [userChainValues, setUserChainValues] = useAtom(userChainValuesAtom)
-
-  // TODO: Add back interval
 
   useEffect(() => {
     // TODO: Probably need to reset other atoms if this changes.
@@ -102,6 +92,13 @@ export const PoolUI = (props) => {
   usePrizePoolType()
   usePoolAddresses()
   usePoolChainValues()
+
+  // Keep chain values fresh
+  useInterval(() => {
+    console.log('Refresh data')
+    fetchPoolChainValues(provider, poolAddresses, prizePoolType, setPoolChainValues)
+    fetchUserChainData(provider, poolAddresses, usersAddress, setUserChainValues)
+  }, 25000)
 
   useEffect(() => {
     const getExternalAwards = async () => {
