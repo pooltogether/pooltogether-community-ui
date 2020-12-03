@@ -37,7 +37,7 @@ export const SweepTimelockedForm = (props) => {
 
         {!hasFundsToSweep && (
           <>
-            <div className='text-green'>
+            <div className='text-green-1'>
               You have {displayAmountInEther(usersTimelockBalance, { decimals: tokenDecimals })}{' '}
               {tokenSymbol} scheduled for withdrawal after the interest has matured.
             </div>

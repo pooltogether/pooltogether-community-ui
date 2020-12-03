@@ -159,7 +159,7 @@ export const ActivateVolumeDrip = (props) => {
 
           setFormVisible(true)
         }}
-        className={classnames('mt-4 mb-1 text-green font-bold trans', {
+        className={classnames('mt-4 mb-1 text-green-1 font-bold trans', {
           hidden: formVisible
         })}
       >

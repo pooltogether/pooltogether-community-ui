@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
 import classnames from 'classnames'
-
 import { BlueLineStat } from 'lib/components/BlueLineStat'
 import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 import { StatContainer } from 'lib/components/StatContainer'
+import React, { useState } from 'react'
 
 export const PoolRelatedAddressesUI = (props) => {
   const { networkName, poolAddresses } = props
@@ -19,7 +18,7 @@ export const PoolRelatedAddressesUI = (props) => {
           setShowPoolAddresses(true)
         }}
         className={classnames(
-          `mt-2 animated text-highlight-3 hover:text-green trans text-xxs sm:text-base lg:text-base border-b-2 border-purple-800 hover:border-purple-700`,
+          `mt-2 animated text-highlight-3 hover:text-green-1 trans text-xxs sm:text-base lg:text-base border-b-2 border-purple-800 hover:border-purple-700`,
           {
             'fadeOut': showPoolAddresses,
           }
@@ -34,7 +33,7 @@ export const PoolRelatedAddressesUI = (props) => {
           'mt-8 mb-4 rounded-xl text-base sm:text-lg animated faster',
           {
             'h-0 opacity-0 pointer-events-none': !showPoolAddresses,
-            'fadeIn': showPoolAddresses,
+            'fadeIn': showPoolAddresses
           }
         )}
       >

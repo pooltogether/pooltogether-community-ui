@@ -1,8 +1,7 @@
-import React from 'react'
 import classnames from 'classnames'
-
 import { PTHint } from 'lib/components/PTHint'
 import { QuestionMarkCircle } from 'lib/components/QuestionMarkCircle'
+import React from 'react'
 
 export const CheckboxInputGroup = (props) => {
   const { id, disabled, hint, title, label, handleClick, checked } = props
@@ -16,8 +15,8 @@ export const CheckboxInputGroup = (props) => {
   return (
     <div
       className={classnames(defaultClasses, textClasses, marginClasses, roundedClasses, {
-        'text-green inner-lg': checked,
-        'text-accent-1 hover:text-green': !checked
+        'text-green-1 inner-lg': checked,
+        'text-accent-1 hover:text-green-1': !checked
       })}
       onClick={handleClick}
     >

@@ -97,7 +97,7 @@
 }
 
 .pool-toast .Toastify__toast--success {
-  @apply text-green;
+  @apply text-green-1;
 }
 
 .pool-toast .Toastify__toast--error {
@@ -105,7 +105,7 @@
 }
 
 .pool-toast .Toastify__toast--warning {
-  @apply text-yellow;
+  @apply text-yellow-1;
 }
 
 .Toastify__progress-bar--info {
@@ -117,7 +117,7 @@
 }
 
 .Toastify__progress-bar--warning {
-  @apply bg-yellow;
+  @apply bg-yellow-1;
 }
 
 .Toastify__progress-bar--error {

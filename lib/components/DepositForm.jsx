@@ -99,7 +99,7 @@ export const DepositForm = (props) => {
 
         {overBalance && (
           <>
-            <div className='text-yellow'>
+            <div className='text-yellow-1'>
               You only have {displayAmountInEther(usersTokenBalance, { decimals: tokenDecimals })}{' '}
               {tokenSymbol}.
               <br />

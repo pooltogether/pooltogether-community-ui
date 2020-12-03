@@ -1,10 +1,10 @@
-import React from 'react'
 import classnames from 'classnames'
+import React from 'react'
 
 export const QuestionMarkCircle = (props) => {
   const { white } = props
 
-  let defaultClasses = 'bg-blue text-white'
+  let defaultClasses = 'bg-blue-1 text-white'
   if (white) {
     defaultClasses = 'bg-transparent text-white border-white border-2'
   }
@@ -20,7 +20,7 @@ export const QuestionMarkCircle = (props) => {
         <span
           className='relative font-number font-bold text-base'
           style={{
-            left: '0.05rem',
+            left: '0.05rem'
           }}
         >
           ?

@@ -1,7 +1,7 @@
-import React, { useRef, useEffect } from 'react'
 import classnames from 'classnames'
 import { omit } from 'lodash'
 import Link from 'next/link'
+import React, { useEffect, useRef } from 'react'
 
 const getBorderClasses = (borderClasses, color, isText) => {
   if (borderClasses) {
@@ -149,7 +149,7 @@ export const Button = (props) => {
     defaultClasses += ' min-width-auto'
   }
 
-  backgroundColorClasses = 'bg-blue hover:bg-highlight-1 active:bg-highlight-1'
+  backgroundColorClasses = 'bg-blue-1 hover:bg-highlight-1 active:bg-highlight-1'
   borderClasses = getBorderClasses(borderClasses, color, isText)
   paddingClasses = getPaddingClasses(paddingClasses, isText)
   roundedClasses = getRoundedClasses(roundedClasses)

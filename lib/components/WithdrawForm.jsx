@@ -147,7 +147,7 @@ export const WithdrawForm = (props) => {
 
         {overBalance && (
           <>
-            <div className='text-yellow'>
+            <div className='text-yellow-1'>
               You only have {displayAmountInEther(usersTicketBalance, { decimals: tokenDecimals })}{' '}
               tickets.
               <br />
@@ -175,7 +175,7 @@ export const WithdrawForm = (props) => {
           value={maxExitFee}
         />
  */}
-            <div className='text-yellow'>
+            <div className='text-yellow-1'>
               You will receive {displayAmountInEther(instantTotal, { decimals: tokenDecimals })}{' '}
               {tokenSymbol} now&nbsp;
               {exitFee.eq(0) ? (
@@ -211,7 +211,7 @@ export const WithdrawForm = (props) => {
 
         {!overBalance && timelockDurationSeconds && withdrawType !== 'instant' && (
           <>
-            <div className='text-yellow'>
+            <div className='text-yellow-1'>
               You will receive {displayAmountInEther(instantTotal, { decimals: tokenDecimals })}{' '}
               {tokenSymbol}&nbsp;
               {timelockDurationSeconds.eq(0) ? (
