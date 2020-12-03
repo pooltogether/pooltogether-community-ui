@@ -1,17 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react'
-import FeatherIcon from 'feather-icons-react'
-import { ethers } from 'ethers'
-import { useRouter } from 'next/router'
-
 import ComptrollerAbi from '@pooltogether/pooltogether-contracts/abis/Comptroller'
-
-import { SENTINEL_ADDRESS } from 'lib/constants'
+import { ethers } from 'ethers'
+import FeatherIcon from 'feather-icons-react'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { WalletContext } from 'lib/components/WalletContextProvider'
+import { SENTINEL_ADDRESS } from 'lib/constants'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { extractPrevDripTokenAddress } from 'lib/utils/extractPrevDripTokenAddress'
 import { fetchVolumeDripChainData } from 'lib/utils/fetchVolumeDripChainData'
 import { sendTx } from 'lib/utils/sendTx'
+import { useRouter } from 'next/router'
+import React, { useContext, useEffect, useState } from 'react'
 
 const VolumeDripRow = (props) => {
   const { drip, handleDeactivate, isReferralVolumeDrips } = props
@@ -24,7 +22,7 @@ const VolumeDripRow = (props) => {
         <td className='px-4 py-3 text-left'>
           {displayAmountInEther(drip.tokenBalanceOf, {
             precision: 4,
-            decimals: drip.tokenDecimals,
+            decimals: drip.tokenDecimals
           })}
         </td>
         <td className='px-4 pt-1 pb-1 text-right'>
@@ -121,8 +119,8 @@ const handleDeactivateVolumeDrip = async (
     isReferral,
     prevTokenAddress,
     {
-      gasLimit: 200000,
-    },
+      gasLimit: 200000
+    }
   ]
   console.log({ params })
 
@@ -138,11 +136,7 @@ const handleDeactivateVolumeDrip = async (
 }
 
 export const ListVolumeDrips = (props) => {
-  const {
-    genericChainValues,
-    poolAddresses,
-    // adminChainValues, ?
-  } = props
+  const { poolAddresses } = props
 
   const router = useRouter()
   const networkName = router.query.networkName

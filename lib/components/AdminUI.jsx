@@ -1,12 +1,11 @@
-import React from 'react'
-
 import { ActivateBalanceDrip } from 'lib/components/ActivateBalanceDrip'
 import { ActivateVolumeDrip } from 'lib/components/ActivateVolumeDrip'
 import { ListBalanceDrips } from 'lib/components/ListBalanceDrips'
 import { ListVolumeDrips } from 'lib/components/ListVolumeDrips'
+import React from 'react'
 
 export const AdminUI = (props) => {
-  const { genericChainValues, poolAddresses } = props
+  const { poolChainValues, poolAddresses } = props
 
   return (
     <>
@@ -33,13 +32,13 @@ export const AdminUI = (props) => {
 
       <div className='bg-card p-10 rounded-lg mb-6'>
         <h6 className='mb-2'>Balance drips:</h6>
-        <ListBalanceDrips genericChainValues={genericChainValues} poolAddresses={poolAddresses} />
+        <ListBalanceDrips poolChainValues={poolChainValues} poolAddresses={poolAddresses} />
         <ActivateBalanceDrip poolAddresses={poolAddresses} />
       </div>
 
       <div className='bg-card p-10 rounded-lg mb-6'>
         <h6>Volume drips:</h6>
-        <ListVolumeDrips genericChainValues={genericChainValues} poolAddresses={poolAddresses} />
+        <ListVolumeDrips poolChainValues={poolChainValues} poolAddresses={poolAddresses} />
         <ActivateVolumeDrip poolAddresses={poolAddresses} />
       </div>
     </>

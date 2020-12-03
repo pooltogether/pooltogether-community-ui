@@ -1,26 +1,25 @@
-import React from 'react'
-
 import { Button } from 'lib/components/Button'
 import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
+import React from 'react'
 
 export const SweepTimelockedForm = (props) => {
   const {
     hasFundsToSweep,
-    genericChainValues,
+    poolChainValues,
     handleSubmit,
     usersTimelockBalance,
-    usersTimelockBalanceAvailableAt,
+    usersTimelockBalanceAvailableAt
   } = props
 
-  const { tokenDecimals } = genericChainValues
+  const { tokenDecimals } = poolChainValues
 
   const now = parseInt(Date.now() / 1000, 10)
   const fundsReadyInSeconds = usersTimelockBalanceAvailableAt - now
   const buttonDisabled = fundsReadyInSeconds > 0
 
-  const tokenSymbol = genericChainValues.tokenSymbol || 'TOKEN'
+  const tokenSymbol = poolChainValues.tokenSymbol || 'TOKEN'
 
   return (
     <>

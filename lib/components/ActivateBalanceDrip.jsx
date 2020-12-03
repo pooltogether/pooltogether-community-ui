@@ -1,10 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react'
+import ComptrollerAbi from '@pooltogether/pooltogether-contracts/abis/Comptroller'
 import classnames from 'classnames'
 import { ethers } from 'ethers'
-import { useRouter } from 'next/router'
-
-import ComptrollerAbi from '@pooltogether/pooltogether-contracts/abis/Comptroller'
-
 import { Button } from 'lib/components/Button'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
@@ -14,6 +10,8 @@ import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { fetchTokenChainData } from 'lib/utils/fetchTokenChainData'
 import { poolToast } from 'lib/utils/poolToast'
 import { sendTx } from 'lib/utils/sendTx'
+import { useRouter } from 'next/router'
+import React, { useContext, useEffect, useState } from 'react'
 
 // deactivateBalanceDrip(prizeStrategyAddress, controlledTokenAddress, erc20Address)
 // [1, 2, 3, 4, 5]
@@ -64,7 +62,7 @@ const handleActivateBalanceDripSubmit = async (
 
 export const ActivateBalanceDrip = (props) => {
   const {
-    genericChainValues
+    poolChainValues
     // adminChainValues, ?
   } = props
 

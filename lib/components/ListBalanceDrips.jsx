@@ -1,17 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react'
-import FeatherIcon from 'feather-icons-react'
-import { ethers } from 'ethers'
-import { useRouter } from 'next/router'
-
 import ComptrollerAbi from '@pooltogether/pooltogether-contracts/abis/Comptroller'
-
-import { SENTINEL_ADDRESS } from 'lib/constants'
+import { ethers } from 'ethers'
+import FeatherIcon from 'feather-icons-react'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { WalletContext } from 'lib/components/WalletContextProvider'
+import { SENTINEL_ADDRESS } from 'lib/constants'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { extractPrevDripTokenAddress } from 'lib/utils/extractPrevDripTokenAddress'
 import { fetchBalanceDripChainData } from 'lib/utils/fetchBalanceDripChainData'
 import { sendTx } from 'lib/utils/sendTx'
+import { useRouter } from 'next/router'
+import React, { useContext, useEffect, useState } from 'react'
 
 // deactivateBalanceDrip(prizeStrategyAddress, controlledTokenAddress, erc20Address)
 // [1, 2, 3, 4, 5]
@@ -37,8 +35,8 @@ const handleDeactivateBalanceDrip = async (
     dripTokenAddress,
     prevTokenAddress,
     {
-      gasLimit: 200000,
-    },
+      gasLimit: 200000
+    }
   ]
 
   await sendTx(
@@ -53,11 +51,7 @@ const handleDeactivateBalanceDrip = async (
 }
 
 export const ListBalanceDrips = (props) => {
-  const {
-    genericChainValues,
-    poolAddresses,
-    // adminChainValues, ?
-  } = props
+  const { poolAddresses } = props
 
   const router = useRouter()
   const networkName = router.query.networkName
@@ -164,7 +158,7 @@ export const ListBalanceDrips = (props) => {
                     <td className='px-4 py-3 text-left'>
                       {displayAmountInEther(drip.tokenBalanceOf, {
                         precision: 4,
-                        decimals: drip.tokenDecimals,
+                        decimals: drip.tokenDecimals
                       })}
                     </td>
                     <td className='px-4 pt-1 pb-1 text-right'>

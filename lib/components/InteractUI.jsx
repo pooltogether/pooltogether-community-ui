@@ -1,15 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
-
 import { CompleteAwardUI } from 'lib/components/CompleteAwardUI'
-import { StartAwardUI } from 'lib/components/StartAwardUI'
 import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
+import { StartAwardUI } from 'lib/components/StartAwardUI'
 import { UserActionsUI } from 'lib/components/UserActionsUI'
 import { UserStats } from 'lib/components/UserStats'
 import { WalletContext } from 'lib/components/WalletContextProvider'
+import React, { useContext, useEffect, useState } from 'react'
 
 export const InteractUI = (props) => {
-  const { genericChainValues, usersChainValues, poolAddresses } = props
+  const { poolChainValues, usersChainValues, poolAddresses } = props
 
   const walletContext = useContext(WalletContext)
   const usersAddress = walletContext._onboard.getState().address
@@ -78,10 +77,10 @@ export const InteractUI = (props) => {
           </FormLockedOverlay>
         )}
 
-        <UserStats genericChainValues={genericChainValues} usersChainValues={usersChainValues} />
+        <UserStats poolChainValues={poolChainValues} usersChainValues={usersChainValues} />
 
         <UserActionsUI
-          genericChainValues={genericChainValues}
+          poolChainValues={poolChainValues}
           poolAddresses={poolAddresses}
           usersChainValues={usersChainValues}
         />

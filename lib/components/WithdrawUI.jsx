@@ -1,16 +1,14 @@
-import React, { useContext, useState, useEffect } from 'react'
-import { ethers } from 'ethers'
-import { useRouter } from 'next/router'
-
 import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
-
-import { useDebounce } from 'lib/hooks/useDebounce'
-import { WithdrawForm } from 'lib/components/WithdrawForm'
+import { ethers } from 'ethers'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
+import { WithdrawForm } from 'lib/components/WithdrawForm'
+import { useDebounce } from 'lib/hooks/useDebounce'
 import { fetchExitFee } from 'lib/utils/fetchExitFee'
 import { poolToast } from 'lib/utils/poolToast'
 import { sendTx } from 'lib/utils/sendTx'
+import { useRouter } from 'next/router'
+import React, { useContext, useEffect, useState } from 'react'
 
 const handleWithdrawSubmit = async (
   setTx,
@@ -43,9 +41,9 @@ const handleWithdrawSubmit = async (
 }
 
 export const WithdrawUI = (props) => {
-  const { genericChainValues } = props
+  const { poolChainValues } = props
 
-  const { tokenDecimals } = genericChainValues
+  const { tokenDecimals } = poolChainValues
 
   const router = useRouter()
   const networkName = router.query.networkName
@@ -87,7 +85,7 @@ export const WithdrawUI = (props) => {
   const [tx, setTx] = useState({
     inWallet: false,
     sent: false,
-    completed: false,
+    completed: false
   })
 
   const txInFlight = tx.inWallet || tx.sent
@@ -123,11 +121,11 @@ export const WithdrawUI = (props) => {
             vars={{
               maxExitFee,
               withdrawAmount,
-              withdrawType,
+              withdrawType
             }}
             stateSetters={{
               setWithdrawAmount,
-              setWithdrawType,
+              setWithdrawType
             }}
           />
         </>

@@ -1,21 +1,20 @@
-import React from 'react'
 import { ethers } from 'ethers'
-
 import { Button } from 'lib/components/Button'
 import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
+import React from 'react'
 
 export const DepositForm = (props) => {
-  const { genericChainValues, handleSubmit, vars, stateSetters, disabled, usersChainValues } = props
+  const { poolChainValues, handleSubmit, vars, stateSetters, disabled, usersChainValues } = props
 
   const { usersTokenBalance } = usersChainValues || {}
 
-  const { tokenDecimals, isRngRequested } = genericChainValues || {}
+  const { tokenDecimals, isRngRequested } = poolChainValues || {}
 
   const poolIsLocked = isRngRequested
-  const tokenSymbol = genericChainValues.tokenSymbol || 'TOKEN'
+  const tokenSymbol = poolChainValues.tokenSymbol || 'TOKEN'
 
   let depositAmount, setDepositAmount
   if (vars && stateSetters) {

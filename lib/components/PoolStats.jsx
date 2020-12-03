@@ -8,14 +8,11 @@ import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import React, { useEffect, useState } from 'react'
 
 export const PoolStats = (props) => {
-  const { genericChainValues } = props
+  const { poolChainValues } = props
 
   const {
-    awardBalance,
     prizePeriodRemainingSeconds,
     canCompleteAward,
-    poolTotalSupply,
-    supplyRatePerBlock,
     ticketTotalSupply,
     ticketName,
     ticketSymbol,
@@ -24,16 +21,16 @@ export const PoolStats = (props) => {
     sponsorshipName,
     sponsorshipSymbol,
     maxExitFeeMantissa
-  } = genericChainValues
+  } = poolChainValues
 
-  const tokenDecimals = genericChainValues.tokenDecimals || DEFAULT_TOKEN_PRECISION
-  const tokenSymbol = genericChainValues.tokenSymbol || 'TOKEN'
+  const tokenDecimals = poolChainValues.tokenDecimals || DEFAULT_TOKEN_PRECISION
+  const tokenSymbol = poolChainValues.tokenSymbol || 'TOKEN'
 
   const [mountedAt, setMountedAt] = useState(0)
   const [secondsToPrizeAtMount, setSecondsToPrizeAtMount] = useState(0)
   const [secondsRemainingNow, setSecondsRemainingNow] = useState('--')
 
-  const [erc20Awards, setErc20Awards] = useAtom(erc20AwardsAtom)
+  const [prizePoolType, setPrizePoolType] = useAtom(prizePoolTypeAtom)
 
   useEffect(() => {
     const set = () => {
@@ -49,106 +46,103 @@ export const PoolStats = (props) => {
     setSecondsRemainingNow(remaining <= 0 ? 0 : remaining)
   }, 1000)
 
+  const cards = [
+    {
+      icon: null,
+      title: <>next prize (estimate)</>,
+      content: <AwardCard />
+    },
+    {
+      icon: null,
+      title: <>Seconds until rewardable</>,
+      content: (
+        <>
+          <h3>{secondsRemainingNow}</h3>
+        </>
+      )
+    },
+    {
+      icon: null,
+      title: <>Decimal precision</>,
+      content: (
+        <>
+          <h3>{tokenDecimals}</h3>
+        </>
+      )
+    },
+    {
+      icon: null,
+      title: <>Total ticket supply</>,
+      content: (
+        <>
+          <h3>
+            {displayAmountInEther(ticketTotalSupply, {
+              precision: 2,
+              decimals: tokenDecimals
+            })}{' '}
+            {tokenSymbol}
+          </h3>
+        </>
+      )
+    },
+    {
+      icon: null,
+      title: <>Ticket Symbol &amp; Name</>,
+      content: (
+        <>
+          <h5>
+            ${ticketSymbol}
+            <br />
+            <span className='text-blue'>{ticketName}</span>
+          </h5>
+        </>
+      )
+    },
+    {
+      icon: null,
+      title: <>Ticket Credit Rate (% per second)</>,
+      content: (
+        <>
+          <h3>{displayAmountInEther(ticketCreditRateMantissa, { precision: 10 })}</h3>
+        </>
+      )
+    },
+    {
+      icon: null,
+      title: <>Ticket Credit Limit</>,
+      content: (
+        <>
+          <h3>{displayAmountInEther(ticketCreditLimitMantissa.mul(100), { precision: 2 })}%</h3>
+        </>
+      )
+    },
+    {
+      icon: null,
+      title: <>Sponsorship Symbol &amp; Name</>,
+      content: (
+        <>
+          <h5>
+            ${sponsorshipSymbol}
+            <br />
+            <span className='text-blue'>{sponsorshipName}</span>
+          </h5>
+        </>
+      )
+    },
+    {
+      icon: null,
+      title: <>Max Exit Fee</>,
+      content: (
+        <>
+          <h3>{displayAmountInEther(maxExitFeeMantissa.mul(100), { precision: 2 })}%</h3>
+        </>
+      )
+    }
+  ]
+
   return (
     <>
-      <CardGrid
-        cardGroupId='manage-pool-cards'
-        cards={[
-          {
-            icon: null,
-            title: <>next prize (estimate)</>,
-            content: <AwardCard />
-          },
-          {
-            icon: null,
-            title: <>Seconds until rewardable</>,
-            content: (
-              <>
-                <h3>{secondsRemainingNow}</h3>
-              </>
-            )
-          },
-          {
-            icon: null,
-            title: <>Decimal precision</>,
-            content: (
-              <>
-                <h3>{tokenDecimals}</h3>
-              </>
-            )
-          },
-          {
-            icon: null,
-            title: <>Total ticket supply</>,
-            content: (
-              <>
-                <h3>
-                  {displayAmountInEther(ticketTotalSupply, {
-                    precision: 2,
-                    decimals: tokenDecimals
-                  })}{' '}
-                  {tokenSymbol}
-                </h3>
-              </>
-            )
-          },
-          {
-            icon: null,
-            title: <>Ticket Symbol &amp; Name</>,
-            content: (
-              <>
-                <h5>
-                  ${ticketSymbol}
-                  <br />
-                  <span className='text-blue'>{ticketName}</span>
-                </h5>
-              </>
-            )
-          },
-          {
-            icon: null,
-            title: <>Ticket Credit Rate (% per second)</>,
-            content: (
-              <>
-                <h3>{displayAmountInEther(ticketCreditRateMantissa, { precision: 10 })}</h3>
-              </>
-            )
-          },
-          {
-            icon: null,
-            title: <>Ticket Credit Limit</>,
-            content: (
-              <>
-                <h3>
-                  {displayAmountInEther(ticketCreditLimitMantissa.mul(100), { precision: 2 })}%
-                </h3>
-              </>
-            )
-          },
-          {
-            icon: null,
-            title: <>Sponsorship Symbol &amp; Name</>,
-            content: (
-              <>
-                <h5>
-                  ${sponsorshipSymbol}
-                  <br />
-                  <span className='text-blue'>{sponsorshipName}</span>
-                </h5>
-              </>
-            )
-          },
-          {
-            icon: null,
-            title: <>Max Exit Fee</>,
-            content: (
-              <>
-                <h3>{displayAmountInEther(maxExitFeeMantissa.mul(100), { precision: 2 })}%</h3>
-              </>
-            )
-          }
-        ]}
-      />
+      <CardGrid cardGroupId='manage-pool-cards' cards={cards} />
     </>
   )
 }

@@ -1,17 +1,14 @@
-import React, { useContext, useState } from 'react'
-import { ethers } from 'ethers'
-
-import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
-import PermitAndDepositDaiAbi from '@pooltogether/pooltogether-contracts/abis/PermitAndDepositDai'
 import DaiAbi from '@pooltogether/pooltogether-contracts/abis/Dai'
-
-import { signPermit } from 'lib/utils/signPermit'
-import { CONTRACT_ADDRESSES } from 'lib/constants'
+import PermitAndDepositDaiAbi from '@pooltogether/pooltogether-contracts/abis/PermitAndDepositDai'
+import { ethers } from 'ethers'
 import { DepositForm } from 'lib/components/DepositForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
+import { CONTRACT_ADDRESSES } from 'lib/constants'
 import { poolToast } from 'lib/utils/poolToast'
 import { sendTx } from 'lib/utils/sendTx'
+import { signPermit } from 'lib/utils/signPermit'
+import React, { useContext, useState } from 'react'
 
 const handleDepositSubmit = async (
   setTx,
@@ -43,14 +40,14 @@ const handleDepositSubmit = async (
       name: 'Dai Stablecoin',
       version: '1',
       chainId,
-      verifyingContract: tokenAddress,
+      verifyingContract: tokenAddress
     },
     {
       holder,
       spender: permitAddress,
       nonce: nonce.toString(),
       expiry,
-      allowed: true,
+      allowed: true
     }
   )
   let { v, r, s } = ethers.utils.splitSignature(permit.sig)
@@ -71,8 +68,8 @@ const handleDepositSubmit = async (
     ticketAddress,
     referrer,
     {
-      gasLimit: 800000,
-    },
+      gasLimit: 800000
+    }
   ]
 
   await sendTx(
@@ -114,7 +111,7 @@ export const PermitAndDepositUI = (props) => {
         <>
           <DepositForm
             {...props}
-            genericChainValues={props.genericChainValues}
+            poolChainValues={props.poolChainValues}
             handleSubmit={(e) => {
               e.preventDefault()
               handleDepositSubmit(
@@ -125,15 +122,15 @@ export const PermitAndDepositUI = (props) => {
                 ticketAddress,
                 tokenAddress,
                 depositAmount,
-                props.genericChainValues.tokenDecimals,
+                props.poolChainValues.tokenDecimals,
                 chainId
               )
             }}
             vars={{
-              depositAmount,
+              depositAmount
             }}
             stateSetters={{
-              setDepositAmount,
+              setDepositAmount
             }}
           />
         </>

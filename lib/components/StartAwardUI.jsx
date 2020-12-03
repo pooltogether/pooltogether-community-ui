@@ -1,17 +1,15 @@
-import React, { useContext, useState } from 'react'
-
 import SingleRandomWinnerAbi from '@pooltogether/pooltogether-contracts/abis/SingleRandomWinner'
-
 import { Button } from 'lib/components/Button'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { sendTx } from 'lib/utils/sendTx'
+import React, { useContext, useState } from 'react'
 
 const handleStartAwardSubmit = async (setTx, provider, contractAddress) => {
   const params = [
     {
-      gasLimit: 300000,
-    },
+      gasLimit: 300000
+    }
   ]
 
   await sendTx(
@@ -26,9 +24,9 @@ const handleStartAwardSubmit = async (setTx, provider, contractAddress) => {
 }
 
 export const StartAwardUI = (props) => {
-  const { genericChainValues } = props
+  const { poolChainValues } = props
 
-  const { canCompleteAward, canStartAward, isRngRequested } = genericChainValues
+  const { canCompleteAward, canStartAward, isRngRequested } = poolChainValues
 
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider

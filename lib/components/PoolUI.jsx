@@ -20,9 +20,9 @@ import { usePoolAddresses } from 'lib/hooks/usePoolAddresses'
 import { fetchPoolChainValues, usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { usePrizePoolType } from 'lib/hooks/usePrizePoolType'
 import { fetchUserChainData } from 'lib/hooks/useUserChainValues'
-import { fetchErc20AwardBalances } from 'lib/utils/fetchChainData'
 import { nameToChainId } from 'lib/utils/nameToChainId'
 import { poolToast } from 'lib/utils/poolToast'
+import { fetchErc20AwardBalances, useExternalErc20Awards } from 'lib/utils/useExternalErc20Awards'
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
 
@@ -92,28 +92,19 @@ export const PoolUI = (props) => {
   usePrizePoolType()
   usePoolAddresses()
   usePoolChainValues()
+  useExternalErc20Awards()
 
   // Keep chain values fresh
   useInterval(() => {
-    console.log('Refresh data')
     fetchPoolChainValues(provider, poolAddresses, prizePoolType, setPoolChainValues)
     fetchUserChainData(provider, poolAddresses, usersAddress, setUserChainValues)
+    fetchErc20AwardBalances(
+      provider,
+      poolAddresses,
+      poolChainValues.externalErc20Awards,
+      setErc20Awards
+    )
   }, 25000)
-
-  useEffect(() => {
-    const getExternalAwards = async () => {
-      if (poolChainValues.externalErc20Awards?.length >= 1) {
-        const erc20Awards = await fetchErc20AwardBalances(
-          networkName,
-          poolAddresses.prizePool,
-          poolChainValues.externalErc20Awards
-        )
-        setErc20Awards(erc20Awards)
-      }
-    }
-
-    getExternalAwards()
-  }, [poolAddresses.prizePool, poolChainValues.externalErc20Awards])
 
   useEffect(() => {
     const balance = walletContext.state.onboard.getState().balance
@@ -138,7 +129,7 @@ export const PoolUI = (props) => {
     })
   }
 
-  if (poolAddresses.error || poolChainValues.error || userChainValues.error) {
+  if (poolAddresses.error || poolChainValues.error || userChainValues.error || erc20Awards.error) {
     if (poolAddresses.error) {
       renderErrorMessage(prizePool, 'pool addresses', poolAddresses.errorMessage)
     }
@@ -151,13 +142,9 @@ export const PoolUI = (props) => {
       renderErrorMessage(prizePool, `user's chain values`, userChainValues.errorMessage)
     }
 
-    // router.push(
-    //   `/`,
-    //   `/`,
-    //   {
-    //     shallow: true
-    //   }
-    // )
+    if (erc20Awards.error) {
+      renderErrorMessage(prizePool, 'erc20 awards', erc20Awards.errorMessage)
+    }
 
     return null
   }
@@ -234,7 +221,7 @@ export const PoolUI = (props) => {
             <Content>
               <ContentPane isSelected={isSelected === '#stats'}>
                 <StatsUI
-                  genericChainValues={poolChainValues}
+                  poolChainValues={poolChainValues}
                   networkName={networkName}
                   poolAddresses={poolAddresses}
                   usersAddress={usersAddress}
@@ -243,14 +230,14 @@ export const PoolUI = (props) => {
 
               <ContentPane isSelected={isSelected === '#interact'}>
                 <InteractUI
-                  genericChainValues={poolChainValues}
+                  poolChainValues={poolChainValues}
                   poolAddresses={poolAddresses}
                   usersChainValues={userChainValues}
                 />
               </ContentPane>
 
               <ContentPane isSelected={isSelected === '#admin'}>
-                <AdminUI genericChainValues={poolChainValues} poolAddresses={poolAddresses} />
+                <AdminUI poolChainValues={poolChainValues} poolAddresses={poolAddresses} />
               </ContentPane>
             </Content>
           </div>

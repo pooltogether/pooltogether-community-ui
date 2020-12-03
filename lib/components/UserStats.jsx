@@ -1,14 +1,13 @@
-import React from 'react'
 import classnames from 'classnames'
-
 import { BlueLineStat } from 'lib/components/BlueLineStat'
 import { StatContainer } from 'lib/components/StatContainer'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
+import React from 'react'
 
 export const UserStats = (props) => {
-  const { ethBalance, genericChainValues, usersChainValues } = props
+  const { ethBalance, poolChainValues, usersChainValues } = props
 
-  const { ticketSymbol, tokenSymbol, tokenDecimals } = genericChainValues
+  const { ticketSymbol, tokenSymbol, tokenDecimals } = poolChainValues
 
   const { usersTokenBalance, usersTokenAllowance, usersTicketBalance } = usersChainValues
 
