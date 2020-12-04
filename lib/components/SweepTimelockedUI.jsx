@@ -11,8 +11,8 @@ const handleSweepTimelockedSubmit = async (setTx, provider, contractAddress, use
   const params = [
     [usersAddress],
     {
-      gasLimit: 700000,
-    },
+      gasLimit: 700000
+    }
   ]
 
   await sendTx(
@@ -36,7 +36,7 @@ export const SweepTimelockedUI = (props) => {
   const [tx, setTx] = useState({
     inWallet: false,
     sent: false,
-    completed: false,
+    completed: false
   })
 
   const { usersTimelockBalance, usersTimelockBalanceAvailableAt } = usersChainValues || {}

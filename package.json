@@ -42,6 +42,7 @@
     "ethers": "^4.0.47",
     "feather-icons-react": "^0.4.1",
     "jest": "^26.4.2",
+    "jotai": "^0.11.2",
     "js-cookie": "^2.2.1",
     "next": "9.4.4",
     "next-images": "^1.4.0",
@@ -52,6 +53,7 @@
     "react-toastify": "^6.0.5",
     "request": "2.88.2",
     "rollup": "2.17.1",
+    "scheduler": "^0.20.1",
     "tailwindcss": "^1.7.6",
     "webpack": "4"
   },

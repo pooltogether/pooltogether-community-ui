@@ -6,9 +6,9 @@ import { StatContainer } from 'lib/components/StatContainer'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 
 export const UserStats = (props) => {
-  const { ethBalance, genericChainValues, usersChainValues } = props
+  const { ethBalance, poolChainValues, usersChainValues } = props
 
-  const { ticketSymbol, tokenSymbol, tokenDecimals } = genericChainValues
+  const { ticketSymbol, tokenSymbol, tokenDecimals } = poolChainValues
 
   const { usersTokenBalance, usersTokenAllowance, usersTicketBalance } = usersChainValues
 

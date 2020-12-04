@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react'
-
 import SingleRandomWinnerAbi from '@pooltogether/pooltogether-contracts/abis/SingleRandomWinner'
 
 import { Button } from 'lib/components/Button'
@@ -26,9 +25,9 @@ const handleCompleteAwardSubmit = async (setTx, provider, contractAddress) => {
 }
 
 export const CompleteAwardUI = (props) => {
-  const { genericChainValues } = props
+  const { poolChainValues } = props
 
-  const { isRngRequested, canCompleteAward } = genericChainValues
+  const { isRngRequested, canCompleteAward } = poolChainValues
 
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider

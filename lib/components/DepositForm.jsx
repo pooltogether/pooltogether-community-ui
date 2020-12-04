@@ -8,14 +8,14 @@ import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
 
 export const DepositForm = (props) => {
-  const { genericChainValues, handleSubmit, vars, stateSetters, disabled, usersChainValues } = props
+  const { poolChainValues, handleSubmit, vars, stateSetters, disabled, usersChainValues } = props
 
   const { usersTokenBalance } = usersChainValues || {}
 
-  const { tokenDecimals, isRngRequested } = genericChainValues || {}
+  const { tokenDecimals, isRngRequested } = poolChainValues || {}
 
   const poolIsLocked = isRngRequested
-  const tokenSymbol = genericChainValues.tokenSymbol || 'TOKEN'
+  const tokenSymbol = poolChainValues.tokenSymbol || 'TOKEN'
 
   let depositAmount, setDepositAmount
   if (vars && stateSetters) {

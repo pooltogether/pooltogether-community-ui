@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
+import ComptrollerAbi from '@pooltogether/pooltogether-contracts/abis/Comptroller'
 import classnames from 'classnames'
 import { ethers } from 'ethers'
 import { useRouter } from 'next/router'
-
-import ComptrollerAbi from '@pooltogether/pooltogether-contracts/abis/Comptroller'
 
 import { Button } from 'lib/components/Button'
 import { LoadingDots } from 'lib/components/LoadingDots'
@@ -64,7 +63,7 @@ const handleActivateBalanceDripSubmit = async (
 
 export const ActivateBalanceDrip = (props) => {
   const {
-    genericChainValues
+    poolChainValues
     // adminChainValues, ?
   } = props
 

@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react'
-import { ethers } from 'ethers'
-
 import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
+import { ethers } from 'ethers'
 
 import { DepositForm } from 'lib/components/DepositForm'
 import { TxMessage } from 'lib/components/TxMessage'
@@ -30,8 +29,8 @@ const handleDepositSubmit = async (
     ticketAddress,
     referrer,
     {
-      gasLimit: 800000,
-    },
+      gasLimit: 800000
+    }
   ]
 
   await sendTx(
@@ -69,7 +68,7 @@ export const DepositUI = (props) => {
         <>
           <DepositForm
             {...props}
-            genericChainValues={props.genericChainValues}
+            poolChainValues={props.poolChainValues}
             handleSubmit={(e) => {
               e.preventDefault()
               handleDepositSubmit(
@@ -79,14 +78,14 @@ export const DepositUI = (props) => {
                 props.poolAddresses.prizePool,
                 ticketAddress,
                 depositAmount,
-                props.genericChainValues.tokenDecimals
+                props.poolChainValues.tokenDecimals
               )
             }}
             vars={{
-              depositAmount,
+              depositAmount
             }}
             stateSetters={{
-              setDepositAmount,
+              setDepositAmount
             }}
           />
         </>

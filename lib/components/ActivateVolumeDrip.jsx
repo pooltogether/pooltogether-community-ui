@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
+import ComptrollerAbi from '@pooltogether/pooltogether-contracts/abis/Comptroller'
 import classnames from 'classnames'
 import { ethers } from 'ethers'
 import { useRouter } from 'next/router'
 
-import ComptrollerAbi from '@pooltogether/pooltogether-contracts/abis/Comptroller'
-
 import { Button } from 'lib/components/Button'
-import { LoadingDots } from 'lib/components/LoadingDots'
 import { CheckboxInputGroup } from 'lib/components/CheckboxInputGroup'
+import { LoadingDots } from 'lib/components/LoadingDots'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
@@ -65,7 +64,7 @@ const handleActivateVolumeDripSubmit = async (
 
 export const ActivateVolumeDrip = (props) => {
   const {
-    genericChainValues
+    poolChainValues
     // adminChainValues, ?
   } = props
 

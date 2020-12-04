@@ -3,15 +3,14 @@ import { ethers } from 'ethers'
 
 import { Button } from 'lib/components/Button'
 import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
+import { PTHint } from 'lib/components/PTHint'
 import { RadioInputGroup } from 'lib/components/RadioInputGroup'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
-
-import { PTHint } from 'lib/components/PTHint'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
 
 export const WithdrawForm = (props) => {
-  const { exitFees, genericChainValues, handleSubmit, vars, stateSetters, usersChainValues } = props
+  const { exitFees, poolChainValues, handleSubmit, vars, stateSetters, usersChainValues } = props
 
   const { usersTicketBalance } = usersChainValues || {}
 
@@ -25,11 +24,11 @@ export const WithdrawForm = (props) => {
     setWithdrawType(e.target.value)
   }
 
-  const { isRngRequested, tokenDecimals } = genericChainValues || {}
+  const { isRngRequested, tokenDecimals } = poolChainValues || {}
 
   const poolIsLocked = isRngRequested
-  const tokenSymbol = genericChainValues.tokenSymbol || 'TOKEN'
-  const ticketSymbol = genericChainValues.ticketSymbol || 'TICK'
+  const tokenSymbol = poolChainValues.tokenSymbol || 'TOKEN'
+  const ticketSymbol = poolChainValues.ticketSymbol || 'TICK'
 
   let instantTotal = ethers.utils.bigNumberify(0)
   if (withdrawAmount) {
@@ -106,12 +105,12 @@ export const WithdrawForm = (props) => {
           radios={[
             {
               value: 'scheduled',
-              label: 'scheduled',
+              label: 'scheduled'
             },
             {
               value: 'instant',
-              label: 'instant',
-            },
+              label: 'instant'
+            }
           ]}
         />
 
@@ -155,7 +154,7 @@ export const WithdrawForm = (props) => {
               The maximum you can withdraw is{' '}
               {displayAmountInEther(usersTicketBalance, {
                 precision: 2,
-                decimals: tokenDecimals,
+                decimals: tokenDecimals
               })}{' '}
               {tokenSymbol}.
             </div>
