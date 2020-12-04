@@ -25,6 +25,7 @@ import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
 import { DATA_REFRESH_POLLING_INTERVAL } from 'lib/constants'
+import { useReadProvider } from 'lib/hooks/useReadProvider'
 
 // http://localhost:3000/pools/rinkeby/0xd1E58Db0d67DB3f28fFa412Db58aCeafA0fEF8fA#admin
 
@@ -68,11 +69,12 @@ export const PoolUI = (props) => {
   const [_usersAddress, setUsersAddress] = useAtom(usersAddressAtom)
   const [network, setNetwork] = useAtom(networkAtom)
 
-  const [poolAddresses, setPoolAddresses] = usePoolAddresses()
-  const [userChainValues, setUserChainValues] = useUserChainValues()
-  const [prizePoolType, setPrizePoolType] = usePrizePoolType()
-  const [poolChainValues, setPoolChainValues] = usePoolChainValues()
-  const [erc20Awards, setErc20Awards] = useExternalErc20Awards()
+  const readProvider = useReadProvider(networkName)
+  const [poolAddresses, setPoolAddresses] = usePoolAddresses(readProvider)
+  const [userChainValues, setUserChainValues] = useUserChainValues(readProvider)
+  const [prizePoolType, setPrizePoolType] = usePrizePoolType(readProvider)
+  const [poolChainValues, setPoolChainValues] = usePoolChainValues(readProvider)
+  const [erc20Awards, setErc20Awards] = useExternalErc20Awards(readProvider)
 
   useEffect(() => {
     setPoolAddresses({
@@ -108,10 +110,10 @@ export const PoolUI = (props) => {
 
   // Keep chain values fresh
   useInterval(() => {
-    fetchPoolChainValues(provider, poolAddresses, prizePoolType, setPoolChainValues)
-    fetchUserChainData(provider, poolAddresses, usersAddress, setUserChainValues)
+    fetchPoolChainValues(readProvider, poolAddresses, prizePoolType, setPoolChainValues)
+    fetchUserChainData(readProvider, poolAddresses, usersAddress, setUserChainValues)
     fetchErc20AwardBalances(
-      provider,
+      readProvider,
       poolAddresses,
       poolChainValues.externalErc20Awards,
       setErc20Awards
