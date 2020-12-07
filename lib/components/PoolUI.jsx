@@ -26,6 +26,9 @@ import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
 import { DATA_REFRESH_POLLING_INTERVAL } from 'lib/constants'
 import { useReadProvider } from 'lib/hooks/useReadProvider'
+import { ThemeContext } from 'lib/components/contextProviders/ThemeContextProvider'
+import { MainUI } from 'lib/components/MainUI'
+import { getCoinGeckoId, getCoinGeckoTokenList } from 'lib/services/coingecko'
 
 // http://localhost:3000/pools/rinkeby/0xd1E58Db0d67DB3f28fFa412Db58aCeafA0fEF8fA#admin
 
@@ -53,6 +56,8 @@ export const userChainValuesAtom = atom({
   usersTokenBalance: ethers.utils.bigNumberify(0)
 })
 
+export const coinGeckoTokenIdsAtom = atom({})
+
 /**
  * Main wrapper for the UI views
  */
@@ -68,6 +73,7 @@ export const PoolUI = (props) => {
   const [ethBalance, setEthBalance] = useAtom(ethBalanceAtom)
   const [_usersAddress, setUsersAddress] = useAtom(usersAddressAtom)
   const [network, setNetwork] = useAtom(networkAtom)
+  const [coinGeckoTokenIds, setCoinGeckoTokenIds] = useAtom(coinGeckoTokenIdsAtom)
 
   const readProvider = useReadProvider(networkName)
   const [poolAddresses, setPoolAddresses] = usePoolAddresses(readProvider)
@@ -75,6 +81,30 @@ export const PoolUI = (props) => {
   const [prizePoolType, setPrizePoolType] = usePrizePoolType(readProvider)
   const [poolChainValues, setPoolChainValues] = usePoolChainValues(readProvider)
   const [erc20Awards, setErc20Awards] = useExternalErc20Awards(readProvider)
+
+  // Fetch CoinGecko Token Ids so we can map token symbol + name to images
+  useEffect(() => {
+    const getTokenData = async () => {
+      try {
+        const response = await getCoinGeckoTokenList()
+        const tokenIds = {
+          _error: false
+        }
+        response.data.forEach((token) => {
+          tokenIds[getCoinGeckoId(token)] = token.id
+        })
+        setCoinGeckoTokenIds(tokenIds)
+        console.log(tokenIds)
+      } catch (e) {
+        console.log("Can't access CoinGecko Token Data")
+        setCoinGeckoTokenIds({
+          _error: true
+        })
+      }
+    }
+
+    getTokenData()
+  }, [])
 
   useEffect(() => {
     setPoolAddresses({
@@ -175,25 +205,6 @@ export const PoolUI = (props) => {
     walletContext.handleConnectWallet()
   }
 
-  const tokenSymbol = poolChainValues.tokenSymbol
-
-  let tokenSvg
-  if (tokenSymbol === 'DAI') {
-    tokenSvg = DaiSvg
-  } else if (tokenSymbol === 'BAT') {
-    tokenSvg = BatSvg
-  } else if (tokenSymbol === 'USDC') {
-    tokenSvg = UsdcSvg
-  } else if (tokenSymbol === 'USDT') {
-    tokenSvg = UsdtSvg
-  } else if (tokenSymbol === 'USDC') {
-    tokenSvg = UsdtSvg
-  } else if (tokenSymbol === 'WBTC') {
-    tokenSvg = WbtcSvg
-  } else if (tokenSymbol === 'ZRX') {
-    tokenSvg = ZrxSvg
-  }
-
   return (
     <>
       {poolChainValues.loading ? (
@@ -203,59 +214,7 @@ export const PoolUI = (props) => {
           Fetching chain values ...
         </div>
       ) : (
-        <>
-          <div className='py-4 sm:py-6 text-center'>
-            <img
-              src={tokenSvg}
-              className='inline-block w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mb-2'
-            />
-
-            <div className='mb-6'>
-              Prize Pool contract address:
-              <br />{' '}
-              <EtherscanAddressLink address={poolAddresses.prizePool} networkName={networkName}>
-                {poolAddresses.prizePool}
-              </EtherscanAddressLink>
-            </div>
-          </div>
-
-          <div className='mt-8'>
-            <Tabs>
-              <Tab changeHash={changeHash} selected={isSelected === '#stats'} hash='#stats'>
-                Stats
-              </Tab>
-              <Tab changeHash={changeHash} selected={isSelected === '#interact'} hash='#interact'>
-                Interact
-              </Tab>
-              <Tab changeHash={changeHash} selected={isSelected === '#admin'} hash='#admin'>
-                Admin
-              </Tab>
-            </Tabs>
-
-            <Content>
-              <ContentPane isSelected={isSelected === '#stats'}>
-                <StatsUI
-                  poolChainValues={poolChainValues}
-                  networkName={networkName}
-                  poolAddresses={poolAddresses}
-                  usersAddress={usersAddress}
-                />
-              </ContentPane>
-
-              <ContentPane isSelected={isSelected === '#interact'}>
-                <InteractUI
-                  poolChainValues={poolChainValues}
-                  poolAddresses={poolAddresses}
-                  usersChainValues={userChainValues}
-                />
-              </ContentPane>
-
-              <ContentPane isSelected={isSelected === '#admin'}>
-                <AdminUI poolChainValues={poolChainValues} poolAddresses={poolAddresses} />
-              </ContentPane>
-            </Content>
-          </div>
-        </>
+        <MainUI />
       )}
     </>
   )

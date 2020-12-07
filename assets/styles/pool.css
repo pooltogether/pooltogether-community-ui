@@ -1,73 +1,19 @@
 * {
   caret-color: #05e6c4;
 
-  --color-bg-body: #290b5a;
-  --color-bg-card: #341762;
-  --color-bg-card-selected: #43286e;
-  --color-bg-primary: #290b5a;
-  --color-bg-secondary: #4c249f;
-  --color-bg-default: #341762;
-  --color-bg-darkened: #1a083a;
-  --color-bg-inverse: #fff;
-  --color-bg-overlay: rgba(0, 0, 0, 0.7);
-  --color-bg-black: #111;
-  --color-bg-accent-grey-1: rgba(53, 240, 208, 0.2);
-  --color-bg-accent-grey-2: #43286e;
-  --color-bg-highlight-1: #35f0d0;
-  --color-bg-highlight-2: #35f0d0;
-  --color-bg-highlight-3: #401c94;
-  --color-bg-highlight-4: #5af5db;
-  --color-bg-highlight-5: #4c1fa0;
-  --color-bg-grey: rgba(187, 187, 187, 0.7);
-  --color-bg-red: #aa0b0b;
-  --color-bg-light-red: #bd0505;
-  --color-bg-green: #3ef3d4;
-  --color-bg-yellow-1: #ff9303;
-  --color-bg-yellow-2: rgba(255, 147, 3, 0.3);
-  --color-bg-blue-1: #4565ff;
-  --color-bg-blue-2: rgba(69, 101, 255, 0.4);
-  --color-bg-teal: #0ea3a4;
-  --color-bg-purple-1: #401c94;
-
-  --color-text-accent-1: #bbb2ce;
-  --color-text-accent-2: #bbb2ce;
-  --color-text-accent-3: #9f82d7;
-  --color-text-primary: #4c249f;
-  --color-text-primary-soft: #6458af;
-  --color-text-secondary: #4c249f;
-  --color-text-default: #a472f7;
-  --color-text-default-soft: #7458df;
-  --color-text-inverse: #fff;
-  --color-text-match: #111;
-  --color-text-black: #111;
-  --color-text-highlight-1: #1ef7d6;
-  --color-text-highlight-2: #35f0d0;
-  --color-text-highlight-3: #55f1d7;
-  --color-text-whitesmoke: rgba(245, 245, 245, 0.6);
-  --color-text-red: #e61b1b;
-  --color-text-green-1: #05e6c4;
-  --color-text-green-2: #31b073;
-  --color-text-yellow-1: #ffc403;
-  --color-text-yellow-2: #ff9403;
-  --color-text-blue: #68a7ff;
-  --color-text-teal: #049c9c;
-  --color-text-purple: #401c94;
-
-  --color-border-accent-1: #bbb2ce;
-  --color-border-accent-2: #bbb2ce;
-  --color-border-accent-3: #4c249f;
-  --color-border-accent-4: #341762;
-  --color-border-primary: #3c1a79;
-  --color-border-card: #341762;
-  --color-border-secondary: #4c249f;
-  --color-border-default: #4c249f;
-  --color-border-inverse: #fff;
-  --color-border-highlight-1: #35f0d0;
-  --color-border-highlight-2: #35f0d0;
-  --color-border-red: #e61b1b;
-  --color-border-green-1: #3ef3d4;
-  --color-border-green-2: #31b073;
-  --color-border-transparent: rgba(0, 0, 0, 0);
+  --flashyGradient: linear-gradient(
+    40deg,
+    #ff9304 0%,
+    #ff04ea 10%,
+    #9b4beb 20%,
+    #0e8dd6 30%,
+    #0bc6df 40%,
+    #07d464 50%,
+    #dfd105 60%,
+    #ff04ab 78%,
+    #8933eb 90%,
+    #3b89ff 100%
+  );
 }
 
 body {
@@ -492,4 +438,26 @@ input[type='text'] {
   100% {
     stroke-dashoffset: 0;
   }
+}
+
+@keyframes cycleBackgroundPos {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.text-flashy {
+  background: var(--flashyGradient);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+
+  background-size: 1000% auto;
+  animation: cycleBackgroundPos 15000ms infinite steps(100);
 }

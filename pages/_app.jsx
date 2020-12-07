@@ -1,8 +1,10 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
-import { Provider } from 'jotai'
+import { Provider as JotaiProvider } from 'jotai'
+import { QueryCache, ReactQueryCacheProvider } from 'react-query'
 
 import { Layout } from 'lib/components/Layout'
+import { ThemeContextProvider } from 'lib/components/contextProviders/ThemeContextProvider'
 
 import 'react-toastify/dist/ReactToastify.css'
 import '@reach/tooltip/styles.css'
@@ -16,9 +18,12 @@ import 'assets/styles/utils.css'
 import 'assets/styles/animations.css'
 import 'assets/styles/transitions.css'
 import 'assets/styles/typography.css'
+import 'assets/styles/themes.css'
 
 import 'assets/styles/bnc-onboard--custom.css'
 import 'assets/styles/reach--custom.css'
+
+const queryCache = new QueryCache()
 
 const DynamicWalletContextProvider = dynamic(
   () => import('lib/components/WalletContextProvider').then((mod) => mod.WalletContextProvider),
@@ -28,11 +33,15 @@ const DynamicWalletContextProvider = dynamic(
 function MyApp ({ Component, pageProps }) {
   return (
     <DynamicWalletContextProvider>
-      <Provider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </Provider>
+      <ReactQueryCacheProvider queryCache={queryCache}>
+        <ThemeContextProvider>
+          <JotaiProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </JotaiProvider>
+        </ThemeContextProvider>
+      </ReactQueryCacheProvider>
     </DynamicWalletContextProvider>
   )
 }
