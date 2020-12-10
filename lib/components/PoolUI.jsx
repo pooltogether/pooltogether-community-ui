@@ -18,12 +18,6 @@ import { fetchUserChainData, useUserChainValues } from 'lib/hooks/useUserChainVa
 import { nameToChainId } from 'lib/utils/nameToChainId'
 import { poolToast } from 'lib/utils/poolToast'
 import { fetchErc20AwardBalances, useExternalErc20Awards } from 'lib/hooks/useExternalErc20Awards'
-import BatSvg from 'assets/images/bat-new-transparent.png'
-import DaiSvg from 'assets/images/dai-new-transparent.png'
-import UsdcSvg from 'assets/images/usdc-new-transparent.png'
-import UsdtSvg from 'assets/images/usdt-new-transparent.png'
-import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
-import ZrxSvg from 'assets/images/zrx-new-transparent.png'
 import { DATA_REFRESH_POLLING_INTERVAL } from 'lib/constants'
 import { useReadProvider } from 'lib/hooks/useReadProvider'
 import { ThemeContext } from 'lib/components/contextProviders/ThemeContextProvider'
@@ -32,9 +26,10 @@ import { getCoinGeckoId, getCoinGeckoTokenList } from 'lib/services/coingecko'
 
 // http://localhost:3000/pools/rinkeby/0xd1E58Db0d67DB3f28fFa412Db58aCeafA0fEF8fA#admin
 
-const renderErrorMessage = (address, type, message) => {
-  const errorMsg = `Error fetching ${type} for prize pool with address: ${address}: ${message}. (maybe wrong Ethereum network or your IP is being rate-limited?)`
+export const getDataFetchingErrorMessage = (address, type, message) =>
+  `Error fetching ${type} for prize pool with address: ${address}: ${message}. (maybe wrong Ethereum network or your IP is being rate-limited?)`
 
+const renderErrorMessage = (errorMsg) => {
   console.error(errorMsg)
   poolToast.error(errorMsg)
 }
@@ -56,17 +51,25 @@ export const userChainValuesAtom = atom({
   usersTokenBalance: ethers.utils.bigNumberify(0)
 })
 
+export const errorStateAtom = atom({
+  error: null,
+  errorMessage: null
+})
+
 export const coinGeckoTokenIdsAtom = atom({})
 
 /**
  * Main wrapper for the UI views
  */
-export const PoolUI = (props) => {
+const PoolUIViews = (props) => {
   const router = useRouter()
   const networkName = router.query.networkName
   const prizePool = router.query.prizePoolAddress
 
+  const [errorState] = useAtom(errorStateAtom)
+
   const walletContext = useContext(WalletContext)
+  console.log(walletContext)
   const provider = walletContext.state.provider
   const usersAddress = walletContext._onboard.getState().address
 
@@ -165,57 +168,52 @@ export const PoolUI = (props) => {
     }
   }, [])
 
-  const changeHash = (hash) => {
-    setIsSelected(hash)
-
-    router.push(`${router.route.split('#')[0]}${hash}`, `${router.asPath.split('#')[0]}${hash}`, {
-      shallow: true
-    })
+  if (poolChainValues.loading) {
+    return <div className='text-center text-xl'>
+    <LoadingDots />
+    <br />
+    Fetching chain values ...
+  </div>
   }
-
-  if (poolAddresses.error || poolChainValues.error || userChainValues.error || erc20Awards.error) {
-    if (poolAddresses.error) {
-      renderErrorMessage(prizePool, 'pool addresses', poolAddresses.errorMessage)
-    }
-
-    if (poolChainValues.error) {
-      renderErrorMessage(prizePool, 'generic chain values', poolChainValues.errorMessage)
-    }
-
-    if (userChainValues.error) {
-      renderErrorMessage(prizePool, `user's chain values`, userChainValues.errorMessage)
-    }
-
-    if (erc20Awards.error) {
-      renderErrorMessage(prizePool, 'erc20 awards', erc20Awards.errorMessage)
-    }
-
-    return null
-  }
-
-  try {
-    ethers.utils.getAddress(prizePool)
-  } catch (e) {
-    return <>'Incorrectly formatted Ethereum address!'</>
-  }
-
-  const handleConnect = (e) => {
-    e.preventDefault()
-
-    walletContext.handleConnectWallet()
-  }
-
+  
   return (
     <>
       {poolChainValues.loading ? (
-        <div className='text-center text-xl'>
-          <LoadingDots />
-          <br />
-          Fetching chain values ...
-        </div>
+        
       ) : (
         <MainUI />
       )}
     </>
   )
 }
+
+export const PoolUI = (props) => {
+  const router = useRouter()
+  const networkName = router.query.networkName
+  const prizePoolAddress = router.query.prizePoolAddress
+  const [errorState] = useAtom(errorStateAtom)
+
+  try {
+    ethers.utils.getAddress(String(prizePoolAddress))
+  } catch (e) {
+    throw new Error(`Incorrectly formatted Ethereum address! ${prizePoolAddress}`)
+  }
+
+  // Error Catching
+  if (errorState.error) {
+    if (errorState.errorMessage) {
+      renderErrorMessage(errorState.errorMessage)
+    }
+    return null
+  }
+
+  return <PoolUIViews />
+}
+
+// const changeHash = (hash) => {
+//   setIsSelected(hash)
+
+//   router.push(`${router.route.split('#')[0]}${hash}`, `${router.asPath.split('#')[0]}${hash}`, {
+//     shallow: true
+//   })
+// }

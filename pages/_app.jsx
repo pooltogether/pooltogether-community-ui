@@ -22,6 +22,7 @@ import 'assets/styles/themes.css'
 
 import 'assets/styles/bnc-onboard--custom.css'
 import 'assets/styles/reach--custom.css'
+import { ErrorBoundary } from 'lib/components/ErrorBoundary'
 
 const queryCache = new QueryCache()
 
@@ -37,7 +38,9 @@ function MyApp ({ Component, pageProps }) {
         <ThemeContextProvider>
           <JotaiProvider>
             <Layout>
-              <Component {...pageProps} />
+              <ErrorBoundary>
+                <Component {...pageProps} />
+              </ErrorBoundary>
             </Layout>
           </JotaiProvider>
         </ThemeContextProvider>
