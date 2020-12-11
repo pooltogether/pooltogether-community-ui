@@ -11,7 +11,16 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 })
 
 const nextConfig = {
-  inlineImageLimit: 48 // make it tiny so that it doesn't inline,
+  inlineImageLimit: 48, // make it tiny so that it doesn't inline,
+  async redirects() {
+    return [
+      {
+        source: '/old',
+        destination: '/',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 const allConfig = withBundleAnalyzer(

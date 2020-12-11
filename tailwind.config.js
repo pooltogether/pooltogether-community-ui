@@ -7,8 +7,8 @@ module.exports = {
   theme: {
     // this gives us regular (mobile), sm (641px - 1281px) and lg (1281px+)
     screens: {
-      xs: '501px',
-      sm: '1041px',
+      xs: '531px',
+      sm: '941px',
       lg: '1481px'
     },
     extend: {

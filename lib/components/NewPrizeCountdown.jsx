@@ -5,11 +5,15 @@ import { useInterval } from 'beautiful-react-hooks'
 
 // import { formatFutureDateInSeconds } from 'lib/utils/formatFutureDateInSeconds'
 import { subtractDates } from 'lib/utils/subtractDates'
+import { useAtom } from 'jotai'
+import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 
 const ONE_SECOND = 1000
 
 export const NewPrizeCountdown = (props) => {
-  const { pool, center, textAlign, textSize } = props
+  const { center, textAlign, textSize } = props
+  const [poolChainValues] = useAtom(poolChainValuesAtom)
+
   let flashy = props.flashy === false ? false : true
 
   const [secondsRemaining, setSecondsRemaining] = useState(null)
@@ -18,7 +22,8 @@ export const NewPrizeCountdown = (props) => {
 
   // const secs = 167868
   const secs =
-    pool?.prizePeriodRemainingSeconds && parseInt(pool?.prizePeriodRemainingSeconds.toString(), 10)
+    poolChainValues?.prizePeriodRemainingSeconds &&
+    parseInt(poolChainValues?.prizePeriodRemainingSeconds.toString(), 10)
 
   useEffect(() => {
     setSecondsRemaining(secs)
@@ -28,7 +33,7 @@ export const NewPrizeCountdown = (props) => {
     setSecondsRemaining(secondsRemaining - 1)
   }, ONE_SECOND)
 
-  if (!pool || secs === undefined) {
+  if (!poolChainValues || secs === undefined) {
     return null
   }
 
@@ -37,7 +42,7 @@ export const NewPrizeCountdown = (props) => {
   const { days, hours, minutes, seconds } = subtractDates(futureDate, currentDate)
 
   let msg
-  if (pool?.isRngRequested) {
+  if (poolChainValues?.isRngRequested) {
     return (
       <p
         className={classnames(textSize, 'font-bold', {

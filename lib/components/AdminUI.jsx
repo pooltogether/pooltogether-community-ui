@@ -1,47 +1,51 @@
+import { useAtom } from 'jotai'
+import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
+import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React from 'react'
 
-import { ActivateBalanceDrip } from 'lib/components/ActivateBalanceDrip'
-import { ActivateVolumeDrip } from 'lib/components/ActivateVolumeDrip'
-import { ListBalanceDrips } from 'lib/components/ListBalanceDrips'
-import { ListVolumeDrips } from 'lib/components/ListVolumeDrips'
-
 export const AdminUI = (props) => {
-  const { poolChainValues, poolAddresses } = props
+  const [usersAddress] = useAtom(usersAddressAtom)
+  const [poolChainValues] = useAtom(poolChainValuesAtom)
+
+  console.log('Admin render')
 
   return (
-    <>
-      <h5 className='mb-4 uppercase'>Prize Strategy</h5>
+    <div>
+      <h1>{usersAddress}</h1>
+      <Linkbtns />
+    </div>
+  )
+}
 
-      <div className='bg-card p-10 rounded-lg mb-6'>
-        <h6>External ERC20 token awards:</h6>
-        <p>list and add erc20 token awards</p>
-      </div>
+export const Linkbtns = () => {
+  const router = useRouter()
 
-      {/* 
-    addExternalErc20Award(address)
-    removeExternalErc20Award(address, prevToken)
+  const { networkName, prizePoolAddress } = router.query
 
-    addExternalErc721Award(address, [nftIds])
-    removeExternalErc721Award(address, prev721)
-    */}
-      <div className='bg-card p-10 rounded-lg mb-6'>
-        <h6>External ERC721 (NFT) awards:</h6>
-        <p>list and add erc721 nft awards</p>
-      </div>
-
-      <h5 className='uppercase mt-10 mb-4'>Comptroller</h5>
-
-      <div className='bg-card p-10 rounded-lg mb-6'>
-        <h6 className='mb-2'>Balance drips:</h6>
-        <ListBalanceDrips poolChainValues={poolChainValues} poolAddresses={poolAddresses} />
-        <ActivateBalanceDrip poolAddresses={poolAddresses} />
-      </div>
-
-      <div className='bg-card p-10 rounded-lg mb-6'>
-        <h6>Volume drips:</h6>
-        <ListVolumeDrips poolChainValues={poolChainValues} poolAddresses={poolAddresses} />
-        <ActivateVolumeDrip poolAddresses={poolAddresses} />
-      </div>
-    </>
+  return (
+    <div>
+      <Link
+        href={`/pools/[networkName]/[prizePoolAddress]/`}
+        as={`/pools/${networkName}/${prizePoolAddress}/`}
+      >
+        <a>landing</a>
+      </Link>
+      <br />
+      <Link
+        href={`/pools/[networkName]/[prizePoolAddress]/home`}
+        as={`/pools/${networkName}/${prizePoolAddress}/home`}
+      >
+        <a>home</a>
+      </Link>
+      <br />
+      <Link
+        href={`/pools/[networkName]/[prizePoolAddress]/admin`}
+        as={`/pools/${networkName}/${prizePoolAddress}/admin`}
+      >
+        <a>admin</a>
+      </Link>
+    </div>
   )
 }
