@@ -7,8 +7,6 @@ import { Meta } from 'lib/components/Meta'
 import { Nav } from 'lib/components/Nav'
 import { StaticNetworkNotificationBanner } from 'lib/components/StaticNetworkNotificationBanner'
 
-import packageJson from '../../package.json'
-
 export const Layout = (props) => {
   const { children } = props
 
@@ -37,12 +35,12 @@ export const Layout = (props) => {
           /> */}
 
             <div
-              className='relative flex flex-col flex-grow h-full z-10 text-white'
+              className='relative flex justify-center flex-grow h-full z-10 text-white'
               style={{
                 flex: 1
               }}
             >
-              <div className='px-4 sm:px-8 lg:px-12 my-4'>
+              <div className='px-4 sm:px-8 lg:px-12 my-4 w-100 max-w-screen-sm flex flex-col flex-grow'>
                 {React.cloneElement(children, {
                   ...props
                 })}

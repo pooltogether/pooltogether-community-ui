@@ -3,15 +3,17 @@ import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
 
 export const Collapse = (props) => {
-  const { title, children, className } = props
+  const { title, children, className, openOnMount } = props
 
-  const [showContent, setShowContent] = useState(false)
+  const [showContent, setShowContent] = useState(openOnMount)
 
   return (
     <>
       <div
         className={classnames('flex cursor-pointer', className, {
-          'mb-4 sm:mb-8': showContent
+          'mb-4 sm:mb-8': showContent,
+          'justify-between': title,
+          'justify-end': title
         })}
         onClick={() => setShowContent(!showContent)}
       >
@@ -30,4 +32,8 @@ export const Collapse = (props) => {
       {showContent && children}
     </>
   )
+}
+
+Collapse.defaultProps = {
+  openOnMount: false
 }

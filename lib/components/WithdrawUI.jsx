@@ -1,14 +1,20 @@
-import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
+import React, { useContext, useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import { ethers } from 'ethers'
+import { useAtom } from 'jotai'
+import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
+
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { WithdrawForm } from 'lib/components/WithdrawForm'
 import { useDebounce } from 'lib/hooks/useDebounce'
+import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { fetchExitFee } from 'lib/utils/fetchExitFee'
 import { poolToast } from 'lib/utils/poolToast'
 import { sendTx } from 'lib/utils/sendTx'
-import { useRouter } from 'next/router'
-import React, { useContext, useEffect, useState } from 'react'
+import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
+import { networkAtom } from 'lib/hooks/useNetwork'
+import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 
 const handleWithdrawSubmit = async (
   setTx,
@@ -41,19 +47,17 @@ const handleWithdrawSubmit = async (
 }
 
 export const WithdrawUI = (props) => {
-  const { poolChainValues } = props
+  const walletContext = useContext(WalletContext)
+  const [poolAddresses] = useAtom(poolAddressesAtom)
+  const [poolChainValues] = useAtom(poolChainValuesAtom)
+  const [usersAddress] = useAtom(usersAddressAtom)
+  const [network] = useAtom(networkAtom)
 
   const { tokenDecimals } = poolChainValues
+  const { networkName } = network
+  const { prizePool, ticket: ticketAddress } = poolAddresses
 
-  const router = useRouter()
-  const networkName = router.query.networkName
-
-  const prizePool = props.poolAddresses.prizePool
-  const ticketAddress = props.poolAddresses.ticket
-
-  const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
-  const usersAddress = walletContext._onboard.getState().address
 
   const [exitFees, setExitFees] = useState({})
   const maxExitFee = exitFees?.exitFee
@@ -93,47 +97,51 @@ export const WithdrawUI = (props) => {
   const resetState = (e) => {
     e.preventDefault()
     setWithdrawAmount('')
-    setTx({})
+    setTx({
+      inWallet: false,
+      sent: false,
+      completed: false
+    })
+  }
+
+  if (txInFlight) {
+    return <TxMessage txType='Withdraw' tx={tx} handleReset={resetState} />
   }
 
   return (
     <>
-      {!txInFlight ? (
-        <>
-          <WithdrawForm
-            {...props}
-            exitFees={exitFees}
-            handleSubmit={(e) => {
-              e.preventDefault()
+      <div className='mb-4 sm:mb-8 text-sm sm:text-base text-accent-1'>
+        You can choose to withdraw the deposited fund at any time. By withdrawing the fund, you are
+        eliminating/reducing the chance to win the prize in this pool in the next prize periods.
+      </div>
+      <WithdrawForm
+        {...props}
+        exitFees={exitFees}
+        handleSubmit={(e) => {
+          e.preventDefault()
 
-              handleWithdrawSubmit(
-                setTx,
-                provider,
-                prizePool,
-                ticketAddress,
-                usersAddress,
-                withdrawAmount,
-                withdrawType,
-                maxExitFee,
-                tokenDecimals
-              )
-            }}
-            vars={{
-              maxExitFee,
-              withdrawAmount,
-              withdrawType
-            }}
-            stateSetters={{
-              setWithdrawAmount,
-              setWithdrawType
-            }}
-          />
-        </>
-      ) : (
-        <>
-          <TxMessage txType='Withdraw' tx={tx} handleReset={resetState} />
-        </>
-      )}
+          handleWithdrawSubmit(
+            setTx,
+            provider,
+            prizePool,
+            ticketAddress,
+            usersAddress,
+            withdrawAmount,
+            withdrawType,
+            maxExitFee,
+            tokenDecimals
+          )
+        }}
+        vars={{
+          maxExitFee,
+          withdrawAmount,
+          withdrawType
+        }}
+        stateSetters={{
+          setWithdrawAmount,
+          setWithdrawType
+        }}
+      />
     </>
   )
 }

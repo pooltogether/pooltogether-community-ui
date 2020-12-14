@@ -8,9 +8,15 @@ import { RadioInputGroup } from 'lib/components/RadioInputGroup'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
+import { useAtom } from 'jotai'
+import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
+import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
 
 export const WithdrawForm = (props) => {
-  const { exitFees, poolChainValues, handleSubmit, vars, stateSetters, usersChainValues } = props
+  const { exitFees, handleSubmit, vars, stateSetters } = props
+
+  const [poolChainValues] = useAtom(poolChainValuesAtom)
+  const [usersChainValues] = useAtom(userChainValuesAtom)
 
   const { usersTicketBalance } = usersChainValues || {}
 

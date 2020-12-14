@@ -6,9 +6,15 @@ import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
+import { useAtom } from 'jotai'
+import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
+import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
 
 export const DepositForm = (props) => {
-  const { poolChainValues, handleSubmit, vars, stateSetters, disabled, usersChainValues } = props
+  const { handleSubmit, vars, stateSetters, disabled } = props
+
+  const [poolChainValues] = useAtom(poolChainValuesAtom)
+  const [usersChainValues] = useAtom(userChainValuesAtom)
 
   const { usersTokenBalance } = usersChainValues || {}
 
@@ -35,86 +41,73 @@ export const DepositForm = (props) => {
   const tokenBal = ethers.utils.formatUnits(usersTokenBalance, tokenDecimals)
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        {poolIsLocked && (
-          <FormLockedOverlay title='Deposit'>
-            <div>
-              The Pool is currently being awarded and until awarding is complete can not accept
-              withdrawals.
-            </div>
-          </FormLockedOverlay>
-        )}
+    <form onSubmit={handleSubmit}>
+      {poolIsLocked && (
+        <FormLockedOverlay title='Deposit'>
+          <div>
+            The Pool is currently being awarded and until awarding is complete can not accept
+            withdrawals.
+          </div>
+        </FormLockedOverlay>
+      )}
 
-        {disabled && (
-          <FormLockedOverlay title='Deposit'>
+      {disabled && (
+        <FormLockedOverlay title='Deposit'>
+          <div>
+            Unlock deposits by first approving the pool's ticket contract to have a DAI allowance.
+          </div>
+
+          <div className='mt-3 sm:mt-5 mb-5'>
+            <Button color='green'>Unlock Deposits</Button>
+          </div>
+        </FormLockedOverlay>
+      )}
+
+      <div className='w-full mx-auto'>
+        <TextInputGroup
+          id='depositAmount'
+          name='depositAmount'
+          label={
             <>
-              <div>
-                Unlock deposits by first approving the pool's ticket contract to have a DAI
-                allowance.
-              </div>
-
-              <div className='mt-3 sm:mt-5 mb-5'>
-                <Button color='green'>Unlock Deposits</Button>
-              </div>
+              Deposit amount <span className='text-default italic'> (in {tokenSymbol})</span>
             </>
-          </FormLockedOverlay>
-        )}
-
-        <div className='font-bold mb-2 py-2 text-lg sm:text-xl lg:text-2xl'>Deposit:</div>
-
-        <div className='w-full mx-auto'>
-          <TextInputGroup
-            id='depositAmount'
-            name='depositAmount'
-            label={
-              <>
-                Deposit amount <span className='text-default italic'> (in {tokenSymbol})</span>
-              </>
-            }
-            required
-            disabled={disabled}
-            type='number'
-            pattern='\d+'
-            onChange={(e) => setDepositAmount(e.target.value)}
-            value={depositAmount}
-            rightLabel={
-              tokenSymbol && (
-                <>
-                  <button
-                    type='button'
-                    onClick={(e) => {
-                      e.preventDefault()
-                      setDepositAmount(tokenBal)
-                    }}
-                  >
-                    {/* Balance:  */}
-                    MAX - {numberWithCommas(tokenBal, { precision: 4 })} {tokenSymbol}
-                  </button>
-                </>
-              )
-            }
-          />
+          }
+          required
+          disabled={disabled}
+          type='number'
+          pattern='\d+'
+          onChange={(e) => setDepositAmount(e.target.value)}
+          value={depositAmount}
+          rightLabel={
+            tokenSymbol && (
+              <button
+                type='button'
+                onClick={(e) => {
+                  e.preventDefault()
+                  setDepositAmount(tokenBal)
+                }}
+              >
+                {/* Balance:  */}
+                MAX - {numberWithCommas(tokenBal, { precision: 4 })} {tokenSymbol}
+              </button>
+            )
+          }
+        />
+      </div>
+      {overBalance && (
+        <div className='text-yellow-1'>
+          You only have {displayAmountInEther(usersTokenBalance, { decimals: tokenDecimals })}{' '}
+          {tokenSymbol}.
+          <br />
+          The maximum you can deposit is{' '}
+          {displayAmountInEther(usersTokenBalance, { precision: 2, decimals: tokenDecimals })}.
         </div>
-
-        {overBalance && (
-          <>
-            <div className='text-yellow-1'>
-              You only have {displayAmountInEther(usersTokenBalance, { decimals: tokenDecimals })}{' '}
-              {tokenSymbol}.
-              <br />
-              The maximum you can deposit is{' '}
-              {displayAmountInEther(usersTokenBalance, { precision: 2, decimals: tokenDecimals })}.
-            </div>
-          </>
-        )}
-
-        <div className='my-5'>
-          <Button disabled={overBalance} color='green'>
-            Deposit
-          </Button>
-        </div>
-      </form>
-    </>
+      )}
+      <div className='my-5'>
+        <Button disabled={overBalance} color='green'>
+          Deposit
+        </Button>
+      </div>
+    </form>
   )
 }
