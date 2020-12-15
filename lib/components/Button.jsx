@@ -81,6 +81,9 @@ const getRoundedClasses = (roundedClasses) => {
   return roundedClasses || 'rounded-full'
 }
 
+// TODO:
+// className='font-bold rounded-full text-green-1 border border-green-1 hover:text-white hover:bg-lightPurple-1000 text-xxs sm:text-base mt-4 pt-2 pb-2 px-3 sm:px-6 trans'
+
 export const Button = (props) => {
   // create a ref to store the textInput DOM element
   const buttonRef = useRef()

@@ -29,7 +29,13 @@ export const Collapse = (props) => {
           )}
         />
       </div>
-      {showContent && children}
+      <div
+        className={classnames({
+          hidden: !showContent
+        })}
+      >
+        {children}
+      </div>
     </>
   )
 }

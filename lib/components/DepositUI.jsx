@@ -81,7 +81,12 @@ export const DepositUI = (props) => {
   }
 
   if (txInFlight) {
-    return <TxMessage txType='Deposit' tx={tx} handleReset={resetState} />
+    return (
+      <>
+        <div className='mb-4 sm:mb-8 text-sm sm:text-base text-accent-1'>{depositMessage}</div>
+        <TxMessage txType='Deposit' tx={tx} handleReset={resetState} />
+      </>
+    )
   }
 
   return (

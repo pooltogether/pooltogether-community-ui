@@ -296,6 +296,7 @@ module.exports = {
     }
   },
   variants: {
+    margins: ['first'],
     borderColor: ['hover', 'focus', 'active', 'focus-within'],
     textColor: ['responsive', 'hover', 'focus', 'active'],
     backgroundColor: ['responsive', 'hover', 'focus', 'active'],
