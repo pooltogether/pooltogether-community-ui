@@ -1,38 +1,29 @@
 import { useAtom } from 'jotai'
 import { Card, CardPrimaryText, CardTitle } from 'lib/components/Card'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
+import { getCreditMaturationDaysAndLimitPercentage } from 'lib/utils/format'
 import React from 'react'
 
 export const ExitFeeCards = (props) => {
+  const [poolChainValues] = useAtom(poolChainValuesAtom)
+
+  const [creditMaturationInDays, creditLimitPercentage] = getCreditMaturationDaysAndLimitPercentage(
+    poolChainValues.ticketCreditRateMantissa,
+    poolChainValues.ticketCreditLimitMantissa
+  )
+
   return (
     <div className='flex'>
-      <EarlyExitFeeCard />
-      <SponsorshipCard />
+      <Card className='mr-4'>
+        <CardTitle>Early exit fee</CardTitle>
+        <CardPrimaryText>{`${creditLimitPercentage}%`}</CardPrimaryText>
+      </Card>
+      <Card className='ml-4'>
+        <CardTitle>Exit fee decay time</CardTitle>
+        <CardPrimaryText>{`${creditMaturationInDays} day${
+          creditMaturationInDays === 1 ? '' : 's'
+        }`}</CardPrimaryText>
+      </Card>
     </div>
-  )
-}
-
-const EarlyExitFeeCard = () => {
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const maxExitFee = displayAmountInEther(poolChainValues.maxExitFeeMantissa.mul(100), {
-    precision: 2
-  })
-
-  return (
-    <Card className='mr-4'>
-      <CardTitle>Max exit fee</CardTitle>
-      <CardPrimaryText>{`${maxExitFee}%`}</CardPrimaryText>
-    </Card>
-  )
-}
-const SponsorshipCard = () => {
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-
-  return (
-    <Card className='ml-4'>
-      <CardTitle>Exit fee decay time</CardTitle>
-      <CardPrimaryText>{`decay time`}</CardPrimaryText>
-    </Card>
   )
 }

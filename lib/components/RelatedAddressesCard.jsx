@@ -8,8 +8,6 @@ import { RowDataCell, Table } from 'lib/components/Table'
 
 export const RelatedAddressesCard = (props) => {
   const [poolAddresses] = useAtom(poolAddressesAtom)
-  console.log(poolAddresses)
-
   const rows = useMemo(() => {
     const rowData = [
       {

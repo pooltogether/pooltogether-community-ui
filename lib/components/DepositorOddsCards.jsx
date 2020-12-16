@@ -38,15 +38,22 @@ const TicketCard = () => {
 const OddsCard = () => {
   const [poolChainValues] = useAtom(poolChainValuesAtom)
   const [userChainValues] = useAtom(userChainValuesAtom)
-
-  const formattedOdds = numberWithCommas(
-    caclulateOdds(
-      userChainValues.usersTicketBalance,
-      poolChainValues.ticketTotalSupply,
-      poolChainValues.ticketDecimals
-    ),
-    { precision: 0 }
+  const odds = caclulateOdds(
+    userChainValues.usersTicketBalance,
+    poolChainValues.ticketTotalSupply,
+    poolChainValues.ticketDecimals
   )
+
+  if (!odds) {
+    return (
+      <Card className='mx-4 text-center'>
+        <CardTitle>My winning odds</CardTitle>
+        <CardPrimaryText>0</CardPrimaryText>
+      </Card>
+    )
+  }
+
+  const formattedOdds = numberWithCommas(odds, { precision: 0 })
 
   return (
     <Card className='mx-4 text-center'>

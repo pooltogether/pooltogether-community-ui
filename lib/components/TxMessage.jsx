@@ -26,7 +26,7 @@ export const TxMessage = (props) => {
       {txInFlight && (
         <>
           <div className='bg-card rounded-lg px-2 sm:px-4 pt-5 pb-2 sm:py-6 text-center text-white text-xs sm:text-sm lg:text-base'>
-            <div className='font-bold rounded-full text-default-soft text-sm sm:text-base uppercase px-2 bg-purple-1-900'>
+            <div className='font-bold rounded-full text-default-soft text-sm sm:text-base uppercase px-2 bg-purple-1'>
               Transaction status
             </div>
 
@@ -76,7 +76,7 @@ export const TxMessage = (props) => {
                       or check the JS console.
                     </>
                   ) : (
-                    <>Transaction Signature Denied</>
+                    <>Transaction Failed</>
                   )}
                 </div>
               </>
@@ -102,7 +102,7 @@ export const TxMessage = (props) => {
               <>
                 <div className='mt-6 mb-2 text-center'>
                   <button
-                    className='font-bold rounded-full text-green-1 border-2 sm:border-4 border-green-1-300 hover:text-white hover:bg-lightPurple-1000 text-sm sm:text-base pt-2 pb-2 px-6 trans'
+                    className='font-bold rounded-full text-green-1 border-2 sm:border-4 border-green-1 hover:text-white hover:bg-lightPurple-1000 text-sm sm:text-base pt-2 pb-2 px-6 trans'
                     onClick={handleReset}
                   >
                     {resetButtonText || 'Reset form'}

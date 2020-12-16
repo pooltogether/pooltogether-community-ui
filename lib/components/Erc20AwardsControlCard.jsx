@@ -76,8 +76,6 @@ export const Erc20AwardsControlCard = (props) => {
   const [poolChainValues] = useAtom(poolChainValuesAtom)
   const [erc20Awards] = useAtom(erc20AwardsAtom)
 
-  console.log(poolChainValues, erc20Awards)
-
   return (
     <Card>
       <Collapse title='ERC20 awards'>
@@ -186,7 +184,7 @@ const AddErc20Form = () => {
         }}
         value={externalErc20Address}
       />
-      <Button disabled={!externalErc20Address}>Add ERC20 award</Button>
+      <Button disabled={!externalErc20Address}>Add ERC20 awardable token</Button>
     </form>
   )
 }

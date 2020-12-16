@@ -8,8 +8,6 @@ import { WithdrawUI } from 'lib/components/WithdrawUI'
 import { DepositorOddsCards } from 'lib/components/DepositorOddsCards'
 
 export const DepositorUI = (props) => {
-  console.log('depositor render')
-
   return (
     <>
       <PrizeCard className='mb-4' />

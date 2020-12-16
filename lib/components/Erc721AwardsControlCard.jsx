@@ -76,8 +76,6 @@ export const Erc721AwardsControlCard = (props) => {
   const [poolChainValues] = useAtom(poolChainValuesAtom)
   const [erc20Awards] = useAtom(erc20AwardsAtom)
 
-  console.log(poolChainValues, erc20Awards)
-
   return (
     <Card>
       <Collapse title='ERC20 awards'>

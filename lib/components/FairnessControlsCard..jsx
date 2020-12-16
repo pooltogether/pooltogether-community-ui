@@ -14,8 +14,11 @@ import { errorStateAtom } from 'lib/components/PoolData'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { TxMessage } from 'lib/components/TxMessage'
 import { TextInputGroup, TextInputGroupType } from 'lib/components/TextInputGroup'
-import { daysToSeconds, percentageToFraction } from 'lib/utils/format'
-import { ethers } from 'ethers'
+import {
+  getCreditMaturationDaysAndLimitPercentage,
+  getCreditRateMantissaAndLimitMantissa
+} from 'lib/utils/format'
+import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 
 const handleSetCreditPlan = async (
   txName,
@@ -35,7 +38,7 @@ const handleSetCreditPlan = async (
     }
   ]
 
-  await sendTx(setTx, provider, prizePoolAddress, PrizePoolAbi, 'setRngService', params, txName)
+  await sendTx(setTx, provider, prizePoolAddress, PrizePoolAbi, 'setCreditPlanOf', params, txName)
 }
 
 export const FairnessControlsCard = (props) => {
@@ -47,9 +50,7 @@ export const FairnessControlsCard = (props) => {
         </div>
         <CardSecondaryText className='mb-8'>
           When a user deposits, they are instantly eligible to win. To maintain fairness a time
-          decay early exit is enforced. The settings below are recommended for your prize pool but
-          can be manually adjusted if necessary. These can also be changed after your prize pool has
-          been created. All early exit fees accrue to the prize.
+          decay early exit is enforced. All early exit fees accrue to the prize.
         </CardSecondaryText>
         <FairnessControlsForm />
       </Collapse>
@@ -59,33 +60,53 @@ export const FairnessControlsCard = (props) => {
 
 const FairnessControlsForm = (props) => {
   const [poolAddresses, setPoolAddresses] = useAtom(poolAddressesAtom)
+  const [poolChainValues] = useAtom(poolChainValuesAtom)
   const [tx, setTx] = useState({})
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
 
-  const [ticketCreditLimitPercentage, setTicketCreditLimitPercentage] = useState()
-  const [ticketCreditMaturationInDays, setTicketCreditMaturationInDays] = useState()
+  const [creditMaturationInDays, creditLimitPercentage] = getCreditMaturationDaysAndLimitPercentage(
+    poolChainValues.ticketCreditRateMantissa,
+    poolChainValues.ticketCreditLimitMantissa
+  )
+
+  const [ticketCreditMaturationInDays, setTicketCreditMaturationInDays] = useState(
+    creditMaturationInDays
+  )
+  const [ticketCreditLimitPercentage, setTicketCreditLimitPercentage] = useState(
+    creditLimitPercentage
+  )
 
   const txName = 'Set Credit Plan'
 
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    const creditMaturationInSeconds = daysToSeconds(ticketCreditMaturationInDays)
-    const creditLimitMantissa = percentageToFraction(ticketCreditLimitPercentage).toString()
+    const [
+      ticketCreditRateMantissa,
+      ticketCreditLimitMantissa
+    ] = getCreditRateMantissaAndLimitMantissa(
+      ticketCreditMaturationInDays,
+      ticketCreditLimitPercentage
+    )
 
-    const ticketCreditRateMantissa = ethers.utils
-      .parseEther(creditLimitMantissa)
-      .div(creditMaturationInSeconds)
-    const ticketCreditLimitMantissa = ethers.utils.parseEther(creditLimitMantissa)
+    console.log(
+      txName,
+      setTx,
+      provider,
+      poolAddresses.prizePool,
+      poolAddresses.ticket,
+      ticketCreditRateMantissa,
+      ticketCreditLimitMantissa
+    )
 
     handleSetCreditPlan(
       txName,
       setTx,
       provider,
       poolAddresses.prizePool,
-      poolAddresses.token,
+      poolAddresses.ticket,
       ticketCreditRateMantissa,
       ticketCreditLimitMantissa
     )

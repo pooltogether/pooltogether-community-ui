@@ -31,8 +31,6 @@ const PrizeAwardsTable = () => {
     )
   }
 
-  console.log(awards)
-
   return <Table headers={['Value', 'Token name', 'Ticker']} rows={rows} />
 }
 

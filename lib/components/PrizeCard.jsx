@@ -15,6 +15,8 @@ import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { getCoinGeckoId, getCoinGeckoTokenData } from 'lib/services/coingecko'
 import { useAwardsList } from 'lib/hooks/useAwardsList'
 
+import Cactus from 'assets/images/cactus.svg'
+
 export const PrizeCard = (props) => {
   const { showLinks, className } = props
   const [network] = useAtom(networkAtom)
@@ -25,8 +27,7 @@ export const PrizeCard = (props) => {
 
   return (
     <Card className={classnames('flex flex-col mx-auto', className)}>
-      <CardTitle>Current Prize</CardTitle>
-      <Prizes />
+      <PrizeSection />
       <NewPrizeCountdown center />
       {showLinks && (
         <div className='flex flex-col mt-4 w-2/4 mx-auto'>
@@ -70,42 +71,73 @@ export const PrizeCard = (props) => {
   )
 }
 
-const Prizes = (props) => {
-  const { className } = props
+const PrizeSection = (props) => {
   const { awards, loading } = useAwardsList()
 
   if (loading) {
     return (
-      <div className={classnames('p-10', className)}>
+      <div className={'p-10'}>
         <LoadingDots />
       </div>
     )
   }
 
-  if (awards.length === 1) {
-    return <SinglePrizeItem token={awards[0]} className={className} />
+  if (awards.length === 0) {
+    return (
+      <>
+        <CardTitle className='text-center mb-2 font-bold'>
+          No prize data available at the moment
+        </CardTitle>
+        <CardTitle className='text-center'>
+          We're growing new prizes worth winning for you.
+        </CardTitle>
+        <CardTitle className='text-center mb-8'>Check back on us soon!</CardTitle>
+        <img
+          alt='image of a cactus'
+          src={Cactus}
+          className='mx-auto w-8 h-8 sm:w-32 sm:h-32 mb-4 sm:mb-8'
+        />
+      </>
+    )
   }
 
   return (
-    <div className={className}>
-      <ul>
-        {awards.map((token, index) => (
-          <PrizeListItem token={token} index={index} />
-        ))}
-      </ul>
-    </div>
+    <>
+      {' '}
+      <CardTitle className='text-center'>Current Prize</CardTitle>
+      <Prizes />
+    </>
+  )
+}
+
+const Prizes = (props) => {
+  const { awards, loading } = useAwardsList()
+
+  if (awards.length === 1) {
+    return <SinglePrizeItem token={awards[0]} />
+  }
+
+  return (
+    <ul
+      className='flex flex-col my-2 sm:my-8 max-w-xs mx-auto overflow-auto'
+      style={{ maxHeight: '160px' }}
+    >
+      {awards.map((token, index) => (
+        <PrizeListItem token={token} index={index} />
+      ))}
+    </ul>
   )
 }
 
 const SinglePrizeItem = (props) => {
-  const { token, className } = props
+  const { token } = props
   const [coinGeckoTokenIds] = useAtom(coinGeckoTokenIdsAtom)
   const tokenId = coinGeckoTokenIds[getCoinGeckoId(token)]
   const { data } = useQuery(tokenId, async () => getCoinGeckoTokenData(tokenId))
   const imageUrl = data?.data?.image?.small
 
   return (
-    <div className={classnames('flex mx-auto my-2 sm:my-8 leading-none', className)}>
+    <div className={'flex mx-auto my-2 sm:my-8 leading-none'}>
       {imageUrl && <img src={imageUrl} className='w-4 h-4 sm:w-16 sm:h-16 mr-4 my-auto' />}
       <span className='font-bold text-2xl sm:text-9xl mr-4 my-auto'>{token.formattedBalance}</span>
       <span className='font-bolt text-sm sm:text-4xl mt-auto mb-1'>{token.symbol}</span>
@@ -123,12 +155,15 @@ const PrizeListItem = (props) => {
 
   if (imageUrl) {
     return (
-      <li key={index + token.symbol} className='flex'>
-        <img src={imageUrl} />
-        {`${token.symbol}: ${token.formattedBalance}`}
+      <li key={index + token.symbol} className='flex justify-between mb-2'>
+        <span className='font-bold'>{token.formattedBalance}</span>
+        <div className='flex ml-4'>
+          {imageUrl && <img className='my-auto mr-2 w-6 h-6' src={imageUrl} />}
+          {token.name || token.symbol}
+        </div>
       </li>
     )
   }
 
-  return <li key={index + token.symbol}>{`${token.symbol}: ${token.formattedBalance}`}</li>
+  return <li key={index + token.symbol}>{`$: ${token.formattedBalance}`}</li>
 }

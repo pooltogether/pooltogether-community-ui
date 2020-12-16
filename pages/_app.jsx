@@ -6,6 +6,7 @@ import { QueryCache, ReactQueryCacheProvider } from 'react-query'
 import { Layout } from 'lib/components/Layout'
 import { ThemeContextProvider } from 'lib/components/contextProviders/ThemeContextProvider'
 import { ErrorBoundary } from 'lib/components/ErrorBoundary'
+import { PoolData } from 'lib/components/PoolData'
 
 import 'react-toastify/dist/ReactToastify.css'
 import '@reach/tooltip/styles.css'
@@ -23,7 +24,6 @@ import 'assets/styles/themes.css'
 
 import 'assets/styles/bnc-onboard--custom.css'
 import 'assets/styles/reach--custom.css'
-import { PoolData } from 'lib/components/PoolData'
 
 const queryCache = new QueryCache()
 

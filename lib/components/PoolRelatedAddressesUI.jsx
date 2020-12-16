@@ -1,8 +1,9 @@
+import React, { useState } from 'react'
 import classnames from 'classnames'
+
 import { BlueLineStat } from 'lib/components/BlueLineStat'
 import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 import { StatContainer } from 'lib/components/StatContainer'
-import React, { useState } from 'react'
 
 export const PoolRelatedAddressesUI = (props) => {
   const { networkName, poolAddresses } = props

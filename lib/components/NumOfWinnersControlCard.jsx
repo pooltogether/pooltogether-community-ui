@@ -13,6 +13,7 @@ import { sendTx } from 'lib/utils/sendTx'
 import { errorStateAtom } from 'lib/components/PoolData'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { TxMessage } from 'lib/components/TxMessage'
+import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 
 const handleSetRngService = async (
   txName,
@@ -39,7 +40,6 @@ const handleSetRngService = async (
   )
 }
 
-// TODO: Only display if it is a multiple winners contract
 export const NumOfWinnersControlCard = (props) => {
   return (
     <Card>
@@ -52,21 +52,20 @@ export const NumOfWinnersControlCard = (props) => {
 
 const NumOfWinnersForm = (props) => {
   const [poolAddresses, setPoolAddresses] = useAtom(poolAddressesAtom)
+  const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [network] = useAtom(networkAtom)
   const [tx, setTx] = useState({})
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
 
-  const rngServicesList = Object.keys(CONTRACT_ADDRESSES[network.id].RNG_SERVICE)
-  const currentRngService = rngServicesList.find(
-    (service) => CONTRACT_ADDRESSES[network.id].RNG_SERVICE[service] === poolAddresses.rng
-  )
-  const [newRngService, setNewRngService] = useState(currentRngService)
+  const currentNumOfWinners = poolChainValues.numberOfWinners
+
+  const [newNumOfWinners, setNewNumOfWinners] = useState(currentNumOfWinners)
 
   // Listen for external updates
   useEffect(() => {
-    setNewRngService(currentRngService)
+    // setNewRngService(currentRngService)
   }, [currentRngService])
 
   const rngServices = {
