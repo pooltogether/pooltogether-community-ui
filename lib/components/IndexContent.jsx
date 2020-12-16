@@ -16,15 +16,16 @@ import UsdcSvg from 'assets/images/usdc-new-transparent.png'
 import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
+import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
 
 const demoAssetTypes = {
   dai: { label: 'DAI', logo: DaiSvg },
   usdc: { label: 'USDC', logo: UsdcSvg },
-  usdt: { label: 'USDT', logo: UsdtSvg },
+  usdt: { label: 'USDT', logo: UsdtSvg }
 }
 const demoPools = {
   ropsten: { chainId: 3, assets: ['dai', 'usdc', 'usdt'] },
-  rinkeby: { chainId: 4, assets: ['dai', 'usdc', 'usdt'] },
+  rinkeby: { chainId: 4, assets: ['dai', 'usdc', 'usdt'] }
 }
 
 export const IndexContent = (props) => {
@@ -43,13 +44,38 @@ export const IndexContent = (props) => {
 
   let networkDemoPools = []
 
+  const formatValue = (key) => networks[key].view
+
+  const onValueSet = (network) => {
+    setNetwork(network)
+  }
+
+  const networks = {
+    ropsten: {
+      value: 'ropsten',
+      view: 'Ropsten'
+    },
+    rinkeby: {
+      value: 'rinkeby',
+      view: 'Rinkeby'
+    },
+    mainnet: {
+      value: 'mainnet',
+      view: 'Mainnet'
+    },
+    local: {
+      value: 'local',
+      view: 'Local'
+    }
+  }
+
   demoPool?.assets.forEach((assetType) => {
     const address = getDemoPoolContractAddress(demoNetworkName, assetType)
 
     if (address) {
       networkDemoPools.push({
         assetType,
-        address: getDemoPoolContractAddress(demoNetworkName, assetType),
+        address: getDemoPoolContractAddress(demoNetworkName, assetType)
       })
     }
   })
@@ -125,29 +151,13 @@ export const IndexContent = (props) => {
                 window.location.href = `/pools/${network}/${contractAddress}`
               }}
             >
-              <RadioInputGroup
-                label='Network the Pool is on:'
-                name='network'
-                onChange={handleNetworkChange}
-                value={network}
-                radios={[
-                  {
-                    value: 'ropsten',
-                    label: 'Ropsten',
-                  },
-                  {
-                    value: 'rinkeby',
-                    label: 'Rinkeby',
-                  },
-                  {
-                    value: 'mainnet',
-                    label: 'Mainnet',
-                  },
-                  {
-                    value: 'local',
-                    label: 'Local',
-                  },
-                ]}
+              <DropdownInputGroup
+                id='network-dropdown'
+                label={'Network the Pool is on:'}
+                formatValue={formatValue}
+                onValueSet={onValueSet}
+                current={network}
+                values={networks}
               />
 
               <TextInputGroup

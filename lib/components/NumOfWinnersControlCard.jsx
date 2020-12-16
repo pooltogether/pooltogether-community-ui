@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
-import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/PeriodicPrizeStrategy'
+import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/MultipleWinners'
 
 import { Button } from 'lib/components/Button'
 import { Card } from 'lib/components/Card'
@@ -14,16 +14,17 @@ import { errorStateAtom } from 'lib/components/PoolData'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { TxMessage } from 'lib/components/TxMessage'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
+import { TextInputGroup } from 'lib/components/TextInputGroup'
 
-const handleSetRngService = async (
+const handleSetNumberOfWinners = async (
   txName,
   setTx,
   provider,
   prizeStrategyAddress,
-  rngServiceAddress
+  numOfWinners
 ) => {
   const params = [
-    rngServiceAddress,
+    numOfWinners,
     {
       gasLimit: 200000
     }
@@ -34,7 +35,7 @@ const handleSetRngService = async (
     provider,
     prizeStrategyAddress,
     PrizeStrategyAbi,
-    'setRngService',
+    'setNumberOfWinners',
     params,
     txName
   )
@@ -65,45 +66,22 @@ const NumOfWinnersForm = (props) => {
 
   // Listen for external updates
   useEffect(() => {
-    // setNewRngService(currentRngService)
-  }, [currentRngService])
+    setNewNumOfWinners(currentNumOfWinners)
+  }, [currentNumOfWinners])
 
-  const rngServices = {
-    blockhash: {
-      value: 'blockhash',
-      view: 'Blockhash'
-    },
-    chainlink: {
-      value: 'chainlink',
-      view: 'Chainlink'
-    }
-  }
-
-  const formatValue = (key) => rngServices[key].view
-
-  const onValueSet = (newRngService) => {
-    setNewRngService(newRngService)
-  }
-
-  const txName = 'Set RNG Service'
+  const txName = 'Set Number of winners'
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    handleSetRngService(
-      txName,
-      setTx,
-      provider,
-      poolAddresses.prizeStrategy,
-      CONTRACT_ADDRESSES[network.id].RNG_SERVICE[newRngService]
-    )
+    handleSetNumberOfWinners(txName, setTx, provider, poolAddresses.prizeStrategy, newNumOfWinners)
   }
 
   // Update local data upon completion
   useEffect(() => {
     if (tx.completed && !tx.error) {
-      setPoolAddresses({
-        ...poolAddresses,
-        rng: CONTRACT_ADDRESSES[network.id].RNG_SERVICE[newRngService]
+      setPoolChainValues({
+        ...poolChainValues,
+        numberOfWinners: newNumOfWinners
       })
     }
   }, [tx.completed, tx.error])
@@ -111,7 +89,7 @@ const NumOfWinnersForm = (props) => {
   const resetState = (e) => {
     e.preventDefault()
 
-    setNewRngService(currentRngService)
+    setNewNumOfWinners(currentNumOfWinners)
     setTx({})
   }
 
@@ -121,16 +99,18 @@ const NumOfWinnersForm = (props) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <DropdownInputGroup
-        id='rng-dropdown'
-        placeHolder='Select a random number generator service'
-        label={'Random number generator service'}
-        formatValue={formatValue}
-        onValueSet={onValueSet}
-        current={currentRngService}
-        values={rngServices}
+      <TextInputGroup
+        id='newNumOfWinners'
+        name='newNumOfWinners'
+        label='Number of winners'
+        containerClassName='mb-8'
+        placeholder='(eg. 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984)'
+        onChange={(e) => {
+          setNewNumOfWinners(e.target.value)
+        }}
+        value={newNumOfWinners}
       />
-      <Button>Update RNG service</Button>
+      <Button>Update winners</Button>
     </form>
   )
 }
