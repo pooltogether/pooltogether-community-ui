@@ -17,9 +17,9 @@
   --color-bg-highlight-4: #5af5db;
   --color-bg-highlight-5: #4c1fa0;
   --color-bg-grey: rgba(187, 187, 187, 0.7);
-  --color-bg-red: #aa0b0b;
+  --color-bg-red-1: #aa0b0b;
   --color-bg-light-red: #bd0505;
-  --color-bg-green: #3ef3d4;
+  --color-bg-green-1: #3ef3d4;
   --color-bg-yellow-1: #ff9303;
   --color-bg-yellow-2: rgba(255, 147, 3, 0.3);
   --color-bg-blue-1: #4565ff;
@@ -42,7 +42,7 @@
   --color-text-highlight-2: #35f0d0;
   --color-text-highlight-3: #55f1d7;
   --color-text-whitesmoke: rgba(245, 245, 245, 0.6);
-  --color-text-red: #e61b1b;
+  --color-text-red-1: #e61b1b;
   --color-text-green-1: #05e6c4;
   --color-text-green-2: #31b073;
   --color-text-yellow-1: #ffc403;
@@ -62,7 +62,7 @@
   --color-border-inverse: #fff;
   --color-border-highlight-1: #35f0d0;
   --color-border-highlight-2: #35f0d0;
-  --color-border-red: #e61b1b;
+  --color-border-red-1: #e61b1b;
   --color-border-green-1: #3ef3d4;
   --color-border-green-2: #31b073;
   --color-border-transparent: rgba(0, 0, 0, 0);
@@ -87,9 +87,9 @@
   --color-bg-highlight-4: #5c29c2;
   --color-bg-highlight-5: #f9f9f9;
   --color-bg-grey: rgba(187, 187, 187, 0.7);
-  --color-bg-red: #e61b1b;
+  --color-bg-red-1: #e61b1b;
   --color-bg-light-red: #fa3131;
-  --color-bg-green: #1ef7d6;
+  --color-bg-green-1: #1ef7d6;
   --color-bg-yellow-1: #ff9303;
   --color-bg-yellow-2: rgba(255, 147, 3, 0.3);
   --color-bg-blue-1: #4565ff;
@@ -112,7 +112,7 @@
   --color-text-highlight-2: #7f51d1;
   --color-text-highlight-3: #3857ee;
   --color-text-whitesmoke: rgba(245, 245, 245, 0.6);
-  --color-text-red: #e61b1b;
+  --color-text-red-1: #e61b1b;
   --color-text-green-1: #5af5db;
   --color-text-green-2: #31b073;
   --color-text-yellow-1: #ffc403;
@@ -132,7 +132,7 @@
   --color-border-inverse: #111;
   --color-border-highlight-1: #4c249f;
   --color-border-highlight-2: #7f51d1;
-  --color-border-red: #e61b1b;
+  --color-border-red-1: #e61b1b;
   --color-border-green-1: #1ef7d6;
   --color-border-green-2: #31b073;
   --color-border-transparent: rgba(0, 0, 0, 0);

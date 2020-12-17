@@ -121,23 +121,6 @@ form:after {
   clear: both;
 }
 
-.pt-button {
-  min-width: 180px;
-  max-width: 340px;
-}
-
-@media screen and (min-width: 640px) {
-  .pt-button {
-    min-width: 200px;
-  }
-}
-
-@media screen and (min-width: 1280px) {
-  .pt-button {
-    min-width: 220px;
-  }
-}
-
 button {
   @apply tracking-wide;
 }

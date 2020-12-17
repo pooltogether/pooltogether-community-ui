@@ -259,7 +259,7 @@ const RemoveAddressButton = (props) => {
           icon='x'
           strokeWidth='0.25rem'
           className={classnames(
-            'ml-3 sm:ml-4 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current text-red trans hover:opacity-75 active:opacity-50'
+            'ml-3 sm:ml-4 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current text-red-1 trans hover:opacity-75 active:opacity-50'
           )}
         />
       </button>

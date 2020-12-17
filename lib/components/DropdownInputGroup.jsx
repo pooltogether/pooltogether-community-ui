@@ -73,7 +73,7 @@ export const DropdownInputGroup = (props) => {
   borderClasses = borderClasses
     ? borderClasses
     : classnames('border', {
-        'border-red': isError,
+        'border-red-1': isError,
         'border-green-2': isSuccess,
         'border-transparent': !isError && !isSuccess,
         'hover:border-accent-3 focus-within:border-accent-3 focus-within:shadow-green': !disabled

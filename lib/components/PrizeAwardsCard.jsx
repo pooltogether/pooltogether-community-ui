@@ -39,9 +39,11 @@ const Row = (props) => {
 
   return (
     <tr>
-      <RowDataCell first>{formattedBalance}</RowDataCell>
+      <RowDataCell first className='font-bold'>
+        {formattedBalance}
+      </RowDataCell>
       <RowDataCell>{name}</RowDataCell>
-      <RowDataCell>{symbol}</RowDataCell>
+      <RowDataCell className='text-accent-1'>{symbol}</RowDataCell>
     </tr>
   )
 }

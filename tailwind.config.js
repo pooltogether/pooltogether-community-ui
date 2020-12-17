@@ -1,6 +1,7 @@
 const { colors } = require('tailwindcss/defaultTheme')
 
 module.exports = {
+  experimental: 'all',
   corePlugins: {
     container: true
   },
@@ -29,9 +30,9 @@ module.exports = {
         'highlight-4': 'var(--color-bg-highlight-4)',
         'highlight-5': 'var(--color-bg-highlight-5)',
         'grey': 'var(--color-bg-grey)',
-        'red': 'var(--color-bg-red)',
+        'red-1': 'var(--color-bg-red-1)',
         'light-red': 'var(--color-bg-light-red)',
-        'green': 'var(--color-bg-green)',
+        'green-1': 'var(--color-bg-green-1)',
         'yellow-1': 'var(--color-bg-yellow-1)',
         'yellow-2': 'var(--color-bg-yellow-2)',
         'blue-1': 'var(--color-bg-blue-1)',
@@ -58,7 +59,7 @@ module.exports = {
         'highlight-2': 'var(--color-text-highlight-2)',
         'highlight-3': 'var(--color-text-highlight-3)',
         'whitesmoke': 'var(--color-text-whitesmoke)',
-        'red': 'var(--color-text-red)',
+        'red-1': 'var(--color-text-red-1)',
         'green-1': 'var(--color-text-green-1)',
         'green-2': 'var(--color-text-green-2)',
         'yellow-1': 'var(--color-text-yellow-1)',
@@ -81,7 +82,7 @@ module.exports = {
         'inverse': 'var(--color-border-inverse)',
         'highlight-1': 'var(--color-border-highlight-1)',
         'highlight-2': 'var(--color-border-highlight-2)',
-        'red': 'var(--color-border-red)',
+        'red-1': 'var(--color-border-red-1)',
         'green-1': 'var(--color-border-green-1)',
         'green-2': 'var(--color-border-green-2)'
       },
@@ -95,7 +96,9 @@ module.exports = {
         '4xl': '0 30px 40px -3px rgba(0, 0, 0, .25), 0 20px 20px -3px rgba(0, 0, 0, .15)',
         'inner': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
         'inner-lg': 'inset 0 1px 5px 0 rgba(0, 0, 0, 0.2)',
-        'green': '0px 0px 10px #35F0D0;'
+        'green': '0px 0px 10px #35F0D0;',
+        'red': '0px 0px 10px #F11E1E;',
+        'gray': '0px 0px 10px #BBBBBB;'
       },
       minHeight: {
         '0': '0',
@@ -206,13 +209,26 @@ module.exports = {
         '90': '.9',
         '100': '1'
       },
+      backgroundOpacity: {
+        '15': '0.15',
+        '80': '0.8'
+      },
       fill: (theme) => ({
         // 'indigo': theme('colors.indigo.500')
       }),
       colors: {
+        gray: {
+          ...colors.gray,
+          '400': '#bbbbbb'
+        },
         cyan: {
           '200': '#9CF9F3',
           '400': '#6FE2DA'
+        },
+        red: {
+          ...colors.red,
+          '600': '#FF5050',
+          '700': '#F11E1E'
         },
         blue: {
           ...colors.blue,
@@ -230,7 +246,7 @@ module.exports = {
           '100': '#80FFF7',
           '200': '#72FAE3',
           '300': '#3EF3D4',
-          '400': '#33DEC3',
+          '400': '#35f0d0',
           '500': '#24C5A8',
           '600': '#1cb298',
           '700': '#18a090'
@@ -302,7 +318,9 @@ module.exports = {
     backgroundColor: ['responsive', 'hover', 'focus', 'active'],
     borderRadius: ['responsive'],
     opacity: ['hover', 'focus', 'responsive', 'disabled'],
-    boxShadow: ['focus-within']
+    boxShadow: ['focus-within', 'focus', 'active'],
+    backgroundOpacity: ['hover', 'focus', 'active']
   },
-  plugins: []
+  plugins: [],
+  purge: false
 }

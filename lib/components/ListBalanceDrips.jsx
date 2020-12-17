@@ -170,7 +170,7 @@ export const ListBalanceDrips = (props) => {
 
                           handleDeactivate(drip.id)
                         }}
-                        className='bg-red p-1 rounded-full font-bold hover:bg-light-red mx-2'
+                        className='bg-red-1 p-1 rounded-full font-bold hover:bg-light-red mx-2'
                       >
                         <FeatherIcon
                           strokeWidth='0.2rem'

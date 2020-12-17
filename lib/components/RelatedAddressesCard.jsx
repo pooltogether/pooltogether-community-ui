@@ -5,6 +5,7 @@ import { Collapse } from 'lib/components/Collapse'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import React, { useMemo } from 'react'
 import { RowDataCell, Table } from 'lib/components/Table'
+import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 
 export const RelatedAddressesCard = (props) => {
   const [poolAddresses] = useAtom(poolAddressesAtom)
@@ -52,7 +53,11 @@ const Row = (props) => {
   return (
     <tr>
       <RowDataCell first>{contract}</RowDataCell>
-      <RowDataCell>{address}</RowDataCell>
+      <RowDataCell>
+        <EtherscanAddressLink size='xxs' address={address} className='text-accent-1'>
+          {address}
+        </EtherscanAddressLink>
+      </RowDataCell>
     </tr>
   )
 }

@@ -92,6 +92,27 @@ export const DepositUI = (props) => {
   return (
     <>
       <div className='mb-4 sm:mb-8 text-sm sm:text-base text-accent-1'>{depositMessage}</div>
+      <DepositForm
+        {...props}
+        handleSubmit={(e) => {
+          e.preventDefault()
+          handleDepositSubmit(
+            setTx,
+            provider,
+            usersAddress,
+            poolAddresses.prizePool,
+            ticketAddress,
+            depositAmount,
+            poolChainValues.tokenDecimals
+          )
+        }}
+        vars={{
+          depositAmount
+        }}
+        stateSetters={{
+          setDepositAmount
+        }}
+      />
     </>
   )
 }

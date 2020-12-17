@@ -283,7 +283,7 @@ export const ActivateVolumeDrip = (props) => {
                         <div className={'uppercase text-default'}>Comptroller's balance:</div>{' '}
                         <span
                           className={classnames({
-                            'text-red': erc20TokenBalance?.eq(0)
+                            'text-red-1': erc20TokenBalance?.eq(0)
                           })}
                         >
                           {displayAmountInEther(erc20TokenBalance, {
