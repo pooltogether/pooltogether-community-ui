@@ -163,7 +163,9 @@ const FairnessControlsForm = (props) => {
           unit='days'
         />
       </div>
-      <Button>Update fairness rules</Button>
+      <Button color='secondary' size='lg'>
+        Update fairness rules
+      </Button>
     </form>
   )
 }

@@ -185,7 +185,9 @@ const AddErc20Form = () => {
         }}
         value={externalErc20Address}
       />
-      <Button disabled={!externalErc20Address}>Add ERC20 award</Button>
+      <Button color='secondary' size='lg' disabled={!externalErc20Address}>
+        Add ERC20 award
+      </Button>
     </form>
   )
 }

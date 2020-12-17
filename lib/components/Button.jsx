@@ -29,6 +29,13 @@ const COLOR_CLASSES = {
     textColorClasses:
       'text-red-600 hover:text-red-700 focus:text-red-700 active:shadow-red focus:shadow-red'
   },
+  warning: {
+    backgroundClasses: 'bg-transparent',
+    borderClasses:
+      'border border-orange-500 hover:border-orange-600 focus:border-orange-600 active:shadow-orange',
+    textColorClasses:
+      'text-orange-500 hover:text-orange-600 focus:text-orange-600 active:shadow-orange focus:shadow-orange'
+  },
   disabled: {
     backgroundClasses: 'bg-transparent',
     borderClasses: 'border border-gray-400 focus:border-gray-400',
@@ -53,6 +60,9 @@ const getColorClasses = (color, disabled) => {
     }
     case 'danger': {
       return COLOR_CLASSES.danger
+    }
+    case 'warning': {
+      return COLOR_CLASSES.warning
     }
     default: {
       return COLOR_CLASSES.primary
@@ -110,8 +120,6 @@ const getRoundedClasses = (roundedClasses) => {
   return roundedClasses || 'rounded-full'
 }
 
-// className='font-bold rounded-full text-green-1 border border-green-1 hover:text-white hover:bg-lightPurple-1000 text-xxs sm:text-base mt-4 pt-2 pb-2 px-3 sm:px-6 trans'
-
 export const Button = (props) => {
   // create a ref to store the textInput DOM element
   const buttonRef = useRef()
@@ -149,26 +157,21 @@ export const Button = (props) => {
     disabled,
     href,
     as,
-    noAnim,
-    isBold,
-    isText,
-    isLowOpacity,
     paddingClasses,
     roundedClasses,
     size,
     textSizeClasses,
-    transitionClasses
+    transitionClasses,
+    fullWidth
   } = props
 
   let defaultClasses =
-    'inline-block text-center leading-snug tracking-wide outline-none focus:outline-none active:outline-none no-underline width-max-content'
+    'inline-block text-center leading-snug tracking-wide outline-none focus:outline-none active:outline-none no-underline '
 
-  if (isBold !== false) {
-    defaultClasses += ' font-bold'
-  }
-
-  if (isLowOpacity) {
-    defaultClasses += ' opacity-50 hover:opacity-100'
+  if (fullWidth) {
+    defaultClasses += 'w-full'
+  } else {
+    defaultClasses += 'width-max-content'
   }
 
   const { backgroundClasses, borderClasses, textColorClasses } = getColorClasses(color, disabled)
@@ -182,21 +185,18 @@ export const Button = (props) => {
     backgroundClasses,
     borderClasses,
     textColorClasses,
-    className,
     defaultClasses,
     paddingClasses,
     roundedClasses,
     size,
     textSizeClasses,
     transitionClasses,
-    cursorClasses
+    cursorClasses,
+    className
   )
 
   const newProps = omit(props, [
     'noAnim',
-    'isBold',
-    'isLowOpacity',
-    'isText',
     'paddingClasses',
     'roundedClasses',
     'size',

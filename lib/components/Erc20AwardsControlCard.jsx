@@ -184,7 +184,9 @@ const AddErc20Form = () => {
         }}
         value={externalErc20Address}
       />
-      <Button disabled={!externalErc20Address}>Add ERC20 awardable token</Button>
+      <Button color='secondary' size='lg' disabled={!externalErc20Address}>
+        Add ERC20 awardable token
+      </Button>
     </form>
   )
 }
@@ -240,6 +242,8 @@ const RemoveAddressButton = (props) => {
       )
     }
   }, [tx.completed, tx.error])
+
+  // TODO: Error state
 
   if (tx.sent && !tx.completed) {
     return <td className='pl-8 text-right flex-grow text-accent-1'>Waiting for confirmations</td>

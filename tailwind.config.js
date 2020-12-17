@@ -98,7 +98,8 @@ module.exports = {
         'inner-lg': 'inset 0 1px 5px 0 rgba(0, 0, 0, 0.2)',
         'green': '0px 0px 10px #35F0D0;',
         'red': '0px 0px 10px #F11E1E;',
-        'gray': '0px 0px 10px #BBBBBB;'
+        'gray': '0px 0px 10px #BBBBBB;',
+        'orange': '0px 0px 10px #EF7301;'
       },
       minHeight: {
         '0': '0',
