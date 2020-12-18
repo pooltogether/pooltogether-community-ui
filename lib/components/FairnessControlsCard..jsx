@@ -18,9 +18,10 @@ import {
   getCreditMaturationDaysAndLimitPercentage,
   getCreditRateMantissaAndLimitMantissa
 } from 'lib/utils/format'
-import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
+import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
+import { prizePoolTypeAtom } from 'lib/hooks/usePrizePoolType'
 
 const handleSetCreditPlan = async (
   txName,
@@ -62,7 +63,9 @@ export const FairnessControlsCard = (props) => {
 
 const FairnessControlsForm = (props) => {
   const [poolAddresses, setPoolAddresses] = useAtom(poolAddressesAtom)
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
+  const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
+  const [prizePoolType] = useAtom(prizePoolTypeAtom)
+  const [errorState, setErrorState] = useAtom(errorStateAtom)
   const [usersAddress] = useAtom(usersAddressAtom)
   const [tx, setTx] = useState({})
   const walletContext = useContext(WalletContext)
@@ -93,16 +96,6 @@ const FairnessControlsForm = (props) => {
       ticketCreditLimitPercentage
     )
 
-    console.log(
-      txName,
-      setTx,
-      provider,
-      poolAddresses.prizePool,
-      poolAddresses.ticket,
-      ticketCreditRateMantissa,
-      ticketCreditLimitMantissa
-    )
-
     handleSetCreditPlan(
       txName,
       setTx,
@@ -117,7 +110,13 @@ const FairnessControlsForm = (props) => {
   // Update local data upon completion
   useEffect(() => {
     if (tx.completed && !tx.error) {
-      // TODO: fetch pool chain data
+      fetchPoolChainValues(
+        provider,
+        poolAddresses,
+        prizePoolType,
+        setPoolChainValues,
+        setErrorState
+      )
     }
   }, [tx.completed, tx.error])
 

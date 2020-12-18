@@ -30,7 +30,7 @@ table {
 ::placeholder,
 .input::placeholder,
 .textarea::placeholder {
-  color: rgb(235, 203, 253);
+  color: rgba(235, 203, 253, 0.6);
 }
 
 input:-internal-autofill-previewed,

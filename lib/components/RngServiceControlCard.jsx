@@ -3,7 +3,7 @@ import { useAtom } from 'jotai'
 import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/PeriodicPrizeStrategy'
 
 import { Button } from 'lib/components/Button'
-import { Card } from 'lib/components/Card'
+import { Card, CardSecondaryText } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
 import { CONTRACT_ADDRESSES } from 'lib/constants'
@@ -45,6 +45,11 @@ export const RngServiceControlCard = (props) => {
   return (
     <Card>
       <Collapse title='Random Number Generator (RNG) Service'>
+        <CardSecondaryText className='mb-8'>
+          Choose the source of randomness the prize pool will use. This can be changed after pool
+          creation.
+        </CardSecondaryText>
+
         <RngServiceControlForm />
       </Collapse>
     </Card>

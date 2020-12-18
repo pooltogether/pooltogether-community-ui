@@ -41,7 +41,7 @@ export const RelatedAddressesCard = (props) => {
   return (
     <Card>
       <Collapse title='Related contract addresses'>
-        <Table headers={['Contract', 'Address']} rows={rows} />
+        <Table headers={['Contract', 'Address']} rows={rows} className='w-full' />
       </Collapse>
     </Card>
   )

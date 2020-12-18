@@ -133,7 +133,7 @@ const AwardsTable = () => {
     return null
   }
 
-  return <Table headers={['Token id', 'Token address', '']} rows={rows} className='mb-8' />
+  return <Table headers={['Token id', 'Token address', '']} rows={rows} className='mb-8 w-full' />
 }
 
 const AddErc721Form = () => {

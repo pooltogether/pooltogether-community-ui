@@ -82,7 +82,7 @@ const PoolAddress = () => {
     <>
       <div className='text-accent-1 font-bold title text-lg sm:text-4xl'>Pool's Info</div>
       <Card className='flex flex-col'>
-        <CardTitle className='text-center mb-2'>Pool's contract address</CardTitle>
+        <CardTitle className='mb-2'>Pool's contract address</CardTitle>
         <EtherscanAddressLink address={poolAddresses.prizePool} className='mx-auto text-white'>
           {poolAddresses.prizePool}
         </EtherscanAddressLink>

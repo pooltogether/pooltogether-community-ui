@@ -3,7 +3,7 @@ import { useAtom } from 'jotai'
 import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/MultipleWinners'
 
 import { Button } from 'lib/components/Button'
-import { Card } from 'lib/components/Card'
+import { Card, CardSecondaryText } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
 import { CONTRACT_ADDRESSES } from 'lib/constants'
@@ -47,6 +47,9 @@ export const NumOfWinnersControlCard = (props) => {
   return (
     <Card>
       <Collapse title='Number of winners'>
+        <CardSecondaryText className='mb-8'>
+          Alter the number of winners to split the prize between.
+        </CardSecondaryText>
         <NumOfWinnersForm />
       </Collapse>
     </Card>

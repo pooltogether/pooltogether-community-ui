@@ -34,14 +34,35 @@ const TimeUntilPrizeCard = () => {
   const futureDate = addSeconds(currentDate, secondsLeft)
   const { days, hours, minutes, seconds } = subtractDates(futureDate, currentDate)
 
-  // TODO: format time
   return (
     <Card className='mr-4'>
       <CardTitle>Time to next prize</CardTitle>
-      <CardPrimaryText>{`${secondsLeft}`}</CardPrimaryText>
+      <TimeDisplay days={days} hours={hours} minutes={minutes} seconds={seconds} />
     </Card>
   )
 }
+
+const TimeDisplay = (props) => {
+  const { days, hours, minutes, seconds } = props
+
+  if (days > 0) {
+    return (
+      <CardPrimaryText className='text-xl'>
+        {days} days {hours} hours
+      </CardPrimaryText>
+    )
+  }
+
+  if (hours) {
+    return (
+      <CardPrimaryText>
+        {String(12).padStart(2, '0')}:{String(minutes).padStart(2, '0')}:
+        {String(seconds).padStart(2, '0')}
+      </CardPrimaryText>
+    )
+  }
+}
+
 const PlayersCard = () => {
   const [poolChainValues] = useAtom(poolChainValuesAtom)
 
@@ -52,6 +73,7 @@ const PlayersCard = () => {
     </Card>
   )
 }
+
 const TotalDeposits = () => {
   const [poolChainValues] = useAtom(poolChainValuesAtom)
   const total = displayAmountInEther(poolChainValues.poolTotalSupply, poolChainValues.tokenDecimals)

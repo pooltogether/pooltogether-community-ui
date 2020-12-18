@@ -78,6 +78,7 @@ export const WithdrawUI = (props) => {
           ticketAddress,
           ethers.utils.parseUnits(debouncedWithdrawAmount, tokenDecimals)
         )
+        console.log(result)
         setExitFees(result)
       } else {
         setExitFees(null)
@@ -109,16 +110,22 @@ export const WithdrawUI = (props) => {
     return <ConnectWalletButton />
   }
 
+  const withdrawText = `You can choose to withdraw the deposited fund at any time. By withdrawing the fund, you
+  are eliminating/reducing the chance to win the prize in this pool in the next prize
+  periods.`
+
   if (txInFlight) {
-    return <TxMessage txType='Withdraw' tx={tx} handleReset={resetState} />
+    return (
+      <>
+        <div className='mb-4 sm:mb-8 text-sm sm:text-base text-accent-1'>{withdrawText}</div>
+        <TxMessage txType='Withdraw' tx={tx} handleReset={resetState} />
+      </>
+    )
   }
 
   return (
     <>
-      <div className='mb-4 sm:mb-8 text-sm sm:text-base text-accent-1'>
-        You can choose to withdraw the deposited fund at any time. By withdrawing the fund, you are
-        eliminating/reducing the chance to win the prize in this pool in the next prize periods.
-      </div>
+      <div className='mb-4 sm:mb-8 text-sm sm:text-base text-accent-1'>{withdrawText}</div>
       <WithdrawForm
         {...props}
         exitFees={exitFees}

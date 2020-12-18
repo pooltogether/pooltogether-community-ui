@@ -17,13 +17,18 @@ export const Card = (props) => {
 }
 
 export const CardTitle = (props) => (
-  <div className={classnames('text-sm sm:text-base text-accent-1', props.className)}>
+  <div className={classnames('text-sm sm:text-base text-accent-1 text-center', props.className)}>
     {props.children}
   </div>
 )
 
 export const CardPrimaryText = (props) => (
-  <div className={classnames('text-base sm:text-4xl font-bold text-white', props.className)}>
+  <div
+    className={classnames(
+      'text-base sm:text-4xl font-bold text-white text-center',
+      props.className
+    )}
+  >
     {props.children}
   </div>
 )

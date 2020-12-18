@@ -25,11 +25,14 @@ const renderErrorMessage = (errorMsg) => {
   poolToast.error(errorMsg)
 }
 
-// Jotai Atoms
-export const errorStateAtom = atom({
+export const EMPTY_ERROR_STATE = {
   error: null,
-  errorMessage: null
-})
+  errorMessage: null,
+  view: null
+}
+
+// Jotai Atoms
+export const errorStateAtom = atom(EMPTY_ERROR_STATE)
 
 /**
  * Wraps app and populates Jotai pool data stores if applicable
@@ -38,6 +41,7 @@ export const PoolData = (props) => {
   const router = useRouter()
   const { prizePoolAddress } = router.query
   const [errorState] = useAtom(errorStateAtom)
+  useNetwork()
 
   // If there's no address, we don't need to check it or fetch data
   if (!prizePoolAddress) {
@@ -55,6 +59,9 @@ export const PoolData = (props) => {
     if (errorState.errorMessage) {
       renderErrorMessage(errorState.errorMessage)
     }
+    if (errorState.view) {
+      return errorState.view
+    }
     return null
   }
 
@@ -65,7 +72,6 @@ export const PoolData = (props) => {
  * Main wrapper for the data fetching
  */
 const PoolDataInitialization = (props) => {
-  useNetwork()
   useUsersAddress()
   useCoinGeckoTokenIds()
   usePrizePoolType()

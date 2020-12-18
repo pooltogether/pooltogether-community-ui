@@ -124,7 +124,9 @@ const AwardsTable = () => {
     return null
   }
 
-  return <Table headers={['Value', 'Token name', 'Ticker', '']} rows={rows} className='mb-8' />
+  return (
+    <Table headers={['Value', 'Token name', 'Ticker', '']} rows={rows} className='mb-8 w-full' />
+  )
 }
 
 const AddErc20Form = () => {
@@ -250,8 +252,6 @@ const RemoveAddressButton = (props) => {
       )
     }
   }, [tx.completed, tx.error])
-
-  // TODO: Error state
 
   if (!usersAddress) {
     return null

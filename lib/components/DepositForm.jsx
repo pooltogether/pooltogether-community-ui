@@ -158,7 +158,6 @@ const UnlockDepositsButton = () => {
       </Button>
     )
   }
-  // TODO: Error state
 
   let buttonText = `Approve ${poolChainValues.tokenSymbol}`
   if (tx.sent && !tx.completed) {

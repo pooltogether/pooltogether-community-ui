@@ -1,3 +1,4 @@
+import { Button } from 'lib/components/Button'
 import { EtherscanTxLink } from 'lib/components/EtherscanTxLink'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { WalletContext } from 'lib/components/WalletContextProvider'
@@ -101,12 +102,9 @@ export const TxMessage = (props) => {
             {handleReset && txCompleted && (
               <>
                 <div className='mt-6 mb-2 text-center'>
-                  <button
-                    className='font-bold rounded-full text-green-1 border-2 sm:border-4 border-green-1 hover:text-white hover:bg-lightPurple-1000 text-sm sm:text-base pt-2 pb-2 px-6 trans'
-                    onClick={handleReset}
-                  >
+                  <Button size='sm' className='mx-auto' color='secondary' onClick={handleReset}>
                     {resetButtonText || 'Reset form'}
-                  </button>
+                  </Button>
                 </div>
               </>
             )}

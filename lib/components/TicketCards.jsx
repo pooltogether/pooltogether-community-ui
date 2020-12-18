@@ -19,7 +19,9 @@ const TicketCard = () => {
     <Card className='mr-4'>
       <CardTitle>Sponsorship symbol & name</CardTitle>
       <CardPrimaryText>{`$${poolChainValues.sponsorshipSymbol}`}</CardPrimaryText>
-      <CardSecondaryText>{poolChainValues.sponsorshipName}</CardSecondaryText>
+      <CardSecondaryText className='text-center'>
+        {poolChainValues.sponsorshipName}
+      </CardSecondaryText>
     </Card>
   )
 }
@@ -30,7 +32,9 @@ const SponsorshipCard = () => {
     <Card className='ml-4'>
       <CardTitle>Sponsorship symbol & name</CardTitle>
       <CardPrimaryText>{`$${poolChainValues.sponsorshipSymbol}`}</CardPrimaryText>
-      <CardSecondaryText>{poolChainValues.sponsorshipName}</CardSecondaryText>
+      <CardSecondaryText className='text-center'>
+        {poolChainValues.sponsorshipName}
+      </CardSecondaryText>
     </Card>
   )
 }

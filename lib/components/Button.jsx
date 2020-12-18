@@ -3,8 +3,6 @@ import { omit } from 'lodash'
 import Link from 'next/link'
 import React, { useEffect, useRef } from 'react'
 
-// TODO: Icons
-
 const COLOR_CLASSES = {
   primary: {
     backgroundClasses: 'bg-green-400 hover:bg-opacity-80',
@@ -223,7 +221,7 @@ export const Button = (props) => {
       <a
         href={href}
         target='_blank'
-        className='trans text-xs sm:text-base no-underline border-0 active:outline-none hover:outline-none focus:outline-none'
+        className='trans text-xs sm:text-base no-underline border-0 active:outline-none hover:outline-none focus:outline-none width-max-content'
       >
         <button {...newProps} ref={buttonRef} className={className}>
           {children}
