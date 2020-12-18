@@ -13,6 +13,7 @@ import { useExternalErc20Awards } from 'lib/hooks/useExternalErc20Awards'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { useCoinGeckoTokenIds } from 'lib/hooks/useCoinGeckoTokenIds'
+import { useExternalErc721Awards } from 'lib/hooks/useExternalErc721Awards'
 
 // http://localhost:3000/pools/rinkeby/0xd1E58Db0d67DB3f28fFa412Db58aCeafA0fEF8fA#admin
 
@@ -72,6 +73,7 @@ const PoolDataInitialization = (props) => {
   const [poolChainValues, setPoolChainValues] = usePoolChainValues()
   useUserChainValues()
   useExternalErc20Awards()
+  useExternalErc721Awards()
 
   if (poolChainValues.loading) {
     return (

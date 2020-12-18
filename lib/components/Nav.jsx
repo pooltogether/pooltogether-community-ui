@@ -1,4 +1,5 @@
 import PoolLogo from 'assets/images/pooltogether-white-wordmark.svg'
+import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { WalletInfo } from 'lib/components/WalletInfo'
 import Link from 'next/link'
@@ -36,16 +37,7 @@ export const Nav = (props) => {
 
           <div className='w-2/5 lg:w-1/5 flex justify-end h-full items-center text-right'>
             <div className='mt-0 sm:mt-0 text-xxs sm:text-sm tracking-wide text-right spinner-hidden'>
-              {usersAddress ? (
-                <WalletInfo {...props} />
-              ) : (
-                <button
-                  className='font-bold rounded-full text-green-1 border-2 sm:border-4 border-green-1-300 hover:text-white hover:bg-lightPurple-1000 text-xxs sm:text-base pt-2 pb-2 px-3 sm:px-6 trans'
-                  onClick={handleConnect}
-                >
-                  Connect Wallet
-                </button>
-              )}
+              {usersAddress ? <WalletInfo {...props} /> : <ConnectWalletButton size='sm' />}
             </div>
           </div>
         </nav>

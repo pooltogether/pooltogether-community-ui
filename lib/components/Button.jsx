@@ -77,7 +77,11 @@ const getCursorClasses = (disabled) => {
   return 'cursor-pointer'
 }
 
-const getPaddingClasses = (paddingClasses) => {
+const getPaddingClasses = (paddingClasses, noPad) => {
+  if (noPad) {
+    return ''
+  }
+
   if (paddingClasses) {
     return paddingClasses
   }
@@ -88,10 +92,6 @@ const getPaddingClasses = (paddingClasses) => {
 const getTextSizeClasses = (textSizeClasses, size) => {
   if (textSizeClasses) {
     return textSizeClasses
-  }
-
-  if (!size) {
-    size = 'base'
   }
 
   switch (size) {
@@ -107,6 +107,8 @@ const getTextSizeClasses = (textSizeClasses, size) => {
       return `text-lg sm:text-xl lg:text-2xl`
     case '2xl':
       return `text-xl sm:text-2xl lg:text-3xl`
+    case '3xl':
+      return `text-xl sm:text-3xl lg:text-4xl`
     default:
       return `text-sm sm:text-base lg:text-lg`
   }
@@ -162,11 +164,12 @@ export const Button = (props) => {
     size,
     textSizeClasses,
     transitionClasses,
-    fullWidth
+    fullWidth,
+    noPad
   } = props
 
   let defaultClasses =
-    'inline-block text-center leading-snug tracking-wide outline-none focus:outline-none active:outline-none no-underline '
+    'inline-block text-center leading-snug tracking-wide outline-none focus:outline-none active:outline-none no-underline font-bold '
 
   if (fullWidth) {
     defaultClasses += 'w-full'
@@ -175,7 +178,7 @@ export const Button = (props) => {
   }
 
   const { backgroundClasses, borderClasses, textColorClasses } = getColorClasses(color, disabled)
-  paddingClasses = getPaddingClasses(paddingClasses)
+  paddingClasses = getPaddingClasses(paddingClasses, noPad)
   roundedClasses = getRoundedClasses(roundedClasses)
   textSizeClasses = getTextSizeClasses(textSizeClasses, size)
   transitionClasses = getTransitionClasses(transitionClasses)
@@ -201,7 +204,8 @@ export const Button = (props) => {
     'roundedClasses',
     'size',
     'textSizeClasses',
-    'transitionClasses'
+    'transitionClasses',
+    'fullWidth'
   ])
 
   if (href && as) {
@@ -214,7 +218,23 @@ export const Button = (props) => {
         </a>
       </Link>
     )
+  } else if (href) {
+    return (
+      <a
+        href={href}
+        target='_blank'
+        className='trans text-xs sm:text-base no-underline border-0 active:outline-none hover:outline-none focus:outline-none'
+      >
+        <button {...newProps} ref={buttonRef} className={className}>
+          {children}
+        </button>
+      </a>
+    )
   } else {
-    return <button {...newProps} ref={buttonRef} className={className} />
+    return (
+      <button {...newProps} ref={buttonRef} className={className}>
+        {children}
+      </button>
+    )
   }
 }

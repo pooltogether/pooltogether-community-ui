@@ -1,7 +1,6 @@
 import { useAtom } from 'jotai'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
-import Link from 'next/link'
 import React from 'react'
 import { useQuery } from 'react-query'
 
@@ -16,6 +15,7 @@ import { getCoinGeckoId, getCoinGeckoTokenData } from 'lib/services/coingecko'
 import { useAwardsList } from 'lib/hooks/useAwardsList'
 
 import Cactus from 'assets/images/cactus.svg'
+import { InternalLink } from 'lib/components/InternalLink'
 
 export const PrizeCard = (props) => {
   const { showLinks, className } = props
@@ -34,36 +34,35 @@ export const PrizeCard = (props) => {
           <Button
             href={`/pools/[networkName]/[prizePoolAddress]/home`}
             as={`/pools/${networkName}/${prizePoolAddress}/home`}
+            size='3xl'
+            color='primary'
+            fullWidth
           >
-            Get tickets
+            Deposit to win
           </Button>
           <div className='flex justify-between mt-4'>
-            <Link
+            <InternalLink
               href={`/pools/[networkName]/[prizePoolAddress]/manage`}
               as={`/pools/${networkName}/${prizePoolAddress}/manage`}
             >
-              <a className='flex underline font-bold'>
-                Manage pool{' '}
-                <FeatherIcon
-                  icon='settings'
-                  strokeWidth='0.25rem'
-                  className={'ml-3 my-auto w-4 h-4 stroke-2 stroke-current'}
-                />
-              </a>
-            </Link>
-            <Link
+              Manage pool{' '}
+              <FeatherIcon
+                icon='settings'
+                strokeWidth='0.25rem'
+                className={'ml-3 my-auto w-4 h-4 stroke-2 stroke-current'}
+              />
+            </InternalLink>
+            <InternalLink
               href={`/pools/[networkName]/[prizePoolAddress]/home`}
               as={`/pools/${networkName}/${prizePoolAddress}/home`}
             >
-              <a className='flex underline font-bold'>
-                My Account{' '}
-                <FeatherIcon
-                  icon='arrow-right'
-                  strokeWidth='0.25rem'
-                  className={'ml-3 my-auto w-4 h-4 stroke-2 stroke-current'}
-                />
-              </a>
-            </Link>
+              My Account{' '}
+              <FeatherIcon
+                icon='arrow-right'
+                strokeWidth='0.25rem'
+                className={'ml-3 my-auto w-4 h-4 stroke-2 stroke-current'}
+              />
+            </InternalLink>
           </div>
         </div>
       )}
@@ -123,7 +122,7 @@ const Prizes = (props) => {
       style={{ maxHeight: '160px' }}
     >
       {awards.map((token, index) => (
-        <PrizeListItem token={token} index={index} />
+        <PrizeListItem key={index} token={token} index={index} />
       ))}
     </ul>
   )

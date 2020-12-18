@@ -13,6 +13,8 @@ import { sendTx } from 'lib/utils/sendTx'
 import { errorStateAtom } from 'lib/components/PoolData'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { TxMessage } from 'lib/components/TxMessage'
+import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
+import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 
 const handleSetRngService = async (
   txName,
@@ -51,6 +53,7 @@ export const RngServiceControlCard = (props) => {
 
 const RngServiceControlForm = (props) => {
   const [poolAddresses, setPoolAddresses] = useAtom(poolAddressesAtom)
+  const [usersAddress] = useAtom(usersAddressAtom)
   const [network] = useAtom(networkAtom)
   const [tx, setTx] = useState({})
   const [errorState, setErrorState] = useAtom(errorStateAtom)
@@ -113,6 +116,10 @@ const RngServiceControlForm = (props) => {
     setTx({})
   }
 
+  if (!usersAddress) {
+    return <ConnectWalletButton />
+  }
+
   if (tx.inWallet || tx.sent || tx.completed) {
     return <TxMessage txType={txName} tx={tx} handleReset={resetState} />
   }
@@ -123,12 +130,15 @@ const RngServiceControlForm = (props) => {
         id='rng-dropdown'
         placeHolder='Select a random number generator service'
         label={'Random number generator service'}
+        containerClassName='mb-8 w-full'
         formatValue={formatValue}
         onValueSet={onValueSet}
         current={currentRngService}
         values={rngServices}
       />
-      <Button>Update RNG service</Button>
+      <Button color='secondary' size='lg'>
+        Update RNG service
+      </Button>
     </form>
   )
 }

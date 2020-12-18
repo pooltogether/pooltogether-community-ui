@@ -20,12 +20,12 @@ import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
 
 const demoAssetTypes = {
   dai: { label: 'DAI', logo: DaiSvg },
+  uni: { label: 'UNI Stake' },
   usdc: { label: 'USDC', logo: UsdcSvg },
   usdt: { label: 'USDT', logo: UsdtSvg }
 }
 const demoPools = {
-  ropsten: { chainId: 3, assets: ['dai', 'usdc', 'usdt'] },
-  rinkeby: { chainId: 4, assets: ['dai', 'usdc', 'usdt'] }
+  rinkeby: { chainId: 4, assets: ['dai', 'uni'] }
 }
 
 export const IndexContent = (props) => {
@@ -68,10 +68,10 @@ export const IndexContent = (props) => {
       view: 'Local'
     }
   }
-
+  console.log(demoPool?.assets)
   demoPool?.assets.forEach((assetType) => {
     const address = getDemoPoolContractAddress(demoNetworkName, assetType)
-
+    console.log(address)
     if (address) {
       networkDemoPools.push({
         assetType,
@@ -107,10 +107,12 @@ export const IndexContent = (props) => {
                       >
                         <a className='w-full sm:w-1/2 lg:w-1/3 px-4 border-2 border-transparent hover:border-transparent'>
                           <div className='flex items-center mb-2 py-2 px-4 inline-block bg-card hover:bg-card-selected trans border-2 border-highlight-3 hover:border-highlight-2 border-dashed rounded-lg '>
-                            <img
-                              src={demoAssetTypes[pool.assetType]?.logo}
-                              className='inline-block w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 mr-2'
-                            />
+                            {demoAssetTypes[pool.assetType]?.logo && (
+                              <img
+                                src={demoAssetTypes[pool.assetType]?.logo}
+                                className='inline-block w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 mr-2'
+                              />
+                            )}
 
                             <div>
                               <span className='text-blue text-base'>
@@ -169,7 +171,9 @@ export const IndexContent = (props) => {
               />
 
               <div className='my-5'>
-                <Button color='green'>View Pool</Button>
+                <Button color='primary' size='lg'>
+                  View Pool
+                </Button>
               </div>
             </form>
           </FormPanel>

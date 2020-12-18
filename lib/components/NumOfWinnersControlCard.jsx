@@ -15,6 +15,8 @@ import { WalletContext } from 'lib/components/WalletContextProvider'
 import { TxMessage } from 'lib/components/TxMessage'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
+import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
+import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 
 const handleSetNumberOfWinners = async (
   txName,
@@ -54,9 +56,8 @@ export const NumOfWinnersControlCard = (props) => {
 const NumOfWinnersForm = (props) => {
   const [poolAddresses, setPoolAddresses] = useAtom(poolAddressesAtom)
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
-  const [network] = useAtom(networkAtom)
+  const [usersAddress] = useAtom(usersAddressAtom)
   const [tx, setTx] = useState({})
-  const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
 
@@ -93,6 +94,10 @@ const NumOfWinnersForm = (props) => {
     setTx({})
   }
 
+  if (!usersAddress) {
+    return <ConnectWalletButton />
+  }
+
   if (tx.inWallet || tx.sent || tx.completed) {
     return <TxMessage txType={txName} tx={tx} handleReset={resetState} />
   }
@@ -110,7 +115,9 @@ const NumOfWinnersForm = (props) => {
         }}
         value={newNumOfWinners}
       />
-      <Button>Update winners</Button>
+      <Button color='secondary' size='lg'>
+        Update winners
+      </Button>
     </form>
   )
 }

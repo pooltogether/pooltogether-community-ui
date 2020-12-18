@@ -34,7 +34,7 @@ export const RelatedAddressesCard = (props) => {
     ]
 
     return rowData.map((data, index) => (
-      <Row index={index} contract={data.contract} address={data.address} />
+      <Row key={index} index={index} contract={data.contract} address={data.address} />
     ))
   }, [poolAddresses])
 

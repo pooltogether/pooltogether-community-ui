@@ -4,7 +4,6 @@ import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/Periodic
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
 
-import { erc20AwardsAtom } from 'lib/hooks/useExternalErc20Awards'
 import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { RowDataCell, Table } from 'lib/components/Table'
 import { LoadingDots } from 'lib/components/LoadingDots'
@@ -19,16 +18,21 @@ import { SENTINEL_ADDRESS } from 'lib/constants'
 import { TxMessage } from 'lib/components/TxMessage'
 import { prizePoolTypeAtom } from 'lib/hooks/usePrizePoolType'
 import { errorStateAtom } from 'lib/components/PoolData'
+import { erc721AwardsAtom } from 'lib/hooks/useExternalErc721Awards'
+import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
+import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 
-const handleAddExternalErc20 = async (
+const handleAddExternalErc721 = async (
   txName,
   setTx,
   provider,
   prizeStrategyAddress,
-  externalErc20
+  externalErc721Address,
+  tokenIds
 ) => {
   const params = [
-    externalErc20,
+    externalErc721Address,
+    tokenIds,
     {
       gasLimit: 200000
     }
@@ -39,46 +43,45 @@ const handleAddExternalErc20 = async (
     provider,
     prizeStrategyAddress,
     PrizeStrategyAbi,
-    'addExternalErc20Award',
+    'addExternalErc721Award',
     params,
     txName
   )
 }
 
-const handleRemoveExternalErc20 = async (
+const handleRemoveExternalErc721 = async (
   txName,
   setTx,
   provider,
   prizeStrategyAddress,
-  externalErc20,
-  prevExternalErc20
+  externalErc721Address,
+  prevExternalErc721Address
 ) => {
   const params = [
-    externalErc20,
-    prevExternalErc20,
+    externalErc721Address,
+    prevExternalErc721Address,
     {
       gasLimit: 200000
     }
   ]
+
+  console.log(params)
 
   await sendTx(
     setTx,
     provider,
     prizeStrategyAddress,
     PrizeStrategyAbi,
-    'removeExternalErc20Award',
+    'removeExternalErc721Award',
     params,
     txName
   )
 }
 
 export const Erc721AwardsControlCard = (props) => {
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const [erc20Awards] = useAtom(erc20AwardsAtom)
-
   return (
     <Card>
-      <Collapse title='ERC20 awards'>
+      <Collapse title='ERC721 awards'>
         <CardSecondaryText className='mb-8'>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
           ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
@@ -87,30 +90,38 @@ export const Erc721AwardsControlCard = (props) => {
 
         <AwardsTable />
 
-        <AddErc20Form />
+        <AddErc721Form />
       </Collapse>
     </Card>
   )
 }
 
 const AwardsTable = () => {
-  const [erc20Awards] = useAtom(erc20AwardsAtom)
+  const [erc721Awards] = useAtom(erc721AwardsAtom)
+
+  console.log(erc721Awards)
 
   const rows = useMemo(
     () =>
-      erc20Awards.awards.map((award, index) => {
-        return (
-          <Row
-            key={index}
-            award={award}
-            prevAddress={index === 0 ? SENTINEL_ADDRESS : erc20Awards.awards[index].address}
-          />
-        )
-      }),
-    [erc20Awards.awards]
+      erc721Awards.awards
+        .map((award, index) => {
+          return award.tokenIds[0].map((tokenId) => {
+            console.log(index === 0 ? SENTINEL_ADDRESS : erc721Awards.awards[index].address)
+            return (
+              <Row
+                key={`${index}${tokenId.toString()}`}
+                address={award.address}
+                tokenId={tokenId}
+                prevAddress={index === 0 ? SENTINEL_ADDRESS : erc721Awards.awards[index].address}
+              />
+            )
+          })
+        })
+        .flat(),
+    [erc721Awards.awards]
   )
 
-  if (erc20Awards.loading) {
+  if (erc721Awards.loading) {
     return (
       <div className='p-10'>
         <LoadingDots />
@@ -118,40 +129,44 @@ const AwardsTable = () => {
     )
   }
 
-  if (erc20Awards.awards.length === 0) {
+  if (erc721Awards.awards.length === 0) {
     return null
   }
 
-  return <Table headers={['Value', 'Token name', 'Ticker', '']} rows={rows} className='mb-8' />
+  return <Table headers={['Token id', 'Token address', '']} rows={rows} className='mb-8' />
 }
 
-const AddErc20Form = () => {
-  const [externalErc20Address, setExternalErc20Address] = useState('')
+const AddErc721Form = () => {
+  const [externalErc721Address, setExternalErc721Address] = useState('')
+  const [externalErc721TokenIds, setExternalErc721TokenIds] = useState('')
   const [tx, setTx] = useState({})
   const [poolAddresses] = useAtom(poolAddressesAtom)
   const [prizePoolType] = useAtom(prizePoolTypeAtom)
+  const [usersAddress] = useAtom(usersAddressAtom)
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
 
-  const txName = 'Add External ERC20 Token'
+  const txName = 'Add External ERC721 Tokens'
 
   const resetState = (e) => {
     e.preventDefault()
 
-    setExternalErc20Address('')
+    setExternalErc721Address('')
+    setExternalErc721TokenIds('')
     setTx({})
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    handleAddExternalErc20(
+    handleAddExternalErc721(
       txName,
       setTx,
       provider,
       poolAddresses.prizeStrategy,
-      externalErc20Address
+      externalErc721Address,
+      externalErc721TokenIds.split(',').map((s) => s.trim())
     )
   }
 
@@ -167,6 +182,10 @@ const AddErc20Form = () => {
     }
   }, [tx.completed, tx.error])
 
+  if (!usersAddress) {
+    return <ConnectWalletButton />
+  }
+
   const txInFlight = tx.inWallet || tx.sent
   if (txInFlight || tx.completed) {
     return <TxMessage txType={txName} tx={tx} handleReset={resetState} />
@@ -175,32 +194,47 @@ const AddErc20Form = () => {
   return (
     <form onSubmit={handleSubmit}>
       <TextInputGroup
-        id='newErc20Address'
-        name='newErc20Address'
-        label='Erc20 token address'
+        id='newErc721Address'
+        name='newErc721Address'
+        label='Erc721 token address'
         containerClassName='mb-8'
         placeholder='(eg. 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984)'
         onChange={(e) => {
-          setExternalErc20Address(e.target.value)
+          setExternalErc721Address(e.target.value)
         }}
-        value={externalErc20Address}
+        value={externalErc721Address}
       />
-      <Button color='secondary' size='lg' disabled={!externalErc20Address}>
-        Add ERC20 award
+      <TextInputGroup
+        id='erc721TokenIds'
+        name='erc721TokenIds'
+        label='Erc721 token ids'
+        containerClassName='mb-8'
+        placeholder='1167158, 1167159'
+        onChange={(e) => {
+          setExternalErc721TokenIds(e.target.value)
+        }}
+        value={externalErc721TokenIds}
+      />
+      <Button
+        color='secondary'
+        size='lg'
+        disabled={!externalErc721Address || !externalErc721TokenIds}
+      >
+        Add ERC71 award
       </Button>
     </form>
   )
 }
 
 const Row = (props) => {
-  const { prevAddress } = props
-  const { formattedBalance, symbol, name, address } = props.award
+  const { tokenId, address, prevAddress } = props
 
   return (
     <tr>
-      <RowDataCell first>{formattedBalance}</RowDataCell>
-      <RowDataCell>{name}</RowDataCell>
-      <RowDataCell>{symbol}</RowDataCell>
+      <RowDataCell first className='font-bold'>
+        {tokenId.toString()}
+      </RowDataCell>
+      <RowDataCell className='text-accent-1'>{address}</RowDataCell>
       <RemoveAddressButton address={address} prevAddress={prevAddress} />
     </tr>
   )
@@ -211,6 +245,7 @@ const RemoveAddressButton = (props) => {
   const [tx, setTx] = useState({})
   const [poolAddresses] = useAtom(poolAddressesAtom)
   const [prizePoolType] = useAtom(prizePoolTypeAtom)
+  const [usersAddress] = useAtom(usersAddressAtom)
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
@@ -220,7 +255,7 @@ const RemoveAddressButton = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    await handleRemoveExternalErc20(
+    await handleRemoveExternalErc721(
       txName,
       setTx,
       provider,
@@ -241,6 +276,10 @@ const RemoveAddressButton = (props) => {
       )
     }
   }, [tx.completed, tx.error])
+
+  if (!usersAddress) {
+    return null
+  }
 
   if (tx.sent && !tx.completed) {
     return <td className='pl-8 text-right flex-grow text-accent-1'>Waiting for confirmations</td>

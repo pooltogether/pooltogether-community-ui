@@ -57,13 +57,14 @@ const ManageHeader = () => {
 
         <p className='text-accent-1 text-base sm:text-2xl max-w-3xl'>Version 3.1.0</p>
 
-        <a
+        <Button
+          size='base'
+          color='secondary'
+          className='mt-6'
           href='https://docs.pooltogether.com/'
-          target='_blank'
-          className='trans text-xs sm:text-base no-underline border-0 active:outline-none hover:outline-none focus:outline-none'
         >
-          <Button>View documentation</Button>
-        </a>
+          View documentation
+        </Button>
       </div>
       <img
         src={ManageImage}

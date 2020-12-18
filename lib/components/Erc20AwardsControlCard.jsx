@@ -19,6 +19,8 @@ import { SENTINEL_ADDRESS } from 'lib/constants'
 import { TxMessage } from 'lib/components/TxMessage'
 import { prizePoolTypeAtom } from 'lib/hooks/usePrizePoolType'
 import { errorStateAtom } from 'lib/components/PoolData'
+import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
+import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 
 const handleAddExternalErc20 = async (
   txName,
@@ -128,6 +130,7 @@ const AwardsTable = () => {
 const AddErc20Form = () => {
   const [externalErc20Address, setExternalErc20Address] = useState('')
   const [tx, setTx] = useState({})
+  const [usersAddress] = useAtom(usersAddressAtom)
   const [poolAddresses] = useAtom(poolAddressesAtom)
   const [prizePoolType] = useAtom(prizePoolTypeAtom)
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
@@ -166,6 +169,10 @@ const AddErc20Form = () => {
       )
     }
   }, [tx.completed, tx.error])
+
+  if (!usersAddress) {
+    return <ConnectWalletButton />
+  }
 
   if (tx.inWallet || tx.sent || tx.completed) {
     return <TxMessage txType={txName} tx={tx} handleReset={resetState} />
@@ -212,6 +219,7 @@ const RemoveAddressButton = (props) => {
   const [tx, setTx] = useState({})
   const [poolAddresses] = useAtom(poolAddressesAtom)
   const [prizePoolType] = useAtom(prizePoolTypeAtom)
+  const [usersAddress] = useAtom(usersAddressAtom)
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
@@ -244,6 +252,10 @@ const RemoveAddressButton = (props) => {
   }, [tx.completed, tx.error])
 
   // TODO: Error state
+
+  if (!usersAddress) {
+    return null
+  }
 
   if (tx.sent && !tx.completed) {
     return <td className='pl-8 text-right flex-grow text-accent-1'>Waiting for confirmations</td>

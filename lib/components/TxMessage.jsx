@@ -26,7 +26,7 @@ export const TxMessage = (props) => {
       {txInFlight && (
         <>
           <div className='bg-card rounded-lg px-2 sm:px-4 pt-5 pb-2 sm:py-6 text-center text-white text-xs sm:text-sm lg:text-base'>
-            <div className='font-bold rounded-full text-default-soft text-sm sm:text-base uppercase px-2 bg-purple-1'>
+            <div className='font-bold text-default-soft text-sm sm:text-base uppercase px-2 pb-2'>
               Transaction status
             </div>
 

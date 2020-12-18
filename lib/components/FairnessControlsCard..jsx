@@ -19,6 +19,8 @@ import {
   getCreditRateMantissaAndLimitMantissa
 } from 'lib/utils/format'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
+import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
+import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 
 const handleSetCreditPlan = async (
   txName,
@@ -61,8 +63,8 @@ export const FairnessControlsCard = (props) => {
 const FairnessControlsForm = (props) => {
   const [poolAddresses, setPoolAddresses] = useAtom(poolAddressesAtom)
   const [poolChainValues] = useAtom(poolChainValuesAtom)
+  const [usersAddress] = useAtom(usersAddressAtom)
   const [tx, setTx] = useState({})
-  const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
 
@@ -122,6 +124,10 @@ const FairnessControlsForm = (props) => {
   const resetState = (e) => {
     e.preventDefault()
     setTx({})
+  }
+
+  if (!usersAddress) {
+    return <ConnectWalletButton />
   }
 
   if (tx.inWallet || tx.sent || tx.completed) {

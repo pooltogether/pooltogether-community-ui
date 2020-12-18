@@ -15,6 +15,7 @@ import { sendTx } from 'lib/utils/sendTx'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { networkAtom } from 'lib/hooks/useNetwork'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
+import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 
 const handleWithdrawSubmit = async (
   setTx,
@@ -102,6 +103,10 @@ export const WithdrawUI = (props) => {
       sent: false,
       completed: false
     })
+  }
+
+  if (!usersAddress) {
+    return <ConnectWalletButton />
   }
 
   if (txInFlight) {
