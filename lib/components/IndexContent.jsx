@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { find, findKey, map, upperFirst } from 'lodash'
 
 import { Button } from 'lib/components/Button'
-import { FormPanel } from 'lib/components/FormPanel'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { getDemoPoolContractAddress } from 'lib/utils/getDemoPoolContractAddress'
@@ -16,6 +15,7 @@ import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
 import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
+import { Card } from 'lib/components/Card'
 
 const demoAssetTypes = {
   dai: { label: 'DAI', logo: DaiSvg },
@@ -143,40 +143,38 @@ export const IndexContent = (props) => {
           </>
         )}
 
-        <div className='-mx-16 sm:-mx-20 lg:-mx-24 px-12'>
-          <FormPanel>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault()
+        <Card>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
 
-                window.location.href = `/pools/${network}/${contractAddress}`
-              }}
-            >
-              <DropdownInputGroup
-                id='network-dropdown'
-                label={'Network the Pool is on:'}
-                formatValue={formatValue}
-                onValueSet={onValueSet}
-                current={network}
-                values={networks}
-              />
+              window.location.href = `/pools/${network}/${contractAddress}`
+            }}
+          >
+            <DropdownInputGroup
+              id='network-dropdown'
+              label={'Network the Pool is on:'}
+              formatValue={formatValue}
+              onValueSet={onValueSet}
+              current={network}
+              values={networks}
+            />
 
-              <TextInputGroup
-                id='contractAddress'
-                label={<>Prize Pool contract address:</>}
-                required
-                onChange={(e) => setContractAddress(e.target.value)}
-                value={contractAddress}
-              />
+            <TextInputGroup
+              id='contractAddress'
+              label={<>Prize Pool contract address:</>}
+              required
+              onChange={(e) => setContractAddress(e.target.value)}
+              value={contractAddress}
+            />
 
-              <div className='my-5'>
-                <Button color='primary' size='lg'>
-                  View Pool
-                </Button>
-              </div>
-            </form>
-          </FormPanel>
-        </div>
+            <div className='my-5'>
+              <Button color='primary' size='lg'>
+                View Pool
+              </Button>
+            </div>
+          </form>
+        </Card>
       </div>
     </>
   )
