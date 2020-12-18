@@ -121,9 +121,10 @@ const Prizes = (props) => {
       className='flex flex-col my-2 sm:my-8 max-w-xs mx-auto overflow-auto'
       style={{ maxHeight: '160px' }}
     >
-      {awards.map((token, index) => (
-        <PrizeListItem key={index} token={token} index={index} />
-      ))}
+      {awards.map((token, index) => {
+        if (token.formattedBalance == 0) return null
+        return <PrizeListItem key={index} token={token} index={index} />
+      })}
     </ul>
   )
 }
@@ -157,12 +158,17 @@ const PrizeListItem = (props) => {
       <li key={index + token.symbol} className='flex justify-between mb-2'>
         <span className='font-bold'>{token.formattedBalance}</span>
         <div className='flex ml-4'>
-          {imageUrl && <img className='my-auto mr-2 w-6 h-6' src={imageUrl} />}
+          <img className='my-auto mr-2 w-6 h-6' src={imageUrl} />
           {token.name || token.symbol}
         </div>
       </li>
     )
   }
 
-  return <li key={index + token.symbol}>{`$: ${token.formattedBalance}`}</li>
+  return (
+    <li key={index + token.symbol} className='flex justify-between mb-2'>
+      <span className='font-bold'>{token.formattedBalance}</span>
+      <div className='flex ml-4'>{token.name || token.symbol}</div>
+    </li>
+  )
 }
