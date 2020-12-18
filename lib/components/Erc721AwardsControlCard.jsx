@@ -65,8 +65,6 @@ const handleRemoveExternalErc721 = async (
     }
   ]
 
-  console.log(params)
-
   await sendTx(
     setTx,
     provider,
@@ -99,14 +97,11 @@ export const Erc721AwardsControlCard = (props) => {
 const AwardsTable = () => {
   const [erc721Awards] = useAtom(erc721AwardsAtom)
 
-  console.log(erc721Awards)
-
   const rows = useMemo(
     () =>
       erc721Awards.awards
         .map((award, index) => {
           return award.tokenIds[0].map((tokenId) => {
-            console.log(index === 0 ? SENTINEL_ADDRESS : erc721Awards.awards[index].address)
             return (
               <Row
                 key={`${index}${tokenId.toString()}`}

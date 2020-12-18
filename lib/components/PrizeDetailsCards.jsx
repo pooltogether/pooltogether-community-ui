@@ -45,7 +45,6 @@ const TimeUntilPrizeCard = () => {
 
 const TimeDisplay = (props) => {
   const { days, hours, minutes, seconds } = props
-  console.log(days, hours, minutes, seconds)
 
   if (days > 0) {
     if (hours > 0) {
