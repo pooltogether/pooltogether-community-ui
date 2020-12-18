@@ -1,12 +1,12 @@
-import classnames from 'classnames'
+import React from 'react'
 import { useAtom } from 'jotai'
+
 import { Card, CardPrimaryText, CardTitle } from 'lib/components/Card'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
 import { caclulateOdds } from 'lib/utils/caclulateOdds'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
-import React from 'react'
 
 export const DepositorOddsCards = (props) => {
   return (

@@ -1,6 +1,7 @@
+import React, { useContext } from 'react'
+
 import { Button } from 'lib/components/Button'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import React, { useContext } from 'react'
 
 export const ConnectWalletButton = (props) => {
   const { children, ...buttonProps } = props

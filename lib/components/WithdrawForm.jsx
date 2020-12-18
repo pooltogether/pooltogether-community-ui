@@ -1,14 +1,13 @@
 import React from 'react'
 import { ethers } from 'ethers'
+import { useAtom } from 'jotai'
 
 import { Button } from 'lib/components/Button'
-import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 import { PTHint } from 'lib/components/PTHint'
 import { RadioInputGroup } from 'lib/components/RadioInputGroup'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
-import { useAtom } from 'jotai'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
 

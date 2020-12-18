@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useAtom } from 'jotai'
 
 import { AdminUI } from 'lib/components/AdminUI'
 import { StatsUI } from 'lib/components/StatsUI'
@@ -6,7 +7,6 @@ import { Content, ContentPane, Tab, Tabs } from 'lib/components/Tabs'
 import ManageImage from 'assets/images/manage-image.svg'
 import { Button } from 'lib/components/Button'
 import { Card, CardTitle } from 'lib/components/Card'
-import { useAtom } from 'jotai'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 

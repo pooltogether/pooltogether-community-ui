@@ -1,7 +1,8 @@
+import React from 'react'
+
 import classnames from 'classnames'
 import { PTHint } from 'lib/components/PTHint'
 import { QuestionMarkCircle } from 'lib/components/QuestionMarkCircle'
-import React from 'react'
 
 export const CheckboxInputGroup = (props) => {
   const { id, disabled, hint, title, label, handleClick, checked } = props

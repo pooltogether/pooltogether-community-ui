@@ -4,7 +4,6 @@ import { find, findKey, map, upperFirst } from 'lodash'
 
 import { Button } from 'lib/components/Button'
 import { FormPanel } from 'lib/components/FormPanel'
-import { RadioInputGroup } from 'lib/components/RadioInputGroup'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { getDemoPoolContractAddress } from 'lib/utils/getDemoPoolContractAddress'

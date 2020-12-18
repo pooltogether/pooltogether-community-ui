@@ -1,5 +1,6 @@
-import { poolToast } from 'lib/utils/poolToast'
 import React from 'react'
+
+import { poolToast } from 'lib/utils/poolToast'
 
 export class ErrorBoundary extends React.Component {
   constructor (props) {

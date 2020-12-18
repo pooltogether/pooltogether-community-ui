@@ -1,9 +1,8 @@
+import React, { useMemo } from 'react'
 import { useAtom } from 'jotai'
-import classnames from 'classnames'
 import { Card } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import React, { useMemo } from 'react'
 import { RowDataCell, Table } from 'lib/components/Table'
 import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 

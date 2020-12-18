@@ -1,9 +1,10 @@
-import PoolLogo from 'assets/images/pooltogether-white-wordmark.svg'
+import React, { useContext } from 'react'
+import Link from 'next/link'
+
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { WalletInfo } from 'lib/components/WalletInfo'
-import Link from 'next/link'
-import React, { useContext } from 'react'
+import PoolLogo from 'assets/images/pooltogether-white-wordmark.svg'
 
 export const Nav = (props) => {
   const walletContext = useContext(WalletContext)

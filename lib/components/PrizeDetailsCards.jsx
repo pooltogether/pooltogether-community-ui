@@ -1,11 +1,12 @@
+import React, { useState } from 'react'
 import { addSeconds } from 'date-fns'
 import { useAtom } from 'jotai'
+
 import { Card, CardPrimaryText, CardTitle } from 'lib/components/Card'
 import { useInterval } from 'lib/hooks/useInterval'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { subtractDates } from 'lib/utils/subtractDates'
-import React, { useState } from 'react'
 
 export const PrizeDetailsCards = (props) => {
   return (

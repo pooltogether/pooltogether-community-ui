@@ -1,8 +1,9 @@
+import React, { useContext } from 'react'
 import classnames from 'classnames'
+
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { SUPPORTED_NETWORKS } from 'lib/constants'
 import { chainIdToName } from 'lib/utils/chainIdToName'
-import React, { useContext } from 'react'
 
 export const StaticNetworkNotificationBanner = ({}) => {
   let chainId

@@ -1,7 +1,8 @@
+import React, { useState } from 'react'
+
 import { TooltipPopup, useTooltip } from '@reach/tooltip'
 import classnames from 'classnames'
 import { QuestionMarkCircle } from 'lib/components/QuestionMarkCircle'
-import React, { useState } from 'react'
 
 // Center the tooltip, but collisions will win
 const custom = (triggerRect, tooltipRect) => {

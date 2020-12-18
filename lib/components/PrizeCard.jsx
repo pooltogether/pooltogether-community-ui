@@ -1,7 +1,7 @@
+import React from 'react'
 import { useAtom } from 'jotai'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
-import React from 'react'
 import { useQuery } from 'react-query'
 
 import { Button } from 'lib/components/Button'
@@ -13,9 +13,9 @@ import { networkAtom } from 'lib/hooks/useNetwork'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { getCoinGeckoId, getCoinGeckoTokenData } from 'lib/services/coingecko'
 import { useAwardsList } from 'lib/hooks/useAwardsList'
+import { InternalLink } from 'lib/components/InternalLink'
 
 import Cactus from 'assets/images/cactus.svg'
-import { InternalLink } from 'lib/components/InternalLink'
 
 export const PrizeCard = (props) => {
   const { showLinks, className } = props

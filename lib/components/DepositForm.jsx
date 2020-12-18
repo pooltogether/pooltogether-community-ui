@@ -5,7 +5,6 @@ import { useAtom } from 'jotai'
 import FeatherIcon from 'feather-icons-react'
 
 import { Button } from 'lib/components/Button'
-import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
