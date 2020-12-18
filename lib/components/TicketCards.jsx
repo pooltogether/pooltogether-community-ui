@@ -15,14 +15,13 @@ export const TicketCards = (props) => {
 
 const TicketCard = () => {
   const [poolChainValues] = useAtom(poolChainValuesAtom)
+  console.log(poolChainValues)
 
   return (
     <Card className='mr-4'>
-      <CardTitle>Sponsorship symbol & name</CardTitle>
-      <CardPrimaryText>{`$${poolChainValues.sponsorshipSymbol}`}</CardPrimaryText>
-      <CardSecondaryText className='text-center'>
-        {poolChainValues.sponsorshipName}
-      </CardSecondaryText>
+      <CardTitle>Ticket symbol & name</CardTitle>
+      <CardPrimaryText>{`$${poolChainValues.ticketSymbol}`}</CardPrimaryText>
+      <CardSecondaryText className='text-center'>{poolChainValues.ticketName}</CardSecondaryText>
     </Card>
   )
 }

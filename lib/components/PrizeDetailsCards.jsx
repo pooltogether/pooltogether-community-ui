@@ -45,23 +45,30 @@ const TimeUntilPrizeCard = () => {
 
 const TimeDisplay = (props) => {
   const { days, hours, minutes, seconds } = props
+  console.log(days, hours, minutes, seconds)
 
   if (days > 0) {
-    return (
-      <CardPrimaryText className='text-xl'>
-        {days} days {hours} hours
-      </CardPrimaryText>
-    )
+    if (hours > 0) {
+      return (
+        <CardPrimaryText className='text-xl'>
+          {days} days {hours} hours
+        </CardPrimaryText>
+      )
+    } else {
+      return (
+        <CardPrimaryText className='text-xl'>
+          {days} days {minutes} minutes
+        </CardPrimaryText>
+      )
+    }
   }
 
-  if (hours) {
-    return (
-      <CardPrimaryText>
-        {String(12).padStart(2, '0')}:{String(minutes).padStart(2, '0')}:
-        {String(seconds).padStart(2, '0')}
-      </CardPrimaryText>
-    )
-  }
+  return (
+    <CardPrimaryText>
+      {String(hours).padStart(2, '0')}:{String(minutes).padStart(2, '0')}:
+      {String(seconds).padStart(2, '0')}
+    </CardPrimaryText>
+  )
 }
 
 const PlayersCard = () => {
