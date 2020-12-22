@@ -8,7 +8,7 @@ import { calculateEstimatedPoolPrize } from 'lib/utils/calculateEstimatedPoolPri
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { erc20AwardsAtom } from 'lib/hooks/useExternalErc20Awards'
-import { prizePoolTypeAtom } from 'lib/hooks/usePrizePoolType'
+import { prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
 
 export const PoolStats = (props) => {
   const { poolChainValues } = props

@@ -19,7 +19,7 @@ import {
 import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
-import { prizePoolTypeAtom } from 'lib/hooks/usePrizePoolType'
+import { prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
 
 const handleSetCreditPlan = async (
   txName,

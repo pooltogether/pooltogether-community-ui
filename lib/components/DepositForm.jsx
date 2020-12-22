@@ -13,7 +13,7 @@ import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
 import { sendTx } from 'lib/utils/sendTx'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import { prizePoolTypeAtom } from 'lib/hooks/usePrizePoolType'
+import { prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
 import { errorStateAtom } from 'lib/components/PoolData'
 import { networkAtom } from 'lib/hooks/useNetwork'
 
