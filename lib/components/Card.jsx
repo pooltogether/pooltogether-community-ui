@@ -24,14 +24,17 @@ export const CardTitle = (props) => (
 
 export const CardPrimaryText = (props) => (
   <div
-    className={classnames(
-      'text-base sm:text-4xl font-bold text-white text-center',
-      props.className
-    )}
+    className={classnames('text-base sm:text-4xl font-bold text-white', props.className, {
+      'text-center': props.center
+    })}
   >
     {props.children}
   </div>
 )
+
+CardPrimaryText.defaultProps = {
+  center: true
+}
 
 export const CardSecondaryText = (props) => (
   <div className={classnames('text-xs sm:text-sm text-accent-1', props.className)}>

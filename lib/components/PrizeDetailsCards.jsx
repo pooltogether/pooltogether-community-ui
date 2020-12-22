@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
-import { addSeconds } from 'date-fns'
 import { useAtom } from 'jotai'
 
 import { Card, CardPrimaryText, CardTitle } from 'lib/components/Card'
-import { useInterval } from 'lib/hooks/useInterval'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
-import { subtractDates } from 'lib/utils/subtractDates'
+import { useTimeLeft } from 'lib/hooks/useTimeLeft'
 
 export const PrizeDetailsCards = (props) => {
   return (
@@ -19,21 +17,7 @@ export const PrizeDetailsCards = (props) => {
 }
 
 const TimeUntilPrizeCard = () => {
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const [secondsLeft, setSecondsLeft] = useState(
-    parseInt(poolChainValues.prizePeriodRemainingSeconds.toString(), 10)
-  )
-
-  useInterval(() => {
-    const newRemainder = secondsLeft - 1
-    if (newRemainder > 0) {
-      setSecondsLeft(newRemainder)
-    }
-  }, 1000)
-
-  const currentDate = new Date(Date.now())
-  const futureDate = addSeconds(currentDate, secondsLeft)
-  const { days, hours, minutes, seconds } = subtractDates(futureDate, currentDate)
+  const { days, hours, minutes, seconds } = useTimeLeft()
 
   return (
     <Card className='mr-4'>
