@@ -17,7 +17,7 @@ import { sendTx } from 'lib/utils/sendTx'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { SENTINEL_ADDRESS } from 'lib/constants'
 import { TxMessage } from 'lib/components/TxMessage'
-import { prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
+import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
 import { errorStateAtom } from 'lib/components/PoolData'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
@@ -135,6 +135,7 @@ const AddErc20Form = () => {
   const [usersAddress] = useAtom(usersAddressAtom)
   const [poolAddresses] = useAtom(poolAddressesAtom)
   const [prizePoolType] = useAtom(prizePoolTypeAtom)
+  const [contractVersions] = useAtom(contractVersionsAtom)
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
@@ -167,6 +168,7 @@ const AddErc20Form = () => {
         poolAddresses,
         prizePoolType,
         setPoolChainValues,
+        contractVersions.prizeStrategy.contract,
         setErrorState
       )
     }
@@ -222,6 +224,7 @@ const RemoveAddressButton = (props) => {
   const [poolAddresses] = useAtom(poolAddressesAtom)
   const [prizePoolType] = useAtom(prizePoolTypeAtom)
   const [usersAddress] = useAtom(usersAddressAtom)
+  const [contractVersions] = useAtom(contractVersionsAtom)
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
@@ -248,6 +251,7 @@ const RemoveAddressButton = (props) => {
         poolAddresses,
         prizePoolType,
         setPoolChainValues,
+        contractVersions.prizeStrategy.contract,
         setErrorState
       )
     }

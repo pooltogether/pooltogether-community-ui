@@ -19,7 +19,7 @@ import {
 import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
-import { prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
+import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
 
 const handleSetCreditPlan = async (
   txName,
@@ -63,6 +63,7 @@ const FairnessControlsForm = (props) => {
   const [poolAddresses, setPoolAddresses] = useAtom(poolAddressesAtom)
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [prizePoolType] = useAtom(prizePoolTypeAtom)
+  const [contractVersions] = useAtom(contractVersionsAtom)
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const [usersAddress] = useAtom(usersAddressAtom)
   const [tx, setTx] = useState({})
@@ -113,6 +114,7 @@ const FairnessControlsForm = (props) => {
         poolAddresses,
         prizePoolType,
         setPoolChainValues,
+        contractVersions.prizeStrategy.contract,
         setErrorState
       )
     }

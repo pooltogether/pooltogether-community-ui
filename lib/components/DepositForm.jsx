@@ -13,7 +13,7 @@ import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
 import { sendTx } from 'lib/utils/sendTx'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import { prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
+import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
 import { errorStateAtom } from 'lib/components/PoolData'
 import { networkAtom } from 'lib/hooks/useNetwork'
 
@@ -118,6 +118,7 @@ export const DepositForm = (props) => {
 const UnlockDepositsButton = () => {
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [usersChainValues] = useAtom(userChainValuesAtom)
+  const [contractVersions] = useAtom(contractVersionsAtom)
   const [network] = useAtom(networkAtom)
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const [poolAddresses] = useAtom(poolAddressesAtom)
@@ -140,6 +141,7 @@ const UnlockDepositsButton = () => {
         poolAddresses,
         prizePoolType,
         setPoolChainValues,
+        contractVersions.prizeStrategy.contract,
         setErrorState
       )
     }

@@ -16,7 +16,7 @@ import { sendTx } from 'lib/utils/sendTx'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { SENTINEL_ADDRESS } from 'lib/constants'
 import { TxMessage } from 'lib/components/TxMessage'
-import { prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
+import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
 import { errorStateAtom } from 'lib/components/PoolData'
 import { erc721AwardsAtom } from 'lib/hooks/useExternalErc721Awards'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
@@ -138,6 +138,7 @@ const AddErc721Form = () => {
   const [poolAddresses] = useAtom(poolAddressesAtom)
   const [prizePoolType] = useAtom(prizePoolTypeAtom)
   const [usersAddress] = useAtom(usersAddressAtom)
+  const [contractVersions] = useAtom(contractVersionsAtom)
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
@@ -172,6 +173,7 @@ const AddErc721Form = () => {
         poolAddresses,
         prizePoolType,
         setPoolChainValues,
+        contractVersions.prizeStrategy.contract,
         setErrorState
       )
     }
@@ -241,6 +243,7 @@ const RemoveAddressButton = (props) => {
   const [poolAddresses] = useAtom(poolAddressesAtom)
   const [prizePoolType] = useAtom(prizePoolTypeAtom)
   const [usersAddress] = useAtom(usersAddressAtom)
+  const [contractVersions] = useAtom(contractVersionsAtom)
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
@@ -267,6 +270,7 @@ const RemoveAddressButton = (props) => {
         poolAddresses,
         prizePoolType,
         setPoolChainValues,
+        contractVersions.prizeStrategy.contract,
         setErrorState
       )
     }
