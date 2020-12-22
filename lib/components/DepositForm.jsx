@@ -16,6 +16,9 @@ import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
 import { errorStateAtom } from 'lib/components/PoolData'
 import { networkAtom } from 'lib/hooks/useNetwork'
+import { InnerCard } from 'lib/components/Card'
+
+import Warning from 'assets/images/warning.svg'
 
 export const DepositForm = (props) => {
   const { handleSubmit, vars, stateSetters } = props
@@ -50,10 +53,14 @@ export const DepositForm = (props) => {
 
   if (poolIsLocked) {
     return (
-      <div className='text-orange-600'>
-        The Pool is currently being awarded and until awarding is complete can not accept
-        withdrawals.
-      </div>
+      <InnerCard className='text-center'>
+        <img src={Warning} className='w-10 sm:w-14 mx-auto mb-4' />
+        <div className='text-accent-1 mb-4'>
+          This Prize Pool is not accepting deposits at this time.
+        </div>
+        <div className='text-accent-1'>Deposits can be made once the prize has been awarded.</div>
+        <div className='text-accent-1'>Check back soon!</div>
+      </InnerCard>
     )
   }
 
@@ -63,11 +70,8 @@ export const DepositForm = (props) => {
         <TextInputGroup
           id='depositAmount'
           name='depositAmount'
-          label={
-            <>
-              Deposit amount <span className='text-default italic'> (in {tokenSymbol})</span>
-            </>
-          }
+          label='Deposit amount'
+          unit={tokenSymbol}
           required
           disabled={!hasApprovedBalance}
           type='number'

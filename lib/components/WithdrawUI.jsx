@@ -77,7 +77,6 @@ export const WithdrawUI = (props) => {
           ticketAddress,
           ethers.utils.parseUnits(debouncedWithdrawAmount, tokenDecimals)
         )
-        console.log("exit fees", result)
         setExitFees(result)
       } else {
         setExitFees(null)
@@ -117,7 +116,12 @@ export const WithdrawUI = (props) => {
     return (
       <>
         <div className='mb-4 sm:mb-8 text-sm sm:text-base text-accent-1'>{withdrawText}</div>
-        <TxMessage txType='Withdraw' tx={tx} handleReset={resetState} />
+        <TxMessage
+          txType='Withdraw'
+          tx={tx}
+          handleReset={resetState}
+          resetButtonText='Withdraw more'
+        />
       </>
     )
   }

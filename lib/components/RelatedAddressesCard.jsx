@@ -51,7 +51,9 @@ const Row = (props) => {
 
   return (
     <tr>
-      <RowDataCell first>{contract}</RowDataCell>
+      <RowDataCell first className='font-bold'>
+        {contract}
+      </RowDataCell>
       <RowDataCell>
         <EtherscanAddressLink size='xxs' address={address} className='text-accent-1'>
           {address}

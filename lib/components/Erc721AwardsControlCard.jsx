@@ -8,7 +8,7 @@ import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChai
 import { RowDataCell, Table } from 'lib/components/Table'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
-import { Card, CardSecondaryText } from 'lib/components/Card'
+import { Card, CardSecondaryText, InnerCard } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { Button } from 'lib/components/Button'
 import { WalletContext } from 'lib/components/WalletContextProvider'
@@ -21,6 +21,8 @@ import { errorStateAtom } from 'lib/components/PoolData'
 import { erc721AwardsAtom } from 'lib/hooks/useExternalErc721Awards'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
+
+import PrizeIllustration from 'assets/images/prize-illustration-transparent@2x.png'
 
 const handleAddExternalErc721 = async (
   txName,
@@ -125,7 +127,14 @@ const AwardsTable = () => {
   }
 
   if (erc721Awards.awards.length === 0) {
-    return null
+    return (
+      <InnerCard className='mb-8'>
+        <img src={PrizeIllustration} className='w-32 sm:w-64 mx-auto mb-4' />
+        <span className='text-accent-1 text-center text-base sm:text-xl'>
+          Oh no, there are no external prizes yet!
+        </span>
+      </InnerCard>
+    )
   }
 
   return <Table headers={['Token id', 'Token address', '']} rows={rows} className='mb-8 w-full' />

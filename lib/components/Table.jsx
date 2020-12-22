@@ -29,7 +29,7 @@ export const Table = (props) => {
 export const RowDataCell = (props) => (
   <td
     className={classnames(
-      'text-left text-base sm:text-lg',
+      'text-left text-base sm:text-lg pb-2',
       {
         'pl-2 sm:pl-12': !props.first
       },

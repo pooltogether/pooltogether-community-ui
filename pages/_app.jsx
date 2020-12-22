@@ -11,6 +11,7 @@ import { PoolData } from 'lib/components/PoolData'
 import 'react-toastify/dist/ReactToastify.css'
 import '@reach/tooltip/styles.css'
 import '@reach/menu-button/styles.css'
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 
 import 'assets/styles/index.css'
 import 'assets/styles/layout.css'

@@ -10,6 +10,9 @@ import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
+import { InnerCard } from 'lib/components/Card'
+
+import Warning from 'assets/images/warning.svg'
 
 export const WithdrawForm = (props) => {
   const { exitFees, handleSubmit, vars, stateSetters } = props
@@ -59,10 +62,14 @@ export const WithdrawForm = (props) => {
 
   if (poolIsLocked) {
     return (
-      <div className='text-orange-600'>
-        The Pool is currently being awarded and until awarding is complete can not accept
-        withdrawals.
-      </div>
+      <InnerCard className='text-center'>
+        <img src={Warning} className='w-10 sm:w-14 mx-auto mb-4' />
+        <div className='text-accent-1 mb-4'>
+          This Prize Pool is not accepting deposits at this time.
+        </div>
+        <div className='text-accent-1'>Deposits can be made once the prize has been awarded.</div>
+        <div className='text-accent-1'>Check back soon!</div>
+      </InnerCard>
     )
   }
 
@@ -122,14 +129,11 @@ export const WithdrawForm = (props) => {
         <TextInputGroup
           id='withdrawAmount'
           name='withdrawAmount'
-          label={
-            <>
-              Withdraw amount <span className='text-default italic'> (in {tokenSymbol})</span>
-            </>
-          }
+          label='Withdraw amounts'
           required
           type='number'
           pattern='\d+'
+          unit={tokenSymbol}
           onChange={(e) => setWithdrawAmount(e.target.value)}
           value={withdrawAmount}
           rightLabel={
@@ -234,7 +238,7 @@ export const WithdrawForm = (props) => {
         )}
 
         <div className='my-5'>
-          <Button disabled={overBalance} color='secondary' size='lg'>
+          <Button disabled={overBalance} color='warning' size='lg'>
             Withdraw
           </Button>
         </div>

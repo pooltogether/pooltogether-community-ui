@@ -89,7 +89,12 @@ export const DepositUI = (props) => {
     return (
       <>
         <div className='mb-4 sm:mb-8 text-sm sm:text-base text-accent-1'>{depositMessage}</div>
-        <TxMessage txType='Deposit' tx={tx} handleReset={resetState} />
+        <TxMessage
+          txType='Deposit'
+          tx={tx}
+          handleReset={resetState}
+          resetButtonText='Deposit more'
+        />
       </>
     )
   }
