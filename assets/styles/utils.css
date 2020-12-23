@@ -402,6 +402,10 @@
   min-width: auto !important;
 }
 
+.width-max-content {
+  width: max-content;
+}
+
 .scale-0 {
   transform: scale3d(0, 0, 0);
 }

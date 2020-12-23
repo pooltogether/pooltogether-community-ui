@@ -1,13 +1,19 @@
 import React from 'react'
 
-import { PoolRelatedAddressesUI } from 'lib/components/PoolRelatedAddressesUI'
-import { PoolStats } from 'lib/components/PoolStats'
+import { PrizeAwardsCard } from 'lib/components/PrizeAwardsCard'
+import { PrizeDetailsCards } from 'lib/components/PrizeDetailsCards'
+import { ExitFeeCards } from 'lib/components/ExitFeeCards'
+import { TicketCards } from 'lib/components/TicketCards'
+import { RelatedAddressesCard } from 'lib/components/RelatedAddressesCard'
 
 export const StatsUI = (props) => {
   return (
     <>
-      <PoolStats {...props} />
-      <PoolRelatedAddressesUI {...props} />
+      <PrizeAwardsCard />
+      <PrizeDetailsCards />
+      <ExitFeeCards />
+      <TicketCards />
+      <RelatedAddressesCard />
     </>
   )
 }

@@ -3,8 +3,6 @@ import Link from 'next/link'
 import { find, findKey, map, upperFirst } from 'lodash'
 
 import { Button } from 'lib/components/Button'
-import { FormPanel } from 'lib/components/FormPanel'
-import { RadioInputGroup } from 'lib/components/RadioInputGroup'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { getDemoPoolContractAddress } from 'lib/utils/getDemoPoolContractAddress'
@@ -16,15 +14,17 @@ import UsdcSvg from 'assets/images/usdc-new-transparent.png'
 import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
+import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
+import { Card } from 'lib/components/Card'
 
 const demoAssetTypes = {
   dai: { label: 'DAI', logo: DaiSvg },
+  uni: { label: 'UNI Stake' },
   usdc: { label: 'USDC', logo: UsdcSvg },
-  usdt: { label: 'USDT', logo: UsdtSvg },
+  usdt: { label: 'USDT', logo: UsdtSvg }
 }
 const demoPools = {
-  ropsten: { chainId: 3, assets: ['dai', 'usdc', 'usdt'] },
-  rinkeby: { chainId: 4, assets: ['dai', 'usdc', 'usdt'] },
+  rinkeby: { chainId: 4, assets: ['dai', 'uni'] }
 }
 
 export const IndexContent = (props) => {
@@ -43,13 +43,38 @@ export const IndexContent = (props) => {
 
   let networkDemoPools = []
 
+  const formatValue = (key) => networks[key].view
+
+  const onValueSet = (network) => {
+    setNetwork(network)
+  }
+
+  const networks = {
+    ropsten: {
+      value: 'ropsten',
+      view: 'Ropsten'
+    },
+    rinkeby: {
+      value: 'rinkeby',
+      view: 'Rinkeby'
+    },
+    mainnet: {
+      value: 'mainnet',
+      view: 'Mainnet'
+    },
+    local: {
+      value: 'local',
+      view: 'Local'
+    }
+  }
+  console.log(demoPool?.assets)
   demoPool?.assets.forEach((assetType) => {
     const address = getDemoPoolContractAddress(demoNetworkName, assetType)
-
+    console.log(address)
     if (address) {
       networkDemoPools.push({
         assetType,
-        address: getDemoPoolContractAddress(demoNetworkName, assetType),
+        address: getDemoPoolContractAddress(demoNetworkName, assetType)
       })
     }
   })
@@ -81,10 +106,12 @@ export const IndexContent = (props) => {
                       >
                         <a className='w-full sm:w-1/2 lg:w-1/3 px-4 border-2 border-transparent hover:border-transparent'>
                           <div className='flex items-center mb-2 py-2 px-4 inline-block bg-card hover:bg-card-selected trans border-2 border-highlight-3 hover:border-highlight-2 border-dashed rounded-lg '>
-                            <img
-                              src={demoAssetTypes[pool.assetType]?.logo}
-                              className='inline-block w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 mr-2'
-                            />
+                            {demoAssetTypes[pool.assetType]?.logo && (
+                              <img
+                                src={demoAssetTypes[pool.assetType]?.logo}
+                                className='inline-block w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 mr-2'
+                              />
+                            )}
 
                             <div>
                               <span className='text-blue text-base'>
@@ -116,54 +143,38 @@ export const IndexContent = (props) => {
           </>
         )}
 
-        <div className='-mx-16 sm:-mx-20 lg:-mx-24 px-12'>
-          <FormPanel>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault()
+        <Card>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
 
-                window.location.href = `/pools/${network}/${contractAddress}`
-              }}
-            >
-              <RadioInputGroup
-                label='Network the Pool is on:'
-                name='network'
-                onChange={handleNetworkChange}
-                value={network}
-                radios={[
-                  {
-                    value: 'ropsten',
-                    label: 'Ropsten',
-                  },
-                  {
-                    value: 'rinkeby',
-                    label: 'Rinkeby',
-                  },
-                  {
-                    value: 'mainnet',
-                    label: 'Mainnet',
-                  },
-                  {
-                    value: 'local',
-                    label: 'Local',
-                  },
-                ]}
-              />
+              window.location.href = `/pools/${network}/${contractAddress}`
+            }}
+          >
+            <DropdownInputGroup
+              id='network-dropdown'
+              label={'Network the Pool is on:'}
+              formatValue={formatValue}
+              onValueSet={onValueSet}
+              current={network}
+              values={networks}
+            />
 
-              <TextInputGroup
-                id='contractAddress'
-                label={<>Prize Pool contract address:</>}
-                required
-                onChange={(e) => setContractAddress(e.target.value)}
-                value={contractAddress}
-              />
+            <TextInputGroup
+              id='contractAddress'
+              label={<>Prize Pool contract address:</>}
+              required
+              onChange={(e) => setContractAddress(e.target.value)}
+              value={contractAddress}
+            />
 
-              <div className='my-5'>
-                <Button color='green'>View Pool</Button>
-              </div>
-            </form>
-          </FormPanel>
-        </div>
+            <div className='my-5'>
+              <Button color='primary' size='lg'>
+                View Pool
+              </Button>
+            </div>
+          </form>
+        </Card>
       </div>
     </>
   )

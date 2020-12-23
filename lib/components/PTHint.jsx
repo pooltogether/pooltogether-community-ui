@@ -1,7 +1,7 @@
-import React, { useState, cloneElement } from 'react'
-import classnames from 'classnames'
-import { useTooltip, TooltipPopup } from '@reach/tooltip'
+import React, { useState } from 'react'
 
+import { TooltipPopup, useTooltip } from '@reach/tooltip'
+import classnames from 'classnames'
 import { QuestionMarkCircle } from 'lib/components/QuestionMarkCircle'
 
 // Center the tooltip, but collisions will win
@@ -12,7 +12,7 @@ const custom = (triggerRect, tooltipRect) => {
 
   return {
     left: Math.min(Math.max(2, left), maxLeft) + window.scrollX,
-    top: 60 + window.scrollY,
+    top: 60 + window.scrollY
   }
 }
 
@@ -40,7 +40,7 @@ export const PTHint = (props) => {
     tip = (
       <>
         <div className='-mx-8 bg-black px-8 py-4 -mt-6 rounded-t-lg'>
-          <h5 className='text-green'>{title}</h5>
+          <h5 className='text-green-1'>{title}</h5>
         </div>
 
         <div className='pt-4'>{tip}</div>
@@ -58,7 +58,7 @@ export const PTHint = (props) => {
           onTouchStart={toggleVisible}
           className={classnames('cursor-pointer h-full l-0 r-0 t-0 b-0 absolute')}
           style={{
-            zIndex: 12314082,
+            zIndex: 12314082
           }}
         />
 

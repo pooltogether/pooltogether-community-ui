@@ -1,16 +1,21 @@
 import React from 'react'
 import { ethers } from 'ethers'
+import { useAtom } from 'jotai'
 
 import { Button } from 'lib/components/Button'
-import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 import { PTHint } from 'lib/components/PTHint'
 import { RadioInputGroup } from 'lib/components/RadioInputGroup'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
+import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
+import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
 
 export const WithdrawForm = (props) => {
-  const { exitFees, poolChainValues, handleSubmit, vars, stateSetters, usersChainValues } = props
+  const { exitFees, handleSubmit, vars, stateSetters } = props
+
+  const [poolChainValues] = useAtom(poolChainValuesAtom)
+  const [usersChainValues] = useAtom(userChainValuesAtom)
 
   const { usersTicketBalance } = usersChainValues || {}
 
@@ -52,26 +57,26 @@ export const WithdrawForm = (props) => {
 
   const timelockCredit = '?'
 
+  if (poolIsLocked) {
+    return (
+      <div className='text-orange-600'>
+        The Pool is currently being awarded and until awarding is complete can not accept
+        withdrawals.
+      </div>
+    )
+  }
+
+  if (!poolIsLocked && usersTicketBalance && usersTicketBalance.lte(0)) {
+    return (
+      <div className='text-orange-600'>
+        You have no tickets to withdraw. Deposit some {tokenSymbol} first!
+      </div>
+    )
+  }
+
   return (
     <>
       <form onSubmit={handleSubmit}>
-        {poolIsLocked && (
-          <FormLockedOverlay title='Withdrawal'>
-            <div>
-              The Pool is currently being awarded and until awarding is complete can not accept
-              withdrawals.
-            </div>
-          </FormLockedOverlay>
-        )}
-
-        {!poolIsLocked && usersTicketBalance && usersTicketBalance.lte(0) && (
-          <FormLockedOverlay title='Withdraw'>
-            You have no tickets to withdraw. Deposit some {tokenSymbol} first!
-          </FormLockedOverlay>
-        )}
-
-        <div className='font-bold mb-2 py-2 text-lg sm:text-xl lg:text-2xl'>Withdraw:</div>
-
         <RadioInputGroup
           label={
             <>
@@ -147,7 +152,7 @@ export const WithdrawForm = (props) => {
 
         {overBalance && (
           <>
-            <div className='text-yellow'>
+            <div className='text-yellow-1'>
               You only have {displayAmountInEther(usersTicketBalance, { decimals: tokenDecimals })}{' '}
               tickets.
               <br />
@@ -175,7 +180,7 @@ export const WithdrawForm = (props) => {
           value={maxExitFee}
         />
  */}
-            <div className='text-yellow'>
+            <div className='text-yellow-1'>
               You will receive {displayAmountInEther(instantTotal, { decimals: tokenDecimals })}{' '}
               {tokenSymbol} now&nbsp;
               {exitFee.eq(0) ? (
@@ -211,7 +216,7 @@ export const WithdrawForm = (props) => {
 
         {!overBalance && timelockDurationSeconds && withdrawType !== 'instant' && (
           <>
-            <div className='text-yellow'>
+            <div className='text-yellow-1'>
               You will receive {displayAmountInEther(instantTotal, { decimals: tokenDecimals })}{' '}
               {tokenSymbol}&nbsp;
               {timelockDurationSeconds.eq(0) ? (
@@ -229,7 +234,7 @@ export const WithdrawForm = (props) => {
         )}
 
         <div className='my-5'>
-          <Button disabled={overBalance} color='green'>
+          <Button disabled={overBalance} color='secondary' size='lg'>
             Withdraw
           </Button>
         </div>

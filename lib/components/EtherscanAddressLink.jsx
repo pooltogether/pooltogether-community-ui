@@ -1,26 +1,27 @@
 import React from 'react'
 import FeatherIcon from 'feather-icons-react'
+import { useAtom } from 'jotai'
 
 import { formatEtherscanAddressUrl } from 'lib/utils/formatEtherscanAddressUrl'
 import { nameToChainId } from 'lib/utils/nameToChainId'
 import { shorten } from 'lib/utils/shorten'
+import { networkAtom } from 'lib/hooks/useNetwork'
 
 export const EtherscanAddressLink = (props) => {
   const { address, children, className, networkName, size } = props
+  const [network] = useAtom(networkAtom)
+  const url = formatEtherscanAddressUrl(address, network.id)
 
-  const chainId = nameToChainId(networkName)
-  const url = formatEtherscanAddressUrl(address, chainId)
-
-  let textSizeClasses = 'text-xs sm:text-base lg:text-lg'
+  let textSizeClasses = 'text-sm sm:text-xl'
   if (size === 'xxs') {
-    textSizeClasses = 'text-xxs sm:text-xs lg:text-sm'
+    textSizeClasses = 'text-xs sm:text-base'
   }
 
   return (
     <>
       <a
         href={url}
-        className={`trans ${textSizeClasses} ${className} font-number`}
+        className={`trans ${textSizeClasses} font-number ${className}`}
         target='_blank'
         rel='noopener noreferrer'
         title='View on Etherscan'

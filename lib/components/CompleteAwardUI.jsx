@@ -59,7 +59,7 @@ export const CompleteAwardUI = (props) => {
       {!txInFlight ? (
         <>
           {canCompleteAward && (
-            <Button onClick={handleClick} color='orange' size='sm'>
+            <Button onClick={handleClick} color='warning' size='sm'>
               Complete Award
             </Button>
           )}

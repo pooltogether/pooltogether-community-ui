@@ -97,15 +97,15 @@
 }
 
 .pool-toast .Toastify__toast--success {
-  @apply text-green;
+  @apply text-green-1;
 }
 
 .pool-toast .Toastify__toast--error {
-  @apply text-red;
+  @apply text-red-1;
 }
 
 .pool-toast .Toastify__toast--warning {
-  @apply text-yellow;
+  @apply text-yellow-1;
 }
 
 .Toastify__progress-bar--info {
@@ -113,15 +113,15 @@
 }
 
 .Toastify__progress-bar--success {
-  @apply bg-green;
+  @apply bg-green-1;
 }
 
 .Toastify__progress-bar--warning {
-  @apply bg-yellow;
+  @apply bg-yellow-1;
 }
 
 .Toastify__progress-bar--error {
-  @apply bg-red;
+  @apply bg-red-1;
 }
 
 .pool-toast .Toastify__toast-body {

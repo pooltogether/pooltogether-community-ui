@@ -1,75 +1,114 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import classnames from 'classnames'
 import { omit } from 'lodash'
 import Link from 'next/link'
 
-const getBorderClasses = (borderClasses, color, isText) => {
-  if (borderClasses) {
-    return borderClasses
+const COLOR_CLASSES = {
+  primary: {
+    backgroundClasses: 'bg-green-400 hover:bg-opacity-80',
+    borderClasses: 'border border-green-1 active:shadow-green focus:shadow-green',
+    textColorClasses: 'text-primary'
+  },
+  secondary: {
+    backgroundClasses: 'bg-green-400 bg-opacity-0 hover:bg-opacity-15 active:bg-opacity-15',
+    borderClasses: 'border border-green-1 active:shadow-green focus:shadow-green',
+    textColorClasses: 'text-highlight-2'
+  },
+  tertiary: {
+    backgroundClasses:
+      'bg-green-400 bg-opacity-0 hover:bg-opacity-15 focus:bg-opacity-15 active:bg-opacity-15',
+    borderClasses: 'border border-transparent',
+    textColorClasses: 'text-highlight-2 underline hover:no-underline active:no-underline'
+  },
+  danger: {
+    backgroundClasses: 'bg-transparent',
+    borderClasses:
+      'border border-red-600 hover:border-red-700 focus:border-red-700 active:shadow-red',
+    textColorClasses:
+      'text-red-600 hover:text-red-700 focus:text-red-700 active:shadow-red focus:shadow-red'
+  },
+  warning: {
+    backgroundClasses: 'bg-transparent',
+    borderClasses:
+      'border border-orange-500 hover:border-orange-600 focus:border-orange-600 active:shadow-orange',
+    textColorClasses:
+      'text-orange-500 hover:text-orange-600 focus:text-orange-600 active:shadow-orange focus:shadow-orange'
+  },
+  disabled: {
+    backgroundClasses: 'bg-transparent',
+    borderClasses: 'border border-gray-400 focus:border-gray-400',
+    textColorClasses: 'text-gray-400 focus:shadow-gray'
   }
-
-  if (isText) {
-    return 'border-transparent'
-  }
-
-  if (!color) {
-    color = 'blue'
-  }
-
-  return `border-0`
 }
 
-const getPaddingClasses = (paddingClasses, isText) => {
+const getColorClasses = (color, disabled) => {
+  if (disabled) {
+    return COLOR_CLASSES.disabled
+  }
+
+  switch (color) {
+    case 'primary': {
+      return COLOR_CLASSES.primary
+    }
+    case 'secondary': {
+      return COLOR_CLASSES.secondary
+    }
+    case 'tertiary': {
+      return COLOR_CLASSES.tertiary
+    }
+    case 'danger': {
+      return COLOR_CLASSES.danger
+    }
+    case 'warning': {
+      return COLOR_CLASSES.warning
+    }
+    default: {
+      return COLOR_CLASSES.primary
+    }
+  }
+}
+
+const getCursorClasses = (disabled) => {
+  if (disabled) {
+    return 'cursor-not-allowed'
+  }
+  return 'cursor-pointer'
+}
+
+const getPaddingClasses = (paddingClasses, noPad) => {
+  if (noPad) {
+    return ''
+  }
+
   if (paddingClasses) {
     return paddingClasses
   }
 
-  if (isText) {
-    return 'px-1 py-1'
-  }
-
-  return 'px-1 py-2 sm:py-3 lg:py-4'
+  return 'py-1 px-6 sm:py-2 sm:px-10'
 }
 
-const getTextColorClasses = (textColorClasses, color) => {
-  if (textColorClasses) {
-    return textColorClasses
-  }
-
-  switch (color) {
-    case 'white':
-      return 'text-black hover:text-black focus:text-black active:text-black'
-    default:
-      return 'text-white hover:text-white focus:text-white active:text-white'
-  }
-}
-
-const getTextSizeClasses = (textSizeClasses, isText, size) => {
+const getTextSizeClasses = (textSizeClasses, size) => {
   if (textSizeClasses) {
     return textSizeClasses
   }
 
-  if (isText) {
-    return `text-sm sm:text-base lg:text-2xl`
-  }
-
-  if (!size) {
-    size = 'base'
-  }
-
   switch (size) {
     case 'xs':
-      return `text-xs sm:text-sm lg:text-base`
+      return `text-xxs sm:text-xs lg:text-sm`
     case 'sm':
+      return `text-xs sm:text-sm lg:text-base`
+    case 'base':
       return `text-sm sm:text-base lg:text-lg`
     case 'lg':
-      return `text-lg sm:text-xl lg:text-2xl`
+      return `text-base sm:text-lg lg:text-xl`
     case 'xl':
-      return `text-xl sm:text-2xl lg:text-3xl`
+      return `text-lg sm:text-xl lg:text-2xl`
     case '2xl':
-      return `text-2xl sm:text-3xl lg:text-4xl`
+      return `text-xl sm:text-2xl lg:text-3xl`
+    case '3xl':
+      return `text-xl sm:text-3xl lg:text-4xl`
     default:
-      return `text-base sm:text-base lg:text-xl`
+      return `text-sm sm:text-base lg:text-lg`
   }
 }
 
@@ -112,77 +151,59 @@ export const Button = (props) => {
   })
 
   let {
-    backgroundColorClasses,
-    borderClasses,
     children,
     color,
     className,
     disabled,
     href,
     as,
-    noAnim,
-    isBold,
-    isText,
-    isLowOpacity,
     paddingClasses,
     roundedClasses,
     size,
-    textColorClasses,
     textSizeClasses,
-    transitionClasses
+    transitionClasses,
+    fullWidth,
+    noPad
   } = props
 
   let defaultClasses =
-    'pt-button inline-block text-center leading-snug tracking-wide cursor-pointer outline-none focus:outline-none active:outline-none no-underline'
+    'inline-block text-center leading-snug tracking-wide outline-none focus:outline-none active:outline-none no-underline font-bold '
 
-  if (isBold !== false) {
-    defaultClasses += ' font-bold'
+  if (fullWidth) {
+    defaultClasses += 'w-full'
+  } else {
+    defaultClasses += 'width-max-content'
   }
 
-  if (isLowOpacity) {
-    defaultClasses += ' opacity-50 hover:opacity-100'
-  }
-
-  if (isText) {
-    // colorClass = `text-${color}-300`
-    // defaultClasses += ' mx-auto min-width-auto'
-    defaultClasses += ' min-width-auto'
-  }
-
-  backgroundColorClasses = 'bg-blue hover:bg-highlight-1 active:bg-highlight-1'
-  borderClasses = getBorderClasses(borderClasses, color, isText)
-  paddingClasses = getPaddingClasses(paddingClasses, isText)
+  const { backgroundClasses, borderClasses, textColorClasses } = getColorClasses(color, disabled)
+  paddingClasses = getPaddingClasses(paddingClasses, noPad)
   roundedClasses = getRoundedClasses(roundedClasses)
-  textColorClasses = getTextColorClasses(textColorClasses, color)
-  textSizeClasses = getTextSizeClasses(textSizeClasses, isText, size)
+  textSizeClasses = getTextSizeClasses(textSizeClasses, size)
   transitionClasses = getTransitionClasses(transitionClasses)
+  let cursorClasses = getCursorClasses(disabled)
 
   className = classnames(
-    backgroundColorClasses,
-    className,
+    backgroundClasses,
     borderClasses,
+    textColorClasses,
     defaultClasses,
     paddingClasses,
     roundedClasses,
     size,
-    textColorClasses,
     textSizeClasses,
-    transitionClasses
+    transitionClasses,
+    cursorClasses,
+    className
   )
 
   const newProps = omit(props, [
-    'backgroundColorClasses',
-    'borderClasses',
     'noAnim',
-    'isBold',
-    'isLowOpacity',
-    'isText',
     'paddingClasses',
     'roundedClasses',
     'size',
-    'textColorClasses',
     'textSizeClasses',
-    'transitionClasses'
+    'transitionClasses',
+    'fullWidth'
   ])
 
   if (href && as) {
@@ -190,24 +211,28 @@ export const Button = (props) => {
 
     return (
       <Link href={href} as={as}>
-        <a
-          {...linkProps}
-          ref={buttonRef}
-          anim={disabled || noAnim ? '' : 'ripple'}
-          className={className}
-        >
+        <a {...linkProps} ref={buttonRef} className={className}>
           {children}
         </a>
       </Link>
     )
+  } else if (href) {
+    return (
+      <a
+        href={href}
+        target='_blank'
+        className='trans text-xs sm:text-base no-underline border-0 active:outline-none hover:outline-none focus:outline-none width-max-content'
+      >
+        <button {...newProps} ref={buttonRef} className={className}>
+          {children}
+        </button>
+      </a>
+    )
   } else {
     return (
-      <button
-        {...newProps}
-        ref={buttonRef}
-        anim={disabled || noAnim ? '' : 'ripple'}
-        className={className}
-      />
+      <button {...newProps} ref={buttonRef} className={className}>
+        {children}
+      </button>
     )
   }
 }

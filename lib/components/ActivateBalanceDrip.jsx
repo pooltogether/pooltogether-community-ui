@@ -165,7 +165,7 @@ export const ActivateBalanceDrip = (props) => {
 
           setFormVisible(true)
         }}
-        className={classnames('mt-4 mb-1 text-green font-bold trans', {
+        className={classnames('mt-4 mb-1 text-green-1 font-bold trans', {
           hidden: formVisible
         })}
       >
@@ -235,14 +235,14 @@ export const ActivateBalanceDrip = (props) => {
                       <div className='px-4 pt-1 pb-1'>
                         <div
                           className={classnames('uppercase text-default', {
-                            'text-red': erc20TokenBalance?.eq(0)
+                            'text-red-1': erc20TokenBalance?.eq(0)
                           })}
                         >
                           Comptroller's balance:
                         </div>{' '}
                         <span
                           className={classnames({
-                            'text-red': erc20TokenBalance?.eq(0)
+                            'text-red-1': erc20TokenBalance?.eq(0)
                           })}
                         >
                           {displayAmountInEther(erc20TokenBalance, {

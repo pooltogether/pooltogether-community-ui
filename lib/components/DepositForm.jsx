@@ -1,14 +1,28 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
+import IERC20Abi from '@pooltogether/pooltogether-contracts/abis/IERC20Upgradeable'
+import { useAtom } from 'jotai'
+import FeatherIcon from 'feather-icons-react'
 
 import { Button } from 'lib/components/Button'
-import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
+import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
+import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
+import { sendTx } from 'lib/utils/sendTx'
+import { WalletContext } from 'lib/components/WalletContextProvider'
+import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
+import { prizePoolTypeAtom } from 'lib/hooks/usePrizePoolType'
+import { errorStateAtom } from 'lib/components/PoolData'
+import { networkAtom } from 'lib/hooks/useNetwork'
 
 export const DepositForm = (props) => {
-  const { poolChainValues, handleSubmit, vars, stateSetters, disabled, usersChainValues } = props
+  const { handleSubmit, vars, stateSetters } = props
+
+  const [poolChainValues] = useAtom(poolChainValuesAtom)
+  const [usersChainValues] = useAtom(userChainValuesAtom)
+  const hasApprovedBalance = usersChainValues.usersTokenAllowance.gt(0)
 
   const { usersTokenBalance } = usersChainValues || {}
 
@@ -34,87 +48,158 @@ export const DepositForm = (props) => {
 
   const tokenBal = ethers.utils.formatUnits(usersTokenBalance, tokenDecimals)
 
+  if (poolIsLocked) {
+    return (
+      <div className='text-orange-600'>
+        The Pool is currently being awarded and until awarding is complete can not accept
+        withdrawals.
+      </div>
+    )
+  }
+
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        {poolIsLocked && (
-          <FormLockedOverlay title='Deposit'>
-            <div>
-              The Pool is currently being awarded and until awarding is complete can not accept
-              withdrawals.
-            </div>
-          </FormLockedOverlay>
-        )}
-
-        {disabled && (
-          <FormLockedOverlay title='Deposit'>
+    <form onSubmit={handleSubmit}>
+      <div className='w-full mx-auto'>
+        <TextInputGroup
+          id='depositAmount'
+          name='depositAmount'
+          label={
             <>
-              <div>
-                Unlock deposits by first approving the pool's ticket contract to have a DAI
-                allowance.
-              </div>
-
-              <div className='mt-3 sm:mt-5 mb-5'>
-                <Button color='green'>Unlock Deposits</Button>
-              </div>
+              Deposit amount <span className='text-default italic'> (in {tokenSymbol})</span>
             </>
-          </FormLockedOverlay>
-        )}
-
-        <div className='font-bold mb-2 py-2 text-lg sm:text-xl lg:text-2xl'>Deposit:</div>
-
-        <div className='w-full mx-auto'>
-          <TextInputGroup
-            id='depositAmount'
-            name='depositAmount'
-            label={
-              <>
-                Deposit amount <span className='text-default italic'> (in {tokenSymbol})</span>
-              </>
-            }
-            required
-            disabled={disabled}
-            type='number'
-            pattern='\d+'
-            onChange={(e) => setDepositAmount(e.target.value)}
-            value={depositAmount}
-            rightLabel={
-              tokenSymbol && (
-                <>
-                  <button
-                    type='button'
-                    onClick={(e) => {
-                      e.preventDefault()
-                      setDepositAmount(tokenBal)
-                    }}
-                  >
-                    {/* Balance:  */}
-                    MAX - {numberWithCommas(tokenBal, { precision: 4 })} {tokenSymbol}
-                  </button>
-                </>
-              )
-            }
-          />
+          }
+          required
+          disabled={!hasApprovedBalance}
+          type='number'
+          pattern='\d+'
+          onChange={(e) => setDepositAmount(e.target.value)}
+          value={depositAmount}
+          rightLabel={
+            tokenSymbol && (
+              <button
+                type='button'
+                onClick={(e) => {
+                  e.preventDefault()
+                  setDepositAmount(tokenBal)
+                }}
+              >
+                {/* Balance:  */}
+                MAX - {numberWithCommas(tokenBal, { precision: 4 })} {tokenSymbol}
+              </button>
+            )
+          }
+        />
+      </div>
+      {overBalance && (
+        <div className='text-yellow-1'>
+          You only have {displayAmountInEther(usersTokenBalance, { decimals: tokenDecimals })}{' '}
+          {tokenSymbol}.
+          <br />
+          The maximum you can deposit is{' '}
+          {displayAmountInEther(usersTokenBalance, { precision: 2, decimals: tokenDecimals })}.
         </div>
-
-        {overBalance && (
-          <>
-            <div className='text-yellow'>
-              You only have {displayAmountInEther(usersTokenBalance, { decimals: tokenDecimals })}{' '}
-              {tokenSymbol}.
-              <br />
-              The maximum you can deposit is{' '}
-              {displayAmountInEther(usersTokenBalance, { precision: 2, decimals: tokenDecimals })}.
-            </div>
-          </>
-        )}
-
-        <div className='my-5'>
-          <Button disabled={overBalance} color='green'>
-            Deposit
-          </Button>
-        </div>
-      </form>
-    </>
+      )}
+      <div className='my-5 flex flex-row'>
+        <UnlockDepositsButton />
+        <Button
+          size='lg'
+          fullWidth
+          disabled={overBalance || !hasApprovedBalance}
+          color='secondary'
+          className='ml-4'
+        >
+          Deposit
+        </Button>
+      </div>
+    </form>
   )
+}
+
+const UnlockDepositsButton = () => {
+  const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
+  const [usersChainValues] = useAtom(userChainValuesAtom)
+  const [network] = useAtom(networkAtom)
+  const [errorState, setErrorState] = useAtom(errorStateAtom)
+  const [poolAddresses] = useAtom(poolAddressesAtom)
+  const [prizePoolType] = useAtom(prizePoolTypeAtom)
+  const [tx, setTx] = useState({})
+  const walletContext = useContext(WalletContext)
+  const provider = walletContext.state.provider
+  const hasApprovedBalance = usersChainValues.usersTokenAllowance.gt(0)
+
+  // Reset on network change
+  useEffect(() => {
+    setTx({})
+  }, [network])
+
+  // Update global data upon completion
+  useEffect(() => {
+    if (tx.completed && !tx.error) {
+      fetchPoolChainValues(
+        provider,
+        poolAddresses,
+        prizePoolType,
+        setPoolChainValues,
+        setErrorState
+      )
+    }
+  }, [tx.completed, tx.error])
+
+  if (hasApprovedBalance || (tx.completed && !tx.error)) {
+    return (
+      <Button disabled type='button' color='secondary' fullWidth size='lg' className='mr-4'>
+        <FeatherIcon
+          icon='check-circle'
+          className='relative w-4 h-4 inline-block my-auto mr-2 my-auto'
+          strokeWidth='0.15rem'
+        />
+        {`Approved ${poolChainValues.tokenSymbol}`}
+      </Button>
+    )
+  }
+
+  let buttonText = `Approve ${poolChainValues.tokenSymbol}`
+  if (tx.sent && !tx.completed) {
+    buttonText = 'Waiting for confirmations...'
+  }
+  if (tx.inWallet && !tx.completed) {
+    buttonText = 'Transaction Pending...'
+  }
+
+  return (
+    <Button
+      onClick={(e) => {
+        e.preventDefault()
+
+        if (tx.inWallet) return
+
+        handleUnlockSubmit(
+          setTx,
+          provider,
+          poolAddresses.token,
+          poolAddresses.prizePool,
+          poolChainValues.tokenDecimals
+        )
+      }}
+      type='button'
+      color='secondary'
+      fullWidth
+      size='lg'
+      className='mr-4'
+    >
+      {buttonText}
+    </Button>
+  )
+}
+
+const handleUnlockSubmit = async (setTx, provider, contractAddress, prizePoolAddress, decimals) => {
+  const params = [
+    prizePoolAddress,
+    ethers.utils.parseUnits('1000000000', decimals),
+    {
+      gasLimit: 200000
+    }
+  ]
+
+  await sendTx(setTx, provider, contractAddress, IERC20Abi, 'approve', params, 'Unlock Deposits')
 }
