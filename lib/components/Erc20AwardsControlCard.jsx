@@ -83,12 +83,6 @@ export const Erc20AwardsControlCard = (props) => {
   return (
     <Card>
       <Collapse title='ERC20 awards'>
-        <CardSecondaryText className='mb-8'>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-          ullamco laboris nisi ut aliquip ex ea.
-        </CardSecondaryText>
-
         <AwardsTable />
 
         <AddErc20Form />

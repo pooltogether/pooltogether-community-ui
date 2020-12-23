@@ -1,10 +1,12 @@
 import React, { useMemo } from 'react'
 
-import { Card } from 'lib/components/Card'
+import { Card, InnerCard } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { useAwardsList } from 'lib/hooks/useAwardsList'
 import { RowDataCell, Table } from 'lib/components/Table'
+
+import PrizeIllustration from 'assets/images/prize-illustration-transparent@2x.png'
 
 export const PrizeAwardsCard = (props) => {
   return (
@@ -19,15 +21,33 @@ export const PrizeAwardsCard = (props) => {
 const PrizeAwardsTable = () => {
   const { awards, loading } = useAwardsList()
 
-  const rows = useMemo(() => awards.map((award, index) => <Row key={index} award={award} />), [
-    awards
-  ])
+  const rows = useMemo(
+    () =>
+      awards
+        .map((award, index) => {
+          if (award.formattedBalance == 0) return null
+          return <Row key={index} award={award} />
+        })
+        .filter(Boolean),
+    [awards]
+  )
 
   if (loading) {
     return (
       <div className='p-10'>
         <LoadingDots />
       </div>
+    )
+  }
+
+  if (rows.length === 0) {
+    return (
+      <InnerCard className='mb-8'>
+        <img src={PrizeIllustration} className='w-32 sm:w-64 mx-auto mb-4' />
+        <span className='text-accent-1 text-center text-base sm:text-xl'>
+          Oh no, there are no prizes yet!
+        </span>
+      </InnerCard>
     )
   }
 
