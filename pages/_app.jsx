@@ -35,21 +35,23 @@ const DynamicWalletContextProvider = dynamic(
 
 function MyApp ({ Component, pageProps }) {
   return (
-    <DynamicWalletContextProvider>
-      <ReactQueryCacheProvider queryCache={queryCache}>
-        <ThemeContextProvider>
-          <JotaiProvider>
-            <Layout>
-              <ErrorBoundary>
-                <PoolData>
-                  <Component {...pageProps} />
-                </PoolData>
-              </ErrorBoundary>
-            </Layout>
-          </JotaiProvider>
-        </ThemeContextProvider>
-      </ReactQueryCacheProvider>
-    </DynamicWalletContextProvider>
+    <ErrorBoundary>
+      <DynamicWalletContextProvider>
+        <ReactQueryCacheProvider queryCache={queryCache}>
+          <ThemeContextProvider>
+            <JotaiProvider>
+              <Layout>
+                <ErrorBoundary>
+                  <PoolData>
+                    <Component {...pageProps} />
+                  </PoolData>
+                </ErrorBoundary>
+              </Layout>
+            </JotaiProvider>
+          </ThemeContextProvider>
+        </ReactQueryCacheProvider>
+      </DynamicWalletContextProvider>
+    </ErrorBoundary>
   )
 }
 

@@ -4,7 +4,7 @@ import { useAtom } from 'jotai'
 import { Card, CardPrimaryText, CardTitle } from 'lib/components/Card'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
-import { caclulateOdds } from 'lib/utils/caclulateOdds'
+import { calculateOdds } from 'lib/utils/calculateOdds'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
 
@@ -38,10 +38,11 @@ const TicketCard = () => {
 const OddsCard = () => {
   const [poolChainValues] = useAtom(poolChainValuesAtom)
   const [userChainValues] = useAtom(userChainValuesAtom)
-  const odds = caclulateOdds(
+  const odds = calculateOdds(
     userChainValues.usersTicketBalance,
     poolChainValues.ticketTotalSupply,
-    poolChainValues.ticketDecimals
+    poolChainValues.ticketDecimals,
+    poolChainValues.numberOfWinners
   )
 
   if (!odds) {
