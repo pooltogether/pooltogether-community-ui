@@ -48,7 +48,8 @@ export const NewPrizeCountdown = (props) => {
         className={classnames(textSize, 'font-bold', {
           'text-flashy': flashy,
           'text-xs xs:text-sm sm:text-xl lg:text-2xl': !textSize,
-          'text-right': !textAlign
+          'text-right': !textAlign,
+          'mx-auto': center
         })}
       >
         Prize is being awarded

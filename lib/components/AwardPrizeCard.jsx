@@ -177,13 +177,13 @@ const TimeDisplay = ({ days, hours, minutes, seconds }) => {
     if (hours > 0) {
       return (
         <span>
-          {days} days {hours} hours
+          {days} day{days === 1 ? '' : 's'} {hours} hour{hours === 1 ? '' : 's'}
         </span>
       )
     } else {
       return (
         <span>
-          {days} days {minutes} minutes
+          {days} day{days === 1 ? '' : 's'} {minutes} minute{minutes === 1 ? '' : 's'}
         </span>
       )
     }

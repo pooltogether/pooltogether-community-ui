@@ -65,9 +65,9 @@ export const WithdrawForm = (props) => {
       <InnerCard className='text-center'>
         <img src={Warning} className='w-10 sm:w-14 mx-auto mb-4' />
         <div className='text-accent-1 mb-4'>
-          This Prize Pool is not accepting deposits at this time.
+          This Prize Pool is unable to withdraw at this time.
         </div>
-        <div className='text-accent-1'>Deposits can be made once the prize has been awarded.</div>
+        <div className='text-accent-1'>Withdraws can be made once the prize has been awarded.</div>
         <div className='text-accent-1'>Check back soon!</div>
       </InnerCard>
     )

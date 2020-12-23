@@ -34,13 +34,13 @@ const TimeDisplay = (props) => {
     if (hours > 0) {
       return (
         <CardPrimaryText className='text-xl'>
-          {days} days {hours} hours
+          {days} day{days === 1 ? '' : 's'} {hours} hour{hours === 1 ? '' : 's'}
         </CardPrimaryText>
       )
     } else {
       return (
         <CardPrimaryText className='text-xl'>
-          {days} days {minutes} minutes
+          {days} day{days === 1 ? '' : 's'} {minutes} minute{minutes === 1 ? '' : 's'}
         </CardPrimaryText>
       )
     }
