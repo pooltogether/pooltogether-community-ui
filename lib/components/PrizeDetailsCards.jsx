@@ -10,7 +10,7 @@ export const PrizeDetailsCards = (props) => {
   return (
     <div className='flex'>
       <TimeUntilPrizeCard />
-      <PlayersCard />
+      {/* <PlayersCard /> */}
       <TotalDeposits />
     </div>
   )
@@ -70,7 +70,7 @@ const TotalDeposits = () => {
   const total = displayAmountInEther(poolChainValues.poolTotalSupply, poolChainValues.tokenDecimals)
 
   return (
-    <Card className='mr-4'>
+    <Card className='ml-4'>
       <CardTitle>Total deposits</CardTitle>
       <CardPrimaryText>{`${total} ${poolChainValues.tokenSymbol}`}</CardPrimaryText>
     </Card>
