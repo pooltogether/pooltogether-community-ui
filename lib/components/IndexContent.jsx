@@ -67,10 +67,8 @@ export const IndexContent = (props) => {
       view: 'Local'
     }
   }
-  console.log(demoPool?.assets)
   demoPool?.assets.forEach((assetType) => {
     const address = getDemoPoolContractAddress(demoNetworkName, assetType)
-    console.log(address)
     if (address) {
       networkDemoPools.push({
         assetType,

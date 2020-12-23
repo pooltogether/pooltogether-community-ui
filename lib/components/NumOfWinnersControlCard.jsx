@@ -43,7 +43,18 @@ const handleSetNumberOfWinners = async (
 export const NumOfWinnersControlCard = (props) => {
   const [contractVersions] = useAtom(contractVersionsAtom)
 
-  if (contractVersions.prizeStrategy.contract === 'SingleRandomWinner') return null
+  if (contractVersions.prizeStrategy.contract === 'SingleRandomWinner') {
+    return (
+      <Card>
+        <Collapse title='Number of winners'>
+          <CardSecondaryText className='mb-4'>
+            A single random winner Prize Strategy was selected for this Prize Pool. There will be 1
+            winner for the entire prize .
+          </CardSecondaryText>
+        </Collapse>
+      </Card>
+    )
+  }
 
   return (
     <Card>
