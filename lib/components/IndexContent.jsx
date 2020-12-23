@@ -24,7 +24,7 @@ const demoAssetTypes = {
   usdt: { label: 'USDT', logo: UsdtSvg }
 }
 const demoPools = {
-  rinkeby: { chainId: 4, assets: ['dai', 'uni'] }
+  rinkeby: { chainId: 4, assets: ['dai', 'usdc', 'usdt'] }
 }
 
 export const IndexContent = (props) => {
