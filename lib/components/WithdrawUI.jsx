@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { ethers } from 'ethers'
 import { useAtom } from 'jotai'
-import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
+import PrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PrizePool'
 
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
@@ -44,7 +44,7 @@ const handleWithdrawSubmit = async (
   // TX overrides
   params.push({ gasLimit: 800000 })
 
-  await sendTx(setTx, provider, contractAddress, CompoundPrizePoolAbi, method, params, 'Withdraw')
+  await sendTx(setTx, provider, contractAddress, PrizePoolAbi, method, params, 'Withdraw')
 }
 
 export const WithdrawUI = (props) => {
@@ -55,7 +55,6 @@ export const WithdrawUI = (props) => {
   const [network] = useAtom(networkAtom)
 
   const { tokenDecimals } = poolChainValues
-  const { networkName } = network
   const { prizePool, ticket: ticketAddress } = poolAddresses
 
   const provider = walletContext.state.provider
@@ -72,13 +71,12 @@ export const WithdrawUI = (props) => {
     const t = async () => {
       if (debouncedWithdrawAmount) {
         const result = await fetchExitFee(
-          networkName,
+          network.name,
           usersAddress,
           prizePool,
           ticketAddress,
           ethers.utils.parseUnits(debouncedWithdrawAmount, tokenDecimals)
         )
-        console.log(result)
         setExitFees(result)
       } else {
         setExitFees(null)
@@ -118,7 +116,12 @@ export const WithdrawUI = (props) => {
     return (
       <>
         <div className='mb-4 sm:mb-8 text-sm sm:text-base text-accent-1'>{withdrawText}</div>
-        <TxMessage txType='Withdraw' tx={tx} handleReset={resetState} />
+        <TxMessage
+          txType='Withdraw'
+          tx={tx}
+          handleReset={resetState}
+          resetButtonText='Withdraw more'
+        />
       </>
     )
   }

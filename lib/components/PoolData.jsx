@@ -6,7 +6,6 @@ import { useRouter } from 'next/router'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { usePoolAddresses } from 'lib/hooks/usePoolAddresses'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
-import { usePrizePoolType } from 'lib/hooks/usePrizePoolType'
 import { useUserChainValues } from 'lib/hooks/useUserChainValues'
 import { poolToast } from 'lib/utils/poolToast'
 import { useExternalErc20Awards } from 'lib/hooks/useExternalErc20Awards'
@@ -14,6 +13,7 @@ import { useNetwork } from 'lib/hooks/useNetwork'
 import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { useCoinGeckoTokenIds } from 'lib/hooks/useCoinGeckoTokenIds'
 import { useExternalErc721Awards } from 'lib/hooks/useExternalErc721Awards'
+import { useDetermineContractVersions } from 'lib/hooks/useDetermineContractVersions'
 
 // http://localhost:3000/pools/rinkeby/0xd1E58Db0d67DB3f28fFa412Db58aCeafA0fEF8fA#admin
 
@@ -40,8 +40,8 @@ export const errorStateAtom = atom(EMPTY_ERROR_STATE)
 export const PoolData = (props) => {
   const router = useRouter()
   const { prizePoolAddress } = router.query
+
   const [errorState] = useAtom(errorStateAtom)
-  useNetwork()
 
   // If there's no address, we don't need to check it or fetch data
   if (!prizePoolAddress) {
@@ -72,9 +72,10 @@ export const PoolData = (props) => {
  * Main wrapper for the data fetching
  */
 const PoolDataInitialization = (props) => {
+  useDetermineContractVersions()
+  useNetwork()
   useUsersAddress()
   useCoinGeckoTokenIds()
-  usePrizePoolType()
   usePoolAddresses()
   const [poolChainValues, setPoolChainValues] = usePoolChainValues()
   useUserChainValues()

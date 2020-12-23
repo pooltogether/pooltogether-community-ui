@@ -31,11 +31,13 @@ const PrizeAwardsTable = () => {
     )
   }
 
-  return <Table headers={['Value', 'Token name', 'Ticker']} rows={rows} />
+  return <Table headers={['Value', 'Token name', 'Ticker']} rows={rows} className='w-full' />
 }
 
 const Row = (props) => {
   const { formattedBalance, symbol, name } = props.award
+
+  if (formattedBalance == 0) return null
 
   return (
     <tr>

@@ -24,7 +24,7 @@ const demoAssetTypes = {
   usdt: { label: 'USDT', logo: UsdtSvg }
 }
 const demoPools = {
-  rinkeby: { chainId: 4, assets: ['dai', 'uni'] }
+  rinkeby: { chainId: 4, assets: ['dai', 'usdc', 'usdt'] }
 }
 
 export const IndexContent = (props) => {
@@ -67,10 +67,8 @@ export const IndexContent = (props) => {
       view: 'Local'
     }
   }
-  console.log(demoPool?.assets)
   demoPool?.assets.forEach((assetType) => {
     const address = getDemoPoolContractAddress(demoNetworkName, assetType)
-    console.log(address)
     if (address) {
       networkDemoPools.push({
         assetType,

@@ -13,6 +13,7 @@ import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
+import { contractVersionsAtom } from 'lib/hooks/useDetermineContractVersions'
 
 const handleSetNumberOfWinners = async (
   txName,
@@ -40,6 +41,21 @@ const handleSetNumberOfWinners = async (
 }
 
 export const NumOfWinnersControlCard = (props) => {
+  const [contractVersions] = useAtom(contractVersionsAtom)
+
+  if (contractVersions.prizeStrategy.contract === 'SingleRandomWinner') {
+    return (
+      <Card>
+        <Collapse title='Number of winners'>
+          <CardSecondaryText className='mb-4'>
+            A single random winner Prize Strategy was selected for this Prize Pool. There will be 1
+            winner for the entire prize .
+          </CardSecondaryText>
+        </Collapse>
+      </Card>
+    )
+  }
+
   return (
     <Card>
       <Collapse title='Number of winners'>

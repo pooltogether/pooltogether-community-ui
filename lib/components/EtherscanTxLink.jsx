@@ -12,7 +12,7 @@ export const EtherscanTxLink = (props) => {
     <>
       <a
         href={url}
-        className={`no-underline ${className} font-number`}
+        className={`no-underline trans ${className} font-number hover:opacity-80`}
         target='_blank'
         rel='noopener noreferrer'
         title='View on Etherscan'

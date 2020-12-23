@@ -16,6 +16,17 @@ export const Card = (props) => {
   )
 }
 
+export const InnerCard = (props) => (
+  <div
+    className={classnames(
+      'mx-auto py-2 px-8 sm:py-4 sm:px-12 bg-purple-800 bg-opacity-20 rounded-xl width-max-content',
+      props.className
+    )}
+  >
+    {props.children}
+  </div>
+)
+
 export const CardTitle = (props) => (
   <div className={classnames('text-sm sm:text-base text-accent-1 text-center', props.className)}>
     {props.children}
@@ -24,14 +35,17 @@ export const CardTitle = (props) => (
 
 export const CardPrimaryText = (props) => (
   <div
-    className={classnames(
-      'text-base sm:text-4xl font-bold text-white text-center',
-      props.className
-    )}
+    className={classnames('text-base sm:text-4xl font-bold text-white', props.className, {
+      'text-center': props.center
+    })}
   >
     {props.children}
   </div>
 )
+
+CardPrimaryText.defaultProps = {
+  center: true
+}
 
 export const CardSecondaryText = (props) => (
   <div className={classnames('text-xs sm:text-sm text-accent-1', props.className)}>

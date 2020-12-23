@@ -28,8 +28,8 @@ table {
 }
 
 ::placeholder,
-.input::placeholder,
-.textarea::placeholder {
+input::placeholder,
+textarea::placeholder {
   color: rgba(235, 203, 253, 0.6);
 }
 

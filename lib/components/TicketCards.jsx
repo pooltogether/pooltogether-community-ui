@@ -15,7 +15,6 @@ export const TicketCards = (props) => {
 
 const TicketCard = () => {
   const [poolChainValues] = useAtom(poolChainValuesAtom)
-  console.log(poolChainValues)
 
   return (
     <Card className='mr-4'>
