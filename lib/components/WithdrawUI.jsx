@@ -41,9 +41,6 @@ const handleWithdrawSubmit = async (
     params.push(maxExitFee)
   }
 
-  // TX overrides
-  params.push({ gasLimit: 800000 })
-
   await sendTx(setTx, provider, contractAddress, PrizePoolAbi, method, params, 'Withdraw')
 }
 

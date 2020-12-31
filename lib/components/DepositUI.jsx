@@ -32,10 +32,7 @@ const handleDepositSubmit = async (
     usersAddress,
     ethers.utils.parseUnits(depositAmount, decimals),
     ticketAddress,
-    referrer,
-    {
-      gasLimit: 800000
-    }
+    referrer
   ]
 
   await sendTx(
