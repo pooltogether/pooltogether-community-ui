@@ -1713,10 +1713,10 @@
     walletlink "^2.0.2"
     web3-provider-engine "^15.0.4"
 
-"@pooltogether/current-pool-data@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@pooltogether/current-pool-data/-/current-pool-data-3.0.1.tgz#2cab2078d7df4551fb3074fbcb5c81787f9911cf"
-  integrity sha512-NB4TopoQy/k4xw6RpZopmyxmeYSh8XzU+q9AXLaLKYY9fKwwpbrsk9ZhhzPWX88qm2+grF9AHRq6/+7hcjxrXA==
+"@pooltogether/current-pool-data@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@pooltogether/current-pool-data/-/current-pool-data-3.1.2.tgz#f4e9ad1590aaa76e7738133058bfa979f11d6a3d"
+  integrity sha512-N9rlktjxajA688bVAJARRhJT0FLzg8Iwu1CgPhRGDcOawTefM6YaExOH0Q6w8klaqRkVq6vAxLP0lUjP8HbFFg==
 
 "@pooltogether/etherplex@^0.2.3":
   version "0.2.3"
