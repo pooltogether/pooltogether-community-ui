@@ -56,7 +56,10 @@ export const WithdrawForm = (props) => {
     console.error(e)
   }
 
-  const ticketBal = ethers.utils.formatUnits(usersTicketBalance, tokenDecimals)
+  let ticketBal = ethers.utils.bigNumberify(0)
+  if (usersTicketBalance) {
+    ticketBal = ethers.utils.formatUnits(usersTicketBalance, tokenDecimals)
+  }
 
   const timelockCredit = '?'
 
@@ -97,12 +100,12 @@ export const WithdrawForm = (props) => {
                         To maintain fairness your funds need to contribute interest towards the
                         prize each week. You can:
                       </div>
-                      <div className='my-2 text-xs sm:text-sm'>
+                      {/* <div className='my-2 text-xs sm:text-sm'>
                         1) SCHEDULE: receive $1000 DAI once enough interest has been provided to the
                         prize
-                      </div>
+                      </div> */}
                       <div className='my-2 text-xs sm:text-sm'>
-                        2) INSTANT: pay $1.90 to withdraw right now and forfeit the interest that
+                        INSTANT: pay $1.90 to withdraw right now and forfeit the interest that
                         would go towards the prize
                       </div>
                     </>
@@ -115,10 +118,10 @@ export const WithdrawForm = (props) => {
           onChange={handleWithdrawTypeChange}
           value={withdrawType}
           radios={[
-            {
-              value: 'scheduled',
-              label: 'scheduled'
-            },
+            // {
+            //   value: 'scheduled',
+            //   label: 'scheduled'
+            // },
             {
               value: 'instant',
               label: 'instant'

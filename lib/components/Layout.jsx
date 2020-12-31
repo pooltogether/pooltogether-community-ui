@@ -20,7 +20,7 @@ export const Layout = (props) => {
           minHeight: '100vh'
         }}
       >
-        <StaticNetworkNotificationBanner />
+        {/* <StaticNetworkNotificationBanner /> */}
 
         <div className='pool-container flex flex-grow relative z-30 h-full page fadeIn animated'>
           <div className='flex flex-col flex-grow'>
