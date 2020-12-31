@@ -201,10 +201,7 @@ const UnlockDepositsButton = () => {
 const handleUnlockSubmit = async (setTx, provider, contractAddress, prizePoolAddress, decimals) => {
   const params = [
     prizePoolAddress,
-    ethers.utils.parseUnits('1000000000', decimals),
-    {
-      gasLimit: 200000
-    }
+    ethers.utils.parseUnits('1000000000', decimals)
   ]
 
   await sendTx(setTx, provider, contractAddress, IERC20Abi, 'approve', params, 'Unlock Deposits')
