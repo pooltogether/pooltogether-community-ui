@@ -46,18 +46,25 @@ export const PrizeCard = (props) => {
           >
             Deposit to win
           </Button>
-          <div className='flex justify-between mt-4 flex-grow'>
-            <InternalLink
-              href={`/pools/[networkName]/[prizePoolAddress]/manage`}
-              as={`/pools/${networkName}/${prizePoolAddress}/manage`}
-            >
-              Manage pool{' '}
-              <FeatherIcon
-                icon='settings'
-                strokeWidth='0.25rem'
-                className={'ml-3 my-auto w-4 h-4 stroke-2 stroke-current'}
-              />
-            </InternalLink>
+          <div
+            className={classnames('flex mt-4 flex-grow', {
+              'justify-between': userIsOwner,
+              'justify-center': !userIsOwner
+            })}
+          >
+            {userIsOwner && (
+              <InternalLink
+                href={`/pools/[networkName]/[prizePoolAddress]/manage`}
+                as={`/pools/${networkName}/${prizePoolAddress}/manage`}
+              >
+                Manage pool{' '}
+                <FeatherIcon
+                  icon='settings'
+                  strokeWidth='0.25rem'
+                  className={'ml-3 my-auto w-4 h-4 stroke-2 stroke-current'}
+                />
+              </InternalLink>
+            )}
             <InternalLink
               href={`/pools/[networkName]/[prizePoolAddress]/home`}
               as={`/pools/${networkName}/${prizePoolAddress}/home`}
