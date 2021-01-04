@@ -23,7 +23,7 @@ export const ManageUI = (props) => {
   const [usersAddress] = useAtom(usersAddressAtom)
 
   const owner = poolChainValues.owner
-  const userIsOwner = owner.toLowerCase() === usersAddress.toLowerCase()
+  const userIsOwner = owner?.toLowerCase() === usersAddress?.toLowerCase()
 
   return (
     <>

@@ -29,7 +29,7 @@ export const PrizeCard = (props) => {
   const networkName = network.name
   const prizePoolAddress = poolAddresses.prizePool
   const owner = poolChainValues.owner
-  const userIsOwner = owner.toLowerCase() === usersAddress.toLowerCase()
+  const userIsOwner = owner?.toLowerCase() === usersAddress?.toLowerCase()
 
   return (
     <Card className={classnames('flex flex-col mx-auto', className)}>
