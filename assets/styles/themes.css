@@ -4,6 +4,7 @@
   --color-bg-card-selected: #43286e;
   --color-bg-primary: #290b5a;
   --color-bg-secondary: #4c249f;
+  --color-bg-tertiary: rgba(255, 255, 255, 0.05);
   --color-bg-default: #341762;
   --color-bg-darkened: #1a083a;
   --color-bg-inverse: #fff;
@@ -74,6 +75,7 @@
   --color-bg-card-selected: #fff;
   --color-bg-primary: #fff;
   --color-bg-secondary: #35f0d0;
+  --color-bg-tertiary: rgba(163, 43, 187, 0.4);
   --color-bg-default: #f7f7f7;
   --color-bg-darkened: #e9e9e9;
   --color-bg-inverse: #111;

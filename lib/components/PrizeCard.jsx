@@ -30,7 +30,7 @@ export const PrizeCard = (props) => {
       <PrizeSection />
       <NewPrizeCountdown center />
       {showLinks && (
-        <div className='flex flex-col mt-4 w-2/4 mx-auto'>
+        <div className='flex flex-col mt-4 sm:mt-8 w-3/4 sm:w-2/4 mx-auto'>
           <Button
             href={`/pools/[networkName]/[prizePoolAddress]/home`}
             as={`/pools/${networkName}/${prizePoolAddress}/home`}
