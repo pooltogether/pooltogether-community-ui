@@ -3,7 +3,6 @@ import classnames from 'classnames'
 import addSeconds from 'date-fns/addSeconds'
 import { useInterval } from 'beautiful-react-hooks'
 
-// import { formatFutureDateInSeconds } from 'lib/utils/formatFutureDateInSeconds'
 import { subtractDates } from 'lib/utils/subtractDates'
 import { useAtom } from 'jotai'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
@@ -18,9 +17,6 @@ export const NewPrizeCountdown = (props) => {
 
   const [secondsRemaining, setSecondsRemaining] = useState(null)
 
-  // console.log('a', pool?.prizePeriodRemainingSeconds?.toString())
-
-  // const secs = 167868
   const secs =
     poolChainValues?.prizePeriodRemainingSeconds &&
     parseInt(poolChainValues?.prizePeriodRemainingSeconds.toString(), 10)
@@ -62,16 +58,21 @@ export const NewPrizeCountdown = (props) => {
   const minutesArray = ('' + minutes).split('')
   const secondsArray = ('' + seconds).split('')
 
+  // 86400 seconds = 1 day
   // 3600 seconds = 1 hour
-  const textColor = secondsRemaining >= 3600 ? 'green' : secondsRemaining >= 600 ? 'orange' : 'red'
+  const textColor = secondsRemaining >= 86400 ?
+    'green-1' :
+    secondsRemaining >= 3600 ?
+      'yellow-1' :
+      'red-1'
 
   const LeftSideJsx = ({ digit }) => {
     return (
       <span
-        className={`bg-tertiary text-${textColor} font-bold border border-secondary rounded-tl-sm rounded-bl-sm`}
+        className={`bg-tertiary text-${textColor} font-bold rounded-sm`}
         style={{
-          padding: '1px 4px',
-          borderWidth: '0.015rem'
+          padding: '2px 8px',
+          margin: '0 1px'
         }}
       >
         {digit}
@@ -82,10 +83,10 @@ export const NewPrizeCountdown = (props) => {
   const RightSideJsx = ({ digit }) => {
     return (
       <span
-        className={`bg-tertiary text-${textColor} font-bold border border-secondary rounded-tr-sm rounded-br-sm border-l-0`}
+        className={`bg-tertiary text-${textColor} font-bold rounded-sm`}
         style={{
-          padding: '1px 4px',
-          borderWidth: '0.015rem'
+          padding: '2px 8px',
+          margin: '0 1px'
         }}
       >
         {digit}
@@ -97,13 +98,12 @@ export const NewPrizeCountdown = (props) => {
     <div
       className={classnames(textSize, 'flex text-center', {
         'justify-center': center,
-        'text-xxxs sm:text-xl': !textSize
+        'text-base sm:text-xl': !textSize
       })}
     >
       <div
         className='flex flex-col sm:mr-2'
         style={{
-          // minWidth: 50
           paddingLeft: 2,
           paddingRight: 2
         }}
@@ -112,12 +112,11 @@ export const NewPrizeCountdown = (props) => {
           <LeftSideJsx digit={daysArray.length < 2 ? 0 : daysArray[0]} />
           <RightSideJsx digit={daysArray.length > 1 ? daysArray[1] : daysArray[0]} />
         </div>
-        <div className='text-caption'>DAY</div>
+        <div className='text-caption text-xs sm:text-base'>DAY</div>
       </div>
       <div
         className='flex flex-col'
         style={{
-          // minWidth: 50
           paddingLeft: 2,
           paddingRight: 2
         }}
@@ -126,13 +125,12 @@ export const NewPrizeCountdown = (props) => {
           <LeftSideJsx digit={hoursArray.length < 2 ? 0 : hoursArray[0]} />
           <RightSideJsx digit={hoursArray.length > 1 ? hoursArray[1] : hoursArray[0]} />
         </div>
-        <div className='text-caption'>HR</div>
+        <div className='text-caption text-xs sm:text-base'>HR</div>
       </div>
-      <div className='px-0 sm:px-1'>:</div>
+      <div className={`text-${textColor} px-0 sm:px-1`}>:</div>
       <div
         className='flex flex-col'
         style={{
-          // minWidth: 50
           paddingLeft: 1,
           paddingRight: 2
         }}
@@ -141,13 +139,12 @@ export const NewPrizeCountdown = (props) => {
           <LeftSideJsx digit={minutesArray.length < 2 ? 0 : minutesArray[0]} />
           <RightSideJsx digit={minutesArray.length > 1 ? minutesArray[1] : minutesArray[0]} />
         </div>
-        <div className='text-caption'>MIN</div>
+        <div className='text-caption text-xs sm:text-base'>MIN</div>
       </div>
-      <div className='px-0 sm:px-1'>:</div>
+      <div className={`text-${textColor} px-0 sm:px-1`}>:</div>
       <div
         className='flex flex-col'
         style={{
-          // minWidth: 50
           paddingLeft: 1,
           paddingRight: 2
         }}
@@ -156,7 +153,7 @@ export const NewPrizeCountdown = (props) => {
           <LeftSideJsx digit={secondsArray.length < 2 ? 0 : secondsArray[0]} />
           <RightSideJsx digit={secondsArray.length > 1 ? secondsArray[1] : secondsArray[0]} />
         </div>
-        <div className='text-caption'>SEC</div>
+        <div className='text-caption text-xs sm:text-base'>SEC</div>
       </div>
       {msg}
     </div>

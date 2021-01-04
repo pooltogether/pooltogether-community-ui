@@ -19,6 +19,7 @@ module.exports = {
         'card-selected': 'var(--color-bg-card-selected)',
         'primary': 'var(--color-bg-primary)',
         'secondary': 'var(--color-bg-secondary)',
+        'tertiary': 'var(--color-bg-tertiary)',
         'default': 'var(--color-bg-default)',
         'darkened': 'var(--color-bg-darkened)',
         'inverse': 'var(--color-bg-inverse)',
