@@ -20,7 +20,7 @@ const TimeUntilPrizeCard = () => {
   const { days, hours, minutes, seconds } = useTimeLeft()
 
   return (
-    <Card className='mr-4'>
+    <Card className='mr-1 sm:mr-4'>
       <CardTitle>Time to next prize</CardTitle>
       <TimeDisplay days={days} hours={hours} minutes={minutes} seconds={seconds} />
     </Card>
@@ -70,7 +70,7 @@ const TotalDeposits = () => {
   const total = displayAmountInEther(poolChainValues.poolTotalSupply, poolChainValues.tokenDecimals)
 
   return (
-    <Card className='ml-4'>
+    <Card className='ml-1 sm:ml-4'>
       <CardTitle>Total deposits</CardTitle>
       <CardPrimaryText>{`${total} ${poolChainValues.tokenSymbol}`}</CardPrimaryText>
     </Card>

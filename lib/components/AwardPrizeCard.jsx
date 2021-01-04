@@ -186,7 +186,7 @@ const AwardPrizeTrigger = () => {
         </div>
       )}
 
-      <div className='flex mt-4'>
+      <div className='flex flex-col sm:flex-row mt-4'>
         <Button
           type='button'
           disabled={!canStartAward || timeRemaining}
@@ -194,7 +194,7 @@ const AwardPrizeTrigger = () => {
           color='secondary'
           size='lg'
           fullWidth
-          className='mr-4'
+          className='sm:mr-4 mb-4 sm:mb-0'
         >
           Start award
         </Button>
@@ -205,7 +205,7 @@ const AwardPrizeTrigger = () => {
           color='secondary'
           size='lg'
           fullWidth
-          className='ml-4'
+          className='sm:ml-4'
         >
           Complete award
         </Button>
