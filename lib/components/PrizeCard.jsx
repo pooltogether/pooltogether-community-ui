@@ -102,9 +102,10 @@ const PrizeSection = (props) => {
 
   return (
     <>
-      {' '}
-      <CardTitle className='text-center'>Current Prize</CardTitle>
       <Prizes />
+      <CardTitle className='text-center mb-8' s>
+        Current Prize
+      </CardTitle>
     </>
   )
 }
@@ -112,18 +113,16 @@ const PrizeSection = (props) => {
 const Prizes = (props) => {
   const { awards, loading } = useAwardsList()
 
-  if (awards.length === 1) {
+  const awardsWithBalances = awards.filter((token) => token.formattedBalance != 0)
+
+  if (awardsWithBalances.length === 1) {
     return <SinglePrizeItem token={awards[0]} />
   }
 
   return (
-    <ul
-      className='flex flex-col my-2 sm:my-8 max-w-xs mx-auto overflow-auto'
-      style={{ maxHeight: '160px', minWidth: '230px' }}
-    >
-      {awards.map((token, index) => {
-        if (token.formattedBalance == 0) return null
-        return <PrizeListItem key={index} token={token} index={index} />
+    <ul className='flex flex-col mt-4 mb-2 max-w-xs mx-auto' style={{ minWidth: '230px' }}>
+      {awardsWithBalances.map((token, index) => {
+        return <PrizeListItem small={awards.length > 6} key={index} token={token} index={index} />
       })}
     </ul>
   )
@@ -139,36 +138,42 @@ const SinglePrizeItem = (props) => {
   return (
     <div className={'flex mx-auto my-2 sm:my-8 leading-none'}>
       {imageUrl && <img src={imageUrl} className='w-4 h-4 sm:w-16 sm:h-16 mr-4 my-auto' />}
-      <span className='font-bold text-2xl sm:text-9xl mr-4 my-auto'>{token.formattedBalance}</span>
+      <span className='font-bold text-2xl sm:text-9xl mr-4 my-auto text-flashy-2'>
+        {token.formattedBalance}
+      </span>
       <span className='font-bolt text-sm sm:text-4xl mt-auto mb-1'>{token.symbol}</span>
     </div>
   )
 }
 
 const PrizeListItem = (props) => {
-  const token = props.token
+  const { token, small } = props
   const index = props.index || 0
   const [coinGeckoTokenIds] = useAtom(coinGeckoTokenIdsAtom)
   const tokenId = coinGeckoTokenIds[getCoinGeckoId(token)]
+  console.log(token, tokenId)
   const { data } = useQuery(tokenId, async () => getCoinGeckoTokenData(tokenId))
   const imageUrl = data?.data?.image?.small
 
-  if (imageUrl) {
-    return (
-      <li key={index + token.symbol} className='flex w-full justify-between mb-2'>
-        <span className='font-bold'>{token.formattedBalance}</span>
-        <div className='flex ml-4'>
-          <img className='my-auto mr-2 w-6 h-6' src={imageUrl} />
-          {token.name || token.symbol}
-        </div>
-      </li>
-    )
-  }
-
   return (
-    <li key={index + token.symbol} className='flex justify-between mb-2'>
-      <span className='font-bold'>{token.formattedBalance}</span>
-      <div className='flex ml-4'>{token.name || token.symbol}</div>
+    <li key={index + token.symbol} className='flex w-full justify-between mb-2'>
+      <span
+        className={classnames('font-bold text-flashy-2 leading-none', {
+          'text-md sm:text-xl': small,
+          'text-xl sm:text-5xl': !small
+        })}
+      >
+        {token.formattedBalance}
+      </span>
+      <div
+        className={classnames('flex ml-4 mt-auto', {
+          'text-sm sm:text-lg': small,
+          'text-lg sm:text-3xl': !small
+        })}
+      >
+        {imageUrl && <img className='my-auto mr-2 w-6 h-6' src={imageUrl} />}
+        <span className='leading-none'>{token.symbol || token.name || ''}</span>
+      </div>
     </li>
   )
 }
