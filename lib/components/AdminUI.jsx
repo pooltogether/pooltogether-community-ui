@@ -6,7 +6,6 @@ import { FairnessControlsCard } from 'lib/components/FairnessControlsCard'
 import { NumOfWinnersControlCard } from 'lib/components/NumOfWinnersControlCard'
 import { RngServiceControlCard } from 'lib/components/RngServiceControlCard'
 import { AwardPrizeCard } from 'lib/components/AwardPrizeCard'
-import { OwnershipControlCard } from 'lib/components/OwnershipControlCard'
 
 export const AdminUI = (props) => {
   return (
@@ -17,7 +16,6 @@ export const AdminUI = (props) => {
       <RngServiceControlCard />
       <NumOfWinnersControlCard />
       <FairnessControlsCard />
-      <OwnershipControlCard />
     </>
   )
 }
