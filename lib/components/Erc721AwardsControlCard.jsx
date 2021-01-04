@@ -231,15 +231,13 @@ const AddErc721Form = () => {
 const Row = (props) => {
   const { tokenId, address, prevAddress } = props
 
-  console.log(address, shorten(address))
-
   return (
     <tr>
       <RowDataCell first className='font-bold'>
         {tokenId.toString()}
       </RowDataCell>
       <RowDataCell className='text-accent-1'>
-        <EtherscanAddressLink address={address}>{shorten(address)}</EtherscanAddressLink>
+        <EtherscanAddressLink address={address}>{address}</EtherscanAddressLink>
       </RowDataCell>
       <RemoveAddressButton address={address} prevAddress={prevAddress} />
     </tr>
