@@ -112,8 +112,7 @@ const PrizeSection = (props) => {
 
 const Prizes = (props) => {
   const { awards, loading } = useAwardsList()
-
-  const awardsWithBalances = awards.filter((token) => token.formattedBalance != 0)
+  const awardsWithBalances = awards.filter((token) => !token.balance.isZero())
 
   if (awardsWithBalances.length === 1) {
     return <SinglePrizeItem token={awards[0]} />
@@ -151,7 +150,6 @@ const PrizeListItem = (props) => {
   const index = props.index || 0
   const [coinGeckoTokenIds] = useAtom(coinGeckoTokenIdsAtom)
   const tokenId = coinGeckoTokenIds[getCoinGeckoId(token)]
-  console.log(token, tokenId)
   const { data } = useQuery(tokenId, async () => getCoinGeckoTokenData(tokenId))
   const imageUrl = data?.data?.image?.small
 
@@ -172,7 +170,7 @@ const PrizeListItem = (props) => {
         })}
       >
         {imageUrl && <img className='my-auto mr-2 w-6 h-6' src={imageUrl} />}
-        <span className='leading-none'>{token.symbol || token.name || ''}</span>
+        <span className='leading-none mt-auto'>{token.symbol || token.name || ''}</span>
       </div>
     </li>
   )
