@@ -9,6 +9,8 @@ import { Button } from 'lib/components/Button'
 import { Card, CardTitle } from 'lib/components/Card'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
+import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
+import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 
 const MANAGE_VIEW = Object.freeze({
   stats: '#stats',
@@ -17,6 +19,11 @@ const MANAGE_VIEW = Object.freeze({
 
 export const ManageUI = (props) => {
   const [selectedTab, setSelectedTab] = useState(window.location.hash || MANAGE_VIEW.stats)
+  const [poolChainValues] = useAtom(poolChainValuesAtom)
+  const [usersAddress] = useAtom(usersAddressAtom)
+
+  const owner = poolChainValues.owner
+  const userIsOwner = owner.toLowerCase() === usersAddress.toLowerCase()
 
   return (
     <>
@@ -26,14 +33,16 @@ export const ManageUI = (props) => {
         <Tab setSelectedTab={setSelectedTab} selectedTab={selectedTab} hash={MANAGE_VIEW.stats}>
           Stats
         </Tab>
-        <Tab
-          setSelectedTab={setSelectedTab}
-          selectedTab={selectedTab}
-          hash={MANAGE_VIEW.admin}
-          className='ml-16'
-        >
-          Admin
-        </Tab>
+        {userIsOwner && (
+          <Tab
+            setSelectedTab={setSelectedTab}
+            selectedTab={selectedTab}
+            hash={MANAGE_VIEW.admin}
+            className='ml-16'
+          >
+            Admin
+          </Tab>
+        )}
       </Tabs>
 
       <Content>
@@ -41,9 +50,11 @@ export const ManageUI = (props) => {
           <StatsUI />
         </ContentPane>
 
-        <ContentPane selectedTab={selectedTab} hash={MANAGE_VIEW.admin}>
-          <AdminUI />
-        </ContentPane>
+        {userIsOwner && (
+          <ContentPane selectedTab={selectedTab} hash={MANAGE_VIEW.admin}>
+            <AdminUI />
+          </ContentPane>
+        )}
       </Content>
     </>
   )
