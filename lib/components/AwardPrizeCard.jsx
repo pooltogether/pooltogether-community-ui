@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/PeriodicPrizeStrategy'
+import FeatherIcon from 'feather-icons-react'
 
 import { sendTx } from 'lib/utils/sendTx'
 import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
@@ -13,7 +14,6 @@ import { Card, CardSecondaryText } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { Button } from 'lib/components/Button'
 import { TxMessage } from 'lib/components/TxMessage'
-import { LoadingDots } from 'lib/components/LoadingDots'
 
 const handleStartAwardSubmit = async (setTx, provider, contractAddress) => {
   const params = [
@@ -51,6 +51,24 @@ const handleCompleteAwardSubmit = async (setTx, provider, contractAddress) => {
   )
 }
 
+const handleCancelAward = async (setTx, provider, contractAddress) => {
+  const params = [
+    {
+      gasLimit: 300000
+    }
+  ]
+
+  await sendTx(
+    setTx,
+    provider,
+    contractAddress,
+    PrizeStrategyAbi,
+    'cancelAward',
+    params,
+    'Cancel Award'
+  )
+}
+
 export const AwardPrizeCard = () => {
   return (
     <Card>
@@ -74,8 +92,8 @@ const AwardPrizeTrigger = () => {
 
   const { days, hours, minutes, seconds } = useTimeLeft()
   const timeRemaining = Boolean(days || hours || minutes || seconds)
-  const { canCompleteAward, canStartAward, isRngRequested } = poolChainValues
-  const txInFlight = tx.inWallet || (tx.sent && !tx.completed)
+  const { canCompleteAward, canStartAward, isRngRequested, isRngTimedOut } = poolChainValues
+  const showTx = tx.inWallet || tx.sent
 
   const resetState = (e) => {
     e.preventDefault()
@@ -86,6 +104,12 @@ const AwardPrizeTrigger = () => {
     e.preventDefault()
     setTxType('Start Award')
     handleStartAwardSubmit(setTx, provider, poolAddresses.prizeStrategy)
+  }
+
+  const handleCancelAwardClick = (e) => {
+    e.preventDefault()
+    setTxType('Cancel Award')
+    handleCancelAward(setTx, provider, poolAddresses.prizeStrategy)
   }
 
   const handleCompleteAwardClick = (e) => {
@@ -108,32 +132,41 @@ const AwardPrizeTrigger = () => {
     }
   }, [timeRemaining, tx.completed])
 
-  if (txInFlight) {
+  if (showTx) {
+    return (
+      <TxMessage
+        txType={txType}
+        tx={tx}
+        handleReset={resetState}
+        resetButtonText={txType === 'Start Award' ? 'Next' : 'Hide this'}
+      />
+    )
+  }
+
+  if (isRngTimedOut) {
     return (
       <>
-        <TxMessage txType={txType} tx={tx} handleReset={resetState} resetButtonText='Hide this' />
-        <div className='flex mt-4'>
-          <Button
-            type='button'
-            disabled={true}
-            color='secondary'
-            size='lg'
-            fullWidth
-            className='mr-4'
-          >
-            Start award
-          </Button>
-          <Button
-            type='button'
-            disabled={true}
-            color='secondary'
-            size='lg'
-            fullWidth
-            className='ml-4'
-          >
-            Complete award
-          </Button>
+        <div className='flex text-orange-500 font-bold'>
+          <FeatherIcon
+            icon='alert-triangle'
+            className='mr-2 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current'
+          />
+          Attention
         </div>
+
+        <CardSecondaryText className='mb-4 sm:mb-8'>
+          The random number generator has timed out. You must cancel the awarding process to unlock
+          users funds and start the awarding process again.
+        </CardSecondaryText>
+        <Button
+          type='button'
+          onClick={handleCancelAwardClick}
+          color='danger'
+          size='lg'
+          disabled={showTx}
+        >
+          Cancel award
+        </Button>
       </>
     )
   }
@@ -143,7 +176,16 @@ const AwardPrizeTrigger = () => {
       {timeRemaining && (
         <TimeDisplay days={days} hours={hours} minutes={minutes} seconds={seconds} />
       )}
-      {isRngRequested && !canCompleteAward && <span>Pool is locked. Awarding in progress!</span>}
+      {isRngRequested && !canCompleteAward && (
+        <div className='flex'>
+          <FeatherIcon
+            icon='lock'
+            className='mr-2 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current'
+          />
+          Pool is locked. Awarding in progress!
+        </div>
+      )}
+
       <div className='flex mt-4'>
         <Button
           type='button'

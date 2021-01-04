@@ -119,17 +119,19 @@ const NumOfWinnersForm = (props) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <TextInputGroup
-        id='newNumOfWinners'
-        name='newNumOfWinners'
-        label='Number of winners'
-        containerClassName='mb-8'
-        placeholder='(eg. 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984)'
-        onChange={(e) => {
-          setNewNumOfWinners(e.target.value)
-        }}
-        value={newNumOfWinners}
-      />
+      <div className='flex flex-col sm:flex-row mb-4'>
+        <TextInputGroup
+          id='newNumOfWinners'
+          name='newNumOfWinners'
+          label='Number of winners'
+          containerClassName='w-full sm:w-1/2 sm:mr-2'
+          placeholder='(eg. 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984)'
+          onChange={(e) => {
+            setNewNumOfWinners(e.target.value)
+          }}
+          value={newNumOfWinners}
+        />
+      </div>
       <Button color='secondary' size='lg'>
         Update winners
       </Button>
