@@ -93,7 +93,7 @@ const AwardPrizeTrigger = () => {
   const { days, hours, minutes, seconds } = useTimeLeft()
   const timeRemaining = Boolean(days || hours || minutes || seconds)
   const { canCompleteAward, canStartAward, isRngRequested, isRngTimedOut } = poolChainValues
-  const txInFlight = tx.inWallet || (tx.sent && !tx.completed)
+  const showTx = tx.inWallet || tx.sent
 
   const resetState = (e) => {
     e.preventDefault()
@@ -132,20 +132,27 @@ const AwardPrizeTrigger = () => {
     }
   }, [timeRemaining, tx.completed])
 
+  if (showTx) {
+    return (
+      <TxMessage
+        txType={txType}
+        tx={tx}
+        handleReset={resetState}
+        resetButtonText={txType === 'Start Award' ? 'Next' : 'Hide this'}
+      />
+    )
+  }
+
   if (isRngTimedOut) {
     return (
       <>
-        {txInFlight ? (
-          <TxMessage txType={txType} tx={tx} handleReset={resetState} resetButtonText='Hide this' />
-        ) : (
-          <div className='flex text-orange-500 font-bold'>
-            <FeatherIcon
-              icon='alert-triangle'
-              className='mr-2 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current'
-            />
-            Attention
-          </div>
-        )}
+        <div className='flex text-orange-500 font-bold'>
+          <FeatherIcon
+            icon='alert-triangle'
+            className='mr-2 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current'
+          />
+          Attention
+        </div>
 
         <CardSecondaryText className='mb-4 sm:mb-8'>
           The random number generator has timed out. You must cancel the awarding process to unlock
@@ -156,7 +163,7 @@ const AwardPrizeTrigger = () => {
           onClick={handleCancelAwardClick}
           color='danger'
           size='lg'
-          disabled={txInFlight}
+          disabled={showTx}
         >
           Cancel award
         </Button>
@@ -166,23 +173,23 @@ const AwardPrizeTrigger = () => {
 
   return (
     <>
-      {txInFlight ? (
-        <TxMessage txType={txType} tx={tx} handleReset={resetState} resetButtonText='Hide this' />
-      ) : (
-        <>
-          {timeRemaining && (
-            <TimeDisplay days={days} hours={hours} minutes={minutes} seconds={seconds} />
-          )}
-          {isRngRequested && !canCompleteAward && (
-            <span>Pool is locked. Awarding in progress!</span>
-          )}
-        </>
+      {timeRemaining && (
+        <TimeDisplay days={days} hours={hours} minutes={minutes} seconds={seconds} />
+      )}
+      {isRngRequested && !canCompleteAward && (
+        <div className='flex'>
+          <FeatherIcon
+            icon='lock'
+            className='mr-2 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current'
+          />
+          Pool is locked. Awarding in progress!
+        </div>
       )}
 
       <div className='flex mt-4'>
         <Button
           type='button'
-          disabled={txInFlight || !canStartAward || timeRemaining}
+          disabled={!canStartAward || timeRemaining}
           onClick={handleStartAwardClick}
           color='secondary'
           size='lg'
@@ -193,7 +200,7 @@ const AwardPrizeTrigger = () => {
         </Button>
         <Button
           type='button'
-          disabled={txInFlight || !canCompleteAward}
+          disabled={!canCompleteAward}
           onClick={handleCompleteAwardClick}
           color='secondary'
           size='lg'
