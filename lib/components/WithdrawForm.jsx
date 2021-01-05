@@ -226,7 +226,7 @@ export const WithdrawForm = (props) => {
         />
 
         {overBalance && (
-          <div className='text-orange-500 ml-4'>
+          <div className='text-xs sm:text-sm text-red-600 ml-4'>
             The maximum you can withdraw is{' '}
             {displayAmountInEther(usersTicketBalance, {
               precision: 2,
@@ -237,11 +237,22 @@ export const WithdrawForm = (props) => {
         )}
 
         {withdrawAmount && !overBalance && (
-          <span className='text-xs sm:text-sm text-highlight-1 ml-0 sm:ml-4'>
-            After withdrawing {withdrawAmount} {tokenSymbol} your odds of winning are now 1 in{' '}
-            {formattedOdds}{' '}
+          <span className='text-xs sm:text-sm text-orange-500 ml-0 sm:ml-4'>
+            {newOdds ? (
+              <>
+                After withdrawing{' '}
+                <b>
+                  {withdrawAmount} {tokenSymbol}
+                </b>{' '}
+                your odds of winning are now <b>1 in {formattedOdds}</b>
+              </>
+            ) : (
+              `Withdrawing everything will make you ineligible to win`
+            )}
           </span>
         )}
+
+        {}
 
         {earlyExitFee && !earlyExitFee.isZero() && (
           <div className='flex mt-8 sm:mb-0 flex-col sm:flex-row'>
@@ -257,6 +268,7 @@ export const WithdrawForm = (props) => {
               </div>
               <a
                 href='https://docs.pooltogether.com/protocol/prize-pool/fairness'
+                target={'_blank'}
                 className={'underline text-accent-1 trans hover:opacity-50 text-center mx-auto'}
               >
                 Read more about Fairness
