@@ -226,7 +226,7 @@ export const WithdrawForm = (props) => {
         />
 
         {overBalance && (
-          <div className='text-xs sm:text-sm text-red-600 ml-4'>
+          <div className='text-xs sm:text-sm text-red-600 sm:ml-4'>
             The maximum you can withdraw is{' '}
             {displayAmountInEther(usersTicketBalance, {
               precision: 2,
