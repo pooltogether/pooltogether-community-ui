@@ -81,7 +81,7 @@ const handleRemoveExternalErc721 = async (
 export const Erc721AwardsControlCard = (props) => {
   return (
     <Card>
-      <Collapse title='ERC721 awards'>
+      <Collapse title='External ERC721 awards'>
         <AwardsTable />
 
         <AddErc721Form />
