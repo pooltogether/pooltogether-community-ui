@@ -82,7 +82,7 @@ export const Erc20AwardsControlCard = (props) => {
 
   return (
     <Card>
-      <Collapse title='ERC20 awards'>
+      <Collapse title='External ERC20 awards'>
         <AwardsTable />
 
         <AddErc20Form />

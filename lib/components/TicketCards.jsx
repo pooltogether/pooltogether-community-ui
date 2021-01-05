@@ -17,7 +17,7 @@ const TicketCard = () => {
   const [poolChainValues] = useAtom(poolChainValuesAtom)
 
   return (
-    <Card className='mr-4'>
+    <Card className='mr-1 sm:mr-4'>
       <CardTitle>Ticket symbol & name</CardTitle>
       <CardPrimaryText>{`$${poolChainValues.ticketSymbol}`}</CardPrimaryText>
       <CardSecondaryText className='text-center'>{poolChainValues.ticketName}</CardSecondaryText>
@@ -28,7 +28,7 @@ const SponsorshipCard = () => {
   const [poolChainValues] = useAtom(poolChainValuesAtom)
 
   return (
-    <Card className='ml-4'>
+    <Card className='ml-1 sm:ml-4'>
       <CardTitle>Sponsorship symbol & name</CardTitle>
       <CardPrimaryText>{`$${poolChainValues.sponsorshipSymbol}`}</CardPrimaryText>
       <CardSecondaryText className='text-center'>

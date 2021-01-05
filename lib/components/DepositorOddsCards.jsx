@@ -28,7 +28,7 @@ const TicketCard = () => {
   const symbol = poolChainValues.ticketSymbol
 
   return (
-    <Card className='mr-4 text-center'>
+    <Card className='mr-1 sm:mr-4 text-center'>
       <CardTitle>My tickets</CardTitle>
       <CardPrimaryText>{`${balance} ${symbol}`}</CardPrimaryText>
     </Card>
@@ -47,7 +47,7 @@ const OddsCard = () => {
 
   if (!odds) {
     return (
-      <Card className='mx-4 text-center'>
+      <Card className='mx-1 sm:mx-4 text-center'>
         <CardTitle>My winning odds</CardTitle>
         <CardPrimaryText>0</CardPrimaryText>
       </Card>
@@ -57,7 +57,7 @@ const OddsCard = () => {
   const formattedOdds = numberWithCommas(odds, { precision: 2 })
 
   return (
-    <Card className='mx-4 text-center'>
+    <Card className='mx-1 sm:mx-4 text-center'>
       <CardTitle>My winning odds</CardTitle>
       <CardPrimaryText>1 in {formattedOdds}</CardPrimaryText>
     </Card>
@@ -74,7 +74,7 @@ const BalanceCard = () => {
   const symbol = poolChainValues.tokenSymbol
 
   return (
-    <Card className='ml-4 text-center'>
+    <Card className='ml-1 sm:ml-4 text-center'>
       <CardTitle>My wallet balance</CardTitle>
       <CardPrimaryText>{`${balance} ${symbol}`}</CardPrimaryText>
     </Card>

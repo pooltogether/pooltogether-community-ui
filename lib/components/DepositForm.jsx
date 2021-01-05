@@ -103,14 +103,14 @@ export const DepositForm = (props) => {
           {displayAmountInEther(usersTokenBalance, { precision: 2, decimals: tokenDecimals })}.
         </div>
       )}
-      <div className='my-5 flex flex-row'>
+      <div className='my-5 flex flex-col sm:flex-row'>
         <UnlockDepositsButton />
         <Button
           size='lg'
           fullWidth
           disabled={overBalance || !hasApprovedBalance}
           color='secondary'
-          className='ml-4'
+          className='sm:ml-4'
         >
           Deposit
         </Button>
@@ -191,7 +191,7 @@ const UnlockDepositsButton = () => {
       color='secondary'
       fullWidth
       size='lg'
-      className='mr-4'
+      className='mb-4 sm:mb-0 sm:mr-4'
     >
       {buttonText}
     </Button>
@@ -199,10 +199,7 @@ const UnlockDepositsButton = () => {
 }
 
 const handleUnlockSubmit = async (setTx, provider, contractAddress, prizePoolAddress, decimals) => {
-  const params = [
-    prizePoolAddress,
-    ethers.utils.parseUnits('1000000000', decimals)
-  ]
+  const params = [prizePoolAddress, ethers.utils.parseUnits('1000000000', decimals)]
 
   await sendTx(setTx, provider, contractAddress, IERC20Abi, 'approve', params, 'Unlock Deposits')
 }
