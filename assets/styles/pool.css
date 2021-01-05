@@ -14,13 +14,6 @@
     #8933eb 90%,
     #3b89ff 100%
   );
-
-  --flashyGradient2: linear-gradient(
-    88.42deg,
-    #4c249f -5.53%,
-    rgba(16, 244, 190, 0.755208) 44.31%,
-    rgba(214, 243, 30, 0.5) 96.27%
-  );
 }
 
 body {
@@ -430,16 +423,6 @@ input[type='text'] {
 
 .text-flashy {
   background: var(--flashyGradient);
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
-
-  background-size: 1000% auto;
-  animation: cycleBackgroundPos 15000ms infinite steps(100);
-}
-
-.text-flashy-2 {
-  background: var(--flashyGradient2);
   background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;

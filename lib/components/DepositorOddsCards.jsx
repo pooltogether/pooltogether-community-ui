@@ -59,7 +59,7 @@ const OddsCard = () => {
   return (
     <Card className='mx-1 sm:mx-4 text-center'>
       <CardTitle>My winning odds</CardTitle>
-      <CardPrimaryText>1 in {formattedOdds}</CardPrimaryText>
+      <CardPrimaryText small>1 in {formattedOdds}</CardPrimaryText>
     </Card>
   )
 }

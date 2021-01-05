@@ -33,15 +33,17 @@ export const CardTitle = (props) => (
   </div>
 )
 
-export const CardPrimaryText = (props) => (
-  <div
-    className={classnames('text-base sm:text-4xl font-bold text-white', props.className, {
+export const CardPrimaryText = (props) => {
+  const textClasses = props.small ? 'text-xs sm:text-xl' : 'text-base sm:text-4xl'
+
+  return <div
+    className={classnames('inline-flex items-center h-8 font-bold text-white', props.className, textClasses, {
       'text-center': props.center
     })}
   >
     {props.children}
   </div>
-)
+}
 
 CardPrimaryText.defaultProps = {
   center: true
