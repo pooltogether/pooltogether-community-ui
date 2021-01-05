@@ -10,7 +10,8 @@
     "build": "next build && next export && yarn postexport",
     "start": "next start",
     "postexport": "node post-export.js",
-    "distrelease": "yarn build",
+    "release": "./scripts/sentry-release.sh",
+    "distrelease": "export NEXT_JS_RELEASE_VERSION=$SENTRY_PROJECT:$(sentry-cli releases propose-version) && yarn build && yarn release",
     "format": "yarn prettier --write .",
     "check-format": "yarn prettier --check ."
   },
