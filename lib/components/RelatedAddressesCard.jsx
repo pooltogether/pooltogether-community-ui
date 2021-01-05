@@ -40,7 +40,11 @@ export const RelatedAddressesCard = (props) => {
   return (
     <Card>
       <Collapse title='Related contract addresses'>
-        <Table headers={['Contract', 'Address']} rows={rows} className='w-full' />
+        <Table
+          headers={['Contract', 'Address']}
+          rows={rows}
+          className='w-full table-fixed sm:table-auto'
+        />
       </Collapse>
     </Card>
   )

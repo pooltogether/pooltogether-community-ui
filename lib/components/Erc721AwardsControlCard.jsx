@@ -23,6 +23,8 @@ import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 
 import PrizeIllustration from 'assets/images/prize-illustration-transparent@2x.png'
+import { shorten } from 'lib/utils/shorten'
+import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 
 const handleAddExternalErc721 = async (
   txName,
@@ -234,7 +236,9 @@ const Row = (props) => {
       <RowDataCell first className='font-bold'>
         {tokenId.toString()}
       </RowDataCell>
-      <RowDataCell className='text-accent-1'>{address}</RowDataCell>
+      <RowDataCell className='text-accent-1'>
+        <EtherscanAddressLink address={address}>{address}</EtherscanAddressLink>
+      </RowDataCell>
       <RemoveAddressButton address={address} prevAddress={prevAddress} />
     </tr>
   )

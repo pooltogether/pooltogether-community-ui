@@ -36,7 +36,7 @@ export const PrizeCard = (props) => {
       <PrizeSection />
       <NewPrizeCountdown center />
       {showLinks && (
-        <div className='flex flex-col mt-4 sm:mt-8 w-3/4 sm:w-2/4 mx-auto'>
+        <div className='flex flex-col mt-4 sm:mt-8 w-full sm:w-2/4 mx-auto'>
           <Button
             href={`/pools/[networkName]/[prizePoolAddress]/home`}
             as={`/pools/${networkName}/${prizePoolAddress}/home`}
@@ -47,7 +47,7 @@ export const PrizeCard = (props) => {
             Deposit to win
           </Button>
           <div
-            className={classnames('flex mt-4', {
+            className={classnames('flex mt-4 flex-grow', {
               'justify-between': userIsOwner,
               'justify-center': !userIsOwner
             })}
@@ -107,7 +107,7 @@ const PrizeSection = (props) => {
         <img
           alt='image of a cactus'
           src={Cactus}
-          className='mx-auto w-8 h-8 sm:w-32 sm:h-32 mb-4 sm:mb-8'
+          className='mx-auto w-12 h-12 sm:w-32 sm:h-32 mb-4 sm:mb-8'
         />
       </>
     )
