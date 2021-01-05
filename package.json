@@ -42,6 +42,8 @@
     "beautiful-react-hooks": "^0.31.0",
     "bn.js": "4.11.0",
     "classnames": "^2.2.6",
+    "d3-scale": "^3.2.3",
+    "d3-shape": "^2.0.0",
     "date-fns": "^2.16.1",
     "ethers": "^4.0.47",
     "feather-icons-react": "^0.4.1",

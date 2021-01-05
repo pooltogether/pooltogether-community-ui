@@ -5,7 +5,7 @@ import { useAtom } from 'jotai'
 import FeatherIcon from 'feather-icons-react'
 
 import { Button } from 'lib/components/Button'
-import { TextInputGroup } from 'lib/components/TextInputGroup'
+import { RightLabelButton, TextInputGroup } from 'lib/components/TextInputGroup'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
 import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
@@ -79,18 +79,14 @@ export const DepositForm = (props) => {
           onChange={(e) => setDepositAmount(e.target.value)}
           value={depositAmount}
           rightLabel={
-            tokenSymbol && (
-              <button
-                type='button'
-                onClick={(e) => {
-                  e.preventDefault()
-                  setDepositAmount(tokenBal)
-                }}
-              >
-                {/* Balance:  */}
-                MAX - {numberWithCommas(tokenBal, { precision: 4 })} {tokenSymbol}
-              </button>
-            )
+            <RightLabelButton
+              onClick={(e) => {
+                e.preventDefault()
+                setDepositAmount(tokenBal)
+              }}
+            >
+              {numberWithCommas(tokenBal, { precision: 4 })} {tokenSymbol}
+            </RightLabelButton>
           }
         />
       </div>
@@ -153,7 +149,14 @@ const UnlockDepositsButton = () => {
 
   if (hasApprovedBalance || (tx.completed && !tx.error)) {
     return (
-      <Button disabled type='button' color='secondary' fullWidth size='lg' className='mr-4'>
+      <Button
+        disabled
+        type='button'
+        color='secondary'
+        fullWidth
+        size='lg'
+        className='mb-4 sm:mb-0 mr-4'
+      >
         <FeatherIcon
           icon='check-circle'
           className='relative w-4 h-4 inline-block my-auto mr-2 my-auto'

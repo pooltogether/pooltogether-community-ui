@@ -30,7 +30,7 @@ const TicketCard = () => {
   return (
     <Card className='mr-1 sm:mr-4 text-center'>
       <CardTitle>My tickets</CardTitle>
-      <CardPrimaryText>{`${balance} ${symbol}`}</CardPrimaryText>
+      <CardPrimaryText small>{`${balance} ${symbol}`}</CardPrimaryText>
     </Card>
   )
 }
@@ -76,7 +76,7 @@ const BalanceCard = () => {
   return (
     <Card className='ml-1 sm:ml-4 text-center'>
       <CardTitle>My wallet balance</CardTitle>
-      <CardPrimaryText>{`${balance} ${symbol}`}</CardPrimaryText>
+      <CardPrimaryText small>{`${balance} ${symbol}`}</CardPrimaryText>
     </Card>
   )
 }

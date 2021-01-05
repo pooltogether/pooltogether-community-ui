@@ -1,67 +1,182 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import { useAtom } from 'jotai'
+import PrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PrizePool'
 
 import { Button } from 'lib/components/Button'
-import { PTHint } from 'lib/components/PTHint'
-import { RadioInputGroup } from 'lib/components/RadioInputGroup'
-import { TextInputGroup } from 'lib/components/TextInputGroup'
+import { RightLabelButton, TextInputGroup } from 'lib/components/TextInputGroup'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
 import { InnerCard } from 'lib/components/Card'
+import { useDebounce } from 'lib/hooks/useDebounce'
+import { fetchExitFee } from 'lib/utils/fetchExitFee'
+import { networkAtom } from 'lib/hooks/useNetwork'
+import { WalletContext } from 'lib/components/WalletContextProvider'
+import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
+import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
+import { sendTx } from 'lib/utils/sendTx'
 
 import Warning from 'assets/images/warning.svg'
+import { poolToast } from 'lib/utils/poolToast'
+import { calculateOdds } from 'lib/utils/calculateOdds'
+import Link from 'next/link'
+import { Gauge } from 'lib/components/Gauge'
+import { addSeconds } from 'date-fns'
+import { subtractDates } from 'lib/utils/subtractDates'
 
-export const WithdrawForm = (props) => {
-  const { exitFees, handleSubmit, vars, stateSetters } = props
-
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const [usersChainValues] = useAtom(userChainValuesAtom)
-
-  const { usersTicketBalance } = usersChainValues || {}
-
-  const { burnedCredit, exitFee, timelockDurationSeconds } = exitFees || {}
-
-  const { withdrawAmount, withdrawType } = vars
-
-  const { setWithdrawAmount, setWithdrawType } = stateSetters
-
-  const handleWithdrawTypeChange = (e) => {
-    setWithdrawType(e.target.value)
+const handleWithdrawInstantly = async (
+  setTx,
+  provider,
+  contractAddress,
+  ticketAddress,
+  usersAddress,
+  withdrawAmount,
+  maxExitFee,
+  decimals
+) => {
+  if (!withdrawAmount) {
+    poolToast.error(`Withdraw Amount needs to be filled in`)
+    return
   }
 
-  const { isRngRequested, tokenDecimals } = poolChainValues || {}
+  const params = [
+    usersAddress,
+    ethers.utils.parseUnits(withdrawAmount, decimals),
+    ticketAddress,
+    maxExitFee
+  ]
 
+  await sendTx(
+    setTx,
+    provider,
+    contractAddress,
+    PrizePoolAbi,
+    'withdrawInstantlyFrom',
+    params,
+    'Withdraw'
+  )
+}
+
+const handleWithdrawWithTimelock = async (
+  setTx,
+  provider,
+  contractAddress,
+  ticketAddress,
+  usersAddress,
+  withdrawAmount,
+  decimals
+) => {
+  if (!withdrawAmount) {
+    poolToast.error(`Withdraw Amount needs to be filled in`)
+    return
+  }
+
+  const params = [usersAddress, ethers.utils.parseUnits(withdrawAmount, decimals), ticketAddress]
+
+  await sendTx(
+    setTx,
+    provider,
+    contractAddress,
+    PrizePoolAbi,
+    'withdrawWithTimelockFrom',
+    params,
+    'Withdraw'
+  )
+}
+
+export const WithdrawForm = (props) => {
+  const { setTx, withdrawAmount, setWithdrawAmount } = props
+
+  const walletContext = useContext(WalletContext)
+  const [poolAddresses] = useAtom(poolAddressesAtom)
+  const [usersAddress] = useAtom(usersAddressAtom)
+  const [poolChainValues] = useAtom(poolChainValuesAtom)
+  const [usersChainValues] = useAtom(userChainValuesAtom)
+  const [network] = useAtom(networkAtom)
+
+  const [exitFees, setExitFees] = useState({
+    earlyExitFee: null,
+    timelockDurationSeconds: null,
+    credit: null,
+    fetched: false
+  })
+  const debouncedWithdrawAmount = useDebounce(withdrawAmount, 300)
+
+  const { prizePool, ticket: ticketAddress } = poolAddresses
+  const provider = walletContext.state.provider
+  const { usersTicketBalance } = usersChainValues
+  const { earlyExitFee, timelockDurationSeconds } = exitFees
+  const { isRngRequested, tokenDecimals, maxTimelockDuration } = poolChainValues
   const poolIsLocked = isRngRequested
-  const tokenSymbol = poolChainValues.tokenSymbol || 'TOKEN'
-  const ticketSymbol = poolChainValues.ticketSymbol || 'TICK'
+  const tokenSymbol = poolChainValues.tokenSymbol
 
-  let instantTotal = ethers.utils.bigNumberify(0)
-  if (withdrawAmount) {
-    if (exitFee && exitFee.gt(0) && withdrawType === 'instant') {
-      instantTotal = ethers.utils.parseUnits(withdrawAmount, tokenDecimals).sub(exitFee)
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    if (earlyExitFee.gt(0)) {
+      handleWithdrawInstantly(
+        setTx,
+        provider,
+        prizePool,
+        ticketAddress,
+        usersAddress,
+        withdrawAmount,
+        earlyExitFee,
+        tokenDecimals
+      )
     } else {
-      instantTotal = ethers.utils.parseUnits(withdrawAmount, tokenDecimals)
+      handleWithdrawWithTimelock(
+        setTx,
+        provider,
+        prizePool,
+        ticketAddress,
+        usersAddress,
+        withdrawAmount,
+        tokenDecimals
+      )
     }
   }
 
-  let withdrawAmountBN
-  let overBalance = false
-  try {
-    withdrawAmountBN = ethers.utils.parseUnits(withdrawAmount || '0', tokenDecimals)
-    overBalance = withdrawAmount && usersTicketBalance && usersTicketBalance.lt(withdrawAmountBN)
-  } catch (e) {
-    console.error(e)
-  }
+  useEffect(() => {
+    const t = async () => {
+      if (debouncedWithdrawAmount) {
+        const result = await fetchExitFee(
+          network.name,
+          usersAddress,
+          prizePool,
+          ticketAddress,
+          ethers.utils.parseUnits(debouncedWithdrawAmount, tokenDecimals)
+        )
+        setExitFees(result)
+      } else {
+        setExitFees({
+          earlyExitFee: null,
+          timelockDurationSeconds: null,
+          credit: null,
+          fetched: false
+        })
+      }
+    }
 
-  let ticketBal = ethers.utils.bigNumberify(0)
-  if (usersTicketBalance) {
-    ticketBal = ethers.utils.formatUnits(usersTicketBalance, tokenDecimals)
-  }
+    t()
+  }, [debouncedWithdrawAmount])
 
-  const timelockCredit = '?'
+  const withdrawAmountBN = withdrawAmount
+    ? ethers.utils.parseUnits(withdrawAmount, tokenDecimals)
+    : ethers.utils.bigNumberify(0)
+  const overBalance = withdrawAmountBN.gt(usersTicketBalance)
+  const ticketBal = usersTicketBalance
+    ? ethers.utils.formatUnits(usersTicketBalance, tokenDecimals)
+    : '0'
+  const newOdds = calculateOdds(
+    usersTicketBalance.sub(withdrawAmountBN),
+    poolChainValues.ticketTotalSupply.sub(withdrawAmountBN),
+    poolChainValues.ticketDecimals,
+    poolChainValues.numberOfWinners
+  )
+  const formattedOdds = numberWithCommas(newOdds, { precision: 2 })
 
   if (poolIsLocked) {
     return (
@@ -87,165 +202,232 @@ export const WithdrawForm = (props) => {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <RadioInputGroup
-          label={
-            <>
-              <div className='text-sm'>
-                What type of withdraw?{' '}
-                <PTHint
-                  title='On fairness fees'
-                  tip={
-                    <>
-                      <div className='my-2 text-xs sm:text-sm'>
-                        To maintain fairness your funds need to contribute interest towards the
-                        prize each week. You can:
-                      </div>
-                      {/* <div className='my-2 text-xs sm:text-sm'>
-                        1) SCHEDULE: receive $1000 DAI once enough interest has been provided to the
-                        prize
-                      </div> */}
-                      <div className='my-2 text-xs sm:text-sm'>
-                        INSTANT: pay $1.90 to withdraw right now and forfeit the interest that
-                        would go towards the prize
-                      </div>
-                    </>
-                  }
-                />
-              </div>
-            </>
-          }
-          name='withdrawType'
-          onChange={handleWithdrawTypeChange}
-          value={withdrawType}
-          radios={[
-            // {
-            //   value: 'scheduled',
-            //   label: 'scheduled'
-            // },
-            {
-              value: 'instant',
-              label: 'instant'
-            }
-          ]}
-        />
-
         <TextInputGroup
           id='withdrawAmount'
           name='withdrawAmount'
           label='Withdraw amounts'
           required
+          isError={overBalance}
           type='number'
           pattern='\d+'
           unit={tokenSymbol}
           onChange={(e) => setWithdrawAmount(e.target.value)}
           value={withdrawAmount}
           rightLabel={
-            tokenSymbol && (
-              <>
-                <button
-                  type='button'
-                  onClick={(e) => {
-                    e.preventDefault()
-                    setWithdrawAmount(ticketBal)
-                  }}
-                >
-                  {/* Balance:  */}
-                  MAX - {numberWithCommas(ticketBal, { precision: 4 })} {tokenSymbol}
-                </button>
-              </>
-            )
+            <RightLabelButton
+              onClick={(e) => {
+                e.preventDefault()
+                setWithdrawAmount(ticketBal)
+              }}
+            >
+              {numberWithCommas(ticketBal, { precision: 4 })} {tokenSymbol}
+            </RightLabelButton>
           }
         />
 
         {overBalance && (
-          <>
-            <div className='text-yellow-1'>
-              You only have {displayAmountInEther(usersTicketBalance, { decimals: tokenDecimals })}{' '}
-              tickets.
-              <br />
-              The maximum you can withdraw is{' '}
-              {displayAmountInEther(usersTicketBalance, {
-                precision: 2,
-                decimals: tokenDecimals
-              })}{' '}
-              {tokenSymbol}.
-            </div>
-          </>
+          <div className='text-orange-500 ml-4'>
+            The maximum you can withdraw is{' '}
+            {displayAmountInEther(usersTicketBalance, {
+              precision: 2,
+              decimals: tokenDecimals
+            })}{' '}
+            {tokenSymbol}.
+          </div>
         )}
 
-        {!overBalance && exitFee && withdrawType === 'instant' && (
-          <>
-            {/* <TextInputGroup
-          id='maxExitFee'
-          label={<>
-            Max Exit Fee <span className='text-default italic'> (in {tokenSymbol})</span>
-          </>}
-          required
-          type='number'
-          pattern='\d+'
-          onChange={(e) => setMaxExitFee(e.target.value)}
-          value={maxExitFee}
+        {withdrawAmount && !overBalance && (
+          <span className='text-xs sm:text-sm text-highlight-1 ml-0 sm:ml-4'>
+            After withdrawing {withdrawAmount} {tokenSymbol} your odds of winning are now 1 in{' '}
+            {formattedOdds}{' '}
+          </span>
+        )}
+
+        {earlyExitFee && !earlyExitFee.isZero() && (
+          <div className='flex mt-8 sm:mb-0 flex-col sm:flex-row'>
+            <WithdrawGauge
+              timelockDurationSeconds={timelockDurationSeconds}
+              maxTimelockDuration={maxTimelockDuration}
+            />
+
+            <InnerCard className='text-center height-fit-content sm:mt-6'>
+              <div className='text-base sm:text-xl text-accent-1 mb-4'>
+                Oh no! You're attempting to withdraw early and therefore, are subject to a fairness
+                fee.
+              </div>
+              <a
+                href='https://docs.pooltogether.com/protocol/prize-pool/fairness'
+                className={'underline text-accent-1 trans hover:opacity-50 text-center mx-auto'}
+              >
+                Read more about Fairness
+              </a>
+            </InnerCard>
+          </div>
+        )}
+
+        <WithdrawButtons
+          exitFees={exitFees}
+          resetForm={() => {
+            setWithdrawAmount('')
+          }}
+          tokenSymbol={tokenSymbol}
+          tokenDecimals={tokenDecimals}
         />
- */}
-            <div className='text-yellow-1'>
-              You will receive {displayAmountInEther(instantTotal, { decimals: tokenDecimals })}{' '}
-              {tokenSymbol} now&nbsp;
-              {exitFee.eq(0) ? (
-                <>
-                  and burn {displayAmountInEther(burnedCredit, { decimals: tokenDecimals })} from
-                  your credit
-                </>
-              ) : (
-                <>
-                  and forfeit {displayAmountInEther(exitFee, { decimals: tokenDecimals })}{' '}
-                  {tokenSymbol} as interest
-                </>
-              )}
-            </div>
-
-            {exitFee.eq(0) && (
-              <>
-                <div className='text-sm text-default my-6'>
-                  <em className='text-white'>Why is the fairness fee $0?</em>
-                  <br />
-                  <br />
-                  The fairness fee is based on the previous prize and other factors (see
-                  documentation or contract code).
-                  <br />
-                  <br />
-                  You may want to pay fairness fee's on behalf of your users and/or hide the
-                  fairness fee when it's $0.
-                </div>
-              </>
-            )}
-          </>
-        )}
-
-        {!overBalance && timelockDurationSeconds && withdrawType !== 'instant' && (
-          <>
-            <div className='text-yellow-1'>
-              You will receive {displayAmountInEther(instantTotal, { decimals: tokenDecimals })}{' '}
-              {tokenSymbol}&nbsp;
-              {timelockDurationSeconds.eq(0) ? (
-                <>
-                  now and burn {timelockCredit} {tokenSymbol} from your credit
-                </>
-              ) : (
-                <>
-                  in {numberWithCommas(timelockDurationSeconds, { precision: 0 }).toString()}{' '}
-                  seconds
-                </>
-              )}
-            </div>
-          </>
-        )}
-
-        <div className='my-5'>
-          <Button disabled={overBalance} color='warning' size='lg'>
-            Withdraw
-          </Button>
-        </div>
       </form>
     </>
   )
 }
+
+const WithdrawButtons = (props) => {
+  const { overBalance, resetForm, exitFees, tokenSymbol, tokenDecimals } = props
+  const { earlyExitFee, fetched: exitFeesFetched } = exitFees
+
+  if (earlyExitFee && !earlyExitFee.isZero()) {
+    return (
+      <div className='my-5 flex flex-col sm:flex-row '>
+        <Button
+          disabled={overBalance}
+          color='secondary'
+          size='lg'
+          fullWidth
+          type='button'
+          className='mr-4'
+          onClick={(e) => {
+            e.preventDefault()
+            resetForm()
+          }}
+        >
+          Cancel withdrawal
+        </Button>
+        <Button color='text_warning' size='lg' fullWidth className='ml-0 sm:ml-4 mt-4 sm:mt-0'>
+          {`Withdraw anyway and pay ${ethers.utils.formatUnits(earlyExitFee, tokenDecimals)}
+           ${tokenSymbol}`}
+        </Button>
+      </div>
+    )
+  }
+
+  return (
+    <div className='my-5 flex flex-col sm:flex-row '>
+      <Button disabled={overBalance || !exitFeesFetched} color='warning' size='lg'>
+        Withdraw
+      </Button>
+    </div>
+  )
+}
+
+const WithdrawGauge = (props) => {
+  const { timelockDurationSeconds, maxTimelockDuration } = props
+
+  const percentTimeRemaining =
+    timelockDurationSeconds &&
+    maxTimelockDuration &&
+    Math.round((timelockDurationSeconds.toNumber() / maxTimelockDuration.toNumber()) * 100)
+  const { time, timeType } = getTimeLeftDisplayValues(timelockDurationSeconds.toNumber())
+
+  return (
+    <>
+      <div className='hidden sm:block mr-0 sm:mr-20 ml-0 sm:ml-8' style={{ maxHeight: '240px' }}>
+        <Gauge
+          value={Math.abs(100 - percentTimeRemaining)}
+          label={<GaugeLabel time={time} timeType={timeType} />}
+        />
+      </div>
+      <div className='block sm:hidden text-orange-500 text-center mb-2'>
+        {time} more {timeType} to go until free withdrawal
+      </div>
+    </>
+  )
+}
+
+const getTimeLeftDisplayValues = (secondsLeft) => {
+  const currentDate = new Date(Date.now())
+  const futureDate = addSeconds(currentDate, secondsLeft)
+  const { days, hours, minutes, seconds } = subtractDates(futureDate, currentDate)
+
+  let time = 0
+  let timeType = ''
+  if (days) {
+    time = days
+    timeType = days === 1 ? 'day' : 'days'
+  } else if (hours) {
+    time = hours
+    timeType = hours === 1 ? 'hour' : 'hours'
+  } else if (minutes) {
+    time = minutes
+    timeType = minutes === 1 ? 'minute' : 'minutes'
+  } else {
+    time = seconds
+    timeType = seconds === 1 ? 'second' : 'seconds'
+  }
+  return { time, timeType }
+}
+
+const GaugeLabel = (props) => {
+  const { time, timeType } = props
+
+  return (
+    <div className='flex flex-col'>
+      <div className='text-8xl text-highlight-1 leading-none mt-4 font-bold'>{time}</div>
+      <div className='text-xl text-highlight-1 mb-6 font-bold'>{timeType} left</div>
+      <div className='text-highlight-1'>
+        {time} more {timeType} to go until free withdrawal
+      </div>
+    </div>
+  )
+}
+
+//         {!overBalance && earlyExitFee && withdrawType === 'instant' && (
+//   <>
+//   <div className='text-yellow-1'>
+//     You will receive {displayAmountInEther(instantTotal, { decimals: tokenDecimals })}{' '}
+//     {tokenSymbol} now&nbsp;
+//     {earlyExitFee.eq(0) ? (
+//       <>
+//         and burn {displayAmountInEther(burnedCredit, { decimals: tokenDecimals })} from
+//         your credit
+//       </>
+//     ) : (
+//       <>
+//         and forfeit {displayAmountInEther(earlyExitFee, { decimals: tokenDecimals })}{' '}
+//         {tokenSymbol} as interest
+//       </>
+//     )}
+//   </div>
+
+//   {earlyExitFee.eq(0) && (
+//     <>
+//       <div className='text-sm text-default my-6'>
+//         <em className='text-white'>Why is the fairness fee $0?</em>
+//         <br />
+//         <br />
+//         The fairness fee is based on the previous prize and other factors (see
+//         documentation or contract code).
+//         <br />
+//         <br />
+//         You may want to pay fairness fee's on behalf of your users and/or hide the
+//         fairness fee when it's $0.
+//       </div>
+//     </>
+//   )}
+// </>
+// )}
+
+// {!overBalance && timelockDurationSeconds && withdrawType !== 'instant' && (
+// <>
+//   <div className='text-yellow-1'>
+//     You will receive {displayAmountInEther(instantTotal, { decimals: tokenDecimals })}{' '}
+//     {tokenSymbol}&nbsp;
+//     {timelockDurationSeconds.eq(0) ? (
+//       <>
+//         now and burn {timelockCredit} {tokenSymbol} from your credit
+//       </>
+//     ) : (
+//       <>
+//         in {numberWithCommas(timelockDurationSeconds, { precision: 0 }).toString()}{' '}
+//         seconds
+//       </>
+//     )}
+//   </div>
+// </>
+// )}
