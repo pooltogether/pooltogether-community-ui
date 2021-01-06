@@ -1,88 +1,27 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import { ethers } from 'ethers'
 import { useAtom } from 'jotai'
-import PrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PrizePool'
 
 import { TxMessage } from 'lib/components/TxMessage'
-import { WalletContext } from 'lib/components/WalletContextProvider'
 import { WithdrawForm } from 'lib/components/WithdrawForm'
-import { useDebounce } from 'lib/hooks/useDebounce'
-import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { fetchExitFee } from 'lib/utils/fetchExitFee'
-import { poolToast } from 'lib/utils/poolToast'
-import { sendTx } from 'lib/utils/sendTx'
-import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import { networkAtom } from 'lib/hooks/useNetwork'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
-
-const handleWithdrawSubmit = async (
-  setTx,
-  provider,
-  contractAddress,
-  ticketAddress,
-  usersAddress,
-  withdrawAmount,
-  withdrawType,
-  maxExitFee,
-  decimals
-) => {
-  if (!withdrawAmount) {
-    poolToast.error(`Withdraw Amount needs to be filled in`)
-    return
-  }
-
-  const params = [usersAddress, ethers.utils.parseUnits(withdrawAmount, decimals), ticketAddress]
-
-  let method = 'withdrawWithTimelockFrom'
-  if (withdrawType === 'instant') {
-    method = 'withdrawInstantlyFrom'
-    params.push(maxExitFee)
-  }
-
-  await sendTx(setTx, provider, contractAddress, PrizePoolAbi, method, params, 'Withdraw')
-}
+import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
+import { WalletContext } from 'lib/components/WalletContextProvider'
+import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
+import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
+import { errorStateAtom } from 'lib/components/PoolData'
 
 export const WithdrawUI = (props) => {
   const walletContext = useContext(WalletContext)
-  const [poolAddresses] = useAtom(poolAddressesAtom)
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const [usersAddress] = useAtom(usersAddressAtom)
-  const [network] = useAtom(networkAtom)
-
-  const { tokenDecimals } = poolChainValues
-  const { prizePool, ticket: ticketAddress } = poolAddresses
-
   const provider = walletContext.state.provider
-
-  const [exitFees, setExitFees] = useState({})
-  const maxExitFee = exitFees?.exitFee
+  const [usersAddress] = useAtom(usersAddressAtom)
+  const [poolAddresses] = useAtom(poolAddressesAtom)
+  const [prizePoolType] = useAtom(prizePoolTypeAtom)
+  const [errorState, setErrorState] = useAtom(errorStateAtom)
+  const [contractVersions] = useAtom(contractVersionsAtom)
+  const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
 
   const [withdrawAmount, setWithdrawAmount] = useState('')
-  const [withdrawType, setWithdrawType] = useState('scheduled')
-
-  const debouncedWithdrawAmount = useDebounce(withdrawAmount, 300)
-
-  useEffect(() => {
-    const t = async () => {
-      if (debouncedWithdrawAmount) {
-        const result = await fetchExitFee(
-          network.name,
-          usersAddress,
-          prizePool,
-          ticketAddress,
-          ethers.utils.parseUnits(debouncedWithdrawAmount, tokenDecimals)
-        )
-        setExitFees(result)
-      } else {
-        setExitFees(null)
-      }
-    }
-
-    t()
-  }, [debouncedWithdrawAmount])
-
   const [tx, setTx] = useState({
     inWallet: false,
     sent: false,
@@ -101,6 +40,19 @@ export const WithdrawUI = (props) => {
     })
   }
 
+  useEffect(() => {
+    if (tx.completed) {
+      fetchPoolChainValues(
+        provider,
+        poolAddresses,
+        prizePoolType,
+        setPoolChainValues,
+        contractVersions.prizeStrategy.contract,
+        setErrorState
+      )
+    }
+  }, [tx.completed])
+
   if (!usersAddress) {
     return <ConnectWalletButton />
   }
@@ -113,12 +65,7 @@ export const WithdrawUI = (props) => {
     return (
       <>
         <div className='mb-4 sm:mb-8 text-sm sm:text-base text-accent-1'>{withdrawText}</div>
-        <TxMessage
-          txType='Withdraw'
-          tx={tx}
-          handleReset={resetState}
-          resetButtonText='Withdraw more'
-        />
+        <TxMessage txType='Withdraw' tx={tx} handleReset={resetState} />
       </>
     )
   }
@@ -127,32 +74,9 @@ export const WithdrawUI = (props) => {
     <>
       <div className='mb-4 sm:mb-8 text-sm sm:text-base text-accent-1'>{withdrawText}</div>
       <WithdrawForm
-        {...props}
-        exitFees={exitFees}
-        handleSubmit={(e) => {
-          e.preventDefault()
-
-          handleWithdrawSubmit(
-            setTx,
-            provider,
-            prizePool,
-            ticketAddress,
-            usersAddress,
-            withdrawAmount,
-            withdrawType,
-            maxExitFee,
-            tokenDecimals
-          )
-        }}
-        vars={{
-          maxExitFee,
-          withdrawAmount,
-          withdrawType
-        }}
-        stateSetters={{
-          setWithdrawAmount,
-          setWithdrawType
-        }}
+        setTx={setTx}
+        withdrawAmount={withdrawAmount}
+        setWithdrawAmount={setWithdrawAmount}
       />
     </>
   )
