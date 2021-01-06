@@ -59,33 +59,6 @@ const handleWithdrawInstantly = async (
   )
 }
 
-const handleWithdrawWithTimelock = async (
-  setTx,
-  provider,
-  contractAddress,
-  ticketAddress,
-  usersAddress,
-  withdrawAmount,
-  decimals
-) => {
-  if (!withdrawAmount) {
-    poolToast.error(`Withdraw Amount needs to be filled in`)
-    return
-  }
-
-  const params = [usersAddress, ethers.utils.parseUnits(withdrawAmount, decimals), ticketAddress]
-
-  await sendTx(
-    setTx,
-    provider,
-    contractAddress,
-    PrizePoolAbi,
-    'withdrawWithTimelockFrom',
-    params,
-    'Withdraw'
-  )
-}
-
 export const WithdrawForm = (props) => {
   const { setTx, withdrawAmount, setWithdrawAmount } = props
 
@@ -115,28 +88,16 @@ export const WithdrawForm = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    if (earlyExitFee.gt(0)) {
-      handleWithdrawInstantly(
-        setTx,
-        provider,
-        prizePool,
-        ticketAddress,
-        usersAddress,
-        withdrawAmount,
-        earlyExitFee,
-        tokenDecimals
-      )
-    } else {
-      handleWithdrawWithTimelock(
-        setTx,
-        provider,
-        prizePool,
-        ticketAddress,
-        usersAddress,
-        withdrawAmount,
-        tokenDecimals
-      )
-    }
+    handleWithdrawInstantly(
+      setTx,
+      provider,
+      prizePool,
+      ticketAddress,
+      usersAddress,
+      withdrawAmount,
+      earlyExitFee,
+      tokenDecimals
+    )
   }
 
   useEffect(() => {
