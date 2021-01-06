@@ -124,9 +124,11 @@ export const TextInputGroup = (props) => {
       <div className='flex justify-between'>
         <Input {...inputProps} id={id} disabled={disabled} />
         {(unit || icon) && (
-          <div className='pl-1 sm:pl-2'>
+          <div className='pl-1 sm:pl-2 flex'>
+            {icon && (
+              <FeatherIcon icon={icon} className={classnames('w-4 sm:w-8 mr-2', iconColor)} />
+            )}
             {unit && <span className={unitsClassName}>{unit}</span>}
-            {icon && <FeatherIcon icon={icon} className={classnames('w-4 sm:w-8', iconColor)} />}
           </div>
         )}
       </div>
