@@ -20,24 +20,24 @@ export function ThemeContextProvider (props) {
     const body = document.body
     body.classList.add('theme-dark')
 
-    if (typeof window !== 'undefined' && window.matchMedia) {
-      const setThemeAutomatically = (newValue) => {
-        if (newValue === 'dark') {
-          body.classList.add('theme-dark')
-          body.classList.remove('theme-light')
+    // if (typeof window !== 'undefined' && window.matchMedia) {
+    //   const setThemeAutomatically = (newValue) => {
+    //     if (newValue === 'dark') {
+    //       body.classList.add('theme-dark')
+    //       body.classList.remove('theme-light')
 
-          setTheme('dark')
-        } else if (newValue === 'light') {
-          body.classList.add('theme-light')
-          body.classList.remove('theme-dark')
+    //       setTheme('dark')
+    //     } else if (newValue === 'light') {
+    //       body.classList.add('theme-light')
+    //       body.classList.remove('theme-dark')
 
-          setTheme('light')
-        }
-      }
+    //       setTheme('light')
+    //     }
+    //   }
 
-      // onLoad
-      setThemeAutomatically(stored)
-    }
+    //   // onLoad
+    //   setThemeAutomatically(stored)
+    // }
   }, [])
 
   const toggleTheme = (e) => {
