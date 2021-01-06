@@ -244,7 +244,7 @@ export const WithdrawForm = (props) => {
                 <b>
                   {withdrawAmount} {tokenSymbol}
                 </b>{' '}
-                your odds of winning are now <b>1 in {formattedOdds}</b>
+                your odds of winning would be <b>1 in {formattedOdds}</b>
               </>
             ) : (
               `Withdrawing everything will make you ineligible to win`
