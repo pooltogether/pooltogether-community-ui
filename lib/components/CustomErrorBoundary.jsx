@@ -6,6 +6,7 @@ import {
   SELECTED_WALLET_COOKIE_KEY
 } from 'lib/constants'
 import { poolToast } from 'lib/utils/poolToast'
+import { ErrorPage } from 'lib/components/ErrorPage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 
 export class ErrorBoundary extends React.Component {
