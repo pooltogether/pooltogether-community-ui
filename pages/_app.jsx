@@ -1,11 +1,13 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
+import * as Sentry from '@sentry/react'
+import { Integrations } from '@sentry/tracing'
 import { Provider as JotaiProvider } from 'jotai'
 import { QueryCache, ReactQueryCacheProvider } from 'react-query'
 
 import { Layout } from 'lib/components/Layout'
 import { ThemeContextProvider } from 'lib/components/contextProviders/ThemeContextProvider'
-import { ErrorBoundary } from 'lib/components/ErrorBoundary'
+import { ErrorBoundary, CustomErrorBoundary } from 'lib/components/CustomErrorBoundary'
 import { PoolData } from 'lib/components/PoolData'
 
 import 'react-toastify/dist/ReactToastify.css'
@@ -34,6 +36,16 @@ const DynamicWalletContextProvider = dynamic(
   { ssr: false }
 )
 
+if (process.env.NEXT_JS_SENTRY_DSN) {
+  Sentry.init({
+    dsn: process.env.NEXT_JS_SENTRY_DSN,
+    release: process.env.NEXT_JS_RELEASE_VERSION,
+    integrations: [
+      new Integrations.BrowserTracing(),
+    ],
+  })
+}
+
 function MyApp ({ Component, pageProps }) {
   return (
     <ErrorBoundary>
@@ -42,11 +54,11 @@ function MyApp ({ Component, pageProps }) {
           <ThemeContextProvider>
             <JotaiProvider>
               <Layout>
-                <ErrorBoundary>
+                <CustomErrorBoundary>
                   <PoolData>
                     <Component {...pageProps} />
                   </PoolData>
-                </ErrorBoundary>
+                </CustomErrorBoundary>
               </Layout>
             </JotaiProvider>
           </ThemeContextProvider>

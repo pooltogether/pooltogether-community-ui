@@ -3,6 +3,9 @@ import { ethers } from 'ethers'
 import Onboard from '@pooltogether/bnc-onboard'
 import Cookies from 'js-cookie'
 
+import {
+  SELECTED_WALLET_COOKIE_KEY
+} from 'lib/constants'
 import { nameToChainId } from 'lib/utils/nameToChainId'
 
 const debug = require('debug')('WalletContextProvider')
@@ -10,8 +13,6 @@ const debug = require('debug')('WalletContextProvider')
 const INFURA_KEY = process.env.NEXT_JS_INFURA_KEY
 const FORTMATIC_KEY = process.env.NEXT_JS_FORTMATIC_API_KEY
 const PORTIS_KEY = process.env.NEXT_JS_PORTIS_API_KEY
-
-const SELECTED_WALLET_COOKIE_KEY = 'selectedWallet'
 
 // let networkName = 'mainnet'
 let networkName = 'rinkeby'
@@ -222,8 +223,6 @@ export const WalletContextProvider = (props) => {
       doConnectWallet(null, setOnboardState)
     }
   }
-
-  debug('re-render')
 
   return (
     <WalletContext.Provider

@@ -10,7 +10,8 @@
     "build": "next build && next export && yarn postexport",
     "start": "next start",
     "postexport": "node post-export.js",
-    "distrelease": "yarn build",
+    "release": "./scripts/sentry-release.sh",
+    "distrelease": "export NEXT_JS_RELEASE_VERSION=$SENTRY_PROJECT:$(sentry-cli releases propose-version) && yarn build && yarn release",
     "format": "yarn prettier --write .",
     "check-format": "yarn prettier --check ."
   },
@@ -36,6 +37,8 @@
     "@pooltogether/pooltogether-contracts": "^3.0.1",
     "@reach/menu-button": "^0.11.2",
     "@reach/tooltip": "0.10.5",
+    "@sentry/react": "^5.29.2",
+    "@sentry/tracing": "^5.29.2",
     "autoprefixer": "^9.8.1",
     "axios": "^0.21.0",
     "babel-jest": "^26.3.0",
