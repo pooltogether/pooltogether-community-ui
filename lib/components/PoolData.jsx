@@ -87,7 +87,7 @@ const PoolDataInitialization = (props) => {
       <div className='text-center text-xl'>
         <LoadingDots />
         <br />
-        <h1>Fetching chain values ...</h1>
+        <h1>Loading ...</h1>
       </div>
     )
   }

@@ -150,7 +150,7 @@ const SinglePrizeItem = (props) => {
   return (
     <div className={'flex mx-auto my-2 sm:my-8 leading-none'}>
       {imageUrl && <img src={imageUrl} className='w-4 h-4 sm:w-16 sm:h-16 mr-4 my-auto' />}
-      <span className='font-bold text-2xl sm:text-9xl mr-4 my-auto text-flashy-2'>
+      <span className='font-bold text-2xl sm:text-9xl mr-4 my-auto text-flashy'>
         {token.formattedBalance}
       </span>
       <span className='font-bolt text-sm sm:text-4xl mt-auto mb-1'>{token.symbol}</span>
@@ -169,7 +169,7 @@ const PrizeListItem = (props) => {
   return (
     <li key={index + token.symbol} className='flex w-full justify-between mb-2'>
       <span
-        className={classnames('font-bold text-flashy-2 leading-none', {
+        className={classnames('font-bold text-flashy leading-none', {
           'text-md sm:text-xl': small,
           'text-xl sm:text-5xl': !small
         })}

@@ -34,6 +34,12 @@ const COLOR_CLASSES = {
     textColorClasses:
       'text-orange-500 hover:text-orange-600 focus:text-orange-600 active:shadow-orange focus:shadow-orange'
   },
+  text_warning: {
+    backgroundClasses:
+      'bg-orange-500 bg-opacity-0 hover:bg-opacity-15 focus:bg-opacity-15 active:bg-opacity-15',
+    borderClasses: 'border border-transparent',
+    textColorClasses: 'text-orange-500 underline hover:no-underline active:no-underline'
+  },
   disabled: {
     backgroundClasses: 'bg-transparent',
     borderClasses: 'border border-gray-400 focus:border-gray-400',
@@ -61,6 +67,9 @@ const getColorClasses = (color, disabled) => {
     }
     case 'warning': {
       return COLOR_CLASSES.warning
+    }
+    case 'text_warning': {
+      return COLOR_CLASSES.text_warning
     }
     default: {
       return COLOR_CLASSES.primary
@@ -167,7 +176,7 @@ export const Button = (props) => {
   } = props
 
   let defaultClasses =
-    'inline-block text-center leading-snug tracking-wide outline-none focus:outline-none active:outline-none no-underline font-bold '
+    'inline-block text-center leading-snug tracking-wide outline-none focus:outline-none active:outline-none font-bold '
 
   if (fullWidth) {
     defaultClasses += 'w-full'
@@ -221,7 +230,7 @@ export const Button = (props) => {
       <a
         href={href}
         target='_blank'
-        className='trans text-xs sm:text-base no-underline border-0 active:outline-none hover:outline-none focus:outline-none width-max-content'
+        className='trans text-xs sm:text-base border-0 active:outline-none hover:outline-none focus:outline-none width-max-content'
       >
         <button {...newProps} ref={buttonRef} className={className}>
           {children}
