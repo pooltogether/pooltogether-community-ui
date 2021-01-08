@@ -39,19 +39,21 @@ export const errorStateAtom = atom(EMPTY_ERROR_STATE)
  */
 export const PoolData = (props) => {
   const router = useRouter()
-  const { prizePoolAddress } = router.query
+  const { poolAlias, prizePoolAddress } = router.query
 
   const [errorState] = useAtom(errorStateAtom)
 
   // If there's no address, we don't need to check it or fetch data
-  if (!prizePoolAddress) {
+  if (!poolAlias && !prizePoolAddress) {
     return props.children
   }
 
-  try {
-    ethers.utils.getAddress(String(prizePoolAddress))
-  } catch (e) {
-    throw new Error(`Incorrectly formatted Ethereum address! ${prizePoolAddress}`)
+  if (prizePoolAddress) {
+    try {
+      ethers.utils.getAddress(String(prizePoolAddress))
+    } catch (e) {
+      throw new Error(`Incorrectly formatted Ethereum address! ${prizePoolAddress}`)
+    }
   }
 
   // Error Catching

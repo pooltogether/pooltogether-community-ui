@@ -128,14 +128,24 @@ export const WithdrawForm = (props) => {
     ? ethers.utils.parseUnits(withdrawAmount, tokenDecimals)
     : ethers.utils.bigNumberify(0)
   const overBalance = withdrawAmountBN.gt(usersTicketBalance)
-  const ticketBal = usersTicketBalance
+  const ticketBal = (usersTicketBalance && tokenDecimals)
     ? ethers.utils.formatUnits(usersTicketBalance, tokenDecimals)
     : '0'
+  
+  const {
+    ticketDecimals,
+    ticketTotalSupply,
+    numberOfWinners,
+  } = poolChainValues
+  const totalSupplyLessWithdrawAmountBN = ticketTotalSupply ?
+    ticketTotalSupply.sub(withdrawAmountBN) :
+    ethers.utils.bigNumberify(0)
+
   const newOdds = calculateOdds(
     usersTicketBalance.sub(withdrawAmountBN),
-    poolChainValues.ticketTotalSupply.sub(withdrawAmountBN),
-    poolChainValues.ticketDecimals,
-    poolChainValues.numberOfWinners
+    totalSupplyLessWithdrawAmountBN,
+    ticketDecimals,
+    numberOfWinners
   )
   const formattedOdds = numberWithCommas(newOdds, { precision: 2 })
 
@@ -212,8 +222,6 @@ export const WithdrawForm = (props) => {
             )}
           </span>
         )}
-
-        {}
 
         {earlyExitFee && !earlyExitFee.isZero() && (
           <div className='flex mt-8 sm:mb-0 flex-col sm:flex-row'>
