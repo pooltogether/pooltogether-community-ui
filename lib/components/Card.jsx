@@ -4,7 +4,7 @@ import classnames from 'classnames'
 export const Card = (props) => {
   const { children, className } = props
   
-  const paddingClasses = props.small ? 'py-6 px-3' : 'py-3 px-3 sm:py-6 sm:px-12'
+  const paddingClasses = props.small ? 'py-6 px-3' : 'py-3 px-3 sm:pt-4 sm:pb-6 sm:px-12'
 
   return (
     <div

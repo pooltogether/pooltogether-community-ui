@@ -8,6 +8,7 @@ import { DepositUI } from 'lib/components/DepositUI'
 import { PrizeCard } from 'lib/components/PrizeCard'
 import { WithdrawUI } from 'lib/components/WithdrawUI'
 import { DepositorOddsCards } from 'lib/components/DepositorOddsCards'
+import { RelativeInternalLink } from 'lib/components/RelativeInternalLink'
 import { networkAtom } from 'lib/hooks/useNetwork'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 
@@ -29,18 +30,13 @@ export const DepositorUI = (props) => {
           <WithdrawUI />
         </Collapse>
       </Card>
-      <Link
-        href='/pools/[networkName]/[prizePoolAddress]/manage'
-        as={`/pools/${network.name}/${poolAddresses.prizePool}/manage`}
-      >
-        <a
-          className={
-            'text-base sm:text-xl underline font-bold text-accent-1 trans hover:opacity-50 text-center mx-auto'
-          }
+      <div className='flex justify-center'>
+        <RelativeInternalLink
+          link='/manage'
         >
           View Pool Details
-        </a>
-      </Link>
+        </RelativeInternalLink>
+      </div>
     </>
   )
 }

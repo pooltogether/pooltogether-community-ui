@@ -63,27 +63,27 @@ export const TextInputGroup = (props) => {
   backgroundClasses = backgroundClasses
     ? backgroundClasses
     : classnames(backgroundClasses, {
-        'bg-grey': disabled
+        'bg-secondary opacity-30': disabled
       })
 
   labelClassName = labelClassName
     ? labelClassName
     : classnames(DEFAULT_INPUT_LABEL_CLASSES, {
-        'cursor-not-allowed font-whitesmoke': disabled,
+        'cursor-not-allowed': disabled,
         'text-accent-1': !disabled
       })
 
   rightLabelClassName = rightLabelClassName
     ? rightLabelClassName
     : classnames(DEFAULT_INPUT_LABEL_CLASSES, 'text-right', {
-        'cursor-not-allowed font-whitesmoke': disabled,
+        'cursor-not-allowed': disabled,
         'text-accent-1': !disabled
       })
 
   unitsClassName = unitsClassName
     ? unitsClassName
     : classnames('font-bold text-xs sm:text-sm whitespace-no-wrap', {
-        'cursor-not-allowed font-whitesmoke': disabled,
+        'cursor-not-allowed': disabled,
         'font-white': !disabled
       })
 

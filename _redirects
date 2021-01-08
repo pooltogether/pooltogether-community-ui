@@ -1,8 +1,7 @@
-/basis /pools/mainnet/0x1Ee6194b0e28C12dF0FD107e5eb883Aa071F8C9a 301
+/:poolAlias/home /[poolAlias]/home.html     200
+/:poolAlias/manage /[poolAlias]/manage.html 200
+/:poolAlias /[pools].html                   200
 
-/pools/:networkName/:prizePoolAddress/home /pools/[networkName]/[prizePoolAddress]/home.html 200
+/pools/:networkName/:prizePoolAddress/home /pools/[networkName]/[prizePoolAddress]/home.html     200
 /pools/:networkName/:prizePoolAddress/manage /pools/[networkName]/[prizePoolAddress]/manage.html 200
-/pools/:networkName/:prizePoolAddress /pools/[networkName]/[prizePoolAddress].html 200
-
-/pools/:networkName                   /pools/[networkName].html               200
-
+/pools/:networkName/:prizePoolAddress /pools/[networkName]/[prizePoolAddress].html               200

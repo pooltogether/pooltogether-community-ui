@@ -3,7 +3,6 @@ import FeatherIcon from 'feather-icons-react'
 import { useAtom } from 'jotai'
 
 import { formatEtherscanAddressUrl } from 'lib/utils/formatEtherscanAddressUrl'
-import { nameToChainId } from 'lib/utils/nameToChainId'
 import { shorten } from 'lib/utils/shorten'
 import { networkAtom } from 'lib/hooks/useNetwork'
 

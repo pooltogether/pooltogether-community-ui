@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react'
+import React from 'react'
 import classnames from 'classnames'
-import { omit } from 'lodash'
 import Link from 'next/link'
+import { pick, isUndefined } from 'lodash'
 
 const COLOR_CLASSES = {
   primary: {
@@ -45,6 +45,51 @@ const COLOR_CLASSES = {
     borderClasses: 'border border-gray-400 focus:border-gray-400',
     textColorClasses: 'text-gray-400 focus:shadow-gray'
   }
+}
+
+export function getButtonClasses(props) {
+  let {
+    color,
+    className,
+    disabled,
+    paddingClasses,
+    roundedClasses,
+    size,
+    textSizeClasses,
+    transitionClasses,
+    fullWidth,
+    noPad
+  } = props
+
+  let defaultClasses =
+    'inline-block text-center leading-snug tracking-wide outline-none focus:outline-none active:outline-none font-bold '
+
+  if (fullWidth) {
+    defaultClasses += 'w-full'
+  } else {
+    defaultClasses += 'width-max-content'
+  }
+
+  const { backgroundClasses, borderClasses, textColorClasses } = getColorClasses(color, disabled)
+  paddingClasses = getPaddingClasses(paddingClasses, noPad)
+  roundedClasses = getRoundedClasses(roundedClasses)
+  textSizeClasses = getTextSizeClasses(textSizeClasses, size)
+  transitionClasses = getTransitionClasses(transitionClasses)
+  let cursorClasses = getCursorClasses(disabled)
+
+  return classnames(
+    backgroundClasses,
+    borderClasses,
+    textColorClasses,
+    defaultClasses,
+    paddingClasses,
+    roundedClasses,
+    size,
+    textSizeClasses,
+    transitionClasses,
+    cursorClasses,
+    className
+  )
 }
 
 const getColorClasses = (color, disabled) => {
@@ -129,64 +174,32 @@ const getRoundedClasses = (roundedClasses) => {
   return roundedClasses || 'rounded-full'
 }
 
-export const Button = (props) => {
+export function ButtonLink(props) {
   let {
     children,
-    color,
-    className,
-    disabled,
-    paddingClasses,
-    roundedClasses,
-    size,
-    textSizeClasses,
-    transitionClasses,
-    fullWidth,
-    noPad
+    as,
+    href,
   } = props
 
-  let defaultClasses =
-    'inline-block text-center leading-snug tracking-wide outline-none focus:outline-none active:outline-none font-bold '
+  const classes = getButtonClasses(props)
 
-  if (fullWidth) {
-    defaultClasses += 'w-full'
-  } else {
-    defaultClasses += 'width-max-content'
-  }
-
-  const { backgroundClasses, borderClasses, textColorClasses } = getColorClasses(color, disabled)
-  paddingClasses = getPaddingClasses(paddingClasses, noPad)
-  roundedClasses = getRoundedClasses(roundedClasses)
-  textSizeClasses = getTextSizeClasses(textSizeClasses, size)
-  transitionClasses = getTransitionClasses(transitionClasses)
-  let cursorClasses = getCursorClasses(disabled)
-
-  className = classnames(
-    backgroundClasses,
-    borderClasses,
-    textColorClasses,
-    defaultClasses,
-    paddingClasses,
-    roundedClasses,
-    size,
-    textSizeClasses,
-    transitionClasses,
-    cursorClasses,
-    className
-  )
-
-  const newProps = omit(props, [
-    'noAnim',
-    'paddingClasses',
-    'roundedClasses',
-    'size',
-    'textSizeClasses',
-    'transitionClasses',
-    'fullWidth'
+  const linkProps = pick(props, [
+    'target',
+    'rel',
   ])
 
-  return (
-    <button {...newProps} className={className}>
+  return <Link
+    href={href}
+    as={as}
+    scroll={false}
+  >
+    <a
+      {...linkProps}
+      className={classes}
+      onClick={(e) => e.stopPropagation()}
+    >
       {children}
-    </button>
-  )
+    </a>
+  </Link>
+
 }
