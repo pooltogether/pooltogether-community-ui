@@ -130,7 +130,7 @@ const Prizes = (props) => {
   }
 
   return (
-    <ul className='flex flex-col mt-2 max-w-xs mx-auto' style={{ minWidth: '190px' }}>
+    <ul className='flex flex-col max-w-xs mx-auto' style={{ minWidth: '190px' }}>
       {awardsWithBalances.map((token, index) => {
         return <PrizeListItem small={awards.length > 6} key={index} token={token} index={index} />
       })}
@@ -146,12 +146,12 @@ const SinglePrizeItem = (props) => {
   const imageUrl = data?.data?.image?.small
 
   return (
-    <div className={'flex mx-auto my-2 sm:my-8 leading-none'}>
+    <div className={'flex mx-auto my-2 sm:mt-0 sm:mb-2 leading-none'}>
       {imageUrl && <img src={imageUrl} className='w-4 h-4 sm:w-16 sm:h-16 mr-4 my-auto' />}
       <span className='font-bold text-2xl sm:text-9xl mr-4 my-auto text-flashy'>
         {token.formattedBalance}
       </span>
-      <span className='font-bolt text-sm sm:text-4xl mt-auto mb-1'>{token.symbol}</span>
+      <span className='font-bolt text-sm sm:text-4xl mt-auto mb-2'>{token.symbol}</span>
     </div>
   )
 }

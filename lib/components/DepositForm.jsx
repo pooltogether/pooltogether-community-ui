@@ -49,7 +49,9 @@ export const DepositForm = (props) => {
     console.error(e)
   }
 
-  const tokenBal = ethers.utils.formatUnits(usersTokenBalance, tokenDecimals)
+  const tokenBal = (usersTokenBalance && tokenDecimals) ?
+    ethers.utils.formatUnits(usersTokenBalance, tokenDecimals) :
+    ''
 
   if (poolIsLocked) {
     return (
