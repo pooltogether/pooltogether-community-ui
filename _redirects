@@ -1,6 +1,6 @@
 /:poolAlias/home /[poolAlias]/home.html     200
 /:poolAlias/manage /[poolAlias]/manage.html 200
-/:poolAlias /[pools].html                   200
+/:poolAlias /[poolAlias].html               200
 
 /pools/:networkName/:prizePoolAddress/home /pools/[networkName]/[prizePoolAddress]/home.html     200
 /pools/:networkName/:prizePoolAddress/manage /pools/[networkName]/[prizePoolAddress]/manage.html 200

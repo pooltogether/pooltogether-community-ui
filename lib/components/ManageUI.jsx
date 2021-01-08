@@ -4,12 +4,14 @@ import { useAtom } from 'jotai'
 import { AdminUI } from 'lib/components/AdminUI'
 import { StatsUI } from 'lib/components/StatsUI'
 import { Content, ContentPane, Tab, Tabs } from 'lib/components/Tabs'
-import ManageImage from 'assets/images/manage-image.svg'
 import { Card, CardTitle } from 'lib/components/Card'
+import { ButtonLink } from 'lib/components/ButtonLink'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
+
+import ManageImage from 'assets/images/manage-image.svg'
 
 const MANAGE_VIEW = Object.freeze({
   stats: '#stats',
@@ -67,12 +69,14 @@ const ManageHeader = () => {
 
         <p className='text-accent-1 text-base sm:text-2xl max-w-3xl'>Version 3.1.0</p>
 
-        <a
-          className='bg-green-400 bg-opacity-0 hover:bg-opacity-15 active:bg-opacity-15 border border-green-1 active:shadow-green focus:shadow-green text-highlight-2 inline-block text-center leading-snug tracking-wide outline-none focus:outline-none active:outline-none font-bold width-max-content py-1 px-6 sm:py-2 sm:px-10 rounded-full base text-sm sm:text-base lg:text-lg trans trans-fast cursor-pointer mt-6'
+        <ButtonLink
+          size='base'
+          color='secondary'
+          className='mt-6'
           href='https://docs.pooltogether.com/'
         >
           View documentation
-        </a>
+        </ButtonLink>
       </div>
       <img
         src={ManageImage}

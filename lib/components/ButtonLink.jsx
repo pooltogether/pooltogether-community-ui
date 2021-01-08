@@ -188,18 +188,28 @@ export function ButtonLink(props) {
     'rel',
   ])
 
-  return <Link
-    href={href}
-    as={as}
-    scroll={false}
-  >
-    <a
+  if (!as) {
+    return <a
       {...linkProps}
+      href={href}
       className={classes}
       onClick={(e) => e.stopPropagation()}
     >
       {children}
     </a>
-  </Link>
-
+  } else {
+    return <Link
+      href={href}
+      as={as}
+      scroll={false}
+    >
+      <a
+        {...linkProps}
+        className={classes}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {children}
+      </a>
+    </Link>
+  }
 }
