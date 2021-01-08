@@ -1,4 +1,4 @@
-/basis /pools/mainnet/0x1Ee6194b0e28C12dF0FD107e5eb883Aa071F8C9a 200
+/basis /pools/mainnet/0x1Ee6194b0e28C12dF0FD107e5eb883Aa071F8C9a.html 200
 
 /pools/:networkName/:prizePoolAddress/home /pools/[networkName]/[prizePoolAddress]/home.html 200
 /pools/:networkName/:prizePoolAddress/manage /pools/[networkName]/[prizePoolAddress]/manage.html 200
