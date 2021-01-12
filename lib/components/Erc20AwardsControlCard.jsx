@@ -23,6 +23,7 @@ import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 
 import PrizeIllustration from 'assets/images/prize-illustration-transparent@2x.png'
+import { CopyableAddress } from 'lib/components/CopyableAddress'
 
 const handleAddExternalErc20 = async (
   txName,
@@ -187,10 +188,21 @@ const AddErc20Form = () => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <div className='mb-4 text-sm sm:text-base font-bold opacity-80'>
+        Follow the steps below to add prizes to the pool:{' '}
+      </div>
+      <div className='my-4 text-sm sm:text-base text-accent-1'>
+        1. Send the ERC20 tokens manually to the contract address below.
+      </div>
+      <CopyableAddress className='ml-4 my-4 text-lg sm:text-xl' address={poolAddresses.prizePool} />
+      <div className='mb-6 text-sm sm:text-base text-accent-1'>
+        2. Add the ERC20 token contract address to the external awards distribution list below.
+      </div>
+
       <TextInputGroup
         id='newErc20Address'
         name='newErc20Address'
-        label='Erc20 token address'
+        label='ERC20 token address'
         containerClassName='mb-8'
         placeholder='(eg. 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984)'
         onChange={(e) => {

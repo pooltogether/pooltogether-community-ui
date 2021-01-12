@@ -58,6 +58,7 @@
     "next-images": "^1.4.0",
     "postcss-easy-import": "^3.0.0",
     "react": "16.13.1",
+    "react-copy-to-clipboard": "^5.0.2",
     "react-countup": "^4.3.3",
     "react-device-detect": "^1.13.1",
     "react-dom": "16.13.1",
