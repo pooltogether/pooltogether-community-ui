@@ -131,6 +131,7 @@ const SinglePrizeItem = (props) => {
   const { token } = props
   const [coinGeckoTokenIds] = useAtom(coinGeckoTokenIdsAtom)
   const tokenId = coinGeckoTokenIds[getCoinGeckoId(token)]
+  console.log(token, tokenId, coinGeckoTokenIds)
   const { data } = useQuery(tokenId, async () => getCoinGeckoTokenData(tokenId))
   const imageUrl = data?.data?.image?.small
 
