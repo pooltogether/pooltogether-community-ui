@@ -39,7 +39,7 @@ export const ManageUI = (props) => {
             setSelectedTab={setSelectedTab}
             selectedTab={selectedTab}
             hash={MANAGE_VIEW.admin}
-            className='ml-16'
+            className='ml-4 sm:ml-16'
           >
             Admin
           </Tab>
