@@ -8,7 +8,6 @@ import { ButtonRelativeLink } from 'lib/components/ButtonRelativeLink'
 import { Card, CardTitle } from 'lib/components/Card'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { NewPrizeCountdown } from 'lib/components/NewPrizeCountdown'
-import { coinGeckoTokenIdsAtom } from 'lib/hooks/useCoinGeckoTokenIds'
 import { networkAtom } from 'lib/hooks/useNetwork'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { getCoinGeckoId, getCoinGeckoTokenData } from 'lib/services/coingecko'
@@ -18,6 +17,7 @@ import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 
 import Cactus from 'assets/images/cactus.svg'
+import { useCoingeckoTokenData } from 'lib/hooks/useCoingeckoTokenData'
 
 export const PrizeCard = (props) => {
   const { showLinks, className } = props
@@ -129,15 +129,14 @@ const Prizes = (props) => {
 
 const SinglePrizeItem = (props) => {
   const { token } = props
-  const [coinGeckoTokenIds] = useAtom(coinGeckoTokenIdsAtom)
-  const tokenId = coinGeckoTokenIds[getCoinGeckoId(token)]
-  console.log(token, tokenId, coinGeckoTokenIds)
-  const { data } = useQuery(tokenId, async () => getCoinGeckoTokenData(tokenId))
-  const imageUrl = data?.data?.image?.small
+  const { data: tokenData } = useCoingeckoTokenData(token.address)
+  const imageUrl = tokenData?.image?.small
 
   return (
     <div className={'flex mx-auto my-2 sm:mt-0 sm:mb-2 leading-none'}>
-      {imageUrl && <img src={imageUrl} className='w-8 h-8 sm:w-16 sm:h-16 mr-4 my-auto' />}
+      {imageUrl && (
+        <img src={imageUrl} className='w-8 h-8 sm:w-16 sm:h-16 mr-4 my-auto rounded-full' />
+      )}
       <span className='font-bold text-6xl sm:text-9xl mr-4 my-auto text-flashy'>
         {token.formattedBalance}
       </span>
@@ -149,10 +148,8 @@ const SinglePrizeItem = (props) => {
 const PrizeListItem = (props) => {
   const { token, small } = props
   const index = props.index || 0
-  const [coinGeckoTokenIds] = useAtom(coinGeckoTokenIdsAtom)
-  const tokenId = coinGeckoTokenIds[getCoinGeckoId(token)]
-  const { data } = useQuery(tokenId, async () => getCoinGeckoTokenData(tokenId))
-  const imageUrl = data?.data?.image?.small
+  const { data: tokenData } = useCoingeckoTokenData(token.address)
+  const imageUrl = tokenData?.image?.small
 
   return (
     <li key={index + token.symbol} className='flex w-full justify-between mb-2'>
@@ -170,7 +167,7 @@ const PrizeListItem = (props) => {
           'text-lg sm:text-3xl': !small
         })}
       >
-        {imageUrl && <img className='my-auto mr-2 w-6 h-6' src={imageUrl} />}
+        {imageUrl && <img className='my-auto mr-2 w-6 h-6 rounded-full' src={imageUrl} />}
         <span className='leading-none mt-auto'>{token.symbol || token.name || ''}</span>
       </div>
     </li>

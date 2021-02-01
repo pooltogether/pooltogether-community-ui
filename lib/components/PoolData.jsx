@@ -11,7 +11,6 @@ import { poolToast } from 'lib/utils/poolToast'
 import { useExternalErc20Awards } from 'lib/hooks/useExternalErc20Awards'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { useUsersAddress } from 'lib/hooks/useUsersAddress'
-import { useCoinGeckoTokenIds } from 'lib/hooks/useCoinGeckoTokenIds'
 import { useExternalErc721Awards } from 'lib/hooks/useExternalErc721Awards'
 import { useDetermineContractVersions } from 'lib/hooks/useDetermineContractVersions'
 
@@ -77,7 +76,6 @@ const PoolDataInitialization = (props) => {
   useDetermineContractVersions()
   useNetwork()
   useUsersAddress()
-  useCoinGeckoTokenIds()
   usePoolAddresses()
   const [poolChainValues, setPoolChainValues] = usePoolChainValues()
   useUserChainValues()
