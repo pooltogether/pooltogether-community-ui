@@ -2,7 +2,6 @@ import React from 'react'
 import { useAtom } from 'jotai'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
-import { useQuery } from 'react-query'
 
 import { ButtonRelativeLink } from 'lib/components/ButtonRelativeLink'
 import { Card, CardTitle } from 'lib/components/Card'
@@ -10,7 +9,6 @@ import { LoadingDots } from 'lib/components/LoadingDots'
 import { NewPrizeCountdown } from 'lib/components/NewPrizeCountdown'
 import { networkAtom } from 'lib/hooks/useNetwork'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import { getCoinGeckoId, getCoinGeckoTokenData } from 'lib/services/coingecko'
 import { useAwardsList } from 'lib/hooks/useAwardsList'
 import { RelativeInternalLink } from 'lib/components/RelativeInternalLink'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
@@ -27,8 +25,6 @@ export const PrizeCard = (props) => {
   const [poolChainValues] = useAtom(poolChainValuesAtom)
   const [usersAddress] = useAtom(usersAddressAtom)
 
-  const networkName = network.name
-  const prizePoolAddress = poolAddresses.prizePool
   const owner = poolChainValues.owner
   const userIsOwner = owner?.toLowerCase() === usersAddress?.toLowerCase()
 
