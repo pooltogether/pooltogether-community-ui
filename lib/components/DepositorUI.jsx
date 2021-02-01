@@ -1,5 +1,4 @@
 import React from 'react'
-import Link from 'next/link'
 import { useAtom } from 'jotai'
 
 import { Card } from 'lib/components/Card'
