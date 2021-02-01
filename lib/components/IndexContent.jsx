@@ -3,8 +3,13 @@ import Link from 'next/link'
 import { find, findKey, map, upperFirst } from 'lodash'
 
 import { Button } from 'lib/components/Button'
+import { ButtonLink } from 'lib/components/ButtonLink'
+import { Card } from 'lib/components/Card'
+import { Collapse } from 'lib/components/Collapse'
+import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { WalletContext } from 'lib/components/WalletContextProvider'
+import { useCoingeckoTokenData } from 'lib/hooks/useCoingeckoTokenData'
 import { getDemoPoolContractAddress } from 'lib/utils/getDemoPoolContractAddress'
 import { shorten } from 'lib/utils/shorten'
 
@@ -14,8 +19,6 @@ import UsdcSvg from 'assets/images/usdc-new-transparent.png'
 import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
-import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
-import { Card } from 'lib/components/Card'
 
 const demoAssetTypes = {
   dai: { label: 'DAI', logo: DaiSvg },
@@ -37,9 +40,9 @@ export const IndexContent = (props) => {
   const demoNetworkName = findKey(demoPools, { chainId: walletNetwork })
   const demoPool = find(demoPools, { chainId: walletNetwork })
 
-  const handleNetworkChange = (e) => {
-    setNetwork(e.target.value)
-  }
+  const BOND_TOKEN_ADDRESS = '0x0391d2021f89dc339f60fff84546ea23e337750f'
+  const { data: tokenData } = useCoingeckoTokenData(BOND_TOKEN_ADDRESS)
+  const imageUrl = tokenData?.image?.large
 
   let networkDemoPools = []
 
@@ -67,6 +70,7 @@ export const IndexContent = (props) => {
       view: 'Local'
     }
   }
+
   demoPool?.assets.forEach((assetType) => {
     const address = getDemoPoolContractAddress(demoNetworkName, assetType)
     if (address) {
@@ -79,12 +83,60 @@ export const IndexContent = (props) => {
 
   return (
     <>
-      <div className='lg:w-3/4 lg:mx-auto'>
+      <div className='flex mt-10 mb-6 sm:mb-10 lg:justify-between'>
+        <div className='flex-grow'>
+          <h1 className='text-accent-1 title text-xl sm:text-6xl'>Community Prize Pools</h1>
+
+          <h3 className='text-accent-1 mt-2 xs:mt-6 mb-4 text-base sm:text-3xl'>Pool List</h3>
+
+          <Card>
+            <div className='flex w-full pt-2 pb-2'>
+              <span className='text-accent-1 text-xs w-1/3'>Deposit token</span>
+              <span className='text-accent-1 text-xs w-1/3'>Type</span>
+            </div>
+
+            <div className='flex w-full pb-2 items-center text-xl'>
+              <div className='w-1/3'>
+                <Link
+                  as='/bond'
+                  href='/[poolAlias]'
+                >
+                  <a className='flex items-center'>
+                    {imageUrl && (
+                      <img src={imageUrl} className='w-8 h-8 mr-4 my-auto rounded-full' />
+                    )} BOND
+                  </a>
+                </Link>
+              </div>
+              <div className='w-1/3'>
+                <Link
+                  as='/bond'
+                  href='/[poolAlias]'
+                >
+                  <a>
+                    Staking
+                  </a>
+                </Link>
+              </div>
+              <div className='w-1/3 text-right'>
+                <ButtonLink
+                  size='base'
+                  color='secondary'
+                  as='/bond'
+                  href='/[poolAlias]'
+                >
+                  Deposit
+                </ButtonLink>
+              </div>
+            </div>
+          </Card>
+        </div>
+      </div>
+
+      <div className='w-full lg:mx-auto'>
         {demoPool && (
           <>
-            <div className='text-lg sm:text-xl lg:text-2xl mb-4'>
-              1. View one of the demo pools:
-            </div>
+            <h3 className='text-accent-1 mt-2 xs:mt-6 mb-4 text-base sm:text-3xl'>Demo Pools</h3>
 
             <div className='flex justify-center flex-col sm:flex-row sm:flex-wrap -mx-4 mb-8 text-xs sm:text-lg lg:text-xl'>
               {networkDemoPools?.length === 0 ? (
@@ -132,46 +184,42 @@ export const IndexContent = (props) => {
                 </>
               )}
             </div>
-
-            <hr />
-
-            <div className='text-lg sm:text-xl lg:text-2xl mb-4'>
-              2. Or enter a pool to view it's details:
-            </div>
           </>
         )}
 
         <Card>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault()
+          <Collapse title='Lookup pool by contract address'>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
 
-              window.location.href = `/pools/${network}/${contractAddress}`
-            }}
-          >
-            <DropdownInputGroup
-              id='network-dropdown'
-              label={'Network the Pool is on:'}
-              formatValue={formatValue}
-              onValueSet={onValueSet}
-              current={network}
-              values={networks}
-            />
+                window.location.href = `/pools/${network}/${contractAddress}`
+              }}
+            >
+              <DropdownInputGroup
+                id='network-dropdown'
+                label={'Network the Pool is on:'}
+                formatValue={formatValue}
+                onValueSet={onValueSet}
+                current={network}
+                values={networks}
+              />
 
-            <TextInputGroup
-              id='contractAddress'
-              label={<>Prize Pool contract address:</>}
-              required
-              onChange={(e) => setContractAddress(e.target.value)}
-              value={contractAddress}
-            />
+              <TextInputGroup
+                id='contractAddress'
+                label={<>Prize Pool contract address:</>}
+                required
+                onChange={(e) => setContractAddress(e.target.value)}
+                value={contractAddress}
+              />
 
-            <div className='my-5'>
-              <Button color='primary' size='lg'>
-                View Pool
+              <div className='my-5'>
+                <Button color='primary' size='lg'>
+                  View Pool
               </Button>
-            </div>
-          </form>
+              </div>
+            </form>
+          </Collapse>
         </Card>
       </div>
     </>
