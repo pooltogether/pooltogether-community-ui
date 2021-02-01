@@ -7,6 +7,7 @@ import { ButtonRelativeLink } from 'lib/components/ButtonRelativeLink'
 import { Card, CardTitle } from 'lib/components/Card'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { NewPrizeCountdown } from 'lib/components/NewPrizeCountdown'
+import { useCoingeckoTokenData } from 'lib/hooks/useCoingeckoTokenData'
 import { networkAtom } from 'lib/hooks/useNetwork'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { useAwardsList } from 'lib/hooks/useAwardsList'
@@ -15,7 +16,6 @@ import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 
 import Cactus from 'assets/images/cactus.svg'
-import { useCoingeckoTokenData } from 'lib/hooks/useCoingeckoTokenData'
 
 export const PrizeCard = (props) => {
   const { showLinks, className } = props
@@ -126,7 +126,7 @@ const Prizes = (props) => {
 const SinglePrizeItem = (props) => {
   const { token } = props
   const { data: tokenData } = useCoingeckoTokenData(token.address)
-  const imageUrl = tokenData?.image?.small
+  const imageUrl = tokenData?.image?.large
 
   return (
     <div className={'flex mx-auto my-2 sm:mt-0 sm:mb-2 leading-none'}>

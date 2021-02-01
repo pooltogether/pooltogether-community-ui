@@ -9,6 +9,7 @@ import { Collapse } from 'lib/components/Collapse'
 import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { WalletContext } from 'lib/components/WalletContextProvider'
+import { useCoingeckoTokenData } from 'lib/hooks/useCoingeckoTokenData'
 import { getDemoPoolContractAddress } from 'lib/utils/getDemoPoolContractAddress'
 import { shorten } from 'lib/utils/shorten'
 
@@ -39,9 +40,9 @@ export const IndexContent = (props) => {
   const demoNetworkName = findKey(demoPools, { chainId: walletNetwork })
   const demoPool = find(demoPools, { chainId: walletNetwork })
 
-  const handleNetworkChange = (e) => {
-    setNetwork(e.target.value)
-  }
+  const BOND_TOKEN_ADDRESS = '0x0391d2021f89dc339f60fff84546ea23e337750f'
+  const { data: tokenData } = useCoingeckoTokenData(BOND_TOKEN_ADDRESS)
+  const imageUrl = tokenData?.image?.large
 
   let networkDemoPools = []
 
@@ -82,7 +83,7 @@ export const IndexContent = (props) => {
 
   return (
     <>
-      <div className='flex mt-10 mb-10 sm:mb-20 lg:justify-between'>
+      <div className='flex mt-10 mb-6 sm:mb-10 lg:justify-between'>
         <div className='flex-grow'>
           <h1 className='text-accent-1 title text-xl sm:text-6xl'>Community Prize Pools</h1>
 
@@ -100,8 +101,10 @@ export const IndexContent = (props) => {
                   as='/bond'
                   href='/[poolAlias]'
                 >
-                  <a>
-                    BOND
+                  <a className='flex items-center'>
+                    {imageUrl && (
+                      <img src={imageUrl} className='w-8 h-8 mr-4 my-auto rounded-full' />
+                    )} BOND
                   </a>
                 </Link>
               </div>
@@ -133,9 +136,7 @@ export const IndexContent = (props) => {
       <div className='w-full lg:mx-auto'>
         {demoPool && (
           <>
-            <div className='text-lg sm:text-xl lg:text-2xl mb-4'>
-              1. View one of the demo pools:
-            </div>
+            <h3 className='text-accent-1 mt-2 xs:mt-6 mb-4 text-base sm:text-3xl'>Demo Pools</h3>
 
             <div className='flex justify-center flex-col sm:flex-row sm:flex-wrap -mx-4 mb-8 text-xs sm:text-lg lg:text-xl'>
               {networkDemoPools?.length === 0 ? (
@@ -182,12 +183,6 @@ export const IndexContent = (props) => {
                   })}
                 </>
               )}
-            </div>
-
-            <hr />
-
-            <div className='text-lg sm:text-xl lg:text-2xl mb-4'>
-              2. Or enter a pool to view it's details:
             </div>
           </>
         )}
