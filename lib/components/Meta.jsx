@@ -1,6 +1,7 @@
 import Head from 'next/head'
 
-export const Meta = ({ title }) => {
+export const Meta = (props) => {
+  let { title } = props
   const defaultTitle = 'PoolTogether - V3 Reference Pool Frontend'
   title = title ? `${title} - ${defaultTitle}` : defaultTitle
 
