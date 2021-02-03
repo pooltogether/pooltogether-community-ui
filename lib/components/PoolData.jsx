@@ -51,7 +51,8 @@ export const PoolData = (props) => {
     try {
       ethers.utils.getAddress(String(prizePoolAddress))
     } catch (e) {
-      throw new Error(`Incorrectly formatted Ethereum address! ${prizePoolAddress}`)
+      poolToast.error(`Incorrect pool address for path: ${window.location.pathname}`)
+      throw new Error(`Incorrectly formatted Ethereum address for GET path entered`)
     }
   }
 
