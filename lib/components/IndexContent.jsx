@@ -65,6 +65,10 @@ export const IndexContent = (props) => {
       value: 'mainnet',
       view: 'Mainnet'
     },
+    ['poa-sokol']: {
+      value: 'poa-sokol',
+      view: 'Sokol (POA)'
+    },
     local: {
       value: 'local',
       view: 'Local'
