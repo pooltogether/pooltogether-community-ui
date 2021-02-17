@@ -2,11 +2,11 @@ import Head from 'next/head'
 
 export const Meta = (props) => {
   let { title } = props
-  const defaultTitle = 'PoolTogether - V3 Reference Pool Frontend'
+  const defaultTitle = 'PoolTogether - Community Pools'
   title = title ? `${title} - ${defaultTitle}` : defaultTitle
 
-  const url = `https://reference-app.pooltogether.com`
-  const description = `Deposit and withdraw to V3 Pools`
+  const url = `https://community.pooltogether.com`
+  const description = `View, deposit and withdraw for all V3 Pools`
   const keywords = 'ethereum'
   const twitterHandle = '@PoolTogether_'
 
@@ -25,8 +25,7 @@ export const Meta = (props) => {
         <meta name='theme-color' content='#1a083a' />
         <meta name='description' content={description} />
         <meta name='keywords' content={keywords} />
-        <meta name='author' content='PoolTogether LLC' />
-        <meta name='copyright' content={`Copyright ${new Date().getFullYear()}`} />
+        <meta name='author' content='PoolTogether' />
 
         <meta property='og:title' content={title} />
         <meta property='og:description' content={description} />
