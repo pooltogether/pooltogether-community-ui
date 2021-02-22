@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import Link from 'next/link'
 import { find, findKey, map, upperFirst } from 'lodash'
 
+import { POOL_ALIASES } from 'lib/constants'
 import { Button } from 'lib/components/Button'
 import { ButtonLink } from 'lib/components/ButtonLink'
 import { Card } from 'lib/components/Card'
@@ -30,6 +31,51 @@ const demoPools = {
   rinkeby: { chainId: 4, assets: ['dai', 'usdc', 'usdt'] }
 }
 
+const PoolRow = (props) => {
+  const { poolAlias } = props
+  console.log(poolAlias)
+
+  const { data: tokenData } = useCoingeckoTokenData(poolAlias.tokenAddress)
+  const imageUrl = tokenData?.image?.large
+
+  return (
+    <div className='flex w-full pb-2 items-center text-xl'>
+      <div className='w-1/3'>
+        <Link
+          as={`/${poolAlias.alias}`}
+          href='/[poolAlias]'
+        >
+          <a className='flex items-center uppercase'>
+            {imageUrl && (
+              <img src={imageUrl} className='w-8 h-8 mr-4 my-auto rounded-full' />
+            )} {poolAlias.alias}
+          </a>
+        </Link>
+      </div>
+      <div className='w-1/3'>
+        <Link
+          as={`/${poolAlias.alias}`}
+          href='/[poolAlias]'
+        >
+          <a>
+            Staking
+          </a>
+        </Link>
+      </div>
+      <div className='w-1/3 text-right'>
+        <ButtonLink
+          size='base'
+          color='secondary'
+          as={`/${poolAlias.alias}`}
+          href='/[poolAlias]'
+        >
+          Deposit
+        </ButtonLink>
+      </div>
+    </div>
+  )
+}
+
 export const IndexContent = (props) => {
   const walletContext = useContext(WalletContext)
   const walletNetwork = walletContext._onboard.getState().network
@@ -39,10 +85,6 @@ export const IndexContent = (props) => {
 
   const demoNetworkName = findKey(demoPools, { chainId: walletNetwork })
   const demoPool = find(demoPools, { chainId: walletNetwork })
-
-  const BOND_TOKEN_ADDRESS = '0x0391d2021f89dc339f60fff84546ea23e337750f'
-  const { data: tokenData } = useCoingeckoTokenData(BOND_TOKEN_ADDRESS)
-  const imageUrl = tokenData?.image?.large
 
   let networkDemoPools = []
 
@@ -99,40 +141,12 @@ export const IndexContent = (props) => {
               <span className='text-accent-1 text-xs w-1/3'>Type</span>
             </div>
 
-            <div className='flex w-full pb-2 items-center text-xl'>
-              <div className='w-1/3'>
-                <Link
-                  as='/bond'
-                  href='/[poolAlias]'
-                >
-                  <a className='flex items-center'>
-                    {imageUrl && (
-                      <img src={imageUrl} className='w-8 h-8 mr-4 my-auto rounded-full' />
-                    )} BOND
-                  </a>
-                </Link>
-              </div>
-              <div className='w-1/3'>
-                <Link
-                  as='/bond'
-                  href='/[poolAlias]'
-                >
-                  <a>
-                    Staking
-                  </a>
-                </Link>
-              </div>
-              <div className='w-1/3 text-right'>
-                <ButtonLink
-                  size='base'
-                  color='secondary'
-                  as='/bond'
-                  href='/[poolAlias]'
-                >
-                  Deposit
-                </ButtonLink>
-              </div>
-            </div>
+            <PoolRow
+              poolAlias={POOL_ALIASES.bond}
+            />
+            <PoolRow
+              poolAlias={POOL_ALIASES.rai}
+            />
           </Card>
         </div>
       </div>
