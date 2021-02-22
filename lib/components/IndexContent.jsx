@@ -39,8 +39,8 @@ const PoolRow = (props) => {
   const imageUrl = tokenData?.image?.large
 
   return (
-    <div className='flex w-full pb-2 items-center text-xl'>
-      <div className='w-1/3'>
+    <div className='flex flex-col xs:flex-row w-full pb-2 items-center text-xl'>
+      <div className='w-1/5'>
         <Link
           as={`/${poolAlias.alias}`}
           href='/[poolAlias]'
@@ -52,7 +52,7 @@ const PoolRow = (props) => {
           </a>
         </Link>
       </div>
-      <div className='w-1/3'>
+      <div className='w-1/5'>
         <Link
           as={`/${poolAlias.alias}`}
           href='/[poolAlias]'
@@ -62,12 +62,32 @@ const PoolRow = (props) => {
           </a>
         </Link>
       </div>
-      <div className='w-1/3 text-right'>
+      <div className='w-1/5'>
+        <Link
+          as={`/${poolAlias.alias}`}
+          href='/[poolAlias]'
+        >
+          <a>
+            Staking
+          </a>
+        </Link>
+      </div>
+      <div className='w-1/5'>
+        <Link
+          as={`/${poolAlias.alias}`}
+          href='/[poolAlias]'
+        >
+          <a>
+            Staking
+          </a>
+        </Link>
+      </div>
+      <div className='w-1/5 text-right'>
         <ButtonLink
           size='base'
           color='secondary'
-          as={`/${poolAlias.alias}`}
-          href='/[poolAlias]'
+          as={`/${poolAlias.alias}/home`}
+          href='/[poolAlias]/home'
         >
           Deposit
         </ButtonLink>
@@ -137,8 +157,10 @@ export const IndexContent = (props) => {
 
           <Card>
             <div className='flex w-full pt-2 pb-2'>
-              <span className='text-accent-1 text-xs w-1/3'>Deposit token</span>
-              <span className='text-accent-1 text-xs w-1/3'>Type</span>
+              <span className='text-accent-1 text-xs w-1/5'>Token:</span>
+              <span className='text-accent-1 text-xs w-1/5'>Type:</span>
+              <span className='text-accent-1 text-xs w-1/5'>Prize:</span>
+              <span className='text-accent-1 text-xs w-1/5'>Awards in:</span>
             </div>
 
             <PoolRow
