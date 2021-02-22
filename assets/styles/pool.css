@@ -59,7 +59,7 @@ body {
 hr {
   border: 0;
   height: 0;
-  border-top: 3px solid rgba(60, 8, 165, 0.3);
+  border-top: 2px solid var(--color-border-primary);
   border-bottom: none;
   background: transparent;
   margin: 20px auto;
