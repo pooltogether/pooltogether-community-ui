@@ -33,7 +33,6 @@ const demoPools = {
 
 const PoolRow = (props) => {
   const { poolAlias } = props
-  console.log(poolAlias)
 
   const { data: tokenData } = useCoingeckoTokenData(poolAlias.tokenAddress)
   const imageUrl = tokenData?.image?.large
