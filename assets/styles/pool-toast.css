@@ -15,7 +15,7 @@
 @screen sm {
   .pool-toast.Toastify__toast-container {
     margin: 0 auto;
-    max-width: 420px;
+    max-width: 620px;
   }
 }
 
