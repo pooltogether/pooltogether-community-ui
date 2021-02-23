@@ -1733,10 +1733,10 @@
   resolved "https://registry.yarnpkg.com/@pooltogether/fixed-point/-/fixed-point-1.0.0-beta.2.tgz#d76a1e77f21833e9b680296d65526b0ffd7415d7"
   integrity sha512-aUw4R0Z2oM0AK3W4LIXyBaojTOzRRbhLDHX0egeuvxfjy4gBb6X66v81gI7Wngg/7O0y9QL/B8jWkUnAFzhTig==
 
-"@pooltogether/pooltogether-contracts@^3.0.1":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.1.0.tgz#b66ebd13c721129754313e7ab56dc5460aef3d3d"
-  integrity sha512-G6njHUTx/821SDa1lbpkU6o0YlS5wO/3WmWfFGCBp9ifyI8l5XD2soE4GLb8Kt4f7wN1No5oDi3KzejhNhjhhw==
+"@pooltogether/pooltogether-contracts@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.2.0.tgz#6bef549e82ca846b39547fdacc73f14e418cd27e"
+  integrity sha512-S5aZeDfR0gh+0xer+bZeCKLDDV2WHTEqlOMkRE0AJK9t0NQw7ls9OZkoQH3rzm1N8ASdjlQNVrCCQhhrhCD+Tg==
   dependencies:
     "@openzeppelin/contracts-upgradeable" "3.3.0"
     "@pooltogether/fixed-point" "1.0.0-beta.2"
