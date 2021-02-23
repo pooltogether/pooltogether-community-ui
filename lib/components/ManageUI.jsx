@@ -66,9 +66,6 @@ const ManageHeader = () => {
     <div className='flex mt-10 mb-10 sm:mb-20 lg:justify-between'>
       <div className='flex-grow'>
         <h1 className='text-accent-1 title text-xl sm:text-6xl'>Prize Pool Dashboard</h1>
-
-        <p className='text-accent-1 text-base sm:text-2xl max-w-3xl'>Version 3.1.0</p>
-
         <ButtonLink
           size='base'
           color='secondary'
