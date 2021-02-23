@@ -38,13 +38,13 @@ const PoolRow = (props) => {
   const imageUrl = tokenData?.image?.large
 
   return (
-    <div className='flex w-full pb-2 items-center text-xl'>
+    <div className='flex w-full pb-2 items-center text-xl my-2'>
       <div className='w-1/3'>
         <Link
           as={`/${poolAlias.alias}`}
           href='/[poolAlias]'
         >
-          <a className='flex items-center uppercase'>
+          <a className='flex items-center uppercase hover:text-green-1 trans trans-fast'>
             {imageUrl && (
               <img src={imageUrl} className='w-8 h-8 mr-4 my-auto rounded-full' />
             )} {poolAlias.alias}
@@ -56,7 +56,7 @@ const PoolRow = (props) => {
           as={`/${poolAlias.alias}`}
           href='/[poolAlias]'
         >
-          <a>
+          <a className=' hover:text-green-1 trans trans-fast'>
             Staking
           </a>
         </Link>
@@ -67,6 +67,7 @@ const PoolRow = (props) => {
           color='secondary'
           as={`/${poolAlias.alias}`}
           href='/[poolAlias]'
+          paddingClasses='px-10 py-1'
         >
           Deposit
         </ButtonLink>
