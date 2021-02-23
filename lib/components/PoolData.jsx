@@ -24,14 +24,8 @@ const renderErrorMessage = (errorMsg) => {
   poolToast.error(errorMsg)
 }
 
-export const EMPTY_ERROR_STATE = {
-  error: null,
-  errorMessage: null,
-  view: null
-}
-
 // Jotai Atoms
-export const errorStateAtom = atom(EMPTY_ERROR_STATE)
+export const errorStateAtom = atom({})
 
 /**
  * Wraps app and populates Jotai pool data stores if applicable
@@ -61,13 +55,12 @@ export const PoolData = (props) => {
     if (errorState.errorMessage) {
       renderErrorMessage(errorState.errorMessage)
     }
-    if (errorState.view) {
-      return errorState.view
-    }
-    return null
   }
 
-  return <PoolDataInitialization>{props.children}</PoolDataInitialization>
+  return <PoolDataInitialization>
+    {errorState.view}
+    {props.children}
+  </PoolDataInitialization>
 }
 
 /**
@@ -83,12 +76,15 @@ const PoolDataInitialization = (props) => {
   useExternalErc20Awards()
   useExternalErc721Awards()
 
+  const [errorState] = useAtom(errorStateAtom)
+
   if (poolChainValues.loading) {
     return (
       <div className='text-center text-xl'>
+        {errorState.view}
+
         <LoadingDots />
-        <br />
-        <h1>Loading ...</h1>
+        <h2>Loading ...</h2>
       </div>
     )
   }
