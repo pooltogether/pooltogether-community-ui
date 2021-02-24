@@ -145,6 +145,9 @@ export const IndexContent = (props) => {
               poolAlias={POOL_ALIASES.bond}
             />
             <PoolRow
+              poolAlias={POOL_ALIASES.dpi}
+            />
+            <PoolRow
               poolAlias={POOL_ALIASES.rai}
             />
           </Card>
