@@ -142,6 +142,9 @@ export const IndexContent = (props) => {
             </div>
 
             <PoolRow
+              poolAlias={POOL_ALIASES.bondly}
+            />
+            <PoolRow
               poolAlias={POOL_ALIASES.bond}
             />
             <PoolRow
