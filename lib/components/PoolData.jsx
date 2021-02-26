@@ -57,10 +57,12 @@ export const PoolData = (props) => {
     }
   }
 
-  return <PoolDataInitialization>
-    {errorState.view}
-    {props.children}
-  </PoolDataInitialization>
+  return (
+    <PoolDataInitialization>
+      {errorState.view}
+      {props.children}
+    </PoolDataInitialization>
+  )
 }
 
 /**
@@ -71,7 +73,7 @@ const PoolDataInitialization = (props) => {
   useNetwork()
   useUsersAddress()
   usePoolAddresses()
-  const [poolChainValues, setPoolChainValues] = usePoolChainValues()
+  const [poolChainValues] = usePoolChainValues()
   useUserChainValues()
   useExternalErc20Awards()
   useExternalErc721Awards()
