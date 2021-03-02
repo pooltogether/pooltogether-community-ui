@@ -527,7 +527,7 @@ const Actions = (props) => {
 
   const [as, href] = useMemo(() => {
     const poolAlias = Object.values(POOL_ALIASES).find(
-      (poolAlias) => poolAlias.poolAddress === prizePoolAddress
+      (poolAlias) => poolAlias.poolAddress === prizePoolAddress.toLowerCase()
     )
     if (poolAlias) {
       const as = `/${poolAlias.alias}`
