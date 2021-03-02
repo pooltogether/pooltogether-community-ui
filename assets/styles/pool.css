@@ -381,11 +381,11 @@ input[type='text'] {
   stroke: #05e6c4;
   fill: none;
   height: 100%;
-  stroke-width: 12;
+  stroke-width: 20;
   stroke-dasharray: 400;
   stroke-dashoffset: 400;
-  top: 4px;
-  left: 3px;
+  top: 2px;
+  left: 2px;
   width: 100%;
 }
 
