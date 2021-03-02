@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React from 'react'
 import { ethers } from 'ethers'
 import { atom, useAtom } from 'jotai'
 import { useRouter } from 'next/router'

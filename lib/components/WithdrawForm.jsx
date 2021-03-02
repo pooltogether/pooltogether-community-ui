@@ -12,7 +12,7 @@ import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
 import { InnerCard } from 'lib/components/Card'
 import { useDebounce } from 'lib/hooks/useDebounce'
 import { fetchExitFee } from 'lib/utils/fetchExitFee'
-import { networkAtom } from 'lib/hooks/useNetwork'
+import { useNetwork } from 'lib/hooks/useNetwork'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
@@ -21,7 +21,6 @@ import { sendTx } from 'lib/utils/sendTx'
 import Warning from 'assets/images/warning.svg'
 import { poolToast } from 'lib/utils/poolToast'
 import { calculateOdds } from 'lib/utils/calculateOdds'
-import Link from 'next/link'
 import { Gauge } from 'lib/components/Gauge'
 import { addSeconds } from 'date-fns'
 import { subtractDates } from 'lib/utils/subtractDates'
@@ -67,7 +66,7 @@ export const WithdrawForm = (props) => {
   const [usersAddress] = useAtom(usersAddressAtom)
   const [poolChainValues] = useAtom(poolChainValuesAtom)
   const [usersChainValues] = useAtom(userChainValuesAtom)
-  const [network] = useAtom(networkAtom)
+  const [chainId, networkName] = useNetwork()
 
   const [exitFees, setExitFees] = useState({
     earlyExitFee: null,
@@ -104,7 +103,7 @@ export const WithdrawForm = (props) => {
     const t = async () => {
       if (debouncedWithdrawAmount) {
         const result = await fetchExitFee(
-          network.name,
+          networkName,
           usersAddress,
           prizePool,
           ticketAddress,
@@ -128,18 +127,15 @@ export const WithdrawForm = (props) => {
     ? ethers.utils.parseUnits(withdrawAmount, tokenDecimals)
     : ethers.utils.bigNumberify(0)
   const overBalance = withdrawAmountBN.gt(usersTicketBalance)
-  const ticketBal = (usersTicketBalance && tokenDecimals)
-    ? ethers.utils.formatUnits(usersTicketBalance, tokenDecimals)
-    : '0'
-  
-  const {
-    ticketDecimals,
-    ticketTotalSupply,
-    numberOfWinners,
-  } = poolChainValues
-  const totalSupplyLessWithdrawAmountBN = ticketTotalSupply ?
-    ticketTotalSupply.sub(withdrawAmountBN) :
-    ethers.utils.bigNumberify(0)
+  const ticketBal =
+    usersTicketBalance && tokenDecimals
+      ? ethers.utils.formatUnits(usersTicketBalance, tokenDecimals)
+      : '0'
+
+  const { ticketDecimals, ticketTotalSupply, numberOfWinners } = poolChainValues
+  const totalSupplyLessWithdrawAmountBN = ticketTotalSupply
+    ? ticketTotalSupply.sub(withdrawAmountBN)
+    : ethers.utils.bigNumberify(0)
 
   const newOdds = calculateOdds(
     usersTicketBalance.sub(withdrawAmountBN),

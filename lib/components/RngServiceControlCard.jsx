@@ -7,10 +7,9 @@ import { Card, CardSecondaryText } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
 import { CONTRACT_ADDRESSES } from 'lib/constants'
-import { networkAtom } from 'lib/hooks/useNetwork'
+import { useNetwork } from 'lib/hooks/useNetwork'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { sendTx } from 'lib/utils/sendTx'
-import { errorStateAtom } from 'lib/components/PoolData'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { TxMessage } from 'lib/components/TxMessage'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
@@ -59,15 +58,14 @@ export const RngServiceControlCard = (props) => {
 const RngServiceControlForm = (props) => {
   const [poolAddresses, setPoolAddresses] = useAtom(poolAddressesAtom)
   const [usersAddress] = useAtom(usersAddressAtom)
-  const [network] = useAtom(networkAtom)
+  const [chainId] = useNetwork()
   const [tx, setTx] = useState({})
-  const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
 
-  const rngServicesList = Object.keys(CONTRACT_ADDRESSES[network.id].RNG_SERVICE)
+  const rngServicesList = Object.keys(CONTRACT_ADDRESSES[chainId].RNG_SERVICE)
   const currentRngService = rngServicesList.find(
-    (service) => CONTRACT_ADDRESSES[network.id].RNG_SERVICE[service] === poolAddresses.rng
+    (service) => CONTRACT_ADDRESSES[chainId].RNG_SERVICE[service] === poolAddresses.rng
   )
   const [newRngService, setNewRngService] = useState(currentRngService)
 
@@ -102,7 +100,7 @@ const RngServiceControlForm = (props) => {
       setTx,
       provider,
       poolAddresses.prizeStrategy,
-      CONTRACT_ADDRESSES[network.id].RNG_SERVICE[newRngService]
+      CONTRACT_ADDRESSES[chainId].RNG_SERVICE[newRngService]
     )
   }
 
@@ -111,7 +109,7 @@ const RngServiceControlForm = (props) => {
     if (tx.completed && !tx.error) {
       setPoolAddresses({
         ...poolAddresses,
-        rng: CONTRACT_ADDRESSES[network.id].RNG_SERVICE[newRngService]
+        rng: CONTRACT_ADDRESSES[chainId].RNG_SERVICE[newRngService]
       })
     }
   }, [tx.completed, tx.error])

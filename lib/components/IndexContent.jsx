@@ -17,9 +17,10 @@ import { shorten } from 'lib/utils/shorten'
 import { useAllCreatedPrizePoolsWithTokens } from 'lib/hooks/useAllCreatedPrizePoolsWithTokens'
 import { useAllUserTokenBalances } from 'lib/hooks/useAllUserTokenBalances'
 import { LoadingDots } from 'lib/components/LoadingDots'
-import { numberWithCommas } from 'lib/utils/numberWithCommas'
+import { getPrecision, numberWithCommas } from 'lib/utils/numberWithCommas'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { CheckboxInputGroup } from 'lib/components/CheckboxInputGroup'
+import { formatEtherscanAddressUrl } from 'lib/utils/formatEtherscanAddressUrl'
 
 import BatSvg from 'assets/images/bat-new-transparent.png'
 import DaiSvg from 'assets/images/dai-new-transparent.png'
@@ -27,7 +28,6 @@ import UsdcSvg from 'assets/images/usdc-new-transparent.png'
 import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
-import { formatEtherscanAddressUrl } from 'lib/utils/formatEtherscanAddressUrl'
 
 const demoAssetTypes = {
   dai: { label: 'DAI', logo: DaiSvg },
@@ -211,7 +211,7 @@ const DemoPoolButton = (props) => {
             </span>
           </div>
 
-          <span className='ml-auto text-green-1 font-bold text-sm sm:text-base'>View pool</span>
+          <span className='ml-auto text-green-1 font-bold text-sm sm:text-base'>View</span>
         </div>
       </a>
     </Link>
@@ -221,13 +221,13 @@ const DemoPoolButton = (props) => {
 const GovernancePoolsCard = (props) => {
   const { createdPrizePools, tokenBalances } = props
   const walletContext = useContext(WalletContext)
-  const { id: chainId } = useNetwork()
+  const [chainId] = useNetwork()
   const [hideNoDeposits, setHideNoDeposits] = useState(false)
 
   const isWalletConnected = Boolean(walletContext._onboard.getState().address)
 
   const pools = useMemo(() => {
-    if (!createdPrizePools || !tokenBalances || !isWalletConnected) return []
+    if (!createdPrizePools || !tokenBalances) return []
 
     const pools = []
 
@@ -249,7 +249,7 @@ const GovernancePoolsCard = (props) => {
     pools.sort(sortByTvl)
 
     return pools
-  }, [createdPrizePools, tokenBalances, isWalletConnected, hideNoDeposits])
+  }, [createdPrizePools, tokenBalances, isWalletConnected, hideNoDeposits, chainId])
 
   if (pools.length === 0) return null
 
@@ -328,8 +328,11 @@ const UsersPoolsCard = (props) => {
 const AllPoolsCard = (props) => {
   const { createdPrizePools, tokenBalances } = props
 
+  const walletContext = useContext(WalletContext)
   const [hideNoDeposits, setHideNoDeposits] = useState(true)
   const [showFirstTen, setShowFirstTen] = useState(true)
+
+  const isWalletConnected = Boolean(walletContext._onboard.getState().address)
 
   const pools = useMemo(() => {
     if (!createdPrizePools || !tokenBalances) return []
@@ -353,7 +356,9 @@ const AllPoolsCard = (props) => {
     if (showFirstTen) return pools.slice(0, 10)
 
     return pools
-  }, [createdPrizePools, tokenBalances, hideNoDeposits, showFirstTen])
+  }, [createdPrizePools, tokenBalances, hideNoDeposits, showFirstTen, isWalletConnected])
+
+  if (pools.length === 0) return null
 
   return (
     <Card>
@@ -453,15 +458,15 @@ const PoolTitleCell = (props) => {
 const TypeCell = (props) => {
   const { prizePool } = props
   const { type } = prizePool
-  return <span className='w-1/6 hidden sm:block'>{type}</span>
+  return <span className='w-1/6 hidden sm:block my-auto'>{type}</span>
 }
 
 const TvlCell = (props) => {
   const { ticket, token } = props
   const amount = ticket.totalSupply.toString()
   return (
-    <span className='w-1/6 hidden xs:block'>
-      {numberWithCommas(amount)}
+    <span className='w-1/6 hidden xs:block my-auto'>
+      {numberWithCommas(amount, { precision: getPrecision(Number(amount)) })}
       <span className='ml-1 text-xs text-accent-1'>{token.symbol}</span>
     </span>
   )
@@ -472,8 +477,8 @@ const UsersBalanceCell = (props) => {
   const balance = ticket.balance.toString()
 
   return (
-    <span className='w-1/6 hidden sm:block'>
-      {numberWithCommas(balance)}
+    <span className='w-1/6 hidden sm:block my-auto'>
+      {numberWithCommas(balance, { precision: getPrecision(Number(balance)) })}
       <span className='ml-1 text-xs text-accent-1'>{ticket.symbol}</span>
     </span>
   )
@@ -481,7 +486,7 @@ const UsersBalanceCell = (props) => {
 
 const OwnerAddress = (props) => {
   const { ownerAddress } = props
-  const { id: chainId } = useNetwork()
+  const [chainId] = useNetwork()
   const url = formatEtherscanAddressUrl(ownerAddress, chainId)
 
   if (ownerAddress === CONTRACT_ADDRESSES[chainId].GovernanceTimelock) {
@@ -516,7 +521,7 @@ const OwnerAddress = (props) => {
 }
 
 const Actions = (props) => {
-  const { id: chainId, name: networkName } = useNetwork()
+  const [chainId, networkName] = useNetwork()
   const { prizePool, ticket } = props
   const { prizePool: prizePoolAddress } = prizePool
 

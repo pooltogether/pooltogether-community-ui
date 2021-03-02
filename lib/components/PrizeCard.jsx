@@ -8,8 +8,6 @@ import { Card, CardTitle } from 'lib/components/Card'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { NewPrizeCountdown } from 'lib/components/NewPrizeCountdown'
 import { useCoingeckoTokenData } from 'lib/hooks/useCoingeckoTokenData'
-import { networkAtom } from 'lib/hooks/useNetwork'
-import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { useAwardsList } from 'lib/hooks/useAwardsList'
 import { RelativeInternalLink } from 'lib/components/RelativeInternalLink'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
@@ -20,8 +18,6 @@ import Cactus from 'assets/images/cactus.svg'
 export const PrizeCard = (props) => {
   const { showLinks, className } = props
 
-  const [network] = useAtom(networkAtom)
-  const [poolAddresses] = useAtom(poolAddressesAtom)
   const [poolChainValues] = useAtom(poolChainValuesAtom)
   const [usersAddress] = useAtom(usersAddressAtom)
 

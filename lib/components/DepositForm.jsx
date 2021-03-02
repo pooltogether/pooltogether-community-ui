@@ -15,7 +15,7 @@ import { WalletContext } from 'lib/components/WalletContextProvider'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
 import { errorStateAtom } from 'lib/components/PoolData'
-import { networkAtom } from 'lib/hooks/useNetwork'
+import { useNetwork } from 'lib/hooks/useNetwork'
 import { InnerCard } from 'lib/components/Card'
 
 import Warning from 'assets/images/warning.svg'
@@ -49,9 +49,10 @@ export const DepositForm = (props) => {
     console.error(e)
   }
 
-  const tokenBal = (usersTokenBalance && tokenDecimals) ?
-    ethers.utils.formatUnits(usersTokenBalance, tokenDecimals) :
-    ''
+  const tokenBal =
+    usersTokenBalance && tokenDecimals
+      ? ethers.utils.formatUnits(usersTokenBalance, tokenDecimals)
+      : ''
 
   if (poolIsLocked) {
     return (
@@ -121,7 +122,7 @@ const UnlockDepositsButton = () => {
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [usersChainValues] = useAtom(userChainValuesAtom)
   const [contractVersions] = useAtom(contractVersionsAtom)
-  const [network] = useAtom(networkAtom)
+  const [chainId] = useNetwork()
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const [poolAddresses] = useAtom(poolAddressesAtom)
   const [prizePoolType] = useAtom(prizePoolTypeAtom)
@@ -133,7 +134,7 @@ const UnlockDepositsButton = () => {
   // Reset on network change
   useEffect(() => {
     setTx({})
-  }, [network])
+  }, [chainId])
 
   // Update global data upon completion
   useEffect(() => {
