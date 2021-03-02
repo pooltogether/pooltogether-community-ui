@@ -18,7 +18,6 @@ import { useAllCreatedPrizePoolsWithTokens } from 'lib/hooks/useAllCreatedPrizeP
 import { useAllUserTokenBalances } from 'lib/hooks/useAllUserTokenBalances'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
-import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { CheckboxInputGroup } from 'lib/components/CheckboxInputGroup'
 
@@ -144,7 +143,7 @@ const ReferencePoolCard = () => {
               className='ml-auto'
               disabled={!contractAddress}
             >
-              View Pool
+              View
             </ButtonLink>
           </div>
         </Collapse>
@@ -177,8 +176,8 @@ const DemoPoolsCard = (props) => {
   return (
     <Card>
       <div className='font-bold text-base sm:text-2xl text-accent-1 mb-4'>🧪 Demo Pools</div>
-      {networkDemoPools.map((demoPool) => (
-        <DemoPoolButton {...demoPool} networkName={demoNetworkName} />
+      {networkDemoPools.map((demoPool, index) => (
+        <DemoPoolButton key={index} {...demoPool} networkName={demoNetworkName} />
       ))}
     </Card>
   )
@@ -408,9 +407,9 @@ const ListHeaders = (props) => {
 
   return (
     <div className='w-full flex text-accent-1 text-xs mb-2'>
-      <span className='w-1/4 mr-2'>Title</span>
+      <span className='w-2/3 xs:w-1/3 mr-2 sm:mr-0'>Title</span>
       <span className='w-1/6 hidden sm:block'>Type</span>
-      {isWalletConnected && <span className='w-1/6 hidden xs:block'>Ticket balance</span>}
+      {isWalletConnected && <span className='w-1/6 hidden sm:block'>Ticket balance</span>}
       <span className='w-1/6 hidden xs:block'>Total deposits</span>
     </div>
   )
@@ -439,15 +438,14 @@ const PoolTitleCell = (props) => {
   const imageUrl = tokenData?.image?.large
 
   return (
-    <div className='flex flex-col w-3/4 xs:w-1/4 mr-2'>
-      <div className='flex'>
-        {imageUrl && <img src={imageUrl} className='w-8 h-8 mr-4 my-auto rounded-full' />}
+    <div className='flex w-2/3 xs:w-1/3 mr-2 sm:mr-0'>
+      {imageUrl && <img src={imageUrl} className='w-6 h-6 mr-2 my-auto rounded-full' />}
+      <div className='flex flex-col'>
         {name}
+        <span className='text-accent-1 text-xxs'>
+          Owned by: <OwnerAddress ownerAddress={prizePoolOwner} />
+        </span>
       </div>
-      {/* TODO: Special pill if owned by governance */}
-      <span className='text-accent-1 text-xxs'>
-        Owned by: <OwnerAddress ownerAddress={prizePoolOwner} />
-      </span>
     </div>
   )
 }
@@ -474,7 +472,7 @@ const UsersBalanceCell = (props) => {
   const balance = ticket.balance.toString()
 
   return (
-    <span className='w-1/6 hidden xs:block'>
+    <span className='w-1/6 hidden sm:block'>
       {numberWithCommas(balance)}
       <span className='ml-1 text-xs text-accent-1'>{ticket.symbol}</span>
     </span>
@@ -488,16 +486,18 @@ const OwnerAddress = (props) => {
 
   if (ownerAddress === CONTRACT_ADDRESSES[chainId].GovernanceTimelock) {
     return (
-      <a
-        href={url}
-        className={`trans font-number hover:text-inverse bg-purple-1 rounded-full px-2`}
-        target='_blank'
-        rel='noopener noreferrer'
-        title='View on Etherscan'
-      >
-        <span className='inline-block '>PoolTogether</span>
-        <FeatherIcon icon='external-link' className='is-etherscan-arrow ml-1 inline-block' />
-      </a>
+      <div className='inline bg-purple-1 rounded-full px-2 width-fit-content'>
+        <a
+          href={url}
+          className={`trans font-number hover:text-inverse`}
+          target='_blank'
+          rel='noopener noreferrer'
+          title='View on Etherscan'
+        >
+          <span className='inline-block '>PoolTogether</span>
+          <FeatherIcon icon='external-link' className='is-etherscan-arrow ml-1 inline-block' />
+        </a>
+      </div>
     )
   }
 
@@ -520,144 +520,32 @@ const Actions = (props) => {
   const { prizePool, ticket } = props
   const { prizePool: prizePoolAddress } = prizePool
 
-  const showWithdraw = Number(ticket.balance) !== 0
+  const [as, href] = useMemo(() => {
+    const poolAlias = Object.values(POOL_ALIASES).find(
+      (poolAlias) => poolAlias.poolAddress === prizePoolAddress
+    )
+    if (poolAlias) {
+      const as = `/${poolAlias.alias}`
+      const href = '/[poolAlias]'
+      return [as, href]
+    }
+    const as = `/pools/${networkName}/${prizePoolAddress}/home`
+    const href = '/pools/[networkName]/[prizePoolAddress]/home'
+    return [as, href]
+  }, [prizePoolAddress, networkName])
 
   return (
     <div className='ml-auto'>
       <ButtonLink
         size='base'
         color='tertiary'
-        as={`/pools/${networkName}/${prizePoolAddress}/home`}
-        href='/pools/[networkName]/[prizePoolAddress]/home'
-        paddingClasses='px-10 py-1'
+        as={as}
+        href={href}
+        paddingClasses='px-4 xs:px-10 py-1'
         className='ml-auto'
       >
-        View Pool
+        View
       </ButtonLink>
     </div>
   )
 }
-
-// demoPool?.assets.forEach((assetType) => {
-//   const address = getDemoPoolContractAddress(demoNetworkName, assetType)
-//   if (address) {
-//     networkDemoPools.push({
-//       assetType,
-//       address: getDemoPoolContractAddress(demoNetworkName, assetType)
-//     })
-//   }
-// })
-
-// return (
-//   <>
-//     <div className='flex mt-10 mb-6 sm:mb-10 lg:justify-between'>
-//       <div className='flex-grow'>
-//         <h1 className='text-accent-1 title text-xl sm:text-6xl'>Community Prize Pools</h1>
-
-//         <h3 className='text-accent-1 mt-2 xs:mt-6 mb-4 text-base sm:text-3xl'>Pool List</h3>
-
-//         <Card>
-//           <div className='flex w-full pt-2 pb-2'>
-//             <span className='text-accent-1 text-xs w-1/3'>Deposit token</span>
-//             <span className='text-accent-1 text-xs w-1/3'>Type</span>
-//           </div>
-
-//           <PoolRow poolAlias={POOL_ALIASES.bond} />
-//           <PoolRow poolAlias={POOL_ALIASES.dpi} />
-//           <PoolRow poolAlias={POOL_ALIASES.rai} />
-//         </Card>
-//       </div>
-//     </div>
-
-//     <div className='w-full lg:mx-auto'>
-//       {demoPool && (
-//         <>
-//           <h3 className='text-accent-1 mt-2 xs:mt-6 mb-4 text-base sm:text-3xl'>Demo Pools</h3>
-
-//           <div className='flex justify-center flex-col sm:flex-row sm:flex-wrap -mx-4 mb-8 text-xs sm:text-lg lg:text-xl'>
-//             {networkDemoPools?.length === 0 ? (
-//               <>
-//                 <div className='text-center text-caption uppercase text-sm font-bold text-default rounded-lg bg-default p-4'>
-//                   No demo pools deployed to this network yet...
-//                 </div>
-//               </>
-//             ) : (
-//               <>
-//                 {map(networkDemoPools, (pool) => {
-//                   return (
-//                     <Link
-//                       key={`${demoNetworkName}-${pool.assetType}`}
-//                       href='/pools/[networkName]/[prizePoolAddress]'
-//                       as={`/pools/${demoNetworkName}/${pool.address}`}
-//                     >
-//                       <a className='w-full sm:w-1/2 lg:w-1/3 px-4 border-2 border-transparent hover:border-transparent'>
-//                         <div className='flex items-center mb-2 py-2 px-4 inline-block bg-card hover:bg-card-selected trans border-2 border-highlight-3 hover:border-highlight-2 border-dashed rounded-lg '>
-//                           {demoAssetTypes[pool.assetType]?.logo && (
-//                             <img
-//                               src={demoAssetTypes[pool.assetType]?.logo}
-//                               className='inline-block w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 mr-2'
-//                             />
-//                           )}
-
-//                           <div>
-//                             <span className='text-blue text-base'>
-//                               {upperFirst(demoNetworkName)}{' '}
-//                               {demoAssetTypes[pool.assetType]?.label} Pool
-//                             </span>
-//                             <br />
-//                             <span className='text-xxs sm:text-base inline-block -t-1 relative text-accent-3'>
-//                               {shorten(pool.address)}{' '}
-//                               <span className='uppercase text-accent-3 opacity-50'>
-//                                 TESTNET DEMO
-//                               </span>
-//                             </span>
-//                           </div>
-//                         </div>
-//                       </a>
-//                     </Link>
-//                   )
-//                 })}
-//               </>
-//             )}
-//           </div>
-//         </>
-//       )}
-
-//       <Card>
-//         <Collapse title='Lookup pool by contract address'>
-//           <form
-//             onSubmit={(e) => {
-//               e.preventDefault()
-
-//               window.location.href = `/pools/${network}/${contractAddress}`
-//             }}
-//           >
-//             <DropdownInputGroup
-//               id='network-dropdown'
-//               label={'Network the Pool is on:'}
-//               formatValue={formatValue}
-//               onValueSet={onValueSet}
-//               current={network}
-//               values={networks}
-//             />
-
-//             <TextInputGroup
-//               id='contractAddress'
-//               label={<>Prize Pool contract address:</>}
-//               required
-//               onChange={(e) => setContractAddress(e.target.value)}
-//               value={contractAddress}
-//             />
-
-//             <div className='my-5'>
-//               <Button color='primary' size='lg'>
-//                 View Pool
-//               </Button>
-//             </div>
-//           </form>
-//         </Collapse>
-//       </Card>
-//     </div>
-//   </>
-// )
-// }
