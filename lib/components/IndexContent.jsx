@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { find, findKey, map, upperFirst } from 'lodash'
 
-import { POOL_ALIASES } from 'lib/constants'
+import { CONTRACT_ADDRESSES, POOL_ALIASES } from 'lib/constants'
 import { Button } from 'lib/components/Button'
 import { ButtonLink } from 'lib/components/ButtonLink'
 import { Card } from 'lib/components/Card'
@@ -20,6 +20,14 @@ import UsdcSvg from 'assets/images/usdc-new-transparent.png'
 import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
+import { useAllCreatedPrizePoolsWithTokens } from 'lib/hooks/useAllCreatedPrizePoolsWithTokens'
+import { useAllUserTokenBalances } from 'lib/hooks/useAllUserTokenBalances'
+import { RowDataCell, Table } from 'lib/components/Table'
+import { LoadingDots } from 'lib/components/LoadingDots'
+import { getPrecision, numberWithCommas } from 'lib/utils/numberWithCommas'
+import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
+import { useNetwork } from 'lib/hooks/useNetwork'
+import { ethers } from 'ethers'
 
 const demoAssetTypes = {
   dai: { label: 'DAI', logo: DaiSvg },
@@ -31,7 +39,7 @@ const demoPools = {
   rinkeby: { chainId: 4, assets: ['dai', 'usdc', 'usdt'] }
 }
 
-const PoolRow = (props) => {
+const PoolRow2 = (props) => {
   const { poolAlias } = props
 
   const { data: tokenData } = useCoingeckoTokenData(poolAlias.tokenAddress)
@@ -40,25 +48,16 @@ const PoolRow = (props) => {
   return (
     <div className='flex w-full pb-2 items-center text-xl my-2'>
       <div className='w-1/3'>
-        <Link
-          as={`/${poolAlias.alias}`}
-          href='/[poolAlias]'
-        >
+        <Link as={`/${poolAlias.alias}`} href='/[poolAlias]'>
           <a className='flex items-center uppercase hover:text-green-1 trans trans-fast'>
-            {imageUrl && (
-              <img src={imageUrl} className='w-8 h-8 mr-4 my-auto rounded-full' />
-            )} {poolAlias.alias}
+            {imageUrl && <img src={imageUrl} className='w-8 h-8 mr-4 my-auto rounded-full' />}{' '}
+            {poolAlias.alias}
           </a>
         </Link>
       </div>
       <div className='w-1/3'>
-        <Link
-          as={`/${poolAlias.alias}`}
-          href='/[poolAlias]'
-        >
-          <a className=' hover:text-green-1 trans trans-fast'>
-            Staking
-          </a>
+        <Link as={`/${poolAlias.alias}`} href='/[poolAlias]'>
+          <a className=' hover:text-green-1 trans trans-fast'>Staking</a>
         </Link>
       </div>
       <div className='w-1/3 text-right'>
@@ -85,6 +84,12 @@ export const IndexContent = (props) => {
 
   const demoNetworkName = findKey(demoPools, { chainId: walletNetwork })
   const demoPool = find(demoPools, { chainId: walletNetwork })
+
+  return (
+    <>
+      <PoolsList />
+    </>
+  )
 
   let networkDemoPools = []
 
@@ -141,15 +146,9 @@ export const IndexContent = (props) => {
               <span className='text-accent-1 text-xs w-1/3'>Type</span>
             </div>
 
-            <PoolRow
-              poolAlias={POOL_ALIASES.bond}
-            />
-            <PoolRow
-              poolAlias={POOL_ALIASES.dpi}
-            />
-            <PoolRow
-              poolAlias={POOL_ALIASES.rai}
-            />
+            <PoolRow poolAlias={POOL_ALIASES.bond} />
+            <PoolRow poolAlias={POOL_ALIASES.dpi} />
+            <PoolRow poolAlias={POOL_ALIASES.rai} />
           </Card>
         </div>
       </div>
@@ -237,12 +236,224 @@ export const IndexContent = (props) => {
               <div className='my-5'>
                 <Button color='primary' size='lg'>
                   View Pool
-              </Button>
+                </Button>
               </div>
             </form>
           </Collapse>
         </Card>
       </div>
     </>
+  )
+}
+
+const PoolsList = () => {
+  const {
+    data: createdPrizePools,
+    isFetched: createdPrizePoolsIsFetched
+  } = useAllCreatedPrizePoolsWithTokens()
+  const { data: tokenBalances, isFetched: tokenBalancesIsFetched } = useAllUserTokenBalances()
+  const walletContext = useContext(WalletContext)
+  const usersAddress = walletContext._onboard.getState().address
+  const { id: chainId, name: networkName } = useNetwork()
+
+  const [governancePools, userPools, allPools] = useMemo(() => {
+    if (!createdPrizePools || !tokenBalances) return [[], [], []]
+
+    const governancePools = []
+    const userPools = []
+    const allPools = []
+
+    createdPrizePools.forEach((prizePool, index) => {
+      const token = tokenBalances[prizePool.token]
+      const ticket = tokenBalances[prizePool.ticket]
+      const row = (
+        <PoolRow
+          key={index}
+          prizePool={prizePool}
+          token={token}
+          ticket={ticket}
+          isWalletConnected={Boolean(usersAddress)}
+        />
+      )
+
+      // Add to governance pools if owned by the timelock address
+      if (prizePool.prizePoolOwner === CONTRACT_ADDRESSES[chainId].GovernanceTimelock) {
+        governancePools.push(row)
+      }
+      // Add to user pools if user has a balance
+      if (Boolean(usersAddress) && Number(ticket.balance) !== 0) {
+        userPools.push(row)
+      }
+      // Add to all pools
+      allPools.push(row)
+    })
+
+    return [governancePools, userPools, allPools]
+  }, [createdPrizePools, tokenBalances])
+
+  if (!createdPrizePoolsIsFetched || !tokenBalancesIsFetched) {
+    return <LoadingDots />
+  }
+
+  return (
+    <>
+      <Card className='mt-2 xs:mt-6'>
+        <h3 className='text-accent-1 mb-4 text-base sm:text-3xl'>Governance Pools</h3>
+        <ListHeaders isWalletConnected={Boolean(usersAddress)} />
+        <ul>{governancePools}</ul>
+      </Card>
+
+      {userPools.length > 1 && (
+        <Card>
+          <h3 className='text-accent-1 mt-2 xs:mt-6 mb-4 text-base sm:text-3xl'>My Pools</h3>
+          <ListHeaders isWalletConnected={Boolean(usersAddress)} />
+          <ul>{userPools}</ul>
+        </Card>
+      )}
+      <Card>
+        <h3 className='text-accent-1 mt-2 xs:mt-6 mb-4 text-base sm:text-3xl'>All Pools</h3>
+        <ListHeaders isWalletConnected={Boolean(usersAddress)} />
+        <ul>{allPools}</ul>
+      </Card>
+    </>
+  )
+}
+
+const ListHeaders = (props) => {
+  const { isWalletConnected } = props
+  return (
+    <div className='w-full flex text-accent-1 text-xs'>
+      <span className='w-1/4'>Title</span>
+      <span className='w-1/6'>Type</span>
+      {isWalletConnected && <span className='w-1/6'>Ticket balance</span>}
+      <span className='w-1/6'>Total deposits</span>
+    </div>
+  )
+}
+
+const PoolRow = (props) => {
+  const { prizePool, token, ticket, isWalletConnected } = props
+  const { type } = prizePool
+
+  return (
+    <li className='flex flex-row mb-2 last:mb-0 w-full'>
+      <PoolTitleCell {...props} />
+      <div className='w-1/6'>{type}</div>
+      {isWalletConnected && <UsersBalanceCell {...props} />}
+      <TvlCell {...props} />
+      <Actions {...props} />
+    </li>
+  )
+}
+
+const PoolTitleCell = (props) => {
+  const { prizePool, token } = props
+  const name = token?.name
+  const { token: tokenAddress, prizePoolOwner } = prizePool
+  const { data: tokenData } = useCoingeckoTokenData(tokenAddress)
+  const imageUrl = tokenData?.image?.large
+
+  return (
+    <div className='flex flex-col w-1/4'>
+      <div className='flex'>
+        {imageUrl && <img src={imageUrl} className='w-8 h-8 mr-4 my-auto rounded-full' />}
+        {name}
+      </div>
+      {/* TODO: Special pill if owned by governance */}
+      <span className='text-accent-1 text-xxs'>Owned by: {shorten(prizePoolOwner)}</span>
+    </div>
+  )
+}
+
+const TvlCell = (props) => {
+  const { ticket, token } = props
+  const amount = ticket.totalSupply.toString()
+  return (
+    <TokenAmountCell
+      // amount={numberWithCommas(amount, { precision: getPrecision(ticket.totalSupply.toNumber()) })}
+      amount={numberWithCommas(amount)}
+      symbol={token.symbol}
+    />
+  )
+}
+
+const UsersBalanceCell = (props) => {
+  const { ticket } = props
+  const balance = ticket.balance.toString()
+  return (
+    <TokenAmountCell
+      // amount={numberWithCommas(balance, { precision: getPrecision(ticket.balance.toNumber()) })}
+      amount={numberWithCommas(balance)}
+      symbol={ticket.symbol}
+    />
+  )
+}
+
+const TokenAmountCell = (props) => {
+  const { amount, symbol } = props
+  return (
+    <span className='w-1/6'>
+      {amount}
+      <span className='ml-1 text-xs text-accent-1'>{symbol}</span>
+    </span>
+  )
+}
+
+const OwnerAddress = (props) => {
+  const { ownerAddress } = props
+  return (
+    <EtherscanAddressLink size='xxs' address={ownerAddress}>
+      {ownerAddress}
+    </EtherscanAddressLink>
+  )
+}
+
+const Actions = (props) => {
+  const { id: chainId, name: networkName } = useNetwork()
+  const { prizePool, ticket } = props
+  const { prizePool: prizePoolAddress } = prizePool
+
+  const showWithdraw = Number(ticket.balance) !== 0
+
+  return (
+    <div className='ml-auto'>
+      <ButtonLink
+        size='base'
+        color='secondary'
+        as={`/pools/${networkName}/${prizePoolAddress}/home`}
+        href='/pools/[networkName]/[prizePoolAddress]/home'
+        paddingClasses='px-10 py-1'
+        className='ml-auto'
+      >
+        View Pool
+      </ButtonLink>
+    </div>
+  )
+
+  return (
+    <div className='flex flex-col w-1/4 ml-auto'>
+      <ButtonLink
+        size='base'
+        color='secondary'
+        as={`/pools/${networkName}/${prizePoolAddress}`}
+        href='/pools/[networkName]/[prizePoolAddress]'
+        paddingClasses='px-10 py-1'
+        className='mx-auto'
+      >
+        Deposit
+      </ButtonLink>
+      {showWithdraw && (
+        <ButtonLink
+          size='base'
+          color='text_warning'
+          as={`/pools/${networkName}/${prizePoolAddress}`}
+          href='/pools/[networkName]/[prizePoolAddress]'
+          paddingClasses='px-10 py-1'
+          className='my-2 mx-auto'
+        >
+          Withdraw
+        </ButtonLink>
+      )}
+    </div>
   )
 }
