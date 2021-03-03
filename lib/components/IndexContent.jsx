@@ -70,11 +70,11 @@ const PoolsLists = () => {
 
   return (
     <>
-      <GovernancePoolsCard createdPrizePools={createdPrizePools} tokenBalances={tokenBalances} />
       <UsersPoolsCard createdPrizePools={createdPrizePools} tokenBalances={tokenBalances} />
-      <ReferencePoolCard />
+      <GovernancePoolsCard createdPrizePools={createdPrizePools} tokenBalances={tokenBalances} />
       <DemoPoolsCard />
       <AllPoolsCard createdPrizePools={createdPrizePools} tokenBalances={tokenBalances} />
+      <ReferencePoolCard />
     </>
   )
 }
@@ -414,7 +414,7 @@ const ListHeaders = (props) => {
     <div className='w-full flex text-accent-1 text-xs mb-2'>
       <span className='w-2/3 xs:w-1/3 mr-2 sm:mr-0'>Title</span>
       <span className='w-1/6 hidden sm:block'>Type</span>
-      {isWalletConnected && <span className='w-1/6 hidden sm:block'>Ticket balance</span>}
+      {isWalletConnected && <span className='w-1/6 hidden sm:block'>My balance</span>}
       <span className='w-1/6 hidden xs:block'>Total deposits</span>
     </div>
   )
