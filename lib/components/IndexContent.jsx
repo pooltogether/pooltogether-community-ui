@@ -546,7 +546,7 @@ const Actions = (props) => {
         color='tertiary'
         as={as}
         href={href}
-        paddingClasses='px-4 xs:px-10 py-1'
+        paddingClasses='px-4 xs:px-10 py-2'
         className='ml-auto'
       >
         View
