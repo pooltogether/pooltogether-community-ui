@@ -125,7 +125,7 @@ export const WithdrawForm = (props) => {
 
   const withdrawAmountBN = withdrawAmount
     ? ethers.utils.parseUnits(withdrawAmount, tokenDecimals)
-    : ethers.utils.bigNumberify(0)
+    : ethers.BigNumber.from(0)
   const overBalance = withdrawAmountBN.gt(usersTicketBalance)
   const ticketBal =
     usersTicketBalance && tokenDecimals
@@ -135,7 +135,7 @@ export const WithdrawForm = (props) => {
   const { ticketDecimals, ticketTotalSupply, numberOfWinners } = poolChainValues
   const totalSupplyLessWithdrawAmountBN = ticketTotalSupply
     ? ticketTotalSupply.sub(withdrawAmountBN)
-    : ethers.utils.bigNumberify(0)
+    : ethers.BigNumber.from(0)
 
   const newOdds = calculateOdds(
     usersTicketBalance.sub(withdrawAmountBN),
