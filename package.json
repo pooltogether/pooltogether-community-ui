@@ -35,6 +35,7 @@
     "@pooltogether/current-pool-data": "3.2.0-beta.5",
     "@pooltogether/etherplex": "^0.2.3",
     "@pooltogether/pooltogether-contracts": "^3.2.0",
+    "@portis/web3": "^3.0.8",
     "@reach/menu-button": "^0.11.2",
     "@reach/tooltip": "0.10.5",
     "@sentry/cli": "^1.61.0",
@@ -69,6 +70,7 @@
     "rollup": "2.17.1",
     "scheduler": "^0.20.1",
     "tailwindcss": "^1.7.6",
+    "web3": "^1.3.4",
     "webpack": "4"
   },
   "devDependencies": {
