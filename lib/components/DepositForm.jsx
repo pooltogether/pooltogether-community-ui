@@ -19,6 +19,7 @@ import { useNetwork } from 'lib/hooks/useNetwork'
 import { InnerCard } from 'lib/components/Card'
 
 import Warning from 'assets/images/warning.svg'
+import { getErc20InputProps } from 'lib/utils/getErc20InputProps'
 
 export const DepositForm = (props) => {
   const { handleSubmit, vars, stateSetters } = props
@@ -46,7 +47,7 @@ export const DepositForm = (props) => {
     depositAmountBN = ethers.utils.parseUnits(depositAmount || '0', tokenDecimals)
     overBalance = depositAmountBN && usersTokenBalance && usersTokenBalance.lt(depositAmountBN)
   } catch (e) {
-    console.error(e)
+    console.warn(e)
   }
 
   const tokenBal =
@@ -67,6 +68,8 @@ export const DepositForm = (props) => {
     )
   }
 
+  const { min, step } = getErc20InputProps(tokenDecimals)
+
   return (
     <form onSubmit={handleSubmit}>
       <div className='w-full mx-auto'>
@@ -78,7 +81,8 @@ export const DepositForm = (props) => {
           required
           disabled={!hasApprovedBalance}
           type='number'
-          pattern='\d+'
+          min={min}
+          step={step}
           onChange={(e) => setDepositAmount(e.target.value)}
           value={depositAmount}
           rightLabel={
@@ -88,18 +92,26 @@ export const DepositForm = (props) => {
                 setDepositAmount(tokenBal)
               }}
             >
-              {numberWithCommas(tokenBal, { precision: 4 })} {tokenSymbol}
+              {numberWithCommas(tokenBal, { precision: tokenDecimals })} {tokenSymbol}
             </RightLabelButton>
           }
         />
       </div>
       {overBalance && (
         <div className='text-yellow-1'>
-          You only have {displayAmountInEther(usersTokenBalance, { decimals: tokenDecimals })}{' '}
+          You only have{' '}
+          {displayAmountInEther(usersTokenBalance, {
+            precision: tokenDecimals,
+            decimals: tokenDecimals
+          })}{' '}
           {tokenSymbol}.
           <br />
           The maximum you can deposit is{' '}
-          {displayAmountInEther(usersTokenBalance, { precision: 2, decimals: tokenDecimals })}.
+          {displayAmountInEther(usersTokenBalance, {
+            precision: tokenDecimals,
+            decimals: tokenDecimals
+          })}
+          .
         </div>
       )}
       <div className='my-5 flex flex-col sm:flex-row'>
