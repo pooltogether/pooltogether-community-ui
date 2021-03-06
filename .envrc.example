@@ -1,10 +1,10 @@
 # When the application is loaded on a non-web3 browser this is the network that the browser will use.
 # Note: this is passed directly to ethers.js so you'll want to make sure ethers understand the name.
-export NEXT_JS_FORTMATIC_API_KEY=<YOUR_FORTMATIC_API_KEY>
-export NEXT_JS_FORTMATIC_PRODUCTION_API_KEY=<YOUR_FORTMATIC_PRODUCTION_API_KEY>
+export NEXT_JS_FORTMATIC_API_KEY='pk_test_7E49F4949AFF1BA4'
+export NEXT_JS_FORTMATIC_PRODUCTION_API_KEY='pk_live_C150FA21E9282CC4'
 
-export NEXT_JS_INFURA_KEY=<YOUR_INFURA_KEY>
+export NEXT_JS_INFURA_KEY='ff5a5c50d1e649bdb777f80813747e3d'
 
-export NEXT_JS_PORTIS_API_KEY=<YOUR_PORTIS_API_KEY>
+export NEXT_JS_PORTIS_API_KEY='a2b39aa5-90e5-43d5-9e13-2b573cfffa0a'
 
-export NEXT_JS_DOMAIN_NAME=<USUALLY pooltogether.com WITHOUT THE SUBDOMAIN, LEAVE BLANK IF LOCALHOST!>
+export NEXT_JS_DOMAIN_NAME=''
