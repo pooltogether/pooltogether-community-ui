@@ -1,6 +1,7 @@
 import React from 'react'
 import { useAtom } from 'jotai'
 
+import { DEFAULT_TOKEN_PRECISION } from 'lib/constants'
 import { Card, CardPrimaryText, CardTitle } from 'lib/components/Card'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
@@ -23,7 +24,7 @@ const TicketCard = () => {
   const [userChainValues] = useAtom(userChainValuesAtom)
   const balance = displayAmountInEther(userChainValues.usersTicketBalance, {
     precision: 0,
-    decimals: poolChainValues.ticketDecimals
+    decimals: DEFAULT_TOKEN_PRECISION
   })
   const symbol = poolChainValues.ticketSymbol
 
