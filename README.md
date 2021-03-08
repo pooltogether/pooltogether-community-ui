@@ -39,3 +39,7 @@ To run the local server, run:
 ```
 $ yarn dev
 ```
+
+#### Developer Tools
+
+- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
