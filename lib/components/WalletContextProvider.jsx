@@ -3,9 +3,7 @@ import { ethers } from 'ethers'
 import Onboard from '@pooltogether/bnc-onboard'
 import Cookies from 'js-cookie'
 
-import {
-  SELECTED_WALLET_COOKIE_KEY
-} from 'lib/constants'
+import { SELECTED_WALLET_COOKIE_KEY } from 'lib/constants'
 import { nameToChainId } from 'lib/utils/nameToChainId'
 
 const debug = require('debug')('WalletContextProvider')

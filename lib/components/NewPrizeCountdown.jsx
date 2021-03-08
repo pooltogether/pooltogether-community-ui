@@ -60,11 +60,8 @@ export const NewPrizeCountdown = (props) => {
 
   // 86400 seconds = 1 day
   // 3600 seconds = 1 hour
-  const textColor = secondsRemaining >= 86400 ?
-    'green-1' :
-    secondsRemaining >= 3600 ?
-      'yellow-1' :
-      'red-1'
+  const textColor =
+    secondsRemaining >= 86400 ? 'green-1' : secondsRemaining >= 3600 ? 'yellow-1' : 'red-1'
 
   const LeftSideJsx = ({ digit }) => {
     return (

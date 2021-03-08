@@ -7,7 +7,7 @@ const THEME = 'theme'
 
 export const ThemeContext = React.createContext(null)
 
-export function ThemeContextProvider (props) {
+export function ThemeContextProvider(props) {
   // if (!window) {
   //   return null
   // }

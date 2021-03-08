@@ -18,7 +18,6 @@ export const Layout = (props) => {
           minHeight: '100vh'
         }}
       >
-
         <div className='pool-container flex flex-grow relative z-30 h-full page fadeIn animated'>
           <div className='flex flex-col flex-grow'>
             <div id='top' className='main-nav relative spinner-hidden z-20 pt-2'>
