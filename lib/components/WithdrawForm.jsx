@@ -24,6 +24,7 @@ import { calculateOdds } from 'lib/utils/calculateOdds'
 import { Gauge } from 'lib/components/Gauge'
 import { addSeconds } from 'date-fns'
 import { subtractDates } from 'lib/utils/subtractDates'
+import { getErc20InputProps } from 'lib/utils/getErc20InputProps'
 
 const handleWithdrawInstantly = async (
   setTx,
@@ -125,7 +126,7 @@ export const WithdrawForm = (props) => {
 
   const withdrawAmountBN = withdrawAmount
     ? ethers.utils.parseUnits(withdrawAmount, tokenDecimals)
-    : ethers.utils.bigNumberify(0)
+    : ethers.BigNumber.from(0)
   const overBalance = withdrawAmountBN.gt(usersTicketBalance)
   const ticketBal =
     usersTicketBalance && tokenDecimals
@@ -135,7 +136,7 @@ export const WithdrawForm = (props) => {
   const { ticketDecimals, ticketTotalSupply, numberOfWinners } = poolChainValues
   const totalSupplyLessWithdrawAmountBN = ticketTotalSupply
     ? ticketTotalSupply.sub(withdrawAmountBN)
-    : ethers.utils.bigNumberify(0)
+    : ethers.BigNumber.from(0)
 
   const newOdds = calculateOdds(
     usersTicketBalance.sub(withdrawAmountBN),
@@ -166,6 +167,8 @@ export const WithdrawForm = (props) => {
     )
   }
 
+  const { min, step } = getErc20InputProps(tokenDecimals)
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -176,7 +179,8 @@ export const WithdrawForm = (props) => {
           required
           isError={overBalance}
           type='number'
-          pattern='\d+'
+          min={min}
+          step={step}
           unit={tokenSymbol}
           onChange={(e) => setWithdrawAmount(e.target.value)}
           value={withdrawAmount}
@@ -187,7 +191,7 @@ export const WithdrawForm = (props) => {
                 setWithdrawAmount(ticketBal)
               }}
             >
-              {numberWithCommas(ticketBal, { precision: 4 })} {tokenSymbol}
+              {numberWithCommas(ticketBal, { precision: tokenDecimals })} {tokenSymbol}
             </RightLabelButton>
           }
         />

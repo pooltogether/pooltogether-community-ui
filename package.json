@@ -33,7 +33,7 @@
   "dependencies": {
     "@pooltogether/bnc-onboard": "1.13.1-a",
     "@pooltogether/current-pool-data": "3.2.2",
-    "@pooltogether/etherplex": "^0.2.3",
+    "@pooltogether/etherplex": "1.0.0",
     "@pooltogether/pooltogether-contracts": "^3.2.0",
     "@reach/menu-button": "^0.11.2",
     "@reach/tooltip": "0.10.5",
@@ -49,7 +49,7 @@
     "d3-scale": "^3.2.3",
     "d3-shape": "^2.0.0",
     "date-fns": "^2.16.1",
-    "ethers": "^4.0.47",
+    "ethers": "^5.0.31",
     "feather-icons-react": "^0.4.1",
     "jest": "^26.4.2",
     "jotai": "^0.11.2",
