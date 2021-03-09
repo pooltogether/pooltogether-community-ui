@@ -44,17 +44,6 @@ const demoPools = {
 }
 
 export const IndexContent = (props) => {
-  // const { readProvider, isLoaded } = useReadProvider()
-  // console.log(readProvider)
-
-  // if (isLoaded) {
-  //   const poolContract = new ethers.Contract(
-  //     '0x8c0D17691b3958E8D6Ff6D44D9522110b859BA72',
-  //     YieldPrizePoolAbi,
-  //     readProvider
-  //   )
-  //   console.log('poolContract', poolContract)
-  // }
 
   return (
     <>
