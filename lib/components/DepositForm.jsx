@@ -92,7 +92,8 @@ export const DepositForm = (props) => {
                 setDepositAmount(tokenBal)
               }}
             >
-              {numberWithCommas(tokenBal, { precision: tokenDecimals })} {tokenSymbol}
+              {numberWithCommas(tokenBal, { precision: tokenDecimals, removeTrailingZeros: true })}{' '}
+              {tokenSymbol}
             </RightLabelButton>
           }
         />

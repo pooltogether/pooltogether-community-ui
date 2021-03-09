@@ -2019,10 +2019,10 @@
     safe-buffer "^5.1.1"
     util.promisify "^1.0.0"
 
-"@openzeppelin/contracts-upgradeable@3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-3.3.0.tgz#a536c6ff107d21319490e6cb699e555a3edcf6ea"
-  integrity sha512-kJeNuKauR4xH52Yo3GdXXAOW4CWyWdm7VXcJFe63G8TRb45ISSnkt/gXwUa8zzEYqokQrwNZYoH/iGYfUlp6wA==
+"@openzeppelin/contracts-upgradeable@3.4.0":
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-3.4.0.tgz#7674c73c643a509f1b90c509e3e72fe9aae02aeb"
+  integrity sha512-7wBcbukDqWZt/B1zjb7zyeWq+AC7rx7nGln7/hPxHdKd8PAiiteXd51Cp2KmGP8qaY0/TXh/fQLsA082LWp8Zw==
 
 "@pooltogether/bnc-onboard@1.13.1-a":
   version "1.13.1-a"
@@ -2049,10 +2049,10 @@
     walletlink "^2.0.2"
     web3-provider-engine "^15.0.4"
 
-"@pooltogether/current-pool-data@3.2.0-beta.5":
-  version "3.2.0-beta.5"
-  resolved "https://registry.yarnpkg.com/@pooltogether/current-pool-data/-/current-pool-data-3.2.0-beta.5.tgz#dcfb499a4c0f88ab127336fd4fedcd6e8a3a0db7"
-  integrity sha512-h7d3WJAQQxeKNwXt2mwGL+X0hdvObiTpeKV5IYChIjxKwNsH4L9FxcJ0uSFiTeHqs3xLiWh4G8msi2mXkwY2/Q==
+"@pooltogether/current-pool-data@3.2.2":
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/@pooltogether/current-pool-data/-/current-pool-data-3.2.2.tgz#8cca78d65f2282dfb809af4cb0648ad15947b944"
+  integrity sha512-Ppzvy2adk+S9a3pgQ0ul/axzlvym9fKQkSTufGqBGBH7dJ+jZAflZEeMx+JiS4HMVw9syoszm6LUZj5hs99pSg==
 
 "@pooltogether/etherplex@1.0.0":
   version "1.0.0"
@@ -2069,12 +2069,12 @@
   resolved "https://registry.yarnpkg.com/@pooltogether/fixed-point/-/fixed-point-1.0.0-beta.2.tgz#d76a1e77f21833e9b680296d65526b0ffd7415d7"
   integrity sha512-aUw4R0Z2oM0AK3W4LIXyBaojTOzRRbhLDHX0egeuvxfjy4gBb6X66v81gI7Wngg/7O0y9QL/B8jWkUnAFzhTig==
 
-"@pooltogether/pooltogether-contracts@^3.2.0":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.2.0.tgz#6bef549e82ca846b39547fdacc73f14e418cd27e"
-  integrity sha512-S5aZeDfR0gh+0xer+bZeCKLDDV2WHTEqlOMkRE0AJK9t0NQw7ls9OZkoQH3rzm1N8ASdjlQNVrCCQhhrhCD+Tg==
+"@pooltogether/pooltogether-contracts@3.3.2":
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.3.2.tgz#01e9bc77bc39879a0b96df4365032aadd3eae1d8"
+  integrity sha512-DttMVsMFKipZ7gDUmp2Y/KdRU7GquQFgadjOD/25I35sTFOsNDX+wu2IiO1sQt0ZZy9wSBTr0qF8Tcx9gVALIA==
   dependencies:
-    "@openzeppelin/contracts-upgradeable" "3.3.0"
+    "@openzeppelin/contracts-upgradeable" "3.4.0"
     "@pooltogether/fixed-point" "1.0.0-beta.2"
     "@pooltogether/pooltogether-rng-contracts" "1.0.0"
     "@pooltogether/uniform-random-number" "1.0.0-beta.1"
