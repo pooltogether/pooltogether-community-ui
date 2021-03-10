@@ -29,6 +29,10 @@ import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
 
+import { useReadProvider } from 'lib/hooks/useReadProvider'
+import { ethers } from 'ethers'
+import YieldPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/YieldSourcePrizePool'
+
 const demoAssetTypes = {
   dai: { label: 'DAI', logo: DaiSvg },
   uni: { label: 'UNI Stake' },

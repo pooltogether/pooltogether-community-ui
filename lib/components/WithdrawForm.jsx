@@ -191,7 +191,8 @@ export const WithdrawForm = (props) => {
                 setWithdrawAmount(ticketBal)
               }}
             >
-              {numberWithCommas(ticketBal, { precision: tokenDecimals })} {tokenSymbol}
+              {numberWithCommas(ticketBal, { precision: tokenDecimals, removeTrailingZeros: true })}{' '}
+              {tokenSymbol}
             </RightLabelButton>
           }
         />
