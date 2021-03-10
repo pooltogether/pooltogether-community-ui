@@ -149,14 +149,6 @@ const connectWallet = (w, setOnboardState) => {
   Cookies.set(SELECTED_WALLET_COOKIE_KEY, w.name, cookieOptions)
 
   const provider = new ethers.providers.Web3Provider(w.provider, 'any')
-  provider.on('network', (newNetwork, oldNetwork) => {
-    // When a Provider makes its initial connection, it emits a "network"
-    // event with a null oldNetwork along with the newNetwork. So, if the
-    // oldNetwork exists, it represents a changing network
-    if (oldNetwork) {
-      window.location.reload()
-    }
-  })
 
   setOnboardState((previousState) => ({
     ...previousState,
