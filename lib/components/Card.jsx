@@ -3,13 +3,15 @@ import classnames from 'classnames'
 
 export const Card = (props) => {
   const { children, className } = props
-  
-  const paddingClasses = props.small ? 'py-6 px-3' : 'py-3 px-3 sm:py-6 sm:px-12'
+
+  const paddingClasses = props.small ? 'py-3 px-6' : 'py-3 px-3 sm:py-6 sm:px-12'
+  const marginClasses = props.marginClasses || 'mb-4 sm:mb-10'
 
   return (
     <div
       className={classnames(
-        'bg-default rounded-xl w-full mb-4 sm:mb-10 fadeIn animated',
+        'bg-default rounded-xl w-full fadeIn animated',
+        marginClasses,
         paddingClasses,
         className
       )}
@@ -39,17 +41,24 @@ export const CardTitle = (props) => (
 export const CardPrimaryText = (props) => {
   const textClasses = props.small ? 'text-xs sm:text-xl' : 'text-base sm:text-4xl'
 
-  return <div
-    className={classnames('flex items-center justify-center py-2 leading-none font-bold text-white', props.className, textClasses, {
-      'text-center': props.center
-    })}
-  >
-    {props.children}
-  </div>
+  return (
+    <div
+      className={classnames(
+        'flex items-center justify-center py-2 leading-none font-bold text-white',
+        props.className,
+        textClasses,
+        {
+          'text-center': props.center,
+        }
+      )}
+    >
+      {props.children}
+    </div>
+  )
 }
 
 CardPrimaryText.defaultProps = {
-  center: true
+  center: true,
 }
 
 export const CardSecondaryText = (props) => (

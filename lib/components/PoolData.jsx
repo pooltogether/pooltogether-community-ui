@@ -122,7 +122,6 @@ const UnsupportedNetwork = (props) => {
         You're currently connected to <Network name={networkName} chainId={chainId} />.
       </div>
       <div className='mb-4'>
-        {' '}
         Please connect your wallet to one of the following supported networks:
       </div>
       <ul>
