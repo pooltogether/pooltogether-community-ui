@@ -3,9 +3,7 @@ import { Slide, ToastContainer } from 'react-toastify'
 
 import { Footer } from 'lib/components/Footer'
 import { Meta } from 'lib/components/Meta'
-// import { PTHint } from 'lib/components/PTHint'
 import { Nav } from 'lib/components/Nav'
-import { StaticNetworkNotificationBanner } from 'lib/components/StaticNetworkNotificationBanner'
 
 export const Layout = (props) => {
   const { children } = props
@@ -20,20 +18,11 @@ export const Layout = (props) => {
           minHeight: '100vh'
         }}
       >
-        {/* <StaticNetworkNotificationBanner /> */}
-
         <div className='pool-container flex flex-grow relative z-30 h-full page fadeIn animated'>
           <div className='flex flex-col flex-grow'>
             <div id='top' className='main-nav relative spinner-hidden z-20 pt-2'>
               <Nav />
             </div>
-            {/* <PTHint
-            title='On fairness fees'
-            tip={`To maintain fairness your funds need to contribute interest towards the prize each week. You can:
-1) SCHEDULE: receive $1000 DAI once enough interest has been provided to the prize
-2) INSTANT: pay $1.90 to withdraw right now and forfeit the interest that would go towards the prize`}
-          /> */}
-
             <div
               className='relative flex justify-center flex-grow h-full z-10 text-white'
               style={{

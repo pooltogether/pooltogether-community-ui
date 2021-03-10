@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React from 'react'
 import { ethers } from 'ethers'
 import { atom, useAtom } from 'jotai'
 import { useRouter } from 'next/router'
@@ -11,7 +11,6 @@ import { poolToast } from 'lib/utils/poolToast'
 import { useExternalErc20Awards } from 'lib/hooks/useExternalErc20Awards'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { useUsersAddress } from 'lib/hooks/useUsersAddress'
-import { useCoinGeckoTokenIds } from 'lib/hooks/useCoinGeckoTokenIds'
 import { useExternalErc721Awards } from 'lib/hooks/useExternalErc721Awards'
 import { useDetermineContractVersions } from 'lib/hooks/useDetermineContractVersions'
 
@@ -25,33 +24,30 @@ const renderErrorMessage = (errorMsg) => {
   poolToast.error(errorMsg)
 }
 
-export const EMPTY_ERROR_STATE = {
-  error: null,
-  errorMessage: null,
-  view: null
-}
-
 // Jotai Atoms
-export const errorStateAtom = atom(EMPTY_ERROR_STATE)
+export const errorStateAtom = atom({})
 
 /**
  * Wraps app and populates Jotai pool data stores if applicable
  */
 export const PoolData = (props) => {
   const router = useRouter()
-  const { prizePoolAddress } = router.query
+  const { poolAlias, prizePoolAddress } = router.query
 
   const [errorState] = useAtom(errorStateAtom)
 
   // If there's no address, we don't need to check it or fetch data
-  if (!prizePoolAddress) {
+  if (!poolAlias && !prizePoolAddress) {
     return props.children
   }
 
-  try {
-    ethers.utils.getAddress(String(prizePoolAddress))
-  } catch (e) {
-    throw new Error(`Incorrectly formatted Ethereum address! ${prizePoolAddress}`)
+  if (prizePoolAddress) {
+    try {
+      ethers.utils.getAddress(String(prizePoolAddress))
+    } catch (e) {
+      poolToast.error(`Incorrect pool address for path: ${window.location.pathname}`)
+      throw new Error(`Incorrectly formatted Ethereum address for GET path entered`)
+    }
   }
 
   // Error Catching
@@ -59,13 +55,14 @@ export const PoolData = (props) => {
     if (errorState.errorMessage) {
       renderErrorMessage(errorState.errorMessage)
     }
-    if (errorState.view) {
-      return errorState.view
-    }
-    return null
   }
 
-  return <PoolDataInitialization>{props.children}</PoolDataInitialization>
+  return (
+    <PoolDataInitialization>
+      {errorState.view}
+      {props.children}
+    </PoolDataInitialization>
+  )
 }
 
 /**
@@ -75,19 +72,21 @@ const PoolDataInitialization = (props) => {
   useDetermineContractVersions()
   useNetwork()
   useUsersAddress()
-  useCoinGeckoTokenIds()
   usePoolAddresses()
-  const [poolChainValues, setPoolChainValues] = usePoolChainValues()
+  const [poolChainValues] = usePoolChainValues()
   useUserChainValues()
   useExternalErc20Awards()
   useExternalErc721Awards()
 
+  const [errorState] = useAtom(errorStateAtom)
+
   if (poolChainValues.loading) {
     return (
       <div className='text-center text-xl'>
+        {errorState.view}
+
         <LoadingDots />
-        <br />
-        <h1>Loading ...</h1>
+        <h2>Loading ...</h2>
       </div>
     )
   }

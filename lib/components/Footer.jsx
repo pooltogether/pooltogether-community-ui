@@ -11,15 +11,10 @@ export const Footer = () => {
   let twitterHref = 'https://twitter.com/PoolTogether_'
 
   return (
-    <footer className='footer w-full text-default text-sm sm:px-8 lg:px-0'>
+    <footer className='footer w-full text-default text-sm sm:px-8 lg:px-0 mt-20'>
       <div className='nav-and-footer-container'>
         <div className='flex flex-col sm:flex-row justify-between mt-3 sm:mt-4 lg:mt-6 pb-5 lg:pb-8'>
           <div className=''>
-            <span className='mb-2 sm:mb-0 invisible sm:visible block sm:inline'>
-              &copy; {new Date().getFullYear()}{' '}
-              <a href='https://www.pooltogether.com'>PoolTogether Inc.</a>
-            </span>
-
             <a title='faq' className='trans mr-4 sm:ml-8' href='https://www.pooltogether.com/faq'>
               faq
             </a>
@@ -102,7 +97,7 @@ export const Footer = () => {
                   src={MailFooterIcon}
                   className='h-3 relative'
                   style={{
-                    top: 6,
+                    top: 6
                   }}
                 />
               </a>

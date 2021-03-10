@@ -4,13 +4,14 @@ import { useAtom } from 'jotai'
 import { AdminUI } from 'lib/components/AdminUI'
 import { StatsUI } from 'lib/components/StatsUI'
 import { Content, ContentPane, Tab, Tabs } from 'lib/components/Tabs'
-import ManageImage from 'assets/images/manage-image.svg'
-import { Button } from 'lib/components/Button'
 import { Card, CardTitle } from 'lib/components/Card'
+import { ButtonLink } from 'lib/components/ButtonLink'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
+
+import ManageImage from 'assets/images/manage-image.svg'
 
 const MANAGE_VIEW = Object.freeze({
   stats: '#stats',
@@ -38,7 +39,7 @@ export const ManageUI = (props) => {
             setSelectedTab={setSelectedTab}
             selectedTab={selectedTab}
             hash={MANAGE_VIEW.admin}
-            className='ml-16'
+            className='ml-4 sm:ml-16'
           >
             Admin
           </Tab>
@@ -65,17 +66,14 @@ const ManageHeader = () => {
     <div className='flex mt-10 mb-10 sm:mb-20 lg:justify-between'>
       <div className='flex-grow'>
         <h1 className='text-accent-1 title text-xl sm:text-6xl'>Prize Pool Dashboard</h1>
-
-        <p className='text-accent-1 text-base sm:text-2xl max-w-3xl'>Version 3.1.0</p>
-
-        <Button
+        <ButtonLink
           size='base'
           color='secondary'
           className='mt-6'
           href='https://docs.pooltogether.com/'
         >
           View documentation
-        </Button>
+        </ButtonLink>
       </div>
       <img
         src={ManageImage}

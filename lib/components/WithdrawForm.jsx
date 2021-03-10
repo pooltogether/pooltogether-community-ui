@@ -12,7 +12,7 @@ import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
 import { InnerCard } from 'lib/components/Card'
 import { useDebounce } from 'lib/hooks/useDebounce'
 import { fetchExitFee } from 'lib/utils/fetchExitFee'
-import { networkAtom } from 'lib/hooks/useNetwork'
+import { useNetwork } from 'lib/hooks/useNetwork'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
@@ -21,10 +21,10 @@ import { sendTx } from 'lib/utils/sendTx'
 import Warning from 'assets/images/warning.svg'
 import { poolToast } from 'lib/utils/poolToast'
 import { calculateOdds } from 'lib/utils/calculateOdds'
-import Link from 'next/link'
 import { Gauge } from 'lib/components/Gauge'
 import { addSeconds } from 'date-fns'
 import { subtractDates } from 'lib/utils/subtractDates'
+import { getErc20InputProps } from 'lib/utils/getErc20InputProps'
 
 const handleWithdrawInstantly = async (
   setTx,
@@ -67,7 +67,7 @@ export const WithdrawForm = (props) => {
   const [usersAddress] = useAtom(usersAddressAtom)
   const [poolChainValues] = useAtom(poolChainValuesAtom)
   const [usersChainValues] = useAtom(userChainValuesAtom)
-  const [network] = useAtom(networkAtom)
+  const [chainId, networkName] = useNetwork()
 
   const [exitFees, setExitFees] = useState({
     earlyExitFee: null,
@@ -104,7 +104,7 @@ export const WithdrawForm = (props) => {
     const t = async () => {
       if (debouncedWithdrawAmount) {
         const result = await fetchExitFee(
-          network.name,
+          networkName,
           usersAddress,
           prizePool,
           ticketAddress,
@@ -126,16 +126,23 @@ export const WithdrawForm = (props) => {
 
   const withdrawAmountBN = withdrawAmount
     ? ethers.utils.parseUnits(withdrawAmount, tokenDecimals)
-    : ethers.utils.bigNumberify(0)
+    : ethers.BigNumber.from(0)
   const overBalance = withdrawAmountBN.gt(usersTicketBalance)
-  const ticketBal = usersTicketBalance
-    ? ethers.utils.formatUnits(usersTicketBalance, tokenDecimals)
-    : '0'
+  const ticketBal =
+    usersTicketBalance && tokenDecimals
+      ? ethers.utils.formatUnits(usersTicketBalance, tokenDecimals)
+      : '0'
+
+  const { ticketDecimals, ticketTotalSupply, numberOfWinners } = poolChainValues
+  const totalSupplyLessWithdrawAmountBN = ticketTotalSupply
+    ? ticketTotalSupply.sub(withdrawAmountBN)
+    : ethers.BigNumber.from(0)
+
   const newOdds = calculateOdds(
     usersTicketBalance.sub(withdrawAmountBN),
-    poolChainValues.ticketTotalSupply.sub(withdrawAmountBN),
-    poolChainValues.ticketDecimals,
-    poolChainValues.numberOfWinners
+    totalSupplyLessWithdrawAmountBN,
+    ticketDecimals,
+    numberOfWinners
   )
   const formattedOdds = numberWithCommas(newOdds, { precision: 2 })
 
@@ -160,6 +167,8 @@ export const WithdrawForm = (props) => {
     )
   }
 
+  const { min, step } = getErc20InputProps(tokenDecimals)
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -170,7 +179,8 @@ export const WithdrawForm = (props) => {
           required
           isError={overBalance}
           type='number'
-          pattern='\d+'
+          min={min}
+          step={step}
           unit={tokenSymbol}
           onChange={(e) => setWithdrawAmount(e.target.value)}
           value={withdrawAmount}
@@ -181,7 +191,7 @@ export const WithdrawForm = (props) => {
                 setWithdrawAmount(ticketBal)
               }}
             >
-              {numberWithCommas(ticketBal, { precision: 4 })} {tokenSymbol}
+              {numberWithCommas(ticketBal, { precision: tokenDecimals })} {tokenSymbol}
             </RightLabelButton>
           }
         />
@@ -212,8 +222,6 @@ export const WithdrawForm = (props) => {
             )}
           </span>
         )}
-
-        {}
 
         {earlyExitFee && !earlyExitFee.isZero() && (
           <div className='flex mt-8 sm:mb-0 flex-col sm:flex-row'>
@@ -264,7 +272,7 @@ const WithdrawButtons = (props) => {
           size='lg'
           fullWidth
           type='button'
-          className='mr-4'
+          className='mr-4 border-none'
           onClick={(e) => {
             e.preventDefault()
             resetForm()
@@ -306,7 +314,7 @@ const WithdrawGauge = (props) => {
           label={<GaugeLabel time={time} timeType={timeType} />}
         />
       </div>
-      <div className='block sm:hidden text-orange-500 text-center mb-2'>
+      <div className='block sm:hidden text-orange-500 text-center my-2'>
         {time} more {timeType} to go until free withdrawal
       </div>
     </>
@@ -343,7 +351,7 @@ const GaugeLabel = (props) => {
     <div className='flex flex-col'>
       <div className='text-8xl text-highlight-1 leading-none mt-4 font-bold'>{time}</div>
       <div className='text-xl text-highlight-1 mb-6 font-bold'>{timeType} left</div>
-      <div className='text-highlight-1'>
+      <div className='text-highlight-1 mt-3'>
         {time} more {timeType} to go until free withdrawal
       </div>
     </div>

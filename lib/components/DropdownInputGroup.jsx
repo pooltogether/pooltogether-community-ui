@@ -88,14 +88,14 @@ export const DropdownInputGroup = (props) => {
   labelClassName = labelClassName
     ? labelClassName
     : classnames(DEFAULT_INPUT_LABEL_CLASSES, {
-        'cursor-not-allowed font-whitesmoke': disabled,
+        'cursor-not-allowed opacity-30': disabled,
         'text-accent-1': !disabled
       })
 
   unitsClassName = unitsClassName
     ? unitsClassName
     : classnames('font-bold text-xs sm:text-sm whitespace-no-wrap', {
-        'cursor-not-allowed font-whitesmoke': disabled,
+        'cursor-not-allowed opacity-30': disabled,
         'font-white': !disabled
       })
 
