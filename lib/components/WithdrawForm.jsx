@@ -273,7 +273,7 @@ const WithdrawButtons = (props) => {
           size='lg'
           fullWidth
           type='button'
-          className='mr-4'
+          className='mr-4 border-none'
           onClick={(e) => {
             e.preventDefault()
             resetForm()
@@ -315,7 +315,7 @@ const WithdrawGauge = (props) => {
           label={<GaugeLabel time={time} timeType={timeType} />}
         />
       </div>
-      <div className='block sm:hidden text-orange-500 text-center mb-2'>
+      <div className='block sm:hidden text-orange-500 text-center my-2'>
         {time} more {timeType} to go until free withdrawal
       </div>
     </>
@@ -352,7 +352,7 @@ const GaugeLabel = (props) => {
     <div className='flex flex-col'>
       <div className='text-8xl text-highlight-1 leading-none mt-4 font-bold'>{time}</div>
       <div className='text-xl text-highlight-1 mb-6 font-bold'>{timeType} left</div>
-      <div className='text-highlight-1'>
+      <div className='text-highlight-1 mt-3'>
         {time} more {timeType} to go until free withdrawal
       </div>
     </div>

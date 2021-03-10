@@ -47,7 +47,7 @@ const COLOR_CLASSES = {
   }
 }
 
-export function getButtonClasses (props) {
+export function getButtonClasses(props) {
   let {
     color,
     className,
@@ -174,7 +174,7 @@ const getRoundedClasses = (roundedClasses) => {
   return roundedClasses || 'rounded-full'
 }
 
-export function ButtonLink (props) {
+export function ButtonLink(props) {
   let { children, as, href } = props
 
   const classes = getButtonClasses(props)
