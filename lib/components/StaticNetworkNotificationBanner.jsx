@@ -32,6 +32,10 @@ export const StaticNetworkNotificationBanner = ({}) => {
     networkWords = `${networkName} 👍`
   }
 
+  if (networkSupported) {
+    return null
+  }
+
   return (
     <div
       className={classnames('text-sm sm:text-base lg:text-lg sm:px-6 py-2 sm:py-3', {
@@ -39,7 +43,7 @@ export const StaticNetworkNotificationBanner = ({}) => {
         'text-default bg-purple-1': networkSupported
       })}
     >
-      <div className='text-center px-4'>
+      <div className='text-center px-4 font-bold'>
         This works on {supportedNames}. Your wallet is currently set to{' '}
         <span className='font-bold'>{networkWords}</span>
       </div>

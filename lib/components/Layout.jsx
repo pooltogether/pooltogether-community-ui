@@ -4,6 +4,7 @@ import { Slide, ToastContainer } from 'react-toastify'
 import { Footer } from 'lib/components/Footer'
 import { Meta } from 'lib/components/Meta'
 import { Nav } from 'lib/components/Nav'
+import { StaticNetworkNotificationBanner } from 'lib/components/StaticNetworkNotificationBanner'
 
 export const Layout = (props) => {
   const { children } = props
@@ -11,6 +12,7 @@ export const Layout = (props) => {
   return (
     <>
       <Meta />
+      <StaticNetworkNotificationBanner />
 
       <div
         className='flex flex-col w-full'
