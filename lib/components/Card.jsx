@@ -48,7 +48,7 @@ export const CardPrimaryText = (props) => {
         props.className,
         textClasses,
         {
-          'text-center': props.center,
+          'text-center': props.center
         }
       )}
     >
@@ -58,7 +58,7 @@ export const CardPrimaryText = (props) => {
 }
 
 CardPrimaryText.defaultProps = {
-  center: true,
+  center: true
 }
 
 export const CardSecondaryText = (props) => (

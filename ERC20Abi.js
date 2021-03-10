@@ -6,35 +6,35 @@ export default [
     outputs: [
       {
         name: '',
-        type: 'string',
-      },
+        type: 'string'
+      }
     ],
     payable: false,
     stateMutability: 'view',
-    type: 'function',
+    type: 'function'
   },
   {
     constant: false,
     inputs: [
       {
         name: 'spender',
-        type: 'address',
+        type: 'address'
       },
       {
         name: 'value',
-        type: 'uint256',
-      },
+        type: 'uint256'
+      }
     ],
     name: 'approve',
     outputs: [
       {
         name: '',
-        type: 'bool',
-      },
+        type: 'bool'
+      }
     ],
     payable: false,
     stateMutability: 'nonpayable',
-    type: 'function',
+    type: 'function'
   },
   {
     constant: true,
@@ -43,39 +43,39 @@ export default [
     outputs: [
       {
         name: '',
-        type: 'uint256',
-      },
+        type: 'uint256'
+      }
     ],
     payable: false,
     stateMutability: 'view',
-    type: 'function',
+    type: 'function'
   },
   {
     constant: false,
     inputs: [
       {
         name: 'from',
-        type: 'address',
+        type: 'address'
       },
       {
         name: 'to',
-        type: 'address',
+        type: 'address'
       },
       {
         name: 'value',
-        type: 'uint256',
-      },
+        type: 'uint256'
+      }
     ],
     name: 'transferFrom',
     outputs: [
       {
         name: '',
-        type: 'bool',
-      },
+        type: 'bool'
+      }
     ],
     payable: false,
     stateMutability: 'nonpayable',
-    type: 'function',
+    type: 'function'
   },
   {
     constant: true,
@@ -84,77 +84,77 @@ export default [
     outputs: [
       {
         name: '',
-        type: 'uint8',
-      },
+        type: 'uint8'
+      }
     ],
     payable: false,
     stateMutability: 'view',
-    type: 'function',
+    type: 'function'
   },
   {
     constant: false,
     inputs: [
       {
         name: 'spender',
-        type: 'address',
+        type: 'address'
       },
       {
         name: 'addedValue',
-        type: 'uint256',
-      },
+        type: 'uint256'
+      }
     ],
     name: 'increaseAllowance',
     outputs: [
       {
         name: '',
-        type: 'bool',
-      },
+        type: 'bool'
+      }
     ],
     payable: false,
     stateMutability: 'nonpayable',
-    type: 'function',
+    type: 'function'
   },
   {
     constant: false,
     inputs: [
       {
         name: 'to',
-        type: 'address',
+        type: 'address'
       },
       {
         name: 'value',
-        type: 'uint256',
-      },
+        type: 'uint256'
+      }
     ],
     name: 'mint',
     outputs: [
       {
         name: '',
-        type: 'bool',
-      },
+        type: 'bool'
+      }
     ],
     payable: false,
     stateMutability: 'nonpayable',
-    type: 'function',
+    type: 'function'
   },
   {
     constant: true,
     inputs: [
       {
         name: 'owner',
-        type: 'address',
-      },
+        type: 'address'
+      }
     ],
     name: 'balanceOf',
     outputs: [
       {
         name: '',
-        type: 'uint256',
-      },
+        type: 'uint256'
+      }
     ],
     payable: false,
     stateMutability: 'view',
-    type: 'function',
+    type: 'function'
   },
   {
     constant: true,
@@ -163,26 +163,26 @@ export default [
     outputs: [
       {
         name: '',
-        type: 'string',
-      },
+        type: 'string'
+      }
     ],
     payable: false,
     stateMutability: 'view',
-    type: 'function',
+    type: 'function'
   },
   {
     constant: false,
     inputs: [
       {
         name: 'account',
-        type: 'address',
-      },
+        type: 'address'
+      }
     ],
     name: 'addMinter',
     outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
-    type: 'function',
+    type: 'function'
   },
   {
     constant: false,
@@ -191,109 +191,109 @@ export default [
     outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
-    type: 'function',
+    type: 'function'
   },
   {
     constant: false,
     inputs: [
       {
         name: 'spender',
-        type: 'address',
+        type: 'address'
       },
       {
         name: 'subtractedValue',
-        type: 'uint256',
-      },
+        type: 'uint256'
+      }
     ],
     name: 'decreaseAllowance',
     outputs: [
       {
         name: '',
-        type: 'bool',
-      },
+        type: 'bool'
+      }
     ],
     payable: false,
     stateMutability: 'nonpayable',
-    type: 'function',
+    type: 'function'
   },
   {
     constant: false,
     inputs: [
       {
         name: 'to',
-        type: 'address',
+        type: 'address'
       },
       {
         name: 'value',
-        type: 'uint256',
-      },
+        type: 'uint256'
+      }
     ],
     name: 'transfer',
     outputs: [
       {
         name: '',
-        type: 'bool',
-      },
+        type: 'bool'
+      }
     ],
     payable: false,
     stateMutability: 'nonpayable',
-    type: 'function',
+    type: 'function'
   },
   {
     constant: true,
     inputs: [
       {
         name: 'account',
-        type: 'address',
-      },
+        type: 'address'
+      }
     ],
     name: 'isMinter',
     outputs: [
       {
         name: '',
-        type: 'bool',
-      },
+        type: 'bool'
+      }
     ],
     payable: false,
     stateMutability: 'view',
-    type: 'function',
+    type: 'function'
   },
   {
     constant: false,
     inputs: [
       {
         name: 'sender',
-        type: 'address',
-      },
+        type: 'address'
+      }
     ],
     name: 'initialize',
     outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
-    type: 'function',
+    type: 'function'
   },
   {
     constant: true,
     inputs: [
       {
         name: 'owner',
-        type: 'address',
+        type: 'address'
       },
       {
         name: 'spender',
-        type: 'address',
-      },
+        type: 'address'
+      }
     ],
     name: 'allowance',
     outputs: [
       {
         name: '',
-        type: 'uint256',
-      },
+        type: 'uint256'
+      }
     ],
     payable: false,
     stateMutability: 'view',
-    type: 'function',
+    type: 'function'
   },
   {
     anonymous: false,
@@ -301,11 +301,11 @@ export default [
       {
         indexed: true,
         name: 'account',
-        type: 'address',
-      },
+        type: 'address'
+      }
     ],
     name: 'MinterAdded',
-    type: 'event',
+    type: 'event'
   },
   {
     anonymous: false,
@@ -313,11 +313,11 @@ export default [
       {
         indexed: true,
         name: 'account',
-        type: 'address',
-      },
+        type: 'address'
+      }
     ],
     name: 'MinterRemoved',
-    type: 'event',
+    type: 'event'
   },
   {
     anonymous: false,
@@ -325,21 +325,21 @@ export default [
       {
         indexed: true,
         name: 'from',
-        type: 'address',
+        type: 'address'
       },
       {
         indexed: true,
         name: 'to',
-        type: 'address',
+        type: 'address'
       },
       {
         indexed: false,
         name: 'value',
-        type: 'uint256',
-      },
+        type: 'uint256'
+      }
     ],
     name: 'Transfer',
-    type: 'event',
+    type: 'event'
   },
   {
     anonymous: false,
@@ -347,20 +347,20 @@ export default [
       {
         indexed: true,
         name: 'owner',
-        type: 'address',
+        type: 'address'
       },
       {
         indexed: true,
         name: 'spender',
-        type: 'address',
+        type: 'address'
       },
       {
         indexed: false,
         name: 'value',
-        type: 'uint256',
-      },
+        type: 'uint256'
+      }
     ],
     name: 'Approval',
-    type: 'event',
-  },
+    type: 'event'
+  }
 ]

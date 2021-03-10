@@ -2,7 +2,7 @@ import React from 'react'
 import { arc } from 'd3-shape'
 import { scaleLinear } from 'd3-scale'
 
-export function Gauge ({ value = 50, min = 0, max = 100, label, units }) {
+export function Gauge({ value = 50, min = 0, max = 100, label, units }) {
   const backgroundFillColor = '#222B45'
 
   const startAngle = -Math.PI / 2 - 0.6
@@ -15,15 +15,10 @@ export function Gauge ({ value = 50, min = 0, max = 100, label, units }) {
     .endAngle(endAngle)
     .cornerRadius(1)()
 
-  const percentScale = scaleLinear()
-    .domain([min, max])
-    .range([0, 1])
+  const percentScale = scaleLinear().domain([min, max]).range([0, 1])
   const percent = percentScale(value)
 
-  const angleScale = scaleLinear()
-    .domain([0, 1])
-    .range([startAngle, endAngle])
-    .clamp(true)
+  const angleScale = scaleLinear().domain([0, 1]).range([startAngle, endAngle]).clamp(true)
 
   const angle = angleScale(percent)
 
@@ -34,9 +29,7 @@ export function Gauge ({ value = 50, min = 0, max = 100, label, units }) {
     .endAngle(angle)
     .cornerRadius(1)()
 
-  const colorScale = scaleLinear()
-    .domain([0, 1])
-    .range(['#EF2751', '#6CE988'])
+  const colorScale = scaleLinear().domain([0, 1]).range(['#EF2751', '#6CE988'])
 
   const gradientSteps = colorScale.ticks(10).map((value) => colorScale(value))
 
