@@ -29,18 +29,14 @@ import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
 
-import { useReadProvider } from 'lib/hooks/useReadProvider'
-import { ethers } from 'ethers'
-import YieldPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/YieldSourcePrizePool'
-
 const demoAssetTypes = {
   dai: { label: 'DAI', logo: DaiSvg },
   uni: { label: 'UNI Stake' },
   usdc: { label: 'USDC', logo: UsdcSvg },
-  usdt: { label: 'USDT', logo: UsdtSvg }
+  usdt: { label: 'USDT', logo: UsdtSvg },
 }
 const demoPools = {
-  rinkeby: { chainId: 4, assets: ['dai', 'usdc', 'usdt'] }
+  rinkeby: { chainId: 4, assets: ['dai', 'usdc', 'usdt'] },
 }
 
 export const IndexContent = (props) => {
@@ -51,12 +47,12 @@ const PoolsLists = () => {
   const {
     data: createdPrizePools,
     isFetched: createdPrizePoolsIsFetched,
-    isFetching: createdPrizePoolsIsFetching
+    isFetching: createdPrizePoolsIsFetching,
   } = useAllCreatedPrizePoolsWithTokens()
   const {
     data: tokenBalances,
     isFetched: tokenBalancesIsFetched,
-    isFetching: tokenBalancedIsFetching
+    isFetching: tokenBalancedIsFetching,
   } = useAllUserTokenBalances()
 
   if (
@@ -75,9 +71,20 @@ const PoolsLists = () => {
       <DemoPoolsCard />
       <AllPoolsCard createdPrizePools={createdPrizePools} tokenBalances={tokenBalances} />
       <ReferencePoolCard />
+      <BuilderCard />
     </>
   )
 }
+
+const CardTitle = (props) => (
+  <div
+    className={classnames('font-bold text-base sm:text-2xl text-accent-1 ', {
+      'mb-4': !props.noMargin,
+    })}
+  >
+    {props.children}
+  </div>
+)
 
 const ReferencePoolCard = () => {
   const [network, setNetwork] = useState('mainnet')
@@ -92,63 +99,70 @@ const ReferencePoolCard = () => {
   const networks = {
     'ropsten': {
       value: 'ropsten',
-      view: 'Ropsten'
+      view: 'Ropsten',
     },
     'rinkeby': {
       value: 'rinkeby',
-      view: 'Rinkeby'
+      view: 'Rinkeby',
     },
     'mainnet': {
       value: 'mainnet',
-      view: 'Mainnet'
+      view: 'Mainnet',
+    },
+    kovan: {
+      value: 'kovan',
+      view: 'Kovan',
     },
     'poa-sokol': {
       value: 'poa-sokol',
-      view: 'Sokol (POA)'
+      view: 'Sokol (POA)',
     },
     'local': {
       value: 'local',
-      view: 'Local'
-    }
+      view: 'Local',
+    },
   }
 
   return (
-    <>
-      <Card>
-        <Collapse title='🔍 Lookup pool by contract address'>
-          <DropdownInputGroup
-            id='network-dropdown'
-            label={'Network the Pool is on:'}
-            formatValue={formatValue}
-            onValueSet={onValueSet}
-            current={network}
-            values={networks}
-          />
+    <Card>
+      <Collapse title='🔍 Lookup pool by contract address'>
+        <DropdownInputGroup
+          id='network-dropdown'
+          label={'Network the Pool is on:'}
+          formatValue={formatValue}
+          onValueSet={onValueSet}
+          current={network}
+          values={networks}
+        />
 
-          <TextInputGroup
-            id='contractAddress'
-            label={<>Prize Pool contract address:</>}
-            required
-            onChange={(e) => setContractAddress(e.target.value)}
-            value={contractAddress}
-          />
+        <TextInputGroup
+          id='contractAddress'
+          label={<>Prize Pool contract address:</>}
+          required
+          onChange={(e) => setContractAddress(e.target.value)}
+          value={contractAddress}
+        />
 
-          <div className='mt-4 ml-auto'>
-            <ButtonLink
-              size='base'
-              color='secondary'
-              as={`/pools/${network}/${contractAddress}/home`}
-              href='/pools/[networkName]/[prizePoolAddress]/home'
-              paddingClasses='px-10 py-1'
-              className='ml-auto'
-              disabled={!contractAddress}
-            >
-              View
-            </ButtonLink>
-          </div>
-        </Collapse>
-      </Card>
-    </>
+        <div className='mt-4 ml-auto'>
+          <ViewButton
+            as={`/pools/${network}/${contractAddress}/home`}
+            href='/pools/[networkName]/[prizePoolAddress]/home'
+            disabled={!contractAddress}
+          />
+        </div>
+      </Collapse>
+    </Card>
+  )
+}
+
+const BuilderCard = () => {
+  return (
+    <Card>
+      <div className='w-full flex flex-row'>
+        <CardTitle noMargin>🔨 Pool Builder</CardTitle>
+        <ViewButton href={'https://builder.pooltogether.com/'} />
+      </div>
+    </Card>
   )
 }
 
@@ -166,7 +180,7 @@ const DemoPoolsCard = (props) => {
     if (address) {
       networkDemoPools.push({
         assetType,
-        address: getDemoPoolContractAddress(demoNetworkName, assetType)
+        address: getDemoPoolContractAddress(demoNetworkName, assetType),
       })
     }
   })
@@ -175,7 +189,7 @@ const DemoPoolsCard = (props) => {
 
   return (
     <Card>
-      <div className='font-bold text-base sm:text-2xl text-accent-1 mb-4'>🧪 Demo Pools</div>
+      <CardTitle>🧪 Demo Pools</CardTitle>
       {networkDemoPools.map((demoPool, index) => (
         <DemoPoolButton key={index} {...demoPool} networkName={demoNetworkName} />
       ))}
@@ -265,7 +279,7 @@ const GovernancePoolsCard = (props) => {
             className={classnames(
               'ml-3 sm:ml-4 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current text-accent-1 trans',
               {
-                'rotate-90': showContent
+                'rotate-90': showContent,
               }
             )}
           />
@@ -318,7 +332,7 @@ const UsersPoolsCard = (props) => {
 
   return (
     <Card>
-      <div className='font-bold text-base sm:text-2xl text-accent-1 mb-4'>🎟 My Pools</div>
+      <CardTitle>🎟 My Pools</CardTitle>
       <ListHeaders />
       <ul>{pools}</ul>
     </Card>
@@ -358,7 +372,7 @@ const AllPoolsCard = (props) => {
     return pools
   }, [createdPrizePools, tokenBalances, hideNoDeposits, showFirstTen, isWalletConnected])
 
-  if (pools.length === 0) return null
+  if (createdPrizePools?.length === 0) return null
 
   return (
     <Card>
@@ -372,7 +386,7 @@ const AllPoolsCard = (props) => {
             className={classnames(
               'ml-3 sm:ml-4 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current text-accent-1 trans',
               {
-                'rotate-90': showContent
+                'rotate-90': showContent,
               }
             )}
           />
@@ -387,7 +401,7 @@ const AllPoolsCard = (props) => {
       </Collapse>
       <ListHeaders />
       <ul>{pools}</ul>
-      {showFirstTen && (
+      {showFirstTen && createdPrizePools?.length > 10 && (
         <div className='flex'>
           <button
             className='mx-auto trans hover:text-accent-1'
@@ -541,16 +555,21 @@ const Actions = (props) => {
 
   return (
     <div className='ml-auto'>
-      <ButtonLink
-        size='base'
-        color='tertiary'
-        as={as}
-        href={href}
-        paddingClasses='px-4 xs:px-10 py-2'
-        className='ml-auto'
-      >
-        View
-      </ButtonLink>
+      <ViewButton as={as} href={href} />
     </div>
   )
 }
+
+const ViewButton = (props) => (
+  <ButtonLink
+    size='base'
+    color='tertiary'
+    as={props.as}
+    href={props.href}
+    paddingClasses='px-4 xs:px-10 py-1 sm:py-2'
+    className='ml-auto'
+    disabled={props.disabled}
+  >
+    View
+  </ButtonLink>
+)
