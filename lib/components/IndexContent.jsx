@@ -40,11 +40,7 @@ const demoPools = {
 }
 
 export const IndexContent = (props) => {
-  return (
-    <>
-      <PoolsLists />
-    </>
-  )
+  return <PoolsLists />
 }
 
 const PoolsLists = () => {
@@ -101,15 +97,15 @@ const ReferencePoolCard = () => {
   }
 
   const networks = {
-    ropsten: {
+    'ropsten': {
       value: 'ropsten',
       view: 'Ropsten',
     },
-    rinkeby: {
+    'rinkeby': {
       value: 'rinkeby',
       view: 'Rinkeby',
     },
-    mainnet: {
+    'mainnet': {
       value: 'mainnet',
       view: 'Mainnet',
     },
@@ -117,11 +113,11 @@ const ReferencePoolCard = () => {
       value: 'kovan',
       view: 'Kovan',
     },
-    ['poa-sokol']: {
+    'poa-sokol': {
       value: 'poa-sokol',
       view: 'Sokol (POA)',
     },
-    local: {
+    'local': {
       value: 'local',
       view: 'Local',
     },
