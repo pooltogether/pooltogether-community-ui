@@ -148,11 +148,13 @@ const doConnectWallet = async (walletType, setOnboardState) => {
 const connectWallet = (w, setOnboardState) => {
   Cookies.set(SELECTED_WALLET_COOKIE_KEY, w.name, cookieOptions)
 
+  const provider = new ethers.providers.Web3Provider(w.provider, 'any')
+
   setOnboardState((previousState) => ({
     ...previousState,
     address: undefined,
     wallet: w,
-    provider: new ethers.providers.Web3Provider(w.provider)
+    provider
   }))
 }
 
