@@ -27,54 +27,101 @@ if (process.env.NEXT_JS_DOMAIN_NAME) {
   }
 }
 
+const APP_NAME = 'PoolTogether'
+
+const walletConnectOptions = {
+  infuraKey: INFURA_KEY,
+  preferred: true
+}
+
 const WALLETS_CONFIG = [
   { walletName: 'metamask', preferred: true },
   { walletName: 'coinbase', preferred: true },
+  { walletName: 'rainbow', preferred: true, ...walletConnectOptions },
+  { walletName: 'argent', preferred: true, ...walletConnectOptions },
+  { walletName: 'trustWallet', preferred: true, ...walletConnectOptions },
+  { walletName: 'gnosisSafe', preferred: true, ...walletConnectOptions },
   { walletName: 'trust', preferred: true, rpcUrl: RPC_URL },
   {
     walletName: 'trezor',
+    preferred: true,
     appUrl: 'https://app.pooltogether.com',
     email: 'hello@pooltogether.com',
-    rpcUrl: RPC_URL,
-    preferred: true
+    rpcUrl: RPC_URL
   },
   {
     walletName: 'ledger',
-    rpcUrl: RPC_URL,
-    preferred: true
+    preferred: true,
+    rpcUrl: RPC_URL
   },
   {
     walletName: 'fortmatic',
-    apiKey: FORTMATIC_KEY,
-    preferred: true
+    preferred: true,
+    apiKey: FORTMATIC_KEY
   },
   {
     walletName: 'walletConnect',
-    infuraKey: INFURA_KEY,
-    preferred: true
+    ...walletConnectOptions
   },
   {
     walletName: 'walletLink',
-    rpcUrl: RPC_URL,
-    preferred: true
+    preferred: true,
+    rpcUrl: RPC_URL
   },
   {
     walletName: 'imToken',
-    rpcUrl: RPC_URL,
+    preferred: true,
+    rpcUrl: RPC_URL
+  },
+  {
+    walletName: 'dcent',
     preferred: true
   },
   {
     walletName: 'huobiwallet',
+    preferred: true,
     rpcUrl: RPC_URL
   },
   {
     walletName: 'portis',
+    preferred: true,
     apiKey: PORTIS_KEY
   },
-  { walletName: 'authereum' },
-  { walletName: 'dapper' },
-  { walletName: 'status' },
-  { walletName: 'torus' }
+  {
+    walletName: 'authereum',
+    preferred: true
+  },
+  {
+    walletName: 'status',
+    preferred: true
+  },
+  {
+    walletName: 'torus',
+    preferred: true
+  },
+  {
+    walletName: 'lattice',
+    preferred: true,
+    rpcUrl: RPC_URL,
+    appName: APP_NAME
+  },
+  {
+    walletName: 'mykey',
+    preferred: true,
+    rpcUrl: RPC_URL
+  },
+  {
+    walletName: 'opera',
+    preferred: true
+  },
+  {
+    walletName: 'operaTouch',
+    preferred: true
+  },
+  {
+    walletName: 'web3Wallet',
+    preferred: true
+  }
 ]
 
 export const WalletContext = React.createContext()
