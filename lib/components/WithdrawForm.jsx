@@ -1,30 +1,31 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import { useAtom } from 'jotai'
+import { addSeconds } from 'date-fns'
 import PrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PrizePool'
 
 import { Button } from 'lib/components/Button'
 import { RightLabelButton, TextInputGroup } from 'lib/components/TextInputGroup'
-import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
-import { numberWithCommas } from 'lib/utils/numberWithCommas'
-import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
+import { Gauge } from 'lib/components/Gauge'
 import { InnerCard } from 'lib/components/Card'
-import { useDebounce } from 'lib/hooks/useDebounce'
-import { fetchExitFee } from 'lib/utils/fetchExitFee'
-import { useNetwork } from 'lib/hooks/useNetwork'
 import { WalletContext } from 'lib/components/WalletContextProvider'
+import { useDebounce } from 'lib/hooks/useDebounce'
+import { useNetwork } from 'lib/hooks/useNetwork'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
+import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
+import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
+import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
+import { amountWithCommas } from 'lib/utils/format'
+import { calculateOdds } from 'lib/utils/calculateOdds'
+import { fetchExitFee } from 'lib/utils/fetchExitFee'
+import { getErc20InputProps } from 'lib/utils/getErc20InputProps'
+import { numberWithCommas } from 'lib/utils/numberWithCommas'
+import { poolToast } from 'lib/utils/poolToast'
 import { sendTx } from 'lib/utils/sendTx'
+import { subtractDates } from 'lib/utils/subtractDates'
 
 import Warning from 'assets/images/warning.svg'
-import { poolToast } from 'lib/utils/poolToast'
-import { calculateOdds } from 'lib/utils/calculateOdds'
-import { Gauge } from 'lib/components/Gauge'
-import { addSeconds } from 'date-fns'
-import { subtractDates } from 'lib/utils/subtractDates'
-import { getErc20InputProps } from 'lib/utils/getErc20InputProps'
 
 const handleWithdrawInstantly = async (
   setTx,
@@ -59,6 +60,14 @@ const handleWithdrawInstantly = async (
   )
 }
 
+const parseNumString = (amount, decimals) => {
+  try {
+    return amount ? ethers.utils.parseUnits(amount, decimals) : ethers.BigNumber.from(0)
+  } catch (e) {
+    console.warn(e)
+  }
+}
+
 export const WithdrawForm = (props) => {
   const { setTx, withdrawAmount, setWithdrawAmount } = props
 
@@ -77,13 +86,20 @@ export const WithdrawForm = (props) => {
   })
   const debouncedWithdrawAmount = useDebounce(withdrawAmount, 300)
 
+  const {
+    ticketDecimals,
+    ticketTotalSupply,
+    numberOfWinners,
+    isRngRequested,
+    tokenDecimals,
+    maxTimelockDuration,
+    tokenSymbol
+  } = poolChainValues
   const { prizePool, ticket: ticketAddress } = poolAddresses
   const provider = walletContext.state.provider
   const { usersTicketBalance } = usersChainValues
   const { earlyExitFee, timelockDurationSeconds } = exitFees
-  const { isRngRequested, tokenDecimals, maxTimelockDuration } = poolChainValues
   const poolIsLocked = isRngRequested
-  const tokenSymbol = poolChainValues.tokenSymbol
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -108,7 +124,7 @@ export const WithdrawForm = (props) => {
           usersAddress,
           prizePool,
           ticketAddress,
-          ethers.utils.parseUnits(debouncedWithdrawAmount, tokenDecimals)
+          parseNumString(debouncedWithdrawAmount, tokenDecimals)
         )
         setExitFees(result)
       } else {
@@ -124,22 +140,24 @@ export const WithdrawForm = (props) => {
     t()
   }, [debouncedWithdrawAmount])
 
-  const withdrawAmountBN = withdrawAmount
-    ? ethers.utils.parseUnits(withdrawAmount, tokenDecimals)
-    : ethers.BigNumber.from(0)
-  const overBalance = withdrawAmountBN.gt(usersTicketBalance)
+  const withdrawAmountBN = parseNumString(withdrawAmount, tokenDecimals)
+  const inputError = !withdrawAmountBN
+  const overBalance = withdrawAmountBN?.gt(usersTicketBalance)
+
   const ticketBal =
     usersTicketBalance && tokenDecimals
       ? ethers.utils.formatUnits(usersTicketBalance, tokenDecimals)
       : '0'
 
-  const { ticketDecimals, ticketTotalSupply, numberOfWinners } = poolChainValues
-  const totalSupplyLessWithdrawAmountBN = ticketTotalSupply
-    ? ticketTotalSupply.sub(withdrawAmountBN)
-    : ethers.BigNumber.from(0)
+  let usersNewTicketBalance = ethers.BigNumber.from(0)
+  let totalSupplyLessWithdrawAmountBN = ethers.BigNumber.from(0)
+  if (withdrawAmountBN) {
+    usersNewTicketBalance = usersTicketBalance.sub(withdrawAmountBN)
+    totalSupplyLessWithdrawAmountBN = ticketTotalSupply && ticketTotalSupply.sub(withdrawAmountBN)
+  }
 
   const newOdds = calculateOdds(
-    usersTicketBalance.sub(withdrawAmountBN),
+    usersNewTicketBalance,
     totalSupplyLessWithdrawAmountBN,
     ticketDecimals,
     numberOfWinners
@@ -175,9 +193,9 @@ export const WithdrawForm = (props) => {
         <TextInputGroup
           id='withdrawAmount'
           name='withdrawAmount'
-          label='Withdraw amounts'
+          label='Withdraw amount'
           required
-          isError={overBalance}
+          isError={inputError || overBalance}
           type='number'
           min={min}
           step={step}
@@ -191,24 +209,24 @@ export const WithdrawForm = (props) => {
                 setWithdrawAmount(ticketBal)
               }}
             >
-              {numberWithCommas(ticketBal, { precision: tokenDecimals, removeTrailingZeros: true })}{' '}
-              {tokenSymbol}
+              {ticketBal} {tokenSymbol}
             </RightLabelButton>
           }
         />
 
         {overBalance && (
           <div className='text-xs sm:text-sm text-red-600 sm:ml-4'>
-            The maximum you can withdraw is{' '}
-            {displayAmountInEther(usersTicketBalance, {
-              precision: 2,
-              decimals: tokenDecimals
-            })}{' '}
-            {tokenSymbol}.
+            The maximum you can withdraw is {ticketBal} {tokenSymbol}.
           </div>
         )}
 
-        {withdrawAmount && !overBalance && (
+        {inputError && (
+          <div className='text-xs sm:text-sm text-red-600 sm:ml-4'>
+            The amount you entered is invalid.
+          </div>
+        )}
+
+        {withdrawAmount && !overBalance && !inputError && (
           <span className='text-xs sm:text-sm text-orange-500 ml-0 sm:ml-4'>
             {newOdds ? (
               <>

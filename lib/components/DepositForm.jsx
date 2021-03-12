@@ -7,7 +7,6 @@ import FeatherIcon from 'feather-icons-react'
 import { Button } from 'lib/components/Button'
 import { RightLabelButton, TextInputGroup } from 'lib/components/TextInputGroup'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
-import { numberWithCommas } from 'lib/utils/numberWithCommas'
 import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
 import { sendTx } from 'lib/utils/sendTx'
@@ -17,6 +16,7 @@ import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineC
 import { errorStateAtom } from 'lib/components/PoolData'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { InnerCard } from 'lib/components/Card'
+import { amountWithCommas } from 'lib/utils/format'
 
 import Warning from 'assets/images/warning.svg'
 import { getErc20InputProps } from 'lib/utils/getErc20InputProps'
@@ -92,8 +92,7 @@ export const DepositForm = (props) => {
                 setDepositAmount(tokenBal)
               }}
             >
-              {numberWithCommas(tokenBal, { precision: tokenDecimals, removeTrailingZeros: true })}{' '}
-              {tokenSymbol}
+              {amountWithCommas(usersTokenBalance, tokenDecimals)} {tokenSymbol}
             </RightLabelButton>
           }
         />

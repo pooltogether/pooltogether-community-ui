@@ -35,14 +35,14 @@ export const TxMessage = (props) => {
       {txCompleted && !txError && (
         <FeatherIcon
           icon='check-circle'
-          className={'mx-auto stroke-1 w-16 h-16 stroke-current text-accent-1 mb-4'}
+          className={'mx-auto stroke-1 w-8 sm:w-16 h-8 sm:h-16 stroke-current text-accent-1 mb-4'}
         />
       )}
 
       {txCompleted && txError && (
         <FeatherIcon
           icon='x-circle'
-          className={'mx-auto stroke-1 w-16 h-16 stroke-current text-accent-1 mb-4'}
+          className={'mx-auto stroke-1 w-8 sm:w-16 h-8 sm:h-16 stroke-current text-accent-1 mb-4'}
         />
       )}
 
@@ -55,7 +55,7 @@ export const TxMessage = (props) => {
       )}
 
       {txSent && (
-        <div className='text-accent-1 text-sm sm:text-base'>Waiting for confirmations ...</div>
+        <div className='text-white text-sm sm:text-base'>Waiting for confirmations ...</div>
       )}
 
       {txCompleted && !txError && (
