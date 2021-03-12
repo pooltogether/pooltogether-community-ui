@@ -33,10 +33,10 @@ const demoAssetTypes = {
   dai: { label: 'DAI', logo: DaiSvg },
   uni: { label: 'UNI Stake' },
   usdc: { label: 'USDC', logo: UsdcSvg },
-  usdt: { label: 'USDT', logo: UsdtSvg },
+  usdt: { label: 'USDT', logo: UsdtSvg }
 }
 const demoPools = {
-  rinkeby: { chainId: 4, assets: ['dai', 'usdc', 'usdt'] },
+  rinkeby: { chainId: 4, assets: ['dai', 'usdc', 'usdt'] }
 }
 
 export const IndexContent = (props) => {
@@ -47,12 +47,12 @@ const PoolsLists = () => {
   const {
     data: createdPrizePools,
     isFetched: createdPrizePoolsIsFetched,
-    isFetching: createdPrizePoolsIsFetching,
+    isFetching: createdPrizePoolsIsFetching
   } = useAllCreatedPrizePoolsWithTokens()
   const {
     data: tokenBalances,
     isFetched: tokenBalancesIsFetched,
-    isFetching: tokenBalancedIsFetching,
+    isFetching: tokenBalancedIsFetching
   } = useAllUserTokenBalances()
 
   if (
@@ -79,7 +79,7 @@ const PoolsLists = () => {
 const CardTitle = (props) => (
   <div
     className={classnames('font-bold text-base sm:text-2xl text-accent-1 ', {
-      'mb-4': !props.noMargin,
+      'mb-4': !props.noMargin
     })}
   >
     {props.children}
@@ -99,28 +99,28 @@ const ReferencePoolCard = () => {
   const networks = {
     'ropsten': {
       value: 'ropsten',
-      view: 'Ropsten',
+      view: 'Ropsten'
     },
     'rinkeby': {
       value: 'rinkeby',
-      view: 'Rinkeby',
+      view: 'Rinkeby'
     },
     'mainnet': {
       value: 'mainnet',
-      view: 'Mainnet',
+      view: 'Mainnet'
     },
-    kovan: {
+    'kovan': {
       value: 'kovan',
-      view: 'Kovan',
+      view: 'Kovan'
     },
     'poa-sokol': {
       value: 'poa-sokol',
-      view: 'Sokol (POA)',
+      view: 'Sokol (POA)'
     },
     'local': {
       value: 'local',
-      view: 'Local',
-    },
+      view: 'Local'
+    }
   }
 
   return (
@@ -180,7 +180,7 @@ const DemoPoolsCard = (props) => {
     if (address) {
       networkDemoPools.push({
         assetType,
-        address: getDemoPoolContractAddress(demoNetworkName, assetType),
+        address: getDemoPoolContractAddress(demoNetworkName, assetType)
       })
     }
   })
@@ -279,7 +279,7 @@ const GovernancePoolsCard = (props) => {
             className={classnames(
               'ml-3 sm:ml-4 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current text-accent-1 trans',
               {
-                'rotate-90': showContent,
+                'rotate-90': showContent
               }
             )}
           />
@@ -386,7 +386,7 @@ const AllPoolsCard = (props) => {
             className={classnames(
               'ml-3 sm:ml-4 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current text-accent-1 trans',
               {
-                'rotate-90': showContent,
+                'rotate-90': showContent
               }
             )}
           />
@@ -458,7 +458,9 @@ const PoolTitleCell = (props) => {
 
   return (
     <div className='flex w-2/3 xs:w-1/3 mr-2 sm:mr-0'>
-      {imageUrl && <img src={imageUrl} className='w-6 h-6 mr-2 my-auto rounded-full' />}
+      <div className='w-6 h-6 mr-2'>
+        {imageUrl && <img src={imageUrl} className='my-auto rounded-full' />}
+      </div>
       <div className='flex flex-col'>
         {name}
         <span className='text-accent-1 text-xxs'>
