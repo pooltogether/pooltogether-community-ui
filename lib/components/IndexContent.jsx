@@ -276,9 +276,9 @@ const GovernancePoolsCard = (props) => {
           <>
             🏆 Governance Pools
             <Tooltip
+              id='governance-pools'
               className='ml-2 my-auto'
-              tip='Governance pools are pools that are owned and maintained by the PoolTogether governance
-              contracts.'
+              tip='These pools are owned and maintained by PoolTogether governance'
             />
           </>
         }
@@ -397,7 +397,7 @@ const AllPoolsCard = (props) => {
             <Tooltip
               id='all-pools'
               className='ml-2 my-auto'
-              tip='All pools that have been created by the PoolTogether Builder'
+              tip='These pools created permissionlessly by anyone using the PoolTogether Builder'
             />
           </>
         }
