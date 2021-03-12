@@ -22,7 +22,7 @@ import Warning from 'assets/images/warning.svg'
 import { getErc20InputProps } from 'lib/utils/getErc20InputProps'
 
 export const DepositForm = (props) => {
-  const { handleSubmit, vars, stateSetters } = props
+  const { inputError, handleSubmit, vars, stateSetters } = props
 
   const [poolChainValues] = useAtom(poolChainValuesAtom)
   const [usersChainValues] = useAtom(userChainValuesAtom)
@@ -97,6 +97,13 @@ export const DepositForm = (props) => {
           }
         />
       </div>
+
+      {inputError && (
+        <div className='text-xs sm:text-sm text-red-600 sm:ml-4'>
+          The amount you entered is invalid.
+        </div>
+      )}
+
       {overBalance && (
         <div className='text-yellow-1'>
           You only have{' '}
@@ -104,9 +111,7 @@ export const DepositForm = (props) => {
             precision: tokenDecimals,
             decimals: tokenDecimals
           })}{' '}
-          {tokenSymbol}.
-          <br />
-          The maximum you can deposit is{' '}
+          {tokenSymbol}. The maximum you can deposit is{' '}
           {displayAmountInEther(usersTokenBalance, {
             precision: tokenDecimals,
             decimals: tokenDecimals
@@ -114,12 +119,13 @@ export const DepositForm = (props) => {
           .
         </div>
       )}
+
       <div className='my-5 flex flex-col sm:flex-row'>
         <UnlockDepositsButton />
         <Button
           size='lg'
           fullWidth
-          disabled={overBalance || !hasApprovedBalance}
+          disabled={inputError || overBalance || !hasApprovedBalance}
           color='secondary'
           className='sm:ml-4'
         >

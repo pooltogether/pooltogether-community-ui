@@ -20,6 +20,7 @@ import { fetchExitFee } from 'lib/utils/fetchExitFee'
 import { getErc20InputProps } from 'lib/utils/getErc20InputProps'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
 import { poolToast } from 'lib/utils/poolToast'
+import { parseNumString } from 'lib/utils/parseNumString'
 import { sendTx } from 'lib/utils/sendTx'
 import { subtractDates } from 'lib/utils/subtractDates'
 
@@ -56,14 +57,6 @@ const handleWithdrawInstantly = async (
     params,
     'Withdraw'
   )
-}
-
-const parseNumString = (amount, decimals) => {
-  try {
-    return amount ? ethers.utils.parseUnits(amount, decimals) : ethers.BigNumber.from(0)
-  } catch (e) {
-    console.warn(e)
-  }
 }
 
 export const WithdrawForm = (props) => {
