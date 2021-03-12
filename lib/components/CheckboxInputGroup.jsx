@@ -26,7 +26,7 @@ export const CheckboxInputGroup = (props) => {
       <div
         id={id}
         onClick={handleClick}
-        className={classnames('flex items-center justify-center my-auto mr-3 leading-none')}
+        className={classnames('flex items-center justify-center my-auto leading-none')}
       >
         <div
           className={classnames('flex items-center rounded-sm w-4 h-4 border-2 trans', {
@@ -47,7 +47,11 @@ export const CheckboxInputGroup = (props) => {
         </div>
       </div>
 
-      <div className='text-left flex flex-col items-start justify-start leading-snug'>{label}</div>
+      {label && (
+        <div className='text-left flex flex-col items-start justify-start ml-3 leading-snug'>
+          {label}
+        </div>
+      )}
 
       {hint && (
         <PTHint title={title ? title : null} tip={hint}>

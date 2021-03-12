@@ -28,15 +28,17 @@ import UsdcSvg from 'assets/images/usdc-new-transparent.png'
 import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
+import { PTHint } from 'lib/components/PTHint'
+import { Tooltip } from 'lib/components/ToolTip'
 
 const demoAssetTypes = {
   dai: { label: 'DAI', logo: DaiSvg },
   uni: { label: 'UNI Stake' },
   usdc: { label: 'USDC', logo: UsdcSvg },
-  usdt: { label: 'USDT', logo: UsdtSvg },
+  usdt: { label: 'USDT', logo: UsdtSvg }
 }
 const demoPools = {
-  rinkeby: { chainId: 4, assets: ['dai', 'usdc', 'usdt'] },
+  rinkeby: { chainId: 4, assets: ['dai', 'usdc', 'usdt'] }
 }
 
 export const IndexContent = (props) => {
@@ -47,12 +49,12 @@ const PoolsLists = () => {
   const {
     data: createdPrizePools,
     isFetched: createdPrizePoolsIsFetched,
-    isFetching: createdPrizePoolsIsFetching,
+    isFetching: createdPrizePoolsIsFetching
   } = useAllCreatedPrizePoolsWithTokens()
   const {
     data: tokenBalances,
     isFetched: tokenBalancesIsFetched,
-    isFetching: tokenBalancedIsFetching,
+    isFetching: tokenBalancedIsFetching
   } = useAllUserTokenBalances()
 
   if (
@@ -79,7 +81,7 @@ const PoolsLists = () => {
 const CardTitle = (props) => (
   <div
     className={classnames('font-bold text-base sm:text-2xl text-accent-1 ', {
-      'mb-4': !props.noMargin,
+      'mb-4': !props.noMargin
     })}
   >
     {props.children}
@@ -99,28 +101,28 @@ const ReferencePoolCard = () => {
   const networks = {
     'ropsten': {
       value: 'ropsten',
-      view: 'Ropsten',
+      view: 'Ropsten'
     },
     'rinkeby': {
       value: 'rinkeby',
-      view: 'Rinkeby',
+      view: 'Rinkeby'
     },
     'mainnet': {
       value: 'mainnet',
-      view: 'Mainnet',
+      view: 'Mainnet'
     },
-    kovan: {
+    'kovan': {
       value: 'kovan',
-      view: 'Kovan',
+      view: 'Kovan'
     },
     'poa-sokol': {
       value: 'poa-sokol',
-      view: 'Sokol (POA)',
+      view: 'Sokol (POA)'
     },
     'local': {
       value: 'local',
-      view: 'Local',
-    },
+      view: 'Local'
+    }
   }
 
   return (
@@ -160,7 +162,7 @@ const BuilderCard = () => {
     <Card>
       <div className='w-full flex flex-row'>
         <CardTitle noMargin>🔨 Pool Builder</CardTitle>
-        <ViewButton href={'https://builder.pooltogether.com/'} />
+        <ViewButton text='Start Building' href={'https://builder.pooltogether.com/'} />
       </div>
     </Card>
   )
@@ -180,7 +182,7 @@ const DemoPoolsCard = (props) => {
     if (address) {
       networkDemoPools.push({
         assetType,
-        address: getDemoPoolContractAddress(demoNetworkName, assetType),
+        address: getDemoPoolContractAddress(demoNetworkName, assetType)
       })
     }
   })
@@ -270,27 +272,39 @@ const GovernancePoolsCard = (props) => {
   return (
     <Card>
       <Collapse
-        title='🏆 Governance Pools'
+        title={
+          <>
+            🏆 Governance Pools
+            <Tooltip
+              className='ml-2 my-auto'
+              tip='Governance pools are pools that are owned and maintained by the PoolTogether governance
+              contracts.'
+            />
+          </>
+        }
         containerClassName='mb-4 xs:mb-8'
         headerMarginClassName='mb-4'
-        renderCustomIcon={({ showContent }) => (
+        renderCustomIcon={({ showContent, setShowContent }) => (
           <FeatherIcon
             icon='settings'
             className={classnames(
-              'ml-3 sm:ml-4 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current text-accent-1 trans',
+              'ml-3 sm:ml-4 w-4 h-4 my-auto stroke-current text-accent-1 trans cursor-pointer',
               {
-                'rotate-90': showContent,
+                'rotate-90': showContent
               }
             )}
+            onClick={() => setShowContent(!showContent)}
           />
         )}
       >
-        <CheckboxInputGroup
-          checked={hideNoDeposits}
-          handleClick={() => setHideNoDeposits(!hideNoDeposits)}
-          label='Hide pools with no deposits'
-          marginClasses=''
-        />
+        <div className='flex'>
+          <span className='ml-auto my-auto text-xs leading-snug'>Hide pools with no deposits</span>
+          <CheckboxInputGroup
+            checked={hideNoDeposits}
+            handleClick={() => setHideNoDeposits(!hideNoDeposits)}
+            marginClasses='ml-2'
+          />
+        </div>
       </Collapse>
       <ListHeaders />
       <ul>{pools}</ul>
@@ -377,27 +391,39 @@ const AllPoolsCard = (props) => {
   return (
     <Card>
       <Collapse
-        title='🤿 All Pools'
+        title={
+          <>
+            🤿 All Pools
+            <Tooltip
+              id='all-pools'
+              className='ml-2 my-auto'
+              tip='All pools that have been created by the PoolTogether Builder'
+            />
+          </>
+        }
         containerClassName='mb-4 xs:mb-8'
         headerMarginClassName='mb-4'
-        renderCustomIcon={({ showContent }) => (
+        renderCustomIcon={({ showContent, setShowContent }) => (
           <FeatherIcon
             icon='settings'
             className={classnames(
-              'ml-3 sm:ml-4 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current text-accent-1 trans',
+              'ml-3 sm:ml-4 my-auto w-4 h-4 stroke-current text-accent-1 trans cursor-pointer',
               {
-                'rotate-90': showContent,
+                'rotate-90': showContent
               }
             )}
+            onClick={() => setShowContent(!showContent)}
           />
         )}
       >
-        <CheckboxInputGroup
-          checked={hideNoDeposits}
-          handleClick={() => setHideNoDeposits(!hideNoDeposits)}
-          label='Hide pools with no deposits'
-          marginClasses=''
-        />
+        <div className='flex'>
+          <span className='ml-auto my-auto text-xs leading-snug'>Hide pools with no deposits</span>
+          <CheckboxInputGroup
+            checked={hideNoDeposits}
+            handleClick={() => setHideNoDeposits(!hideNoDeposits)}
+            marginClasses='ml-2'
+          />
+        </div>
       </Collapse>
       <ListHeaders />
       <ul>{pools}</ul>
@@ -508,7 +534,7 @@ const OwnerAddress = (props) => {
       <div className='inline bg-purple-1 rounded-full px-2 width-fit-content'>
         <a
           href={url}
-          className={`trans font-number hover:text-inverse`}
+          className={`trans hover:text-inverse`}
           target='_blank'
           rel='noopener noreferrer'
           title='View on Etherscan'
@@ -523,7 +549,7 @@ const OwnerAddress = (props) => {
   return (
     <a
       href={url}
-      className={`trans font-number hover:text-inverse`}
+      className={`trans hover:text-inverse`}
       target='_blank'
       rel='noopener noreferrer'
       title='View on Etherscan'
@@ -570,6 +596,10 @@ const ViewButton = (props) => (
     className='ml-auto'
     disabled={props.disabled}
   >
-    View
+    {props.text}
   </ButtonLink>
 )
+
+ViewButton.defaultProps = {
+  text: 'View'
+}

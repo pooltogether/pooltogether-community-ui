@@ -10,9 +10,11 @@ const custom = (triggerRect, tooltipRect) => {
   const left = triggerCenter - tooltipRect.width / 2
   const maxLeft = window.innerWidth - tooltipRect.width - 2
 
+  console.log(triggerRect.bottom, window.scrollY)
+
   return {
     left: Math.min(Math.max(2, left), maxLeft) + window.scrollX,
-    top: 60 + window.scrollY
+    top: triggerRect.bottom + 40 + window.scrollY
   }
 }
 

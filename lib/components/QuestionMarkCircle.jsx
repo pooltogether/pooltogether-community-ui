@@ -18,7 +18,7 @@ export const QuestionMarkCircle = (props) => {
         )}
       >
         <span
-          className='relative font-number font-bold text-base'
+          className='relative font-bold text-base'
           style={{
             left: '0.05rem'
           }}
