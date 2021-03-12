@@ -6,7 +6,6 @@ import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
 import { calculateOdds } from 'lib/utils/calculateOdds'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
-import { amountWithCommas } from 'lib/utils/format'
 
 export const DepositorOddsCards = (props) => {
   return (
@@ -29,7 +28,7 @@ const TicketCard = () => {
 
   const symbol = poolChainValues.ticketSymbol
   const decimals = poolChainValues.ticketDecimals
-  const balance = amountWithCommas(userChainValues.usersTicketBalance, decimals)
+  const balance = numberWithCommas(userChainValues.usersTicketBalance, { decimals })
 
   return (
     <Card small className='text-center' marginClasses='mb-4 mr-2'>
@@ -74,7 +73,7 @@ const BalanceCard = () => {
 
   const symbol = poolChainValues.tokenSymbol
   const decimals = poolChainValues.tokenDecimals
-  const balance = amountWithCommas(userChainValues.usersTokenBalance, decimals)
+  const balance = numberWithCommas(userChainValues.usersTokenBalance, { decimals })
 
   return (
     <Card small className='text-center' marginClasses='mb-4 ml-2'>
@@ -89,7 +88,7 @@ const TotalDepositsCard = () => {
 
   const symbol = poolChainValues.tokenSymbol
   const decimals = poolChainValues.tokenDecimals
-  const totalSupply = amountWithCommas(poolChainValues.ticketTotalSupply, decimals)
+  const totalSupply = numberWithCommas(poolChainValues.ticketTotalSupply, { decimals })
 
   return (
     <Card small className='text-center' marginClasses='ml-2'>

@@ -16,7 +16,7 @@ import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineC
 import { errorStateAtom } from 'lib/components/PoolData'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { InnerCard } from 'lib/components/Card'
-import { amountWithCommas } from 'lib/utils/format'
+import { numberWithCommas } from 'lib/utils/numberWithCommas'
 
 import Warning from 'assets/images/warning.svg'
 import { getErc20InputProps } from 'lib/utils/getErc20InputProps'
@@ -92,7 +92,7 @@ export const DepositForm = (props) => {
                 setDepositAmount(tokenBal)
               }}
             >
-              {amountWithCommas(usersTokenBalance, tokenDecimals)} {tokenSymbol}
+              {numberWithCommas(usersTokenBalance, { decimals: tokenDecimals })} {tokenSymbol}
             </RightLabelButton>
           }
         />
