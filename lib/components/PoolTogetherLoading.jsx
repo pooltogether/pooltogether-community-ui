@@ -8,7 +8,7 @@ export const PoolTogetherLoading = () => {
     <div className='m-auto flex flex-col'>
       <img
         src={PoolTogetherMark}
-        className='w-8 outline-none mx-auto mb-8'
+        className='w-8 h-16 outline-none mx-auto mb-8'
         style={{ borderWidth: 0 }}
       />
       <LoadingDots />

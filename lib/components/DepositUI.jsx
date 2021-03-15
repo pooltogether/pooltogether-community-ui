@@ -1,17 +1,18 @@
 import React, { useContext, useState } from 'react'
 import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
 import { ethers } from 'ethers'
+import { useAtom } from 'jotai'
 
+import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 import { DepositForm } from 'lib/components/DepositForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import { poolToast } from 'lib/utils/poolToast'
-import { sendTx } from 'lib/utils/sendTx'
-import { useAtom } from 'jotai'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
+import { parseNumString } from 'lib/utils/parseNumString'
+import { poolToast } from 'lib/utils/poolToast'
+import { sendTx } from 'lib/utils/sendTx'
 
 const handleDepositSubmit = async (
   setTx,
@@ -19,21 +20,11 @@ const handleDepositSubmit = async (
   usersAddress,
   contractAddress,
   ticketAddress,
-  depositAmount,
-  decimals
+  depositAmountBN
 ) => {
-  if (!depositAmount) {
-    poolToast.error(`Deposit Amount needs to be filled in`)
-    return
-  }
-
   const referrer = ethers.constants.AddressZero // TODO
-  const params = [
-    usersAddress,
-    ethers.utils.parseUnits(depositAmount, decimals),
-    ticketAddress,
-    referrer
-  ]
+
+  const params = [usersAddress, depositAmountBN, ticketAddress, referrer]
 
   await sendTx(
     setTx,
@@ -68,6 +59,10 @@ export const DepositUI = (props) => {
 
   const txInFlight = tx.inWallet || tx.sent
 
+  const decimals = poolChainValues.tokenDecimals
+  const depositAmountBN = parseNumString(depositAmount, decimals)
+  const inputError = !depositAmountBN
+
   const resetState = (e) => {
     e.preventDefault()
     setDepositAmount('')
@@ -100,6 +95,7 @@ export const DepositUI = (props) => {
     <>
       <div className='mb-4 sm:mb-8 text-sm sm:text-base text-accent-1'>{depositMessage}</div>
       <DepositForm
+        inputError={inputError}
         handleSubmit={(e) => {
           e.preventDefault()
           handleDepositSubmit(
@@ -108,8 +104,7 @@ export const DepositUI = (props) => {
             usersAddress,
             poolAddresses.prizePool,
             ticketAddress,
-            depositAmount,
-            poolChainValues.tokenDecimals
+            depositAmountBN
           )
         }}
         vars={{

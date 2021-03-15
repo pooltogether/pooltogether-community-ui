@@ -1,14 +1,11 @@
 import React from 'react'
 import { useAtom } from 'jotai'
 
-import { DEFAULT_TOKEN_PRECISION } from 'lib/constants'
 import { Card, CardPrimaryText, CardTitle } from 'lib/components/Card'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
 import { calculateOdds } from 'lib/utils/calculateOdds'
-import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
-import { getPrecision, numberWithCommas } from 'lib/utils/numberWithCommas'
-import { ethers } from 'ethers'
+import { numberWithCommas } from 'lib/utils/numberWithCommas'
 
 export const DepositorOddsCards = (props) => {
   return (
@@ -28,15 +25,14 @@ export const DepositorOddsCards = (props) => {
 const TicketCard = () => {
   const [poolChainValues] = useAtom(poolChainValuesAtom)
   const [userChainValues] = useAtom(userChainValuesAtom)
-  const balance = displayAmountInEther(userChainValues.usersTicketBalance, {
-    precision: 0,
-    decimals: poolChainValues.ticketDecimals
-  })
+
   const symbol = poolChainValues.ticketSymbol
+  const decimals = poolChainValues.ticketDecimals
+  const balance = numberWithCommas(userChainValues.usersTicketBalance, { decimals })
 
   return (
     <Card small className='text-center' marginClasses='mb-4 mr-2'>
-      <CardTitle>My tickets</CardTitle>
+      <CardTitle>My deposit</CardTitle>
       <CardPrimaryText small>{`${balance} ${symbol}`}</CardPrimaryText>
     </Card>
   )
@@ -74,11 +70,10 @@ const OddsCard = () => {
 const BalanceCard = () => {
   const [poolChainValues] = useAtom(poolChainValuesAtom)
   const [userChainValues] = useAtom(userChainValuesAtom)
-  const balance = displayAmountInEther(userChainValues.usersTokenBalance, {
-    precision: 2,
-    decimals: poolChainValues.tokenDecimals
-  })
+
   const symbol = poolChainValues.tokenSymbol
+  const decimals = poolChainValues.tokenDecimals
+  const balance = numberWithCommas(userChainValues.usersTokenBalance, { decimals })
 
   return (
     <Card small className='text-center' marginClasses='mb-4 ml-2'>
@@ -90,14 +85,10 @@ const BalanceCard = () => {
 
 const TotalDepositsCard = () => {
   const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const supplyFormatted = ethers.utils.formatUnits(
-    poolChainValues.ticketTotalSupply,
-    poolChainValues.tokenDecimals
-  )
-  const totalSupply = numberWithCommas(supplyFormatted, {
-    precision: getPrecision(supplyFormatted)
-  })
+
   const symbol = poolChainValues.tokenSymbol
+  const decimals = poolChainValues.tokenDecimals
+  const totalSupply = numberWithCommas(poolChainValues.ticketTotalSupply, { decimals })
 
   return (
     <Card small className='text-center' marginClasses='ml-2'>

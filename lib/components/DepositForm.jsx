@@ -7,7 +7,6 @@ import FeatherIcon from 'feather-icons-react'
 import { Button } from 'lib/components/Button'
 import { RightLabelButton, TextInputGroup } from 'lib/components/TextInputGroup'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
-import { numberWithCommas } from 'lib/utils/numberWithCommas'
 import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
 import { sendTx } from 'lib/utils/sendTx'
@@ -17,12 +16,13 @@ import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineC
 import { errorStateAtom } from 'lib/components/PoolData'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { InnerCard } from 'lib/components/Card'
+import { numberWithCommas } from 'lib/utils/numberWithCommas'
 
 import Warning from 'assets/images/warning.svg'
 import { getErc20InputProps } from 'lib/utils/getErc20InputProps'
 
 export const DepositForm = (props) => {
-  const { handleSubmit, vars, stateSetters } = props
+  const { inputError, handleSubmit, vars, stateSetters } = props
 
   const [poolChainValues] = useAtom(poolChainValuesAtom)
   const [usersChainValues] = useAtom(userChainValuesAtom)
@@ -92,12 +92,18 @@ export const DepositForm = (props) => {
                 setDepositAmount(tokenBal)
               }}
             >
-              {numberWithCommas(tokenBal, { precision: tokenDecimals, removeTrailingZeros: true })}{' '}
-              {tokenSymbol}
+              {numberWithCommas(usersTokenBalance, { decimals: tokenDecimals })} {tokenSymbol}
             </RightLabelButton>
           }
         />
       </div>
+
+      {inputError && (
+        <div className='text-xs sm:text-sm text-red-600 sm:ml-4'>
+          The amount you entered is invalid.
+        </div>
+      )}
+
       {overBalance && (
         <div className='text-yellow-1'>
           You only have{' '}
@@ -105,9 +111,7 @@ export const DepositForm = (props) => {
             precision: tokenDecimals,
             decimals: tokenDecimals
           })}{' '}
-          {tokenSymbol}.
-          <br />
-          The maximum you can deposit is{' '}
+          {tokenSymbol}. The maximum you can deposit is{' '}
           {displayAmountInEther(usersTokenBalance, {
             precision: tokenDecimals,
             decimals: tokenDecimals
@@ -115,12 +119,13 @@ export const DepositForm = (props) => {
           .
         </div>
       )}
+
       <div className='my-5 flex flex-col sm:flex-row'>
         <UnlockDepositsButton />
         <Button
           size='lg'
           fullWidth
-          disabled={overBalance || !hasApprovedBalance}
+          disabled={inputError || overBalance || !hasApprovedBalance}
           color='secondary'
           className='sm:ml-4'
         >

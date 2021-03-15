@@ -483,7 +483,9 @@ const PoolTitleCell = (props) => {
 
   return (
     <div className='flex w-2/3 xs:w-1/3 mr-2 sm:mr-0'>
-      {imageUrl && <img src={imageUrl} className='w-6 h-6 mr-2 my-auto rounded-full' />}
+      <div className='w-6 h-6 mr-2'>
+        {imageUrl && <img src={imageUrl} className='my-auto rounded-full' />}
+      </div>
       <div className='flex flex-col'>
         {name}
         <span className='text-accent-1 text-xxs'>
