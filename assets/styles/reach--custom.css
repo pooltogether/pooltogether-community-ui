@@ -23,47 +23,6 @@ reach-portal {
   animation: slide-down 0.2s ease;
 }
 
-/* TOOLTIPS / PTHINTS */
-.device-is-touch [data-reach-tooltip] {
-  top: 154px !important;
-  bottom: 0 !important;
-  right: 0 !important;
-  left: 0 !important;
-  max-width: 100% !important;
-  width: 100% !important;
-  height: 100vh !important;
-  border-radius: 0 !important;
-}
-
-[data-reach-tooltip] {
-  @apply text-inverse bg-primary rounded-lg;
-  box-shadow: 0 -10px 10px -1px rgba(0, 0, 0, 0.1), 0 20px 20px -3px rgba(0, 0, 0, 0.1),
-    rgba(14, 16, 40, 0.2) 0px 15px 30px;
-  border: 0;
-  max-width: 30rem;
-  padding: 1.25rem 2rem;
-  pointer-events: initial;
-  white-space: initial;
-  z-index: 1823774;
-}
-
-[data-reach-tooltip] * {
-  font-size: 14px !important;
-}
-
-@screen sm {
-  [data-reach-tooltip] {
-    border-radius: 8px;
-    max-width: 30rem;
-  }
-}
-
-@screen sm {
-  [data-reach-tooltip] * {
-    font-size: initial !important;
-  }
-}
-
 /* MENUS / DROPDOWNS */
 [data-reach-popover] {
   margin-top: 10px;

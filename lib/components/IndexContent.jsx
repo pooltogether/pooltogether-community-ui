@@ -28,7 +28,6 @@ import UsdcSvg from 'assets/images/usdc-new-transparent.png'
 import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
-import { PTHint } from 'lib/components/PTHint'
 import { Tooltip } from 'lib/components/ToolTip'
 
 const demoAssetTypes = {

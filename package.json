@@ -37,7 +37,6 @@
     "@pooltogether/pooltogether-contracts": "3.3.2",
     "@pooltogether/pooltogether-rng-contracts": "^1.1.0",
     "@reach/menu-button": "^0.11.2",
-    "@reach/tooltip": "0.10.5",
     "@sentry/cli": "^1.61.0",
     "@sentry/react": "^5.29.2",
     "@sentry/tracing": "^5.29.2",
