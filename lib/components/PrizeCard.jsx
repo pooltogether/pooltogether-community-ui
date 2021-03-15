@@ -50,7 +50,7 @@ export const PrizeCard = (props) => {
               </RelativeInternalLink>
             )}
             <RelativeInternalLink link='/home'>
-              My Account{' '}
+              Account balance{' '}
               <FeatherIcon
                 icon='arrow-right'
                 strokeWidth='0.25rem'
@@ -103,7 +103,7 @@ const PrizeSection = (props) => {
 }
 
 const Prizes = (props) => {
-  const { awards, loading } = useAwardsList()
+  const { awards } = useAwardsList()
   const awardsWithBalances = awards.filter((token) => !token.balance.isZero())
 
   if (awardsWithBalances.length === 1) {
