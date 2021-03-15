@@ -14,6 +14,7 @@ import { Card, CardSecondaryText } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { Button } from 'lib/components/Button'
 import { TxMessage } from 'lib/components/TxMessage'
+import { useNetwork } from 'lib/hooks/useNetwork'
 
 const handleStartAwardSubmit = async (setTx, provider, contractAddress) => {
   const params = [
@@ -89,6 +90,7 @@ const AwardPrizeTrigger = () => {
   const provider = walletContext.state.provider
   const [tx, setTx] = useState({})
   const [txType, setTxType] = useState('')
+  const [chainId] = useNetwork()
 
   const { days, hours, minutes, seconds } = useTimeLeft()
   const timeRemaining = Boolean(days || hours || minutes || seconds)
@@ -123,6 +125,7 @@ const AwardPrizeTrigger = () => {
     if (!timeRemaining && tx.completed) {
       fetchPoolChainValues(
         provider,
+        chainId,
         poolAddresses,
         prizePoolType,
         setPoolChainValues,

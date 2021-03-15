@@ -154,6 +154,7 @@ const UnlockDepositsButton = () => {
     if (tx.completed && !tx.error) {
       fetchPoolChainValues(
         provider,
+        chainId,
         poolAddresses,
         prizePoolType,
         setPoolChainValues,
