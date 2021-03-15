@@ -18,26 +18,26 @@ export const Collapse = (props) => {
   return (
     <>
       <div
-        className={classnames('flex cursor-pointer', headerClassName, headerMarginClassName, {
+        className={classnames('flex', headerClassName, headerMarginClassName, {
           'mb-4': showContent && !headerMarginClassName,
           'justify-between': title,
           'justify-end': title
         })}
-        onClick={() => setShowContent(!showContent)}
       >
-        {title && <div className='font-bold text-base sm:text-2xl text-accent-1'>{title}</div>}
+        {title && <div className='font-bold text-base sm:text-2xl text-accent-1 flex'>{title}</div>}
         {renderCustomIcon ? (
-          renderCustomIcon({ showContent })
+          renderCustomIcon({ showContent, setShowContent })
         ) : (
           <FeatherIcon
             icon='chevron-down'
             strokeWidth='0.25rem'
             className={classnames(
-              'ml-3 sm:ml-4 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current text-accent-1',
+              'ml-3 sm:ml-4 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current text-accent-1 cursor-pointer',
               {
                 'rotate-180': showContent
               }
             )}
+            onClick={() => setShowContent(!showContent)}
           />
         )}
       </div>
