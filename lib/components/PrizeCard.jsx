@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useAtom } from 'jotai'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
@@ -67,6 +67,10 @@ export const PrizeCard = (props) => {
 const PrizeSection = (props) => {
   const { awards, loading } = useAwardsList()
 
+  const awardsWithBalances = useMemo(() => awards.filter((token) => !token.balance.isZero()), [
+    awards
+  ])
+
   if (loading) {
     return (
       <div className={'p-10'}>
@@ -75,7 +79,7 @@ const PrizeSection = (props) => {
     )
   }
 
-  if (awards.length === 0) {
+  if (awardsWithBalances.length === 0) {
     return (
       <>
         <CardTitle className='text-center mb-2 font-bold'>
@@ -96,23 +100,22 @@ const PrizeSection = (props) => {
 
   return (
     <>
-      <Prizes />
+      <Prizes awards={awardsWithBalances} />
       <CardTitle className='text-center mb-8'>Current Prize</CardTitle>
     </>
   )
 }
 
 const Prizes = (props) => {
-  const { awards } = useAwardsList()
-  const awardsWithBalances = awards.filter((token) => !token.balance.isZero())
+  const { awards } = props
 
-  if (awardsWithBalances.length === 1) {
+  if (awards.length === 1) {
     return <SinglePrizeItem token={awards[0]} />
   }
 
   return (
     <ul className='flex flex-col max-w-xs mx-auto' style={{ minWidth: '190px' }}>
-      {awardsWithBalances.map((token, index) => {
+      {awards.map((token, index) => {
         return <PrizeListItem small={awards.length > 6} key={index} token={token} index={index} />
       })}
     </ul>
