@@ -16,9 +16,12 @@ export const SablierStreamCard = (props) => {
   const [poolChainValues] = useAtom(poolChainValuesAtom)
   const [contractVersions] = useAtom(contractVersionsAtom)
 
+  const { hideIfNoStream } = props
+
   const { sablierStream } = poolChainValues
 
   if (!sablierStream) {
+    if (hideIfNoStream) return null
     return <EmptySablierStreamState />
   }
 
@@ -61,7 +64,7 @@ export const SablierStreamCard = (props) => {
 
           <div className='flex'>
             <h3 className='leading-none'>
-              {numberWithCommas(prizesToBeStreamedTo, { precision: 0 })}
+              {numberWithCommas(prizesToBeStreamedTo, { precision: 0, decimals: 0 })}
             </h3>
             <span className='ml-2 mt-auto lowercase'>prizes</span>
           </div>
