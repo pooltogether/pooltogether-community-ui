@@ -9,13 +9,24 @@ import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { getDateFromSeconds } from 'lib/utils/getDateFromSeconds'
 import { secondsSinceEpoch } from 'lib/utils/secondsSinceEpoch'
 import { ethers } from 'ethers'
+import { contractVersionsAtom } from 'lib/hooks/useDetermineContractVersions'
+import compareVersions from 'compare-versions'
 
-// TODO: Only show if relevant?
 export const SablierStreamCard = (props) => {
   const [poolChainValues] = useAtom(poolChainValuesAtom)
+  const [contractVersions] = useAtom(contractVersionsAtom)
+
   const { sablierStream } = poolChainValues
 
-  if (!sablierStream) return <EmptySablierStreamState />
+  if (!sablierStream) {
+    return <EmptySablierStreamState />
+  }
+
+  if (compareVersions(contractVersions.prizeStrategy.version, '3.3.0') < 0) {
+    return (
+      <InvalidPrizeStrategyVersionForStreamState version={contractVersions.prizeStrategy.version} />
+    )
+  }
 
   const { amountPerPrizePeriod, tokenSymbol, startTime, stopTime, totalDeposit } = sablierStream
   const { prizePeriodSeconds } = poolChainValues
@@ -83,10 +94,21 @@ const StreamBar = (props) => {
   )
 }
 
-const EmptySablierStreamState = (props) => {
+const EmptySablierStreamState = () => {
   return (
     <Card>
       <Collapse title='Sablier Prize Stream'>Currently no stream available</Collapse>
+    </Card>
+  )
+}
+
+const InvalidPrizeStrategyVersionForStreamState = (props) => {
+  return (
+    <Card>
+      <Collapse title='Sablier Prize Stream'>
+        Prize Strategy v{props.version} does not support Sablier streams. Please deploy a new Prize
+        Strategy of at least v3.3.0.
+      </Collapse>
     </Card>
   )
 }
