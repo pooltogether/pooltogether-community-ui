@@ -26,6 +26,7 @@ import PrizeIllustration from 'assets/images/prize-illustration-transparent@2x.p
 import { shorten } from 'lib/utils/shorten'
 import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 import { CopyableAddress } from 'lib/components/CopyableAddress'
+import { useNetwork } from 'lib/hooks/useNetwork'
 
 const handleAddExternalErc721 = async (
   txName,
@@ -148,6 +149,8 @@ const AddErc721Form = () => {
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
+  const [chainId] = useNetwork()
+
   const provider = walletContext.state.provider
 
   const txName = 'Add External ERC721 Tokens'
@@ -176,6 +179,7 @@ const AddErc721Form = () => {
     if (tx.completed && !tx.error) {
       fetchPoolChainValues(
         provider,
+        chainId,
         poolAddresses,
         prizePoolType,
         setPoolChainValues,
@@ -268,6 +272,7 @@ const RemoveAddressButton = (props) => {
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
+  const [chainId] = useNetwork()
 
   const txName = 'Remove External ERC20 Token'
 
@@ -287,6 +292,7 @@ const RemoveAddressButton = (props) => {
     if (tx.completed && !tx.error) {
       fetchPoolChainValues(
         provider,
+        chainId,
         poolAddresses,
         prizePoolType,
         setPoolChainValues,

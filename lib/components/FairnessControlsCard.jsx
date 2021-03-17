@@ -20,6 +20,7 @@ import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChai
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
+import { useNetwork } from 'lib/hooks/useNetwork'
 
 const handleSetCreditPlan = async (
   txName,
@@ -67,6 +68,7 @@ const FairnessControlsForm = (props) => {
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const [usersAddress] = useAtom(usersAddressAtom)
   const [tx, setTx] = useState({})
+  const [chainId] = useNetwork()
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
 
@@ -111,6 +113,7 @@ const FairnessControlsForm = (props) => {
     if (tx.completed && !tx.error) {
       fetchPoolChainValues(
         provider,
+        chainId,
         poolAddresses,
         prizePoolType,
         setPoolChainValues,

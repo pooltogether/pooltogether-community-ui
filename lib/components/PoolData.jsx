@@ -18,6 +18,7 @@ import { useDetermineContractVersions } from 'lib/hooks/useDetermineContractVers
 import { SUPPORTED_NETWORKS } from 'lib/constants'
 import { chainIdToName } from 'lib/utils/chainIdToName'
 import { networkColorClassname } from 'lib/utils/networkColorClassname'
+import { PoolTogetherLoading } from 'lib/components/PoolTogetherLoading'
 
 // http://localhost:3000/pools/rinkeby/0xd1E58Db0d67DB3f28fFa412Db58aCeafA0fEF8fA#admin
 
@@ -91,12 +92,10 @@ const PoolDataInitialization = (props) => {
 
   if (poolChainValues.loading) {
     return (
-      <div className='text-center text-xl'>
-        {errorState.view}
-
-        <LoadingDots />
-        <h2>Loading ...</h2>
-      </div>
+      <>
+        <div className='text-center text-xl'>{errorState.view}</div>
+        <PoolTogetherLoading />
+      </>
     )
   }
 

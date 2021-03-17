@@ -12,6 +12,7 @@ import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 
 import ManageImage from 'assets/images/manage-image.svg'
+import { RelativeInternalLink } from 'lib/components/RelativeInternalLink'
 
 const MANAGE_VIEW = Object.freeze({
   stats: '#stats',
@@ -57,6 +58,9 @@ export const ManageUI = (props) => {
           </ContentPane>
         )}
       </Content>
+      <div className='flex justify-center'>
+        <RelativeInternalLink link='/home'>View Prize Pool</RelativeInternalLink>
+      </div>
     </>
   )
 }
