@@ -24,6 +24,7 @@ import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 
 import PrizeIllustration from 'assets/images/prize-illustration-transparent@2x.png'
 import { CopyableAddress } from 'lib/components/CopyableAddress'
+import { useNetwork } from 'lib/hooks/useNetwork'
 
 const handleAddExternalErc20 = async (
   txName,
@@ -144,6 +145,7 @@ const AddErc20Form = () => {
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
+  const [chainId] = useNetwork()
 
   const txName = 'Add External ERC20 Token'
 
@@ -168,6 +170,7 @@ const AddErc20Form = () => {
   useEffect(() => {
     if (tx.completed && !tx.error) {
       fetchPoolChainValues(
+        chainId,
         provider,
         poolAddresses,
         prizePoolType,
@@ -244,6 +247,7 @@ const RemoveAddressButton = (props) => {
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
+  const [chainId] = useNetwork()
 
   const txName = 'Remove External ERC20 Token'
 
@@ -263,6 +267,7 @@ const RemoveAddressButton = (props) => {
     if (tx.completed && !tx.error) {
       fetchPoolChainValues(
         provider,
+        chainId,
         poolAddresses,
         prizePoolType,
         setPoolChainValues,

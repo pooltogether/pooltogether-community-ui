@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import ReactTooltip from 'react-tooltip'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
 
 export const Tooltip = (props) => {
   const { children, tip, className, id } = props
+  const ref = useRef(null)
+
   return (
     <>
       <a
@@ -16,6 +18,7 @@ export const Tooltip = (props) => {
       </a>
       <ReactTooltip
         clickable
+        ref={ref}
         backgroundColor='#111'
         id={`${id}-tooltip`}
         place='top'
@@ -31,6 +34,16 @@ export const Tooltip = (props) => {
           return { top, left }
         }}
       >
+        <button
+          onClick={() => {
+            const current = ref.current
+            current.tooltipRef = null
+            ReactTooltip.hide()
+          }}
+          className='ml-auto mb-2 block xs:hidden'
+        >
+          <FeatherIcon icon='x' className='w-4 h-4 text-inverse' />
+        </button>
         {tip}
       </ReactTooltip>
     </>

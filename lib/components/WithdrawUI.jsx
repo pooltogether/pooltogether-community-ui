@@ -10,6 +10,7 @@ import { WalletContext } from 'lib/components/WalletContextProvider'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
 import { errorStateAtom } from 'lib/components/PoolData'
+import { useNetwork } from 'lib/hooks/useNetwork'
 
 export const WithdrawUI = (props) => {
   const walletContext = useContext(WalletContext)
@@ -20,6 +21,7 @@ export const WithdrawUI = (props) => {
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const [contractVersions] = useAtom(contractVersionsAtom)
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
+  const [chainId] = useNetwork()
 
   const [withdrawAmount, setWithdrawAmount] = useState('')
   const [tx, setTx] = useState({
@@ -44,6 +46,7 @@ export const WithdrawUI = (props) => {
     if (tx.completed) {
       fetchPoolChainValues(
         provider,
+        chainId,
         poolAddresses,
         prizePoolType,
         setPoolChainValues,
