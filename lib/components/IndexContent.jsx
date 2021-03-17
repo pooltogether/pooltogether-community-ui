@@ -20,6 +20,8 @@ import { getPrecision, numberWithCommas } from 'lib/utils/numberWithCommas'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { CheckboxInputGroup } from 'lib/components/CheckboxInputGroup'
 import { formatEtherscanAddressUrl } from 'lib/utils/formatEtherscanAddressUrl'
+import { Tooltip } from 'lib/components/Tooltip'
+import { PoolTogetherLoading } from 'lib/components/PoolTogetherLoading'
 
 import BatSvg from 'assets/images/bat-new-transparent.png'
 import DaiSvg from 'assets/images/dai-new-transparent.png'
@@ -27,8 +29,6 @@ import UsdcSvg from 'assets/images/usdc-new-transparent.png'
 import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
-import { Tooltip } from 'lib/components/ToolTip'
-import { PoolTogetherLoading } from 'lib/components/PoolTogetherLoading'
 
 const demoAssetTypes = {
   dai: { label: 'DAI', logo: DaiSvg },
