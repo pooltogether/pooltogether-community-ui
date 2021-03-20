@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import classnames from 'classnames'
 import FeatherIcon from 'feather-icons-react'
 
+import { NETWORKS } from 'lib/constants'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { networkColorClassname } from 'lib/utils/networkColorClassname'
 import { chainIdToName } from 'lib/utils/chainIdToName'
@@ -23,12 +24,18 @@ export const WalletInfo = () => {
   }
 
   let innerContent = null
-  let networkName = null
+  let networkNameJsx = null
 
   if (chainId && chainId !== 1) {
-    networkName = (
+    let networkName = chainIdToName(chainId)
+    const formattedNetworkName = NETWORKS[networkName]?.view
+    if (formattedNetworkName) {
+      networkName = NETWORKS[networkName]?.view
+    }
+
+    networkNameJsx = (
       <span className={classnames(networkColorClassname(chainId), 'inline-block')}>
-        {chainIdToName(chainId)}
+        {networkName}
       </span>
     )
   }
@@ -41,8 +48,8 @@ export const WalletInfo = () => {
             {shorten(address)}
           </span>
 
-          <span className='block sm:inline-block rounded-lg text-default capitalize'>
-            {walletName} {networkName}
+          <span className='block sm:inline-block rounded-lg text-default'>
+            {walletName} {networkNameJsx}
           </span>
         </div>
 

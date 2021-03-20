@@ -4,7 +4,7 @@ import { find, findKey, upperFirst } from 'lodash'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
 
-import { CONTRACT_ADDRESSES, POOL_ALIASES } from 'lib/constants'
+import { NETWORKS, CONTRACT_ADDRESSES, POOL_ALIASES } from 'lib/constants'
 import { ButtonLink } from 'lib/components/ButtonLink'
 import { Card } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
@@ -91,37 +91,10 @@ const ReferencePoolCard = () => {
   const [network, setNetwork] = useState('mainnet')
   const [contractAddress, setContractAddress] = useState('')
 
-  const formatValue = (key) => networks[key].view
+  const formatValue = (key) => NETWORKS[key].view
 
   const onValueSet = (network) => {
     setNetwork(network)
-  }
-
-  const networks = {
-    'ropsten': {
-      value: 'ropsten',
-      view: 'Ropsten'
-    },
-    'rinkeby': {
-      value: 'rinkeby',
-      view: 'Rinkeby'
-    },
-    'mainnet': {
-      value: 'mainnet',
-      view: 'Mainnet'
-    },
-    'kovan': {
-      value: 'kovan',
-      view: 'Kovan'
-    },
-    'poa-sokol': {
-      value: 'poa-sokol',
-      view: 'Sokol (POA)'
-    },
-    'local': {
-      value: 'local',
-      view: 'Local'
-    }
   }
 
   return (
@@ -133,7 +106,7 @@ const ReferencePoolCard = () => {
           formatValue={formatValue}
           onValueSet={onValueSet}
           current={network}
-          values={networks}
+          values={NETWORKS}
         />
 
         <TextInputGroup
