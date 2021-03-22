@@ -127,7 +127,7 @@ const UnsupportedNetwork = (props) => {
         {SUPPORTED_NETWORKS.map((network) => {
           if ([31337, 1234].includes(network)) return null
           return (
-            <li className='ml-2 xs:ml-4'>
+            <li className='ml-2 xs:ml-4' key={network}>
               <Network chainId={network} />
             </li>
           )

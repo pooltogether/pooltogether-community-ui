@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@pooltogether/bnc-onboard": "1.20.1",
-    "@pooltogether/current-pool-data": "3.3.0-beta.1",
+    "@pooltogether/current-pool-data": "3.3.2",
     "@pooltogether/etherplex": "1.0.0",
     "@pooltogether/pooltogether-contracts": "3.3.2",
     "@pooltogether/pooltogether-rng-contracts": "^1.1.1",
