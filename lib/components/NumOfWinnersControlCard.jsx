@@ -110,7 +110,7 @@ const NumOfWinnersForm = (props) => {
   }
 
   if (!usersAddress) {
-    return <ConnectWalletButton />
+    return <ConnectWalletButton className='w-full mt-4' />
   }
 
   if (tx.inWallet || tx.sent || tx.completed) {

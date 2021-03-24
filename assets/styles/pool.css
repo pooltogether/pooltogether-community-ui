@@ -132,10 +132,8 @@ input[type='submit'][disabled] {
   @apply border-transparent cursor-not-allowed;
 }
 
-.is-etherscan-arrow {
+.em-1 {
   height: 1em;
-  position: relative;
-  top: -2px;
   width: 1em;
 }
 

@@ -6,12 +6,17 @@ import PrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PrizePool'
 import FeatherIcon from 'feather-icons-react'
 
 import { errorStateAtom } from 'lib/components/PoolData'
-import { CONTRACTS, CONTRACT_VERSIONS, PRIZE_POOL_TYPE, SUPPORTED_NETWORKS } from 'lib/constants'
+import {
+  CONTRACTS,
+  CONTRACT_VERSIONS,
+  NETWORKS_WITHOUT_VERSIONING,
+  PRIZE_POOL_TYPE,
+  SUPPORTED_NETWORKS
+} from 'lib/constants'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { useReadProvider } from 'lib/hooks/useReadProvider'
-import { ButtonLink } from 'lib/components/ButtonLink'
-import { chainIdToName } from 'lib/utils/chainIdToName'
+import { chainIdToName } from 'lib/utils/networks'
 
 export const contractVersionsAtom = atom({})
 export const prizePoolTypeAtom = atom((get) => {
@@ -36,7 +41,7 @@ export const prizePoolTypeAtom = atom((get) => {
 export const useDetermineContractVersions = () => {
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const [contractVersions, setContractVersions] = useAtom(contractVersionsAtom)
-  const [chainId] = useNetwork()
+  const { chainId } = useNetwork()
   const [poolAddresses] = useAtom(poolAddressesAtom)
   const { readProvider: provider, isLoaded: readProviderLoaded } = useReadProvider()
   const prizePoolAddress = poolAddresses.prizePool
@@ -120,7 +125,7 @@ const IncompatibleContract = (props) => {
 
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const [poolAddresses] = useAtom(poolAddressesAtom)
-  const [chainId, networkName] = useNetwork()
+  const { chainId, name: networkName } = useNetwork()
 
   const [hideWarning, setHideWarning] = useState(false)
   const [showMoreInfo, setShowMoreInfo] = useState(false)
@@ -128,6 +133,8 @@ const IncompatibleContract = (props) => {
   const { prizePool } = poolAddresses
 
   if (hideWarning) return null
+
+  if (NETWORKS_WITHOUT_VERSIONING.includes(chainId)) return null
 
   return (
     <div className='text-left mb-10 border-2 border-primary rounded-lg px-7 py-4'>

@@ -74,7 +74,7 @@ export const DepositUI = (props) => {
   }
 
   if (!usersAddress) {
-    return <ConnectWalletButton />
+    return <ConnectWalletButton className='w-full mt-4' />
   }
 
   if (txInFlight) {

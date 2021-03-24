@@ -27,6 +27,7 @@ import { shorten } from 'lib/utils/shorten'
 import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 import { CopyableAddress } from 'lib/components/CopyableAddress'
 import { useNetwork } from 'lib/hooks/useNetwork'
+import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
 
 const handleAddExternalErc721 = async (
   txName,
@@ -149,7 +150,7 @@ const AddErc721Form = () => {
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
-  const [chainId] = useNetwork()
+  const { chainId } = useNetwork()
 
   const provider = walletContext.state.provider
 
@@ -190,7 +191,7 @@ const AddErc721Form = () => {
   }, [tx.completed, tx.error])
 
   if (!usersAddress) {
-    return <ConnectWalletButton />
+    return <ConnectWalletButton className='w-full mt-4' />
   }
 
   const txInFlight = tx.inWallet || tx.sent
@@ -254,7 +255,7 @@ const Row = (props) => {
         {tokenId.toString()}
       </RowDataCell>
       <RowDataCell className='text-accent-1'>
-        <EtherscanAddressLink address={address}>{address}</EtherscanAddressLink>
+        <BlockExplorerLink address={address} />
       </RowDataCell>
       <RemoveAddressButton address={address} prevAddress={prevAddress} />
     </tr>
@@ -272,7 +273,7 @@ const RemoveAddressButton = (props) => {
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
-  const [chainId] = useNetwork()
+  const { chainId } = useNetwork()
 
   const txName = 'Remove External ERC20 Token'
 

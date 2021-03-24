@@ -5,9 +5,8 @@ import FeatherIcon from 'feather-icons-react'
 
 import { Button } from 'lib/components/Button'
 import { InnerCard } from 'lib/components/Card'
-import { EtherscanTxLink } from 'lib/components/EtherscanTxLink'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import { shorten } from 'lib/utils/shorten'
+import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
 
 export const TxMessage = (props) => {
   const walletContext = useContext(WalletContext)
@@ -66,10 +65,7 @@ export const TxMessage = (props) => {
 
       {tx.hash && (
         <div className='text-accent-1 text-sm sm:text-base'>
-          Transaction hash:{' '}
-          <EtherscanTxLink chainId={chainId} hash={tx.hash} className='underline'>
-            {shorten(tx.hash)}
-          </EtherscanTxLink>
+          Transaction hash: <BlockExplorerLink tx={tx.hash} shorten className='underline' />
         </div>
       )}
 

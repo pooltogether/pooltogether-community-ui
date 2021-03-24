@@ -145,7 +145,7 @@ const AddErc20Form = () => {
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
-  const [chainId] = useNetwork()
+  const { chainId } = useNetwork()
 
   const txName = 'Add External ERC20 Token'
 
@@ -182,7 +182,7 @@ const AddErc20Form = () => {
   }, [tx.completed, tx.error])
 
   if (!usersAddress) {
-    return <ConnectWalletButton />
+    return <ConnectWalletButton className='w-full mt-4' />
   }
 
   if (tx.inWallet || tx.sent || tx.completed) {
@@ -247,7 +247,7 @@ const RemoveAddressButton = (props) => {
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
-  const [chainId] = useNetwork()
+  const { chainId } = useNetwork()
 
   const txName = 'Remove External ERC20 Token'
 

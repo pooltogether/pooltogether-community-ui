@@ -21,7 +21,7 @@ export const WithdrawUI = (props) => {
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const [contractVersions] = useAtom(contractVersionsAtom)
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
-  const [chainId] = useNetwork()
+  const { chainId } = useNetwork()
 
   const [withdrawAmount, setWithdrawAmount] = useState('')
   const [tx, setTx] = useState({
@@ -57,7 +57,7 @@ export const WithdrawUI = (props) => {
   }, [tx.completed])
 
   if (!usersAddress) {
-    return <ConnectWalletButton />
+    return <ConnectWalletButton className='w-full mt-4' />
   }
 
   const withdrawText = `You can choose to withdraw the deposited fund at any time. By withdrawing the fund, you

@@ -67,7 +67,7 @@ export const WithdrawForm = (props) => {
   const [usersAddress] = useAtom(usersAddressAtom)
   const [poolChainValues] = useAtom(poolChainValuesAtom)
   const [usersChainValues] = useAtom(userChainValuesAtom)
-  const [chainId, networkName] = useNetwork()
+  const { chainId, name: networkName, walletMatchesNetwork } = useNetwork()
 
   const [exitFees, setExitFees] = useState({
     earlyExitFee: null,
@@ -192,6 +192,7 @@ export const WithdrawForm = (props) => {
           step={step}
           unit={tokenSymbol}
           onChange={(e) => setWithdrawAmount(e.target.value)}
+          disabled={!walletMatchesNetwork}
           value={withdrawAmount}
           rightLabel={
             <RightLabelButton
@@ -270,6 +271,8 @@ export const WithdrawForm = (props) => {
 }
 
 const WithdrawButtons = (props) => {
+  const { walletMatchesNetwork } = useNetwork()
+
   const { overBalance, resetForm, exitFees, tokenSymbol, tokenDecimals } = props
   const { earlyExitFee, fetched: exitFeesFetched } = exitFees
 
@@ -277,7 +280,7 @@ const WithdrawButtons = (props) => {
     return (
       <div className='my-5 flex flex-col sm:flex-row '>
         <Button
-          disabled={overBalance}
+          disabled={overBalance || !walletMatchesNetwork}
           color='secondary'
           size='lg'
           fullWidth
@@ -300,7 +303,11 @@ const WithdrawButtons = (props) => {
 
   return (
     <div className='my-5 flex flex-col sm:flex-row '>
-      <Button disabled={overBalance || !exitFeesFetched} color='warning' size='lg'>
+      <Button
+        disabled={overBalance || !exitFeesFetched || !walletMatchesNetwork}
+        color='warning'
+        size='lg'
+      >
         Withdraw
       </Button>
     </div>

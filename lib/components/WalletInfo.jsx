@@ -4,8 +4,7 @@ import FeatherIcon from 'feather-icons-react'
 
 import { NETWORKS } from 'lib/constants'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import { networkColorClassname } from 'lib/utils/networkColorClassname'
-import { chainIdToName } from 'lib/utils/chainIdToName'
+import { chainIdToName, networkColorClassname } from 'lib/utils/networks'
 import { shorten } from 'lib/utils/shorten'
 
 export const WalletInfo = () => {

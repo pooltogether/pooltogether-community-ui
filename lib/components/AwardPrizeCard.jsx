@@ -90,7 +90,7 @@ const AwardPrizeTrigger = () => {
   const provider = walletContext.state.provider
   const [tx, setTx] = useState({})
   const [txType, setTxType] = useState('')
-  const [chainId] = useNetwork()
+  const { chainId } = useNetwork()
 
   const { days, hours, minutes, seconds } = useTimeLeft()
   const timeRemaining = Boolean(days || hours || minutes || seconds)

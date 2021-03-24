@@ -13,6 +13,8 @@ import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 
 import ManageImage from 'assets/images/manage-image.svg'
 import { RelativeInternalLink } from 'lib/components/RelativeInternalLink'
+import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
+import { CopyIcon } from 'lib/components/CopyIcon'
 
 const MANAGE_VIEW = Object.freeze({
   stats: '#stats',
@@ -96,9 +98,10 @@ const PoolAddress = () => {
       <div className='text-accent-1 font-bold title text-lg sm:text-4xl'>Pool's Info</div>
       <Card className='flex flex-col'>
         <CardTitle className='mb-2'>Pool's contract address</CardTitle>
-        <EtherscanAddressLink address={poolAddresses.prizePool} className='mx-auto text-white'>
-          {poolAddresses.prizePool}
-        </EtherscanAddressLink>
+        <h4 className='font-normal mx-auto flex'>
+          <BlockExplorerLink address={poolAddresses.prizePool} className='text-white' />
+          <CopyIcon text={poolAddresses.prizePool} className='ml-4' />
+        </h4>
       </Card>
     </>
   )

@@ -24,9 +24,11 @@ import { getErc20InputProps } from 'lib/utils/getErc20InputProps'
 export const DepositForm = (props) => {
   const { inputError, handleSubmit, vars, stateSetters } = props
 
+  const { walletMatchesNetwork } = useNetwork()
   const [poolChainValues] = useAtom(poolChainValuesAtom)
   const [usersChainValues] = useAtom(userChainValuesAtom)
-  const hasApprovedBalance = usersChainValues.usersTokenAllowance.gt(0)
+  const hasApprovedBalance = usersChainValues.underlyingTokenIsApproved
+  const supportsAllowance = usersChainValues.underlyingTokenSupportsAllowance
 
   const { usersTokenBalance } = usersChainValues || {}
 
@@ -79,7 +81,7 @@ export const DepositForm = (props) => {
           label='Deposit amount'
           unit={tokenSymbol}
           required
-          disabled={!hasApprovedBalance}
+          disabled={(supportsAllowance && !hasApprovedBalance) || !walletMatchesNetwork}
           type='number'
           min={min}
           step={step}
@@ -120,14 +122,14 @@ export const DepositForm = (props) => {
         </div>
       )}
 
-      <div className='my-5 flex flex-col sm:flex-row'>
+      <div className='my-5 flex flex-col sm:flex-row justify-end'>
         <UnlockDepositsButton />
         <Button
           size='lg'
           fullWidth
-          disabled={inputError || overBalance || !hasApprovedBalance}
+          disabled={inputError || overBalance || !hasApprovedBalance || !walletMatchesNetwork}
           color='secondary'
-          className='sm:ml-4'
+          className='sm:ml-4 w-full sm:w-1/2'
         >
           Deposit
         </Button>
@@ -140,14 +142,15 @@ const UnlockDepositsButton = () => {
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [usersChainValues] = useAtom(userChainValuesAtom)
   const [contractVersions] = useAtom(contractVersionsAtom)
-  const [chainId] = useNetwork()
+  const { chainId, walletMatchesNetwork } = useNetwork()
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const [poolAddresses] = useAtom(poolAddressesAtom)
   const [prizePoolType] = useAtom(prizePoolTypeAtom)
   const [tx, setTx] = useState({})
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
-  const hasApprovedBalance = usersChainValues.usersTokenAllowance.gt(0)
+  const hasApprovedBalance = usersChainValues.underlyingTokenIsApproved
+  const underlyingTokenSupportsAllowance = usersChainValues.underlyingTokenSupportsAllowance
 
   // Reset on network change
   useEffect(() => {
@@ -169,6 +172,8 @@ const UnlockDepositsButton = () => {
     }
   }, [tx.completed, tx.error])
 
+  if (!underlyingTokenSupportsAllowance) return null
+
   if (hasApprovedBalance || (tx.completed && !tx.error)) {
     return (
       <Button
@@ -177,7 +182,7 @@ const UnlockDepositsButton = () => {
         color='secondary'
         fullWidth
         size='lg'
-        className='mb-4 sm:mb-0 mr-4'
+        className='mb-4 sm:mb-0 mr-4 w-full sm:w-1/2'
       >
         <FeatherIcon
           icon='check-circle'
@@ -212,11 +217,12 @@ const UnlockDepositsButton = () => {
           poolChainValues.tokenDecimals
         )
       }}
+      disabled={!walletMatchesNetwork}
       type='button'
       color='secondary'
       fullWidth
       size='lg'
-      className='mb-4 sm:mb-0 sm:mr-4'
+      className='mb-4 sm:mb-0 sm:mr-4 w-full sm:w-1/2'
     >
       {buttonText}
     </Button>

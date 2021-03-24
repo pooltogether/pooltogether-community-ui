@@ -1,52 +1,49 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import classnames from 'classnames'
 
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { SUPPORTED_NETWORKS } from 'lib/constants'
-import { chainIdToName } from 'lib/utils/chainIdToName'
+import { chainIdToName, NETWORK_DATA } from 'lib/utils/networks'
+import { CloseBannerButton } from 'lib/components/NotificationBanners'
 
 export const StaticNetworkNotificationBanner = ({}) => {
-  let chainId
   const walletContext = useContext(WalletContext)
-  const { _onboard } = walletContext || {}
+  const [userHasClosedBanner, setUserHasClosedBanner] = useState(false)
 
-  if (!_onboard.getState().wallet.name) {
+  const { _onboard } = walletContext || {}
+  const chainId = _onboard.getState().appNetworkId
+  const networkSupported = SUPPORTED_NETWORKS.includes(chainId)
+
+  useEffect(() => {
+    setUserHasClosedBanner(false)
+  }, [chainId])
+
+  if (!_onboard.getState().wallet.name || networkSupported || userHasClosedBanner) {
     return null
   }
 
-  chainId = _onboard.getState().appNetworkId
   const networkName = chainIdToName(chainId)
 
   const supportedNames = SUPPORTED_NETWORKS.reduce((names, networkId) => {
-    const name = chainIdToName(networkId)
+    const name = NETWORK_DATA?.[networkId]?.view
     if (name && names.indexOf(name) == -1) {
       names.push(name)
     }
     return names
   }, []).join(', ')
 
-  const networkSupported = SUPPORTED_NETWORKS.includes(chainId)
-
   let networkWords = `${networkName} 🥵`
-  if (networkSupported) {
-    networkWords = `${networkName} 👍`
-  }
-
-  if (networkSupported) {
-    return null
-  }
 
   return (
     <div
-      className={classnames('text-sm sm:text-base lg:text-lg sm:px-6 py-2 sm:py-3', {
-        'text-white bg-red-1': !networkSupported,
-        'text-default bg-purple-1': networkSupported
-      })}
+      className={classnames(
+        'text-sm sm:text-base lg:text-lg sm:px-6 py-2 sm:py-3 text-white bg-red-1 relative'
+      )}
     >
-      <div className='text-center px-4 font-bold'>
-        This works on {supportedNames}. Your wallet is currently set to{' '}
-        <span className='font-bold'>{networkWords}</span>
+      <div className='text-center px-4'>
+        This works on <b>{supportedNames}</b>. Your wallet is currently set to <b>{networkWords}</b>
       </div>
+      <CloseBannerButton closeBanner={() => setUserHasClosedBanner(true)} />
     </div>
   )
 }

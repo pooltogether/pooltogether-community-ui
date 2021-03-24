@@ -4,7 +4,7 @@ import Onboard from '@pooltogether/bnc-onboard'
 import Cookies from 'js-cookie'
 
 import { SELECTED_WALLET_COOKIE_KEY } from 'lib/constants'
-import { nameToChainId } from 'lib/utils/nameToChainId'
+import { nameToChainId } from 'lib/utils/networks'
 
 const debug = require('debug')('WalletContextProvider')
 

@@ -19,9 +19,9 @@ import { useAllUserTokenBalances } from 'lib/hooks/useAllUserTokenBalances'
 import { getPrecision, numberWithCommas } from 'lib/utils/numberWithCommas'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { CheckboxInputGroup } from 'lib/components/CheckboxInputGroup'
-import { formatEtherscanAddressUrl } from 'lib/utils/formatEtherscanAddressUrl'
 import { Tooltip } from 'lib/components/Tooltip'
 import { PoolTogetherLoading } from 'lib/components/PoolTogetherLoading'
+import { BlockExplorerLink, LinkIcon } from 'lib/components/BlockExplorerLink'
 
 import BatSvg from 'assets/images/bat-new-transparent.png'
 import DaiSvg from 'assets/images/dai-new-transparent.png'
@@ -29,6 +29,7 @@ import UsdcSvg from 'assets/images/usdc-new-transparent.png'
 import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
+import { NETWORK, NETWORK_DATA } from 'lib/utils/networks'
 
 const demoAssetTypes = {
   dai: { label: 'DAI', logo: DaiSvg },
@@ -67,6 +68,7 @@ const PoolsLists = () => {
 
   return (
     <>
+      <UnsupportedNetworkCard />
       <UsersPoolsCard createdPrizePools={createdPrizePools} tokenBalances={tokenBalances} />
       <GovernancePoolsCard createdPrizePools={createdPrizePools} tokenBalances={tokenBalances} />
       <DemoPoolsCard />
@@ -79,13 +81,31 @@ const PoolsLists = () => {
 
 const CardTitle = (props) => (
   <div
-    className={classnames('font-bold text-base sm:text-2xl text-accent-1 ', {
+    className={classnames('font-bold text-base sm:text-2xl text-accent-1 flex', {
       'mb-4': !props.noMargin
     })}
   >
     {props.children}
   </div>
 )
+
+const UnsupportedNetworkCard = () => {
+  const { chainId } = useNetwork()
+
+  if (![NETWORK.matic, NETWORK.mumbai].includes(chainId)) return null
+
+  const networkName = NETWORK_DATA[chainId].view
+
+  return (
+    <div className='text-left mb-10 border-2 border-primary rounded-lg px-7 py-4 text-accent-1'>
+      <CardTitle noMargin>☹️ Index Unavailable for {networkName}</CardTitle>
+      <p>
+        Unfortunately due to limitations of MaticVigil we can't dynamically compile a list of
+        created prize pools.
+      </p>
+    </div>
+  )
+}
 
 const ReferencePoolCard = () => {
   const [network, setNetwork] = useState('mainnet')
@@ -209,7 +229,7 @@ const DemoPoolButton = (props) => {
 const GovernancePoolsCard = (props) => {
   const { createdPrizePools, tokenBalances } = props
   const walletContext = useContext(WalletContext)
-  const [chainId] = useNetwork()
+  const { chainId } = useNetwork()
   const [hideNoDeposits, setHideNoDeposits] = useState(false)
 
   const isWalletConnected = Boolean(walletContext._onboard.getState().address)
@@ -329,8 +349,8 @@ const AllPoolsCard = (props) => {
   const { createdPrizePools, tokenBalances } = props
 
   const walletContext = useContext(WalletContext)
-  const [hideNoDeposits, setHideNoDeposits] = useState(true)
-  const [showFirstTen, setShowFirstTen] = useState(true)
+  const [hideNoDeposits, setHideNoDeposits] = useState(createdPrizePools.length > 10)
+  const [showFirstTen, setShowFirstTen] = useState(createdPrizePools.length > 10)
 
   const isWalletConnected = Boolean(walletContext._onboard.getState().address)
 
@@ -500,42 +520,24 @@ const UsersBalanceCell = (props) => {
 
 const OwnerAddress = (props) => {
   const { ownerAddress } = props
-  const [chainId] = useNetwork()
-  const url = formatEtherscanAddressUrl(ownerAddress, chainId)
+  const { chainId } = useNetwork()
 
   if (ownerAddress === CONTRACT_ADDRESSES[chainId].GovernanceTimelock) {
     return (
-      <div className='inline bg-purple-1 rounded-full px-2 width-fit-content'>
-        <a
-          href={url}
-          className={`trans hover:text-inverse`}
-          target='_blank'
-          rel='noopener noreferrer'
-          title='View on Etherscan'
-        >
-          <span className='inline-block '>PoolTogether</span>
-          <FeatherIcon icon='external-link' className='is-etherscan-arrow ml-1 inline-block' />
-        </a>
+      <div className='flex bg-purple-1 rounded-full px-2 width-fit-content'>
+        <BlockExplorerLink shorten address={ownerAddress}>
+          PoolTogether
+          <LinkIcon />
+        </BlockExplorerLink>
       </div>
     )
   }
 
-  return (
-    <a
-      href={url}
-      className={`trans hover:text-inverse`}
-      target='_blank'
-      rel='noopener noreferrer'
-      title='View on Etherscan'
-    >
-      <span className='inline-block'>{shorten(ownerAddress)}</span>
-      <FeatherIcon icon='external-link' className='is-etherscan-arrow ml-1 inline-block' />
-    </a>
-  )
+  return <BlockExplorerLink shorten address={ownerAddress} />
 }
 
 const Actions = (props) => {
-  const [chainId, networkName] = useNetwork()
+  const { chainId, name: networkName } = useNetwork()
   const { prizePool, ticket } = props
   const { prizePool: prizePoolAddress } = prizePool
 

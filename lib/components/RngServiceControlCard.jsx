@@ -58,7 +58,7 @@ export const RngServiceControlCard = (props) => {
 const RngServiceControlForm = (props) => {
   const [poolAddresses, setPoolAddresses] = useAtom(poolAddressesAtom)
   const [usersAddress] = useAtom(usersAddressAtom)
-  const [chainId] = useNetwork()
+  const { chainId } = useNetwork()
   const [tx, setTx] = useState({})
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
@@ -120,7 +120,7 @@ const RngServiceControlForm = (props) => {
   }
 
   if (!usersAddress) {
-    return <ConnectWalletButton />
+    return <ConnectWalletButton className='w-full mt-4' />
   }
 
   if (tx.inWallet || tx.sent || tx.completed) {
