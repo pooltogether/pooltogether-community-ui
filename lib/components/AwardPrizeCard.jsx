@@ -80,7 +80,7 @@ export const AwardPrizeCard = () => {
   )
 }
 
-const AwardPrizeTrigger = () => {
+export const AwardPrizeTrigger = (props) => {
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [poolAddresses] = useAtom(poolAddressesAtom)
   const [prizePoolType] = useAtom(prizePoolTypeAtom)
@@ -90,10 +90,10 @@ const AwardPrizeTrigger = () => {
   const provider = walletContext.state.provider
   const [tx, setTx] = useState({})
   const [txType, setTxType] = useState('')
-  const { chainId } = useNetwork()
+  const { chainId, walletMatchesNetwork } = useNetwork()
+  const { days, hours, minutes, seconds, timeRemaining } = useTimeLeft()
 
-  const { days, hours, minutes, seconds } = useTimeLeft()
-  const timeRemaining = Boolean(days || hours || minutes || seconds)
+  const { hideTimeRemaining } = props
   const { canCompleteAward, canStartAward, isRngRequested, isRngTimedOut } = poolChainValues
   const showTx = tx.inWallet || tx.sent
 
@@ -166,7 +166,7 @@ const AwardPrizeTrigger = () => {
           onClick={handleCancelAwardClick}
           color='danger'
           size='lg'
-          disabled={showTx}
+          disabled={showTx || !walletMatchesNetwork}
         >
           Cancel award
         </Button>
@@ -176,7 +176,7 @@ const AwardPrizeTrigger = () => {
 
   return (
     <>
-      {timeRemaining && (
+      {timeRemaining && !hideTimeRemaining && (
         <TimeDisplay days={days} hours={hours} minutes={minutes} seconds={seconds} />
       )}
       {isRngRequested && !canCompleteAward && (
@@ -192,7 +192,7 @@ const AwardPrizeTrigger = () => {
       <div className='flex flex-col sm:flex-row mt-4'>
         <Button
           type='button'
-          disabled={!canStartAward || timeRemaining}
+          disabled={!canStartAward || timeRemaining || !walletMatchesNetwork}
           onClick={handleStartAwardClick}
           color='secondary'
           size='lg'
@@ -203,7 +203,7 @@ const AwardPrizeTrigger = () => {
         </Button>
         <Button
           type='button'
-          disabled={!canCompleteAward}
+          disabled={!canCompleteAward || !walletMatchesNetwork}
           onClick={handleCompleteAwardClick}
           color='secondary'
           size='lg'

@@ -293,7 +293,13 @@ const WithdrawButtons = (props) => {
         >
           Cancel withdrawal
         </Button>
-        <Button color='text_warning' size='lg' fullWidth className='ml-0 sm:ml-4 mt-4 sm:mt-0'>
+        <Button
+          color='text_warning'
+          size='lg'
+          disabled={!walletMatchesNetwork}
+          fullWidth
+          className='ml-0 sm:ml-4 mt-4 sm:mt-0'
+        >
           {`Withdraw anyway and pay ${ethers.utils.formatUnits(earlyExitFee, tokenDecimals)}
            ${tokenSymbol}`}
         </Button>

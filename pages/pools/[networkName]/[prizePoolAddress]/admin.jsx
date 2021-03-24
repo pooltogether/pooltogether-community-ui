@@ -11,6 +11,7 @@ import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 import { shorten } from 'lib/utils/shorten'
 import { RelativeInternalLink } from 'lib/components/RelativeInternalLink'
 import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
+import { PoolData } from 'lib/components/PoolData'
 
 export default function IndexPage() {
   return (

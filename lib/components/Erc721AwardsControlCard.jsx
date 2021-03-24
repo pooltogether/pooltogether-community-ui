@@ -8,7 +8,7 @@ import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChai
 import { RowDataCell, Table } from 'lib/components/Table'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
-import { Card, CardSecondaryText, InnerCard } from 'lib/components/Card'
+import { Card, InnerCard } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { Button } from 'lib/components/Button'
 import { WalletContext } from 'lib/components/WalletContextProvider'
@@ -148,7 +148,7 @@ const AddErc721Form = () => {
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
-  const { chainId } = useNetwork()
+  const { chainId, walletMatchesNetwork } = useNetwork()
 
   const provider = walletContext.state.provider
 
@@ -236,7 +236,7 @@ const AddErc721Form = () => {
       <Button
         color='secondary'
         size='lg'
-        disabled={!externalErc721Address || !externalErc721TokenIds}
+        disabled={!externalErc721Address || !externalErc721TokenIds || !walletMatchesNetwork}
       >
         Add ERC71 award
       </Button>

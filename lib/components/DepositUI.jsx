@@ -11,7 +11,6 @@ import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 import { parseNumString } from 'lib/utils/parseNumString'
-import { poolToast } from 'lib/utils/poolToast'
 import { sendTx } from 'lib/utils/sendTx'
 
 const handleDepositSubmit = async (

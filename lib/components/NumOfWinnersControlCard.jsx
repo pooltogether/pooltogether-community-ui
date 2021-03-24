@@ -14,6 +14,7 @@ import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 import { contractVersionsAtom } from 'lib/hooks/useDetermineContractVersions'
+import { useNetwork } from 'lib/hooks/useNetwork'
 
 const handleSetNumberOfWinners = async (
   txName,
@@ -73,6 +74,7 @@ const NumOfWinnersForm = (props) => {
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [usersAddress] = useAtom(usersAddressAtom)
   const [tx, setTx] = useState({})
+  const { walletMatchesNetwork } = useNetwork()
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
 
@@ -132,7 +134,7 @@ const NumOfWinnersForm = (props) => {
           value={newNumOfWinners}
         />
       </div>
-      <Button color='secondary' size='lg'>
+      <Button color='secondary' size='lg' disabled={!walletMatchesNetwork}>
         Update winners
       </Button>
     </form>
