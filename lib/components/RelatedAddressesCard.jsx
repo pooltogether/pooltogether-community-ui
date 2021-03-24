@@ -4,7 +4,6 @@ import { Card } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { RowDataCell, Table } from 'lib/components/Table'
-import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
 import { CopyIcon } from 'lib/components/CopyIcon'
 

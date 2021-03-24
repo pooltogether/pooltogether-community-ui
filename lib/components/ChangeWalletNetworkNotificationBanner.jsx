@@ -21,7 +21,12 @@ export const ChangeWalletNetworkNotificationBanner = () => {
 
   const walletName = wallet?.state?.wallet?.name
 
+  const defaultNetworks = [1, 4, 42]
+
   if (!walletConnected || walletMatchesNetwork || userHasClosedBanner) return null
+
+  const showConnectButton =
+    [WALLETS.metamask].includes(walletName) && !defaultNetworks.includes(chainId)
 
   return (
     <div
@@ -32,7 +37,7 @@ export const ChangeWalletNetworkNotificationBanner = () => {
           👋 Your wallet is currently set to <b>{walletView}</b>. Please connect to <b>{view}</b> to
           participate in this pool.
         </span>
-        {walletName === WALLETS.metamask && (
+        {showConnectButton && (
           <Button
             size='xs'
             color='primary'

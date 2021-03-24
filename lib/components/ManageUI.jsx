@@ -7,7 +7,6 @@ import { Content, ContentPane, Tab, Tabs } from 'lib/components/Tabs'
 import { Card, CardTitle } from 'lib/components/Card'
 import { ButtonLink } from 'lib/components/ButtonLink'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 

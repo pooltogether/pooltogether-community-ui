@@ -23,8 +23,6 @@ import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 
 import PrizeIllustration from 'assets/images/prize-illustration-transparent@2x.png'
-import { shorten } from 'lib/utils/shorten'
-import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 import { CopyableAddress } from 'lib/components/CopyableAddress'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
