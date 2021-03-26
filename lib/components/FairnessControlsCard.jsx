@@ -68,7 +68,7 @@ const FairnessControlsForm = (props) => {
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const [usersAddress] = useAtom(usersAddressAtom)
   const [tx, setTx] = useState({})
-  const [chainId] = useNetwork()
+  const { chainId, walletMatchesNetwork } = useNetwork()
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
 
@@ -129,7 +129,7 @@ const FairnessControlsForm = (props) => {
   }
 
   if (!usersAddress) {
-    return <ConnectWalletButton />
+    return <ConnectWalletButton className='w-full mt-4' />
   }
 
   if (tx.inWallet || tx.sent || tx.completed) {
@@ -171,7 +171,7 @@ const FairnessControlsForm = (props) => {
           unit='days'
         />
       </div>
-      <Button color='secondary' size='lg'>
+      <Button color='secondary' size='lg' disabled={!walletMatchesNetwork}>
         Update fairness rules
       </Button>
     </form>

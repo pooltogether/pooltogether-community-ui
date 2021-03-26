@@ -1,7 +1,6 @@
-import React, { useEffect, useRef } from 'react'
+import React from 'react'
 import classnames from 'classnames'
 import { omit } from 'lodash'
-import Link from 'next/link'
 
 const COLOR_CLASSES = {
   primary: {

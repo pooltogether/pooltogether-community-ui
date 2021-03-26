@@ -4,7 +4,8 @@ import { Card } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { RowDataCell, Table } from 'lib/components/Table'
-import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
+import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
+import { CopyIcon } from 'lib/components/CopyIcon'
 
 export const RelatedAddressesCard = (props) => {
   const [poolAddresses] = useAtom(poolAddressesAtom)
@@ -17,6 +18,10 @@ export const RelatedAddressesCard = (props) => {
       {
         contract: 'Sponsorship',
         address: poolAddresses.sponsorship
+      },
+      {
+        contract: 'Prize pool',
+        address: poolAddresses.prizePool
       },
       {
         contract: 'Prize strategy',
@@ -40,11 +45,7 @@ export const RelatedAddressesCard = (props) => {
   return (
     <Card>
       <Collapse title='Related contract addresses'>
-        <Table
-          headers={['Contract', 'Address']}
-          rows={rows}
-          className='w-full table-fixed sm:table-auto'
-        />
+        <Table headers={['Contract', 'Address']} rows={rows} className='w-full table-auto' />
       </Collapse>
     </Card>
   )
@@ -59,10 +60,13 @@ const Row = (props) => {
         {contract}
       </RowDataCell>
       <RowDataCell>
-        <EtherscanAddressLink size='xxs' address={address} className='text-accent-1'>
-          {address}
-        </EtherscanAddressLink>
+        <BlockExplorerLink address={address} className='text-xs sm:text-base' />
       </RowDataCell>
+      <td className=''>
+        <div className='flex justify-end'>
+          <CopyIcon text={address} />
+        </div>
+      </td>
     </tr>
   )
 }

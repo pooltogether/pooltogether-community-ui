@@ -8,9 +8,10 @@ import ManageImage from 'assets/images/manage-image.svg'
 import { useAtom } from 'jotai'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
-import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 import { shorten } from 'lib/utils/shorten'
 import { RelativeInternalLink } from 'lib/components/RelativeInternalLink'
+import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
+import { PoolData } from 'lib/components/PoolData'
 
 export default function IndexPage() {
   return (
@@ -62,11 +63,7 @@ const OwnerWarning = () => {
       <FeatherIcon icon='alert-triangle' className='mr-2 w-10 h-10 my-auto text-orange-500' />
       <p>
         Certain actions may only be performed by the owner of the pool. The wallet you have
-        connected (
-        <EtherscanAddressLink size={'xxs'} address={usersAddress}>
-          {usersAddress}
-        </EtherscanAddressLink>
-        ) is not the owner.
+        connected (<BlockExplorerLink shorten address={usersAddress} />) is not the owner.
       </p>
     </div>
   )

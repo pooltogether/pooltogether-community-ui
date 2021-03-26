@@ -8,7 +8,7 @@ import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChai
 import { RowDataCell, Table } from 'lib/components/Table'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
-import { Card, CardSecondaryText, InnerCard } from 'lib/components/Card'
+import { Card, InnerCard } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { Button } from 'lib/components/Button'
 import { WalletContext } from 'lib/components/WalletContextProvider'
@@ -23,10 +23,9 @@ import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 
 import PrizeIllustration from 'assets/images/prize-illustration-transparent@2x.png'
-import { shorten } from 'lib/utils/shorten'
-import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 import { CopyableAddress } from 'lib/components/CopyableAddress'
 import { useNetwork } from 'lib/hooks/useNetwork'
+import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
 
 const handleAddExternalErc721 = async (
   txName,
@@ -149,7 +148,7 @@ const AddErc721Form = () => {
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
-  const [chainId] = useNetwork()
+  const { chainId, walletMatchesNetwork } = useNetwork()
 
   const provider = walletContext.state.provider
 
@@ -190,7 +189,7 @@ const AddErc721Form = () => {
   }, [tx.completed, tx.error])
 
   if (!usersAddress) {
-    return <ConnectWalletButton />
+    return <ConnectWalletButton className='w-full mt-4' />
   }
 
   const txInFlight = tx.inWallet || tx.sent
@@ -237,7 +236,7 @@ const AddErc721Form = () => {
       <Button
         color='secondary'
         size='lg'
-        disabled={!externalErc721Address || !externalErc721TokenIds}
+        disabled={!externalErc721Address || !externalErc721TokenIds || !walletMatchesNetwork}
       >
         Add ERC71 award
       </Button>
@@ -254,7 +253,7 @@ const Row = (props) => {
         {tokenId.toString()}
       </RowDataCell>
       <RowDataCell className='text-accent-1'>
-        <EtherscanAddressLink address={address}>{address}</EtherscanAddressLink>
+        <BlockExplorerLink address={address} />
       </RowDataCell>
       <RemoveAddressButton address={address} prevAddress={prevAddress} />
     </tr>
@@ -272,7 +271,7 @@ const RemoveAddressButton = (props) => {
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
-  const [chainId] = useNetwork()
+  const { chainId } = useNetwork()
 
   const txName = 'Remove External ERC20 Token'
 

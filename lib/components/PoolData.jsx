@@ -5,7 +5,6 @@ import { atom, useAtom } from 'jotai'
 import { useRouter } from 'next/router'
 import FeatherIcon from 'feather-icons-react'
 
-import { LoadingDots } from 'lib/components/LoadingDots'
 import { usePoolAddresses } from 'lib/hooks/usePoolAddresses'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { useUserChainValues } from 'lib/hooks/useUserChainValues'
@@ -16,8 +15,7 @@ import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { useExternalErc721Awards } from 'lib/hooks/useExternalErc721Awards'
 import { useDetermineContractVersions } from 'lib/hooks/useDetermineContractVersions'
 import { SUPPORTED_NETWORKS } from 'lib/constants'
-import { chainIdToName } from 'lib/utils/chainIdToName'
-import { networkColorClassname } from 'lib/utils/networkColorClassname'
+import { chainIdToName, networkColorClassname } from 'lib/utils/networks'
 import { PoolTogetherLoading } from 'lib/components/PoolTogetherLoading'
 
 // http://localhost:3000/pools/rinkeby/0xd1E58Db0d67DB3f28fFa412Db58aCeafA0fEF8fA#admin
@@ -40,7 +38,7 @@ export const PoolData = (props) => {
   const router = useRouter()
   const { poolAlias, prizePoolAddress } = router.query
 
-  const [chainId, networkName] = useNetwork()
+  const { chainId, name: networkName } = useNetwork()
   const [errorState] = useAtom(errorStateAtom)
 
   if (!SUPPORTED_NETWORKS.includes(chainId)) {

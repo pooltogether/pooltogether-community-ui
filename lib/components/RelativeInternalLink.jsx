@@ -11,7 +11,7 @@ export const RelativeInternalLink = (props) => {
   const router = useRouter()
   const poolAlias = router.query.poolAlias
 
-  const [chainId, networkName] = useNetwork()
+  const { chainId, name: networkName } = useNetwork()
   const [poolAddresses] = useAtom(poolAddressesAtom)
 
   let href = `/pools/[networkName]/[prizePoolAddress]${props.link}`

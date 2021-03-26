@@ -14,12 +14,15 @@ import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 
 import Cactus from 'assets/images/cactus.svg'
+import { AwardPrizeTrigger } from 'lib/components/AwardPrizeCard'
+import { useTimeLeft } from 'lib/hooks/useTimeLeft'
 
 export const PrizeCard = (props) => {
   const { showLinks, className } = props
 
   const [poolChainValues] = useAtom(poolChainValuesAtom)
   const [usersAddress] = useAtom(usersAddressAtom)
+  const { timeRemaining } = useTimeLeft()
 
   const owner = poolChainValues.owner
   const userIsOwner = owner?.toLowerCase() === usersAddress?.toLowerCase()
@@ -28,6 +31,13 @@ export const PrizeCard = (props) => {
     <Card className={classnames('flex flex-col mx-auto', className)}>
       <PrizeSection />
       <NewPrizeCountdown center />
+
+      {!timeRemaining && (
+        <div className='mt-8'>
+          <AwardPrizeTrigger hideTimeRemaining />
+        </div>
+      )}
+
       {showLinks && (
         <div className='flex flex-col mt-4 sm:mt-8 w-full sm:w-2/4 mx-auto'>
           <ButtonRelativeLink link='/home' size='3xl' color='primary' fullWidth>
