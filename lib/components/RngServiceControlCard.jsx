@@ -17,6 +17,7 @@ import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 
 const handleSetRngService = async (
+  walletMatchesNetwork,
   txName,
   setTx,
   provider,
@@ -31,6 +32,7 @@ const handleSetRngService = async (
   ]
 
   await sendTx(
+    walletMatchesNetwork,
     setTx,
     provider,
     prizeStrategyAddress,
@@ -98,6 +100,7 @@ const RngServiceControlForm = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     handleSetRngService(
+      walletMatchesNetwork,
       txName,
       setTx,
       provider,

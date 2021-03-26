@@ -57,7 +57,7 @@ const OwnerWarning = () => {
   if (!poolChainValues || !usersAddress || userIsOwner) return null
 
   return (
-    <div className='p-4 border b-purple mb-4 sm:mb-10 rounded-xl flex flex-col sm:flex-row'>
+    <div className='p-4 border b-purple mb-4 rounded-xl flex flex-col sm:flex-row'>
       <FeatherIcon icon='alert-triangle' className='mr-2 w-10 h-10 my-auto text-orange-500' />
       <p>
         Certain actions may only be performed by the owner of the pool. The wallet you have

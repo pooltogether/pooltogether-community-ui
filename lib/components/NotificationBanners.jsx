@@ -17,6 +17,8 @@ export const NotificationBanners = (props) => {
 }
 
 export const NotificationBanner = (props) => {
+  const { canClose } = props
+
   const [userHasClosedBanner, setUserHasClosedBanner] = useState(false)
 
   if (userHasClosedBanner) return null
@@ -24,12 +26,12 @@ export const NotificationBanner = (props) => {
   return (
     <div
       className={classnames(
-        'text-sm sm:text-base sm:px-6 py-2 sm:py-3 text-white z-50 flex relative',
+        'text-center sm:text-left text-sm sm:text-base sm:px-6 py-2 sm:py-3 text-white z-50 flex relative',
         props.className
       )}
     >
       <div className='max-w-screen-sm mx-auto flex-grow px-6'>{props.children}</div>
-      <CloseBannerButton closeBanner={() => setUserHasClosedBanner(true)} />
+      {canClose && <CloseBannerButton closeBanner={() => setUserHasClosedBanner(true)} />}
     </div>
   )
 }

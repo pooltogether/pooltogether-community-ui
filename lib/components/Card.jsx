@@ -5,7 +5,7 @@ export const Card = (props) => {
   const { children, className } = props
 
   const paddingClasses = props.small ? 'py-3 px-6' : 'py-3 px-3 sm:py-6 sm:px-12'
-  const marginClasses = props.marginClasses || 'mb-4 sm:mb-10'
+  const marginClasses = props.marginClasses || 'mb-4'
 
   return (
     <div

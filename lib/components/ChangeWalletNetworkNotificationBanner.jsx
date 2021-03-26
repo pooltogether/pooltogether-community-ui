@@ -5,7 +5,7 @@ import { useAddNetworkToMetamask } from 'lib/hooks/useAddNetworkToMetamask'
 import { Button } from 'lib/components/Button'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { WALLETS } from 'lib/constants'
-import { CloseBannerButton, NotificationBanner } from 'lib/components/NotificationBanners'
+import { NotificationBanner } from 'lib/components/NotificationBanners'
 
 export const ChangeWalletNetworkNotificationBanner = (props) => {
   const { walletConnected, walletMatchesNetwork, walletNetwork, view, chainId } = useNetwork()

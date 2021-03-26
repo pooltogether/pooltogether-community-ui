@@ -26,6 +26,7 @@ import Warning from 'assets/images/warning.svg'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 
 const handleWithdrawInstantly = async (
+  walletMatchesNetwork,
   setTx,
   provider,
   contractAddress,
@@ -48,6 +49,7 @@ const handleWithdrawInstantly = async (
   ]
 
   await sendTx(
+    walletMatchesNetwork,
     setTx,
     provider,
     contractAddress,
@@ -93,6 +95,7 @@ export const WithdrawForm = (props) => {
     e.preventDefault()
 
     handleWithdrawInstantly(
+      walletMatchesNetwork,
       setTx,
       provider,
       prizePoolAddress,

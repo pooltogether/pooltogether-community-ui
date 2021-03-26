@@ -16,6 +16,7 @@ import { useNetwork } from 'lib/hooks/useNetwork'
 import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 
 const handleSetNumberOfWinners = async (
+  walletMatchesNetwork,
   txName,
   setTx,
   provider,
@@ -30,6 +31,7 @@ const handleSetNumberOfWinners = async (
   ]
 
   await sendTx(
+    walletMatchesNetwork,
     setTx,
     provider,
     prizeStrategyAddress,
@@ -89,6 +91,7 @@ const NumOfWinnersForm = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     handleSetNumberOfWinners(
+      walletMatchesNetwork,
       txName,
       setTx,
       provider,

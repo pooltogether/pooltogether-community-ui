@@ -25,6 +25,7 @@ import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 import PrizeIllustration from 'assets/images/prize-illustration-transparent@2x.png'
 
 const handleAddExternalErc20 = async (
+  walletMatchesNetwork,
   txName,
   setTx,
   provider,
@@ -39,6 +40,7 @@ const handleAddExternalErc20 = async (
   ]
 
   await sendTx(
+    walletMatchesNetwork,
     setTx,
     provider,
     prizeStrategyAddress,
@@ -50,6 +52,7 @@ const handleAddExternalErc20 = async (
 }
 
 const handleRemoveExternalErc20 = async (
+  walletMatchesNetwork,
   txName,
   setTx,
   provider,
@@ -66,6 +69,7 @@ const handleRemoveExternalErc20 = async (
   ]
 
   await sendTx(
+    walletMatchesNetwork,
     setTx,
     provider,
     prizeStrategyAddress,
@@ -136,7 +140,7 @@ const AddErc20Form = () => {
   const { refetch: refetchPoolChainValues } = usePoolChainValues()
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
-  const { chainId, walletMatchesNetwork } = useNetwork()
+  const { walletMatchesNetwork } = useNetwork()
 
   const txName = 'Add External ERC20 Token'
 
@@ -150,6 +154,7 @@ const AddErc20Form = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     handleAddExternalErc20(
+      walletMatchesNetwork,
       txName,
       setTx,
       provider,
@@ -226,12 +231,14 @@ const RemoveAddressButton = (props) => {
   const { refetch: refetchPoolChainValues } = usePoolChainValues()
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
+  const { walletMatchesNetwork } = useNetwork()
 
   const txName = 'Remove External ERC20 Token'
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     await handleRemoveExternalErc20(
+      walletMatchesNetwork,
       txName,
       setTx,
       provider,
