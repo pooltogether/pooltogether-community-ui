@@ -100,8 +100,8 @@ const UnsupportedNetworkCard = () => {
     <div className='text-left mb-10 border-2 border-primary rounded-lg px-7 py-4 text-accent-1'>
       <CardTitle noMargin>☹️ Index Unavailable for {networkName}</CardTitle>
       <p>
-        Unfortunately due to limitations of MaticVigil we can't dynamically compile a list of
-        created prize pools.
+        Unfortunately due to limitations of Matic we can't dynamically compile a list of created
+        prize pools.
       </p>
     </div>
   )

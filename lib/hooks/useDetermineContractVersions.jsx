@@ -9,7 +9,7 @@ import { errorStateAtom } from 'lib/components/PoolData'
 import {
   CONTRACTS,
   CONTRACT_VERSIONS,
-  NETWORKS_WITHOUT_VERSIONING,
+  NETWORKS_TO_IGNORE_VERSION_CHECKS,
   PRIZE_POOL_TYPE,
   SUPPORTED_NETWORKS
 } from 'lib/constants'
@@ -134,7 +134,7 @@ const IncompatibleContract = (props) => {
 
   if (hideWarning) return null
 
-  if (NETWORKS_WITHOUT_VERSIONING.includes(chainId)) return null
+  if (NETWORKS_TO_IGNORE_VERSION_CHECKS.includes(chainId)) return null
 
   return (
     <div className='text-left mb-10 border-2 border-primary rounded-lg px-7 py-4'>
