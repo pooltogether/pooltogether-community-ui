@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
-import { useAtom } from 'jotai'
 import { addSeconds } from 'date-fns'
 import PrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PrizePool'
 
@@ -11,10 +10,9 @@ import { InnerCard } from 'lib/components/Card'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { useDebounce } from 'lib/hooks/useDebounce'
 import { useNetwork } from 'lib/hooks/useNetwork'
-import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
-import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+import { useUserChainValues } from 'lib/hooks/useUserChainValues'
 import { calculateOdds } from 'lib/utils/calculateOdds'
 import { fetchExitFee } from 'lib/utils/fetchExitFee'
 import { getErc20InputProps } from 'lib/utils/getErc20InputProps'
@@ -25,6 +23,7 @@ import { sendTx } from 'lib/utils/sendTx'
 import { subtractDates } from 'lib/utils/subtractDates'
 
 import Warning from 'assets/images/warning.svg'
+import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 
 const handleWithdrawInstantly = async (
   setTx,
@@ -58,16 +57,15 @@ const handleWithdrawInstantly = async (
     'Withdraw'
   )
 }
-
+// TODO: Add tx refetch listener to this app
 export const WithdrawForm = (props) => {
   const { setTx, withdrawAmount, setWithdrawAmount } = props
-
   const walletContext = useContext(WalletContext)
-  const [poolAddresses] = useAtom(poolAddressesAtom)
-  const [usersAddress] = useAtom(usersAddressAtom)
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const [usersChainValues] = useAtom(userChainValuesAtom)
-  const { chainId, name: networkName, walletMatchesNetwork } = useNetwork()
+  const { data: prizePoolContracts } = usePrizePoolContracts()
+  const { data: poolChainValues } = usePoolChainValues()
+  const { data: usersChainValues } = useUserChainValues()
+  const usersAddress = useUsersAddress()
+  const { name: networkName, walletMatchesNetwork } = useNetwork()
 
   const [exitFees, setExitFees] = useState({
     earlyExitFee: null,
@@ -77,20 +75,19 @@ export const WithdrawForm = (props) => {
   })
   const debouncedWithdrawAmount = useDebounce(withdrawAmount, 300)
 
-  const {
-    ticketDecimals,
-    ticketTotalSupply,
-    numberOfWinners,
-    isRngRequested,
-    tokenDecimals,
-    maxTimelockDuration,
-    tokenSymbol
-  } = poolChainValues
-  const { prizePool, ticket: ticketAddress } = poolAddresses
+  const ticketDecimals = poolChainValues.ticket.decimals
+  const ticketTotalSupply = poolChainValues.ticket.totalSupplyUnformatted
+  const numberOfWinners = poolChainValues.config.numberOfWinners
+  const poolIsLocked = poolChainValues.prize.isRngRequested
+  const tokenDecimals = poolChainValues.token.decimals
+  const maxTimelockDuration = poolChainValues.config.maxTimelockDuration
+  const tokenSymbol = poolChainValues.token.symbol
+  const prizePoolAddress = prizePoolContracts.prizePool.address
+  const ticketAddress = prizePoolContracts.ticket.address
   const provider = walletContext.state.provider
-  const { usersTicketBalance } = usersChainValues
+  const usersTicketBalance = usersChainValues.usersTicketBalance
+  const usersTicketBalanceUnformatted = usersChainValues.usersTicketBalanceUnformatted
   const { earlyExitFee, timelockDurationSeconds } = exitFees
-  const poolIsLocked = isRngRequested
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -98,7 +95,7 @@ export const WithdrawForm = (props) => {
     handleWithdrawInstantly(
       setTx,
       provider,
-      prizePool,
+      prizePoolAddress,
       ticketAddress,
       usersAddress,
       withdrawAmount,
@@ -113,7 +110,7 @@ export const WithdrawForm = (props) => {
         const result = await fetchExitFee(
           networkName,
           usersAddress,
-          prizePool,
+          prizePoolAddress,
           ticketAddress,
           parseNumString(debouncedWithdrawAmount, tokenDecimals)
         )
@@ -131,20 +128,18 @@ export const WithdrawForm = (props) => {
     t()
   }, [debouncedWithdrawAmount])
 
-  const withdrawAmountBN = parseNumString(withdrawAmount, tokenDecimals)
-  const inputError = !withdrawAmountBN
-  const overBalance = withdrawAmountBN?.gt(usersTicketBalance)
+  const withdrawAmountUnformatted = parseNumString(withdrawAmount, tokenDecimals)
+  const inputError = !withdrawAmountUnformatted
+  const overBalance = withdrawAmountUnformatted?.gt(usersTicketBalanceUnformatted)
 
-  const ticketBal =
-    usersTicketBalance && tokenDecimals
-      ? ethers.utils.formatUnits(usersTicketBalance, tokenDecimals)
-      : '0'
+  const ticketBal = usersTicketBalance
 
-  let usersNewTicketBalance = ethers.BigNumber.from(0)
+  let usersNewTicketBalance = ethers.constants.Zero
   let totalSupplyLessWithdrawAmountBN = ethers.BigNumber.from(0)
-  if (withdrawAmountBN) {
-    usersNewTicketBalance = usersTicketBalance.sub(withdrawAmountBN)
-    totalSupplyLessWithdrawAmountBN = ticketTotalSupply && ticketTotalSupply.sub(withdrawAmountBN)
+  if (withdrawAmountUnformatted) {
+    usersNewTicketBalance = usersTicketBalanceUnformatted.sub(withdrawAmountUnformatted)
+    totalSupplyLessWithdrawAmountBN =
+      ticketTotalSupply && ticketTotalSupply.sub(withdrawAmountUnformatted)
   }
 
   const newOdds = calculateOdds(
@@ -168,7 +163,7 @@ export const WithdrawForm = (props) => {
     )
   }
 
-  if (!poolIsLocked && usersTicketBalance && usersTicketBalance.lte(0)) {
+  if (!poolIsLocked && usersTicketBalance && usersTicketBalanceUnformatted.isZero()) {
     return (
       <div className='text-orange-600'>
         You have no tickets to withdraw. Deposit some {tokenSymbol} first!
@@ -201,7 +196,8 @@ export const WithdrawForm = (props) => {
                 setWithdrawAmount(ticketBal)
               }}
             >
-              {ticketBal} {tokenSymbol}
+              {numberWithCommas(usersTicketBalanceUnformatted, { decimals: tokenDecimals })}{' '}
+              {tokenSymbol}
             </RightLabelButton>
           }
         />

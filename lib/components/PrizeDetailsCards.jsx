@@ -1,10 +1,8 @@
-import React, { useState } from 'react'
-import { useAtom } from 'jotai'
+import React from 'react'
 
 import { Card, CardPrimaryText, CardTitle } from 'lib/components/Card'
-import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
-import { useTimeLeft } from 'lib/hooks/useTimeLeft'
+import { useTimeLeftBeforePrize } from 'lib/hooks/useTimeLeftBeforePrize'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 
 export const PrizeDetailsCards = (props) => {
   return (
@@ -17,7 +15,7 @@ export const PrizeDetailsCards = (props) => {
 }
 
 const TimeUntilPrizeCard = () => {
-  const { days, hours, minutes, seconds } = useTimeLeft()
+  const { days, hours, minutes, seconds } = useTimeLeftBeforePrize()
 
   return (
     <Card className='mr-1 sm:mr-4'>
@@ -54,25 +52,26 @@ const TimeDisplay = (props) => {
   )
 }
 
-const PlayersCard = () => {
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
+// const PlayersCard = () => {
+//   const [poolChainValues] = useAtom(poolChainValuesAtom)
 
-  return (
-    <Card className='mx-4'>
-      <CardTitle>Unique Players</CardTitle>
-      <CardPrimaryText>{`$${poolChainValues.sponsorshipSymbol}`}</CardPrimaryText>
-    </Card>
-  )
-}
+//   return (
+//     <Card className='mx-4'>
+//       <CardTitle>Unique Players</CardTitle>
+//       <CardPrimaryText>{`$${poolChainValues.sponsorshipSymbol}`}</CardPrimaryText>
+//     </Card>
+//   )
+// }
 
 const TotalDeposits = () => {
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const total = displayAmountInEther(poolChainValues.poolTotalSupply, poolChainValues.tokenDecimals)
+  const { data: poolChainValues } = usePoolChainValues()
+
+  const total = poolChainValues.totalSupply
 
   return (
     <Card className='ml-1 sm:ml-4'>
       <CardTitle>Total deposits</CardTitle>
-      <CardPrimaryText>{`${total} ${poolChainValues.tokenSymbol}`}</CardPrimaryText>
+      <CardPrimaryText>{`${total} ${poolChainValues.token.symbol}`}</CardPrimaryText>
     </Card>
   )
 }

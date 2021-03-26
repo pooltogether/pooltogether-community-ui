@@ -3,26 +3,24 @@ import FeatherIcon from 'feather-icons-react'
 
 import { AdminUI } from 'lib/components/AdminUI'
 import { ButtonLink } from 'lib/components/ButtonLink'
-
-import ManageImage from 'assets/images/manage-image.svg'
-import { useAtom } from 'jotai'
-import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
-import { shorten } from 'lib/utils/shorten'
 import { RelativeInternalLink } from 'lib/components/RelativeInternalLink'
 import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
 import { PoolData } from 'lib/components/PoolData'
 
+import ManageImage from 'assets/images/manage-image.svg'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+
 export default function IndexPage() {
   return (
-    <>
+    <PoolData>
       <AdminHeader />
       <OwnerWarning />
       <AdminUI />
       <div className='flex justify-center'>
         <RelativeInternalLink link='/home'>View Prize Pool</RelativeInternalLink>
       </div>
-    </>
+    </PoolData>
   )
 }
 
@@ -50,10 +48,10 @@ const AdminHeader = () => {
 }
 
 const OwnerWarning = () => {
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const [usersAddress] = useAtom(usersAddressAtom)
+  const { data: poolChainValues } = usePoolChainValues()
+  const usersAddress = useUsersAddress()
 
-  const owner = poolChainValues.owner
+  const owner = poolChainValues.config.owner
   const userIsOwner = owner?.toLowerCase() === usersAddress?.toLowerCase()
 
   if (!poolChainValues || !usersAddress || userIsOwner) return null

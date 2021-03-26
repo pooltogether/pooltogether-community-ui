@@ -8,7 +8,6 @@ import { QueryCache, ReactQueryCacheProvider } from 'react-query'
 import { Layout } from 'lib/components/Layout'
 import { ThemeContextProvider } from 'lib/components/contextProviders/ThemeContextProvider'
 import { ErrorBoundary, CustomErrorBoundary } from 'lib/components/CustomErrorBoundary'
-import { PoolData } from 'lib/components/PoolData'
 
 import 'react-toastify/dist/ReactToastify.css'
 import '@reach/menu-button/styles.css'
@@ -52,9 +51,7 @@ function MyApp({ Component, pageProps }) {
             <JotaiProvider>
               <Layout>
                 <CustomErrorBoundary>
-                  <PoolData>
-                    <Component {...pageProps} />
-                  </PoolData>
+                  <Component {...pageProps} />
                 </CustomErrorBoundary>
               </Layout>
             </JotaiProvider>

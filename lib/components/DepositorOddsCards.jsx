@@ -1,11 +1,10 @@
 import React from 'react'
-import { useAtom } from 'jotai'
 
 import { Card, CardPrimaryText, CardTitle } from 'lib/components/Card'
-import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
 import { calculateOdds } from 'lib/utils/calculateOdds'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { useUserChainValues } from 'lib/hooks/useUserChainValues'
 
 export const DepositorOddsCards = (props) => {
   return (
@@ -23,29 +22,34 @@ export const DepositorOddsCards = (props) => {
 }
 
 const TicketCard = () => {
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const [userChainValues] = useAtom(userChainValuesAtom)
+  const { data: poolChainValues, isFetched: poolChainValuesIsFetched } = usePoolChainValues()
+  const { data: userChainValues, isFetched: userChainValuesIsFetched } = useUserChainValues()
 
-  const symbol = poolChainValues.ticketSymbol
-  const decimals = poolChainValues.ticketDecimals
+  if (!poolChainValuesIsFetched || !userChainValuesIsFetched) return null
+
+  const symbol = poolChainValues.token.symbol
+  const decimals = poolChainValues.ticket.decimals
   const balance = numberWithCommas(userChainValues.usersTicketBalance, { decimals })
 
   return (
     <Card small className='text-center' marginClasses='mb-4 mr-2'>
-      <CardTitle>My deposit</CardTitle>
+      <CardTitle>My deposits</CardTitle>
       <CardPrimaryText small>{`${balance} ${symbol}`}</CardPrimaryText>
     </Card>
   )
 }
 
 const OddsCard = () => {
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const [userChainValues] = useAtom(userChainValuesAtom)
+  const { data: poolChainValues, isFetched: poolChainValuesIsFetched } = usePoolChainValues()
+  const { data: userChainValues, isFetched: userChainValuesIsFetched } = useUserChainValues()
+
+  if (!poolChainValuesIsFetched || !userChainValuesIsFetched) return null
+
   const odds = calculateOdds(
-    userChainValues.usersTicketBalance,
-    poolChainValues.ticketTotalSupply,
-    poolChainValues.ticketDecimals,
-    poolChainValues.numberOfWinners
+    userChainValues.usersTicketBalanceUnformatted,
+    poolChainValues.ticket.totalSupplyUnformatted,
+    poolChainValues.ticket.decimals,
+    poolChainValues.config.numberOfWinners
   )
 
   if (!odds) {
@@ -68,11 +72,12 @@ const OddsCard = () => {
 }
 
 const BalanceCard = () => {
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const [userChainValues] = useAtom(userChainValuesAtom)
+  const { data: poolChainValues, isFetched: poolChainValuesIsFetched } = usePoolChainValues()
+  const { data: userChainValues, isFetched: userChainValuesIsFetched } = useUserChainValues()
 
-  const symbol = poolChainValues.tokenSymbol
-  const decimals = poolChainValues.tokenDecimals
+  if (!poolChainValuesIsFetched || !userChainValuesIsFetched) return null
+
+  const { symbol, decimals } = poolChainValues.token
   const balance = numberWithCommas(userChainValues.usersTokenBalance, { decimals })
 
   return (
@@ -84,11 +89,13 @@ const BalanceCard = () => {
 }
 
 const TotalDepositsCard = () => {
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
+  const { data: poolChainValues, isFetched: poolChainValuesIsFetched } = usePoolChainValues()
 
-  const symbol = poolChainValues.tokenSymbol
-  const decimals = poolChainValues.tokenDecimals
-  const totalSupply = numberWithCommas(poolChainValues.ticketTotalSupply, { decimals })
+  if (!poolChainValuesIsFetched) return null
+
+  const { symbol, decimals } = poolChainValues.token
+  const totalSupplyUnformatted = poolChainValues.totalSupplyUnformatted
+  const totalSupply = numberWithCommas(totalSupplyUnformatted, { decimals })
 
   return (
     <Card small className='text-center' marginClasses='ml-2'>

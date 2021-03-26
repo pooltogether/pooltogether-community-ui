@@ -1,19 +1,18 @@
 import React, { useState } from 'react'
-import { useAtom } from 'jotai'
 
 import { AdminUI } from 'lib/components/AdminUI'
 import { StatsUI } from 'lib/components/StatsUI'
 import { Content, ContentPane, Tab, Tabs } from 'lib/components/Tabs'
 import { Card, CardTitle } from 'lib/components/Card'
 import { ButtonLink } from 'lib/components/ButtonLink'
-import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 
 import ManageImage from 'assets/images/manage-image.svg'
 import { RelativeInternalLink } from 'lib/components/RelativeInternalLink'
 import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
 import { CopyIcon } from 'lib/components/CopyIcon'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 
 const MANAGE_VIEW = Object.freeze({
   stats: '#stats',
@@ -22,10 +21,9 @@ const MANAGE_VIEW = Object.freeze({
 
 export const ManageUI = (props) => {
   const [selectedTab, setSelectedTab] = useState(window.location.hash || MANAGE_VIEW.stats)
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const [usersAddress] = useAtom(usersAddressAtom)
-
-  const owner = poolChainValues.owner
+  const { data: poolChainValues } = usePoolChainValues()
+  const usersAddress = useUsersAddress()
+  const owner = poolChainValues.config.owner
   const userIsOwner = owner?.toLowerCase() === usersAddress?.toLowerCase()
 
   return (
@@ -90,7 +88,7 @@ const ManageHeader = () => {
 }
 
 const PoolAddress = () => {
-  const [poolAddresses] = useAtom(poolAddressesAtom)
+  const { data: prizePoolContracts } = usePrizePoolContracts()
 
   return (
     <>
@@ -98,8 +96,11 @@ const PoolAddress = () => {
       <Card className='flex flex-col'>
         <CardTitle className='mb-2'>Pool's contract address</CardTitle>
         <h4 className='font-normal mx-auto flex'>
-          <BlockExplorerLink address={poolAddresses.prizePool} className='text-white' />
-          <CopyIcon text={poolAddresses.prizePool} className='ml-4' />
+          <BlockExplorerLink
+            address={prizePoolContracts.prizePool.address}
+            className='text-white'
+          />
+          <CopyIcon text={prizePoolContracts.prizePool.address} className='ml-4' />
         </h4>
       </Card>
     </>

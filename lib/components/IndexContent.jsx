@@ -57,6 +57,8 @@ const PoolsLists = () => {
     isFetching: tokenBalancedIsFetching
   } = useAllUserTokenBalances()
 
+  console.log(createdPrizePools)
+
   if (
     !createdPrizePoolsIsFetched ||
     !tokenBalancesIsFetched ||

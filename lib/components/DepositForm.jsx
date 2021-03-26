@@ -1,41 +1,38 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import IERC20Abi from '@pooltogether/pooltogether-contracts/abis/IERC20Upgradeable'
-import { useAtom } from 'jotai'
 import FeatherIcon from 'feather-icons-react'
 
 import { Button } from 'lib/components/Button'
 import { RightLabelButton, TextInputGroup } from 'lib/components/TextInputGroup'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
-import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
+import { useUserChainValues } from 'lib/hooks/useUserChainValues'
 import { sendTx } from 'lib/utils/sendTx'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
-import { errorStateAtom } from 'lib/components/PoolData'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { InnerCard } from 'lib/components/Card'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
 
 import Warning from 'assets/images/warning.svg'
 import { getErc20InputProps } from 'lib/utils/getErc20InputProps'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
+import { usePrizePoolType } from 'lib/hooks/usePrizePoolType'
 
 export const DepositForm = (props) => {
   const { inputError, handleSubmit, vars, stateSetters } = props
 
   const { walletMatchesNetwork } = useNetwork()
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const [usersChainValues] = useAtom(userChainValuesAtom)
+  const { data: poolChainValues, isFetched: poolChainValuesIsFetched } = usePoolChainValues()
+  const { data: usersChainValues, isFetched: usersChainValuesIsFetched } = useUserChainValues()
+
+  if (!poolChainValuesIsFetched || !usersChainValuesIsFetched) return null
+
   const hasApprovedBalance = usersChainValues.underlyingTokenIsApproved
   const supportsAllowance = usersChainValues.underlyingTokenSupportsAllowance
-
-  const { usersTokenBalance } = usersChainValues || {}
-
-  const { tokenDecimals, isRngRequested } = poolChainValues || {}
-
-  const poolIsLocked = isRngRequested
-  const tokenSymbol = poolChainValues.tokenSymbol || 'TOKEN'
+  const { usersTokenBalance, usersTokenBalanceUnformatted } = usersChainValues
+  const { symbol: tokenSymbol, decimals: tokenDecimals } = poolChainValues.token.symbol
+  const poolIsLocked = poolChainValues.prize.isRngRequested
 
   let depositAmount, setDepositAmount
   if (vars && stateSetters) {
@@ -47,15 +44,15 @@ export const DepositForm = (props) => {
   let overBalance = false
   try {
     depositAmountBN = ethers.utils.parseUnits(depositAmount || '0', tokenDecimals)
-    overBalance = depositAmountBN && usersTokenBalance && usersTokenBalance.lt(depositAmountBN)
+    overBalance =
+      depositAmountBN &&
+      usersTokenBalanceUnformatted &&
+      usersTokenBalanceUnformatted.lt(depositAmountBN)
   } catch (e) {
     console.warn(e)
   }
 
-  const tokenBal =
-    usersTokenBalance && tokenDecimals
-      ? ethers.utils.formatUnits(usersTokenBalance, tokenDecimals)
-      : ''
+  const tokenBal = usersTokenBalance
 
   if (poolIsLocked) {
     return (
@@ -94,7 +91,8 @@ export const DepositForm = (props) => {
                 setDepositAmount(tokenBal)
               }}
             >
-              {numberWithCommas(usersTokenBalance, { decimals: tokenDecimals })} {tokenSymbol}
+              {numberWithCommas(usersTokenBalanceUnformatted, { decimals: tokenDecimals })}{' '}
+              {tokenSymbol}
             </RightLabelButton>
           }
         />
@@ -139,13 +137,11 @@ export const DepositForm = (props) => {
 }
 
 const UnlockDepositsButton = () => {
-  const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
-  const [usersChainValues] = useAtom(userChainValuesAtom)
-  const [contractVersions] = useAtom(contractVersionsAtom)
+  const { data: poolChainValues, refetch: refetchPoolChainValues } = usePoolChainValues()
+  const { data: usersChainValues, refetch: refetchUsersChainValues } = useUserChainValues()
+  const { data: prizePoolContracts } = usePrizePoolContracts()
+
   const { chainId, walletMatchesNetwork } = useNetwork()
-  const [errorState, setErrorState] = useAtom(errorStateAtom)
-  const [poolAddresses] = useAtom(poolAddressesAtom)
-  const [prizePoolType] = useAtom(prizePoolTypeAtom)
   const [tx, setTx] = useState({})
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
@@ -160,15 +156,8 @@ const UnlockDepositsButton = () => {
   // Update global data upon completion
   useEffect(() => {
     if (tx.completed && !tx.error) {
-      fetchPoolChainValues(
-        provider,
-        chainId,
-        poolAddresses,
-        prizePoolType,
-        setPoolChainValues,
-        contractVersions.prizeStrategy.contract,
-        setErrorState
-      )
+      refetchPoolChainValues()
+      refetchUsersChainValues()
     }
   }, [tx.completed, tx.error])
 
@@ -186,15 +175,15 @@ const UnlockDepositsButton = () => {
       >
         <FeatherIcon
           icon='check-circle'
-          className='relative w-4 h-4 inline-block my-auto mr-2 my-auto'
+          className='relative w-4 h-4 inline-block my-auto mr-2'
           strokeWidth='0.15rem'
         />
-        {`Approved ${poolChainValues.tokenSymbol}`}
+        {`Approved ${poolChainValues.token.symbol}`}
       </Button>
     )
   }
 
-  let buttonText = `Approve ${poolChainValues.tokenSymbol}`
+  let buttonText = `Approve ${poolChainValues.token.symbol}`
   if (tx.sent && !tx.completed) {
     buttonText = 'Waiting for confirmations...'
   }
@@ -212,9 +201,9 @@ const UnlockDepositsButton = () => {
         handleUnlockSubmit(
           setTx,
           provider,
-          poolAddresses.token,
-          poolAddresses.prizePool,
-          poolChainValues.tokenDecimals
+          prizePoolContracts.token.address,
+          prizePoolContracts.prizePool.address,
+          poolChainValues.token.symbol
         )
       }}
       disabled={!walletMatchesNetwork}

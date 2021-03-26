@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useAtom } from 'jotai'
 import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/PeriodicPrizeStrategy'
 
 import { Button } from 'lib/components/Button'
@@ -8,12 +7,14 @@ import { Collapse } from 'lib/components/Collapse'
 import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
 import { CONTRACT_ADDRESSES } from 'lib/constants'
 import { useNetwork } from 'lib/hooks/useNetwork'
-import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { sendTx } from 'lib/utils/sendTx'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { TxMessage } from 'lib/components/TxMessage'
-import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
+import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
+import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 
 const handleSetRngService = async (
   txName,
@@ -56,8 +57,9 @@ export const RngServiceControlCard = (props) => {
 }
 
 const RngServiceControlForm = (props) => {
-  const [poolAddresses, setPoolAddresses] = useAtom(poolAddressesAtom)
-  const [usersAddress] = useAtom(usersAddressAtom)
+  const { data: prizePoolContracts } = usePrizePoolContracts()
+  const usersAddress = useUsersAddress()
+  const { refetch: refetchPoolChainValues } = usePoolChainValues()
   const { chainId, walletMatchesNetwork } = useNetwork()
   const [tx, setTx] = useState({})
   const walletContext = useContext(WalletContext)
@@ -65,7 +67,7 @@ const RngServiceControlForm = (props) => {
 
   const rngServicesList = Object.keys(CONTRACT_ADDRESSES[chainId].RNG_SERVICE)
   const currentRngService = rngServicesList.find(
-    (service) => CONTRACT_ADDRESSES[chainId].RNG_SERVICE[service] === poolAddresses.rng
+    (service) => CONTRACT_ADDRESSES[chainId].RNG_SERVICE[service] === prizePoolContracts.rng.address
   )
   const [newRngService, setNewRngService] = useState(currentRngService)
 
@@ -99,20 +101,12 @@ const RngServiceControlForm = (props) => {
       txName,
       setTx,
       provider,
-      poolAddresses.prizeStrategy,
+      prizePoolContracts.prizeStrategy.address,
       CONTRACT_ADDRESSES[chainId].RNG_SERVICE[newRngService]
     )
   }
 
-  // Update local data upon completion
-  useEffect(() => {
-    if (tx.completed && !tx.error) {
-      setPoolAddresses({
-        ...poolAddresses,
-        rng: CONTRACT_ADDRESSES[chainId].RNG_SERVICE[newRngService]
-      })
-    }
-  }, [tx.completed, tx.error])
+  useOnTransactionCompleted(tx, refetchPoolChainValues)
 
   const resetState = (e) => {
     e.preventDefault()

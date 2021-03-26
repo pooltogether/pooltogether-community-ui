@@ -1,27 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { useAtom } from 'jotai'
+import React, { useEffect, useState } from 'react'
 
 import { TxMessage } from 'lib/components/TxMessage'
 import { WithdrawForm } from 'lib/components/WithdrawForm'
-import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
-import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { WalletContext } from 'lib/components/WalletContextProvider'
-import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
-import { errorStateAtom } from 'lib/components/PoolData'
-import { useNetwork } from 'lib/hooks/useNetwork'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 
-export const WithdrawUI = (props) => {
-  const walletContext = useContext(WalletContext)
-  const provider = walletContext.state.provider
-  const [usersAddress] = useAtom(usersAddressAtom)
-  const [poolAddresses] = useAtom(poolAddressesAtom)
-  const [prizePoolType] = useAtom(prizePoolTypeAtom)
-  const [errorState, setErrorState] = useAtom(errorStateAtom)
-  const [contractVersions] = useAtom(contractVersionsAtom)
-  const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
-  const { chainId } = useNetwork()
+export const WithdrawUI = () => {
+  const { refetch } = usePoolChainValues()
+  const usersAddress = useUsersAddress()
 
   const [withdrawAmount, setWithdrawAmount] = useState('')
   const [tx, setTx] = useState({
@@ -44,15 +31,7 @@ export const WithdrawUI = (props) => {
 
   useEffect(() => {
     if (tx.completed) {
-      fetchPoolChainValues(
-        provider,
-        chainId,
-        poolAddresses,
-        prizePoolType,
-        setPoolChainValues,
-        contractVersions.prizeStrategy.contract,
-        setErrorState
-      )
+      refetch()
     }
   }, [tx.completed])
 

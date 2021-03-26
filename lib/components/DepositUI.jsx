@@ -1,17 +1,16 @@
 import React, { useContext, useState } from 'react'
 import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
 import { ethers } from 'ethers'
-import { useAtom } from 'jotai'
 
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 import { DepositForm } from 'lib/components/DepositForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 import { parseNumString } from 'lib/utils/parseNumString'
 import { sendTx } from 'lib/utils/sendTx'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 
 const handleDepositSubmit = async (
   setTx,
@@ -39,22 +38,26 @@ const handleDepositSubmit = async (
 export const DepositUI = (props) => {
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
-  const [usersAddress] = useAtom(usersAddressAtom)
-  const [poolAddresses] = useAtom(poolAddressesAtom)
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-
-  const ticketAddress = poolAddresses.ticket
-  const tokenSymbol = poolChainValues.tokenSymbol || 'TOKEN'
-  const ticketSymbol = poolChainValues.ticketSymbol || 'TOKEN'
-  const depositMessage = `You can deposit ${tokenSymbol} to be eligible to win the prizes in this pool. Once deposited you will receive ${ticketSymbol} and be entered to win until your ${tokenSymbol} is withdrawn.`
-
+  const usersAddress = useUsersAddress()
+  const {
+    data: prizePoolContracts,
+    isFetched: prizePoolContractsIsFetched
+  } = usePrizePoolContracts()
+  const { data: poolChainValues, isFetched: poolChainValuesIsFetched } = usePoolChainValues()
   const [depositAmount, setDepositAmount] = useState('')
-
   const [tx, setTx] = useState({
     inWallet: false,
     sent: false,
     completed: false
   })
+
+  if (!poolChainValuesIsFetched || !prizePoolContractsIsFetched) return null
+
+  const prizePoolAddress = prizePoolContracts.prizePool.address
+  const ticketAddress = prizePoolContracts.ticket.address
+  const tokenSymbol = poolChainValues.token.symbol
+  const ticketSymbol = poolChainValues.ticket.symbol
+  const depositMessage = `You can deposit ${tokenSymbol} to be eligible to win the prizes in this pool. Once deposited you will receive ${ticketSymbol} and be entered to win until your ${tokenSymbol} is withdrawn.`
 
   const txInFlight = tx.inWallet || tx.sent
 
@@ -101,7 +104,7 @@ export const DepositUI = (props) => {
             setTx,
             provider,
             usersAddress,
-            poolAddresses.prizePool,
+            prizePoolAddress,
             ticketAddress,
             depositAmountBN
           )

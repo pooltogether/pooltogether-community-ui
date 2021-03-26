@@ -3,18 +3,15 @@ import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/Periodic
 import FeatherIcon from 'feather-icons-react'
 
 import { sendTx } from 'lib/utils/sendTx'
-import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { useAtom } from 'jotai'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import { useTimeLeft } from 'lib/hooks/useTimeLeft'
-import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
-import { errorStateAtom } from 'lib/components/PoolData'
+import { useTimeLeftBeforePrize } from 'lib/hooks/useTimeLeftBeforePrize'
 import { Card, CardSecondaryText } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { Button } from 'lib/components/Button'
 import { TxMessage } from 'lib/components/TxMessage'
 import { useNetwork } from 'lib/hooks/useNetwork'
+import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 
 const handleStartAwardSubmit = async (setTx, provider, contractAddress) => {
   const params = [
@@ -81,20 +78,19 @@ export const AwardPrizeCard = () => {
 }
 
 export const AwardPrizeTrigger = (props) => {
-  const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
-  const [poolAddresses] = useAtom(poolAddressesAtom)
-  const [prizePoolType] = useAtom(prizePoolTypeAtom)
-  const [errorState, setErrorState] = useAtom(errorStateAtom)
-  const [contractVersions] = useAtom(contractVersionsAtom)
+  const { hideTimeRemaining } = props
+
+  const { data: prizePoolContracts } = usePrizePoolContracts()
+  const { data: poolChainValues, refetch: refetchPoolChainValues } = usePoolChainValues()
+
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
   const [tx, setTx] = useState({})
   const [txType, setTxType] = useState('')
-  const { chainId, walletMatchesNetwork } = useNetwork()
-  const { days, hours, minutes, seconds, timeRemaining } = useTimeLeft()
+  const { walletMatchesNetwork } = useNetwork()
+  const { days, hours, minutes, seconds, timeRemaining } = useTimeLeftBeforePrize()
 
-  const { hideTimeRemaining } = props
-  const { canCompleteAward, canStartAward, isRngRequested, isRngTimedOut } = poolChainValues
+  const { canCompleteAward, canStartAward, isRngRequested, isRngTimedOut } = poolChainValues.prize
   const showTx = tx.inWallet || tx.sent
 
   const resetState = (e) => {
@@ -105,33 +101,25 @@ export const AwardPrizeTrigger = (props) => {
   const handleStartAwardClick = (e) => {
     e.preventDefault()
     setTxType('Start Award')
-    handleStartAwardSubmit(setTx, provider, poolAddresses.prizeStrategy)
+    handleStartAwardSubmit(setTx, provider, prizePoolContracts.prizeStrategy.address)
   }
 
   const handleCancelAwardClick = (e) => {
     e.preventDefault()
     setTxType('Cancel Award')
-    handleCancelAward(setTx, provider, poolAddresses.prizeStrategy)
+    handleCancelAward(setTx, provider, prizePoolContracts.prizeStrategy.address)
   }
 
   const handleCompleteAwardClick = (e) => {
     e.preventDefault()
     setTxType('Complete Award')
-    handleCompleteAwardSubmit(setTx, provider, poolAddresses.prizeStrategy)
+    handleCompleteAwardSubmit(setTx, provider, prizePoolContracts.prizeStrategy.address)
   }
 
   // If countdown has finished, trigger a chain data refetch
   useEffect(() => {
     if (!timeRemaining && tx.completed) {
-      fetchPoolChainValues(
-        provider,
-        chainId,
-        poolAddresses,
-        prizePoolType,
-        setPoolChainValues,
-        contractVersions.prizeStrategy.contract,
-        setErrorState
-      )
+      refetchPoolChainValues()
     }
   }, [timeRemaining, tx.completed])
 
@@ -152,7 +140,7 @@ export const AwardPrizeTrigger = (props) => {
         <div className='flex text-orange-500 font-bold'>
           <FeatherIcon
             icon='alert-triangle'
-            className='mr-2 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current'
+            className='mr-2 my-auto w-3 h-3 sm:w-4 sm:h-4 stroke-current'
           />
           Attention
         </div>
@@ -181,10 +169,7 @@ export const AwardPrizeTrigger = (props) => {
       )}
       {isRngRequested && !canCompleteAward && (
         <div className='flex'>
-          <FeatherIcon
-            icon='lock'
-            className='mr-2 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current'
-          />
+          <FeatherIcon icon='lock' className='mr-2 my-auto w-3 h-3 sm:w-4 sm:h-4 stroke-current' />
           Pool is locked. Awarding in progress!
         </div>
       )}
