@@ -5,9 +5,12 @@ import { WithdrawForm } from 'lib/components/WithdrawForm'
 import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
+import { useUserChainValues } from 'lib/hooks/useUserChainValues'
 
 export const WithdrawUI = () => {
-  const { refetch } = usePoolChainValues()
+  const { refetch: refetchPoolChainValues } = usePoolChainValues()
+  const { refetch: refetchUsersChainValues } = useUserChainValues()
   const usersAddress = useUsersAddress()
 
   const [withdrawAmount, setWithdrawAmount] = useState('')
@@ -16,6 +19,13 @@ export const WithdrawUI = () => {
     sent: false,
     completed: false
   })
+
+  const refetch = () => {
+    refetchPoolChainValues()
+    refetchUsersChainValues()
+  }
+
+  useOnTransactionCompleted(tx, refetch)
 
   const txInFlight = tx.inWallet || tx.sent
 
@@ -28,12 +38,6 @@ export const WithdrawUI = () => {
       completed: false
     })
   }
-
-  useEffect(() => {
-    if (tx.completed) {
-      refetch()
-    }
-  }, [tx.completed])
 
   if (!usersAddress) {
     return <ConnectWalletButton className='w-full mt-4' />
