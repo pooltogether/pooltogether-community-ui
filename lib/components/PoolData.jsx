@@ -15,6 +15,7 @@ import { errorStateAtom } from 'lib/atoms'
 import { useExternalErc20Awards } from 'lib/hooks/useExternalErc20Awards'
 import { useExternalErc721Awards } from 'lib/hooks/useExternalErc721Awards'
 import { useUserChainValues } from 'lib/hooks/useUserChainValues'
+import { IncompatibleContractWarning } from 'lib/components/IncompatibleContractWarning'
 
 // http://localhost:3000/pools/rinkeby/0xd1E58Db0d67DB3f28fFa412Db58aCeafA0fEF8fA#admin
 
@@ -56,7 +57,12 @@ export const PoolData = (props) => {
     return <PoolTogetherLoading />
   }
 
-  return props.children
+  return (
+    <>
+      <IncompatibleContractWarning />
+      {props.children}
+    </>
+  )
 }
 
 const UnsupportedNetwork = (props) => {

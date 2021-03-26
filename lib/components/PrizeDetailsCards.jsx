@@ -53,7 +53,7 @@ const TimeDisplay = (props) => {
 }
 
 // const PlayersCard = () => {
-//   const [poolChainValues] = useAtom(poolChainValuesAtom)
+// const { data: poolChainValues } = usePoolChainValues()
 
 //   return (
 //     <Card className='mx-4'>

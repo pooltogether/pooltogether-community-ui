@@ -10,7 +10,7 @@ export const CustomYieldNotificationBanner = () => {
   if (prizePoolType !== PRIZE_POOL_TYPE.yield) return null
 
   return (
-    <NotificationBanner className='bg-orange-800'>
+    <NotificationBanner className='bg-purple-2'>
       <CustomYieldNotification />
     </NotificationBanner>
   )

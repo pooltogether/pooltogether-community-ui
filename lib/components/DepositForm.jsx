@@ -31,7 +31,7 @@ export const DepositForm = (props) => {
   const hasApprovedBalance = usersChainValues.underlyingTokenIsApproved
   const supportsAllowance = usersChainValues.underlyingTokenSupportsAllowance
   const { usersTokenBalance, usersTokenBalanceUnformatted } = usersChainValues
-  const { symbol: tokenSymbol, decimals: tokenDecimals } = poolChainValues.token.symbol
+  const { symbol: tokenSymbol, decimals: tokenDecimals } = poolChainValues.token
   const poolIsLocked = poolChainValues.prize.isRngRequested
 
   let depositAmount, setDepositAmount
