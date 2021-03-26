@@ -4,7 +4,7 @@ import { find, findKey, upperFirst } from 'lodash'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
 
-import { NETWORKS, CONTRACT_ADDRESSES, POOL_ALIASES } from 'lib/constants'
+import { NETWORKS, CONTRACT_ADDRESSES, POOL_ALIASES, SUPPORTED_NETWORKS } from 'lib/constants'
 import { ButtonLink } from 'lib/components/ButtonLink'
 import { Card } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
@@ -22,6 +22,8 @@ import { CheckboxInputGroup } from 'lib/components/CheckboxInputGroup'
 import { Tooltip } from 'lib/components/Tooltip'
 import { PoolTogetherLoading } from 'lib/components/PoolTogetherLoading'
 import { BlockExplorerLink, LinkIcon } from 'lib/components/BlockExplorerLink'
+import { NETWORK, NETWORK_DATA } from 'lib/utils/networks'
+import { UnsupportedNetwork } from 'lib/components/UnsupportedNetwork'
 
 import BatSvg from 'assets/images/bat-new-transparent.png'
 import DaiSvg from 'assets/images/dai-new-transparent.png'
@@ -29,7 +31,6 @@ import UsdcSvg from 'assets/images/usdc-new-transparent.png'
 import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
-import { NETWORK, NETWORK_DATA } from 'lib/utils/networks'
 
 const demoAssetTypes = {
   dai: { label: 'DAI', logo: DaiSvg },
@@ -42,6 +43,12 @@ const demoPools = {
 }
 
 export const IndexContent = (props) => {
+  const { chainId, name: networkName } = useNetwork()
+
+  if (!SUPPORTED_NETWORKS.includes(chainId)) {
+    return <UnsupportedNetwork chainId={chainId} networkName={networkName} />
+  }
+
   return <PoolsLists />
 }
 
@@ -56,8 +63,6 @@ const PoolsLists = () => {
     isFetched: tokenBalancesIsFetched,
     isFetching: tokenBalancedIsFetching
   } = useAllUserTokenBalances()
-
-  console.log(createdPrizePools)
 
   if (
     !createdPrizePoolsIsFetched ||

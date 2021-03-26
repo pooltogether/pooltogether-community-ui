@@ -10,11 +10,11 @@ export const ButtonRelativeLink = (props) => {
   const router = useRouter()
   const poolAlias = router.query.poolAlias
 
-  const { chainId, name: networkName } = useNetwork()
+  const { name: networkName } = useNetwork()
   const { data: prizePoolContracts } = usePrizePoolContracts()
 
   let href = `/pools/[networkName]/[prizePoolAddress]${props.link}`
-  let as = `/pools/${networkName}/${poolAddresses.prizePool}${props.link}`
+  let as = `/pools/${networkName}/${prizePoolContracts.prizePool.address}${props.link}`
 
   if (poolAlias) {
     href = `/[poolAlias]${props.link}`

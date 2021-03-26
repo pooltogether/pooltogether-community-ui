@@ -203,7 +203,7 @@ const UnlockDepositsButton = () => {
           provider,
           prizePoolContracts.token.address,
           prizePoolContracts.prizePool.address,
-          poolChainValues.token.symbol
+          poolChainValues.token.decimals
         )
       }}
       disabled={!walletMatchesNetwork}

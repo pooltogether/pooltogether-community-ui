@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import FeatherIcon from 'feather-icons-react'
 
 import { useNetwork } from 'lib/hooks/useNetwork'
@@ -6,25 +6,32 @@ import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { NETWORKS_TO_IGNORE_VERSION_CHECKS, SUPPORTED_NETWORKS } from 'lib/constants'
 import { chainIdToName } from 'lib/utils/networks'
 import { useAtom } from 'jotai'
-import { errorStateAtom } from 'lib/atoms'
+import { EMPTY_ERROR_STATE, errorStateAtom } from 'lib/atoms'
 
-// TODO: Put this back in the app
 export const IncompatibleContractWarning = (props) => {
-  const [errorState] = useAtom(errorStateAtom)
+  const [errorState, setErrorState] = useAtom(errorStateAtom)
   const { data: prizePoolContracts } = usePrizePoolContracts()
   const { chainId, name: networkName } = useNetwork()
 
   const [hideWarning, setHideWarning] = useState(false)
   const [showMoreInfo, setShowMoreInfo] = useState(false)
 
-  // const unknownContracts = errorState.unknownContracts
-  const unknownContracts = ['0xabcd']
-
+  const unknownContracts = errorState.unknownContracts
   const prizePoolAddress = prizePoolContracts.prizePool.address
 
-  // if (hideWarning || unknownContracts.length === 0) return null
+  useEffect(() => {
+    return () => {
+      setErrorState(EMPTY_ERROR_STATE)
+    }
+  }, [])
 
-  if (NETWORKS_TO_IGNORE_VERSION_CHECKS.includes(chainId)) return null
+  if (
+    hideWarning ||
+    unknownContracts.length === 0 ||
+    NETWORKS_TO_IGNORE_VERSION_CHECKS.includes(chainId)
+  ) {
+    return null
+  }
 
   return (
     <div className='text-left mb-10 border-2 border-primary rounded-lg px-7 py-4'>
@@ -69,7 +76,9 @@ export const IncompatibleContractWarning = (props) => {
             The following contracts could not be verified on {networkName}:
             <ul>
               {unknownContracts.map((address) => (
-                <li className='ml-4 font-bold'>{address}</li>
+                <li className='ml-4 font-bold' key={address}>
+                  {address}
+                </li>
               ))}
             </ul>
           </p>
