@@ -113,7 +113,7 @@ const AwardsTable = () => {
     [erc721Awards]
   )
 
-  if (erc721AwardsIsFetched) {
+  if (!erc721AwardsIsFetched) {
     return (
       <div className='p-10'>
         <LoadingDots />
