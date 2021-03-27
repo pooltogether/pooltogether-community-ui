@@ -17,7 +17,8 @@ export default function IndexPage() {
       <AdminHeader />
       <OwnerWarning />
       <AdminUI />
-      <div className='flex justify-center'>
+      <div className='flex justify-between w-3/4 sm:w-1/2 mx-auto'>
+        <RelativeInternalLink link='/manage'>View Pool Details</RelativeInternalLink>
         <RelativeInternalLink link='/home'>View Prize Pool</RelativeInternalLink>
       </div>
     </PoolData>

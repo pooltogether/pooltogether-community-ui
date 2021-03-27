@@ -33,8 +33,8 @@ const ChangeWalletNetworkNotification = (props) => {
   const { view: walletChainName } = walletNetwork
   const walletIsMetaMask = [WALLETS.metamask].includes(walletName)
 
-  const defaultNetworks = [1, 4, 42]
-  const isSupportedEthereumNetwork = defaultNetworks.includes(chainId)
+  const ethereumNetworks = [1, 4, 42]
+  const isSupportedEthereumNetwork = ethereumNetworks.includes(chainId)
 
   const showConnectButton = walletIsMetaMask && !isSupportedEthereumNetwork
   const showBadWalletMessage = !walletIsMetaMask && !isSupportedEthereumNetwork

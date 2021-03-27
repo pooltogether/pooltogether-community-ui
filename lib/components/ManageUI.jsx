@@ -57,8 +57,9 @@ export const ManageUI = (props) => {
           </ContentPane>
         )}
       </Content>
-      <div className='flex justify-center'>
+      <div className='flex justify-between w-3/4 sm:w-1/2 mx-auto'>
         <RelativeInternalLink link='/home'>View Prize Pool</RelativeInternalLink>
+        <RelativeInternalLink link='/admin'>Manage Pool</RelativeInternalLink>
       </div>
     </>
   )
