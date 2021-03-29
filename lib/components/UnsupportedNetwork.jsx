@@ -5,12 +5,12 @@ import { SUPPORTED_NETWORKS } from 'lib/constants'
 import { chainIdToName, networkColorClassname } from 'lib/utils/networks'
 
 export const UnsupportedNetwork = (props) => {
-  const { chainId, networkName } = props
+  const { chainId } = props
   return (
     <div className='flex flex-col text-center my-auto'>
       <h1 className='mb-8'>⚠️ Unsupported network ⚠️</h1>
       <div>
-        You're currently connected to <Network name={networkName} chainId={chainId} />.
+        You're currently connected to <Network chainId={chainId} />.
       </div>
       <div className='mb-4'>
         Please connect your wallet to one of the following supported networks:

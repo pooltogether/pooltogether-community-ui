@@ -13,6 +13,10 @@ import { useUserChainValues } from 'lib/hooks/useUserChainValues'
 import { IncompatibleContractWarning } from 'lib/components/IncompatibleContractWarning'
 import { UnsupportedNetwork } from 'lib/components/UnsupportedNetwork'
 import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+import { usePrizePooladdress } from 'lib/hooks/usePrizePoolAddress'
+import { isValidAddress } from 'lib/utils/isValidAddress'
+import { chainIdToName, chainIdToView } from 'lib/utils/networks'
+import { IndexContent } from 'lib/components/IndexContent'
 
 // http://localhost:3000/pools/rinkeby/0xd1E58Db0d67DB3f28fFa412Db58aCeafA0fEF8fA#admin
 
@@ -28,20 +32,26 @@ const renderErrorMessage = (errorMsg) => {
  * Wraps app and populates Jotai pool data stores if applicable
  */
 export const PoolData = (props) => {
-  const router = useRouter()
-  // TODO: invalid address view
-
-  const { chainId, name: networkName } = useNetwork()
+  const { chainId } = useNetwork()
 
   const usersAddress = useUsersAddress()
+
+  const prizePoolAddress = usePrizePooladdress()
+  const {
+    isFetched: prizePoolContractsIsFetched,
+    data: prizePoolContracts
+  } = usePrizePoolContracts()
   const { isFetched: poolChainValuesIsFetched } = usePoolChainValues()
   const { isFetched: usersChainValuesIsFetched } = useUserChainValues()
-  const { isFetched: prizePoolContractsIsFetched } = usePrizePoolContracts()
   const { isFetched: externalErc20AwardsIsFetched } = useExternalErc20Awards()
   const { isFetched: externalErc721AwardsIsFetched } = useExternalErc721Awards()
 
   if (!SUPPORTED_NETWORKS.includes(chainId)) {
-    return <UnsupportedNetwork chainId={chainId} networkName={networkName} />
+    return <UnsupportedNetwork chainId={chainId} />
+  }
+
+  if (!isValidAddress(prizePoolAddress) || prizePoolContracts?.invalidPrizePoolAddress) {
+    return <InvalidAddress invalidAddress={prizePoolAddress} chainId={chainId} />
   }
 
   const loading =
@@ -59,6 +69,24 @@ export const PoolData = (props) => {
     <>
       <IncompatibleContractWarning />
       {props.children}
+    </>
+  )
+}
+
+const InvalidAddress = (props) => {
+  const { invalidAddress, chainId } = props
+  const networkView = chainIdToView(chainId)
+  return (
+    <>
+      <div className='border-2 border-primary px-7 py-4 rounded-xl mb-10 text-accent-1'>
+        <h1>☹️ Invalid address</h1>
+        <p>
+          <b>{invalidAddress}</b> is not a valid prize pool address on <b>{networkView}</b>.
+        </p>
+        <p>Possibly wrong network?</p>
+      </div>
+      <h2 className='mb-4 text-accent-1'>{networkView} Prize Pools</h2>
+      <IndexContent />
     </>
   )
 }

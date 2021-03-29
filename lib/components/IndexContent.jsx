@@ -42,7 +42,7 @@ const demoPools = {
   rinkeby: { chainId: 4, assets: ['dai', 'usdc', 'usdt'] }
 }
 
-export const IndexContent = (props) => {
+export const IndexContent = () => {
   const { chainId, name: networkName } = useNetwork()
 
   if (!SUPPORTED_NETWORKS.includes(chainId)) {
