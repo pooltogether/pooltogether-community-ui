@@ -6,6 +6,7 @@ import { Button } from 'lib/components/Button'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { WALLETS } from 'lib/constants'
 import { CloseBannerButton, NotificationBanner } from 'lib/components/NotificationBanners'
+import { NETWORK } from 'lib/utils/networks'
 
 export const ChangeWalletNetworkNotificationBanner = (props) => {
   const { walletConnected, walletMatchesNetwork, walletNetwork, view, chainId } = useNetwork()
@@ -32,10 +33,10 @@ const ChangeWalletNetworkNotification = (props) => {
   const walletName = wallet?.state?.wallet?.name
   const { view: walletChainName, chainId: walletChainId } = walletNetwork
 
-  const defaultNetworks = [1, 4, 42]
+  const connectableNetwork = [NETWORK.matic, NETWORK.mumbai, NETWORK.xdai]
 
   const showConnectButton =
-    [WALLETS.metamask].includes(walletName) && !defaultNetworks.includes(chainId)
+    [WALLETS.metamask].includes(walletName) && connectableNetwork.includes(chainId)
 
   return (
     <div className='flex flex-col sm:flex-row justify-between'>

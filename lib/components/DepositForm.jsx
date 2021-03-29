@@ -1,41 +1,35 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import IERC20Abi from '@pooltogether/pooltogether-contracts/abis/IERC20Upgradeable'
-import { useAtom } from 'jotai'
 import FeatherIcon from 'feather-icons-react'
 
 import { Button } from 'lib/components/Button'
 import { RightLabelButton, TextInputGroup } from 'lib/components/TextInputGroup'
-import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
-import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
+import { useUserChainValues } from 'lib/hooks/useUserChainValues'
 import { sendTx } from 'lib/utils/sendTx'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
-import { errorStateAtom } from 'lib/components/PoolData'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { InnerCard } from 'lib/components/Card'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
 
 import Warning from 'assets/images/warning.svg'
 import { getErc20InputProps } from 'lib/utils/getErc20InputProps'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
+import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 
 export const DepositForm = (props) => {
   const { inputError, handleSubmit, vars, stateSetters } = props
 
   const { walletMatchesNetwork } = useNetwork()
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const [usersChainValues] = useAtom(userChainValuesAtom)
+  const { data: poolChainValues, isFetched: poolChainValuesIsFetched } = usePoolChainValues()
+  const { data: usersChainValues, isFetched: usersChainValuesIsFetched } = useUserChainValues()
+
   const hasApprovedBalance = usersChainValues.underlyingTokenIsApproved
   const supportsAllowance = usersChainValues.underlyingTokenSupportsAllowance
-
-  const { usersTokenBalance } = usersChainValues || {}
-
-  const { tokenDecimals, isRngRequested } = poolChainValues || {}
-
-  const poolIsLocked = isRngRequested
-  const tokenSymbol = poolChainValues.tokenSymbol || 'TOKEN'
+  const { usersTokenBalance, usersTokenBalanceUnformatted } = usersChainValues
+  const { symbol: tokenSymbol, decimals: tokenDecimals } = poolChainValues.token
+  const poolIsLocked = poolChainValues.prize.isRngRequested
 
   let depositAmount, setDepositAmount
   if (vars && stateSetters) {
@@ -47,15 +41,13 @@ export const DepositForm = (props) => {
   let overBalance = false
   try {
     depositAmountBN = ethers.utils.parseUnits(depositAmount || '0', tokenDecimals)
-    overBalance = depositAmountBN && usersTokenBalance && usersTokenBalance.lt(depositAmountBN)
+    overBalance =
+      depositAmountBN &&
+      usersTokenBalanceUnformatted &&
+      usersTokenBalanceUnformatted.lt(depositAmountBN)
   } catch (e) {
     console.warn(e)
   }
-
-  const tokenBal =
-    usersTokenBalance && tokenDecimals
-      ? ethers.utils.formatUnits(usersTokenBalance, tokenDecimals)
-      : ''
 
   if (poolIsLocked) {
     return (
@@ -91,10 +83,11 @@ export const DepositForm = (props) => {
             <RightLabelButton
               onClick={(e) => {
                 e.preventDefault()
-                setDepositAmount(tokenBal)
+                setDepositAmount(usersTokenBalance)
               }}
             >
-              {numberWithCommas(usersTokenBalance, { decimals: tokenDecimals })} {tokenSymbol}
+              {numberWithCommas(usersTokenBalanceUnformatted, { decimals: tokenDecimals })}{' '}
+              {tokenSymbol}
             </RightLabelButton>
           }
         />
@@ -108,17 +101,9 @@ export const DepositForm = (props) => {
 
       {overBalance && (
         <div className='text-yellow-1'>
-          You only have{' '}
-          {displayAmountInEther(usersTokenBalance, {
-            precision: tokenDecimals,
-            decimals: tokenDecimals
-          })}{' '}
+          You only have {numberWithCommas(usersTokenBalance, { decimals: tokenDecimals })}{' '}
           {tokenSymbol}. The maximum you can deposit is{' '}
-          {displayAmountInEther(usersTokenBalance, {
-            precision: tokenDecimals,
-            decimals: tokenDecimals
-          })}
-          .
+          {numberWithCommas(usersTokenBalance, { decimals: tokenDecimals })}.
         </div>
       )}
 
@@ -139,13 +124,11 @@ export const DepositForm = (props) => {
 }
 
 const UnlockDepositsButton = () => {
-  const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
-  const [usersChainValues] = useAtom(userChainValuesAtom)
-  const [contractVersions] = useAtom(contractVersionsAtom)
+  const { data: poolChainValues, refetch: refetchPoolChainValues } = usePoolChainValues()
+  const { data: usersChainValues, refetch: refetchUsersChainValues } = useUserChainValues()
+  const { data: prizePoolContracts } = usePrizePoolContracts()
+
   const { chainId, walletMatchesNetwork } = useNetwork()
-  const [errorState, setErrorState] = useAtom(errorStateAtom)
-  const [poolAddresses] = useAtom(poolAddressesAtom)
-  const [prizePoolType] = useAtom(prizePoolTypeAtom)
   const [tx, setTx] = useState({})
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
@@ -157,20 +140,12 @@ const UnlockDepositsButton = () => {
     setTx({})
   }, [chainId])
 
-  // Update global data upon completion
-  useEffect(() => {
-    if (tx.completed && !tx.error) {
-      fetchPoolChainValues(
-        provider,
-        chainId,
-        poolAddresses,
-        prizePoolType,
-        setPoolChainValues,
-        contractVersions.prizeStrategy.contract,
-        setErrorState
-      )
-    }
-  }, [tx.completed, tx.error])
+  const refetch = () => {
+    refetchPoolChainValues()
+    refetchUsersChainValues()
+  }
+
+  useOnTransactionCompleted(tx, refetch)
 
   if (!underlyingTokenSupportsAllowance) return null
 
@@ -186,15 +161,15 @@ const UnlockDepositsButton = () => {
       >
         <FeatherIcon
           icon='check-circle'
-          className='relative w-4 h-4 inline-block my-auto mr-2 my-auto'
+          className='relative w-4 h-4 inline-block my-auto mr-2'
           strokeWidth='0.15rem'
         />
-        {`Approved ${poolChainValues.tokenSymbol}`}
+        {`Approved ${poolChainValues.token.symbol}`}
       </Button>
     )
   }
 
-  let buttonText = `Approve ${poolChainValues.tokenSymbol}`
+  let buttonText = `Approve ${poolChainValues.token.symbol}`
   if (tx.sent && !tx.completed) {
     buttonText = 'Waiting for confirmations...'
   }
@@ -212,9 +187,9 @@ const UnlockDepositsButton = () => {
         handleUnlockSubmit(
           setTx,
           provider,
-          poolAddresses.token,
-          poolAddresses.prizePool,
-          poolChainValues.tokenDecimals
+          prizePoolContracts.token.address,
+          prizePoolContracts.prizePool.address,
+          poolChainValues.token.decimals
         )
       }}
       disabled={!walletMatchesNetwork}

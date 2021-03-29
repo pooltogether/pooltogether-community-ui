@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { useAtom } from 'jotai'
+import React, { useContext, useMemo, useState } from 'react'
 import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/PeriodicPrizeStrategy'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
 
-import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { RowDataCell, Table } from 'lib/components/Table'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
@@ -13,19 +12,18 @@ import { Collapse } from 'lib/components/Collapse'
 import { Button } from 'lib/components/Button'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { sendTx } from 'lib/utils/sendTx'
-import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { SENTINEL_ADDRESS } from 'lib/constants'
 import { TxMessage } from 'lib/components/TxMessage'
-import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
-import { errorStateAtom } from 'lib/components/PoolData'
-import { erc721AwardsAtom } from 'lib/hooks/useExternalErc721Awards'
-import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
+import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
+import { useExternalErc721Awards } from 'lib/hooks/useExternalErc721Awards'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
-
-import PrizeIllustration from 'assets/images/prize-illustration-transparent@2x.png'
 import { CopyableAddress } from 'lib/components/CopyableAddress'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
+import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
+
+import PrizeIllustration from 'assets/images/prize-illustration-transparent@2x.png'
 
 const handleAddExternalErc721 = async (
   txName,
@@ -94,11 +92,11 @@ export const Erc721AwardsControlCard = (props) => {
 }
 
 const AwardsTable = () => {
-  const [erc721Awards] = useAtom(erc721AwardsAtom)
+  const { data: erc721Awards, isFetched: erc721AwardsIsFetched } = useExternalErc721Awards()
 
   const rows = useMemo(
     () =>
-      erc721Awards.awards
+      erc721Awards
         .map((award, index) => {
           return award.tokenIds[0].map((tokenId) => {
             return (
@@ -106,16 +104,16 @@ const AwardsTable = () => {
                 key={`${index}${tokenId.toString()}`}
                 address={award.address}
                 tokenId={tokenId}
-                prevAddress={index === 0 ? SENTINEL_ADDRESS : erc721Awards.awards[index].address}
+                prevAddress={index === 0 ? SENTINEL_ADDRESS : erc721Awards[index].address}
               />
             )
           })
         })
         .flat(),
-    [erc721Awards.awards]
+    [erc721Awards]
   )
 
-  if (erc721Awards.loading) {
+  if (!erc721AwardsIsFetched) {
     return (
       <div className='p-10'>
         <LoadingDots />
@@ -123,7 +121,7 @@ const AwardsTable = () => {
     )
   }
 
-  if (erc721Awards.awards.length === 0) {
+  if (erc721Awards.length === 0) {
     return (
       <InnerCard className='mb-8'>
         <img src={PrizeIllustration} className='w-32 sm:w-64 mx-auto mb-4' />
@@ -141,16 +139,12 @@ const AddErc721Form = () => {
   const [externalErc721Address, setExternalErc721Address] = useState('')
   const [externalErc721TokenIds, setExternalErc721TokenIds] = useState('')
   const [tx, setTx] = useState({})
-  const [poolAddresses] = useAtom(poolAddressesAtom)
-  const [prizePoolType] = useAtom(prizePoolTypeAtom)
-  const [usersAddress] = useAtom(usersAddressAtom)
-  const [contractVersions] = useAtom(contractVersionsAtom)
-  const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
-  const [errorState, setErrorState] = useAtom(errorStateAtom)
+  const usersAddress = useUsersAddress()
+  const { data: prizePoolContracts } = usePrizePoolContracts()
+  const { refetch: refetchPoolChainValues } = usePoolChainValues()
   const walletContext = useContext(WalletContext)
-  const { chainId, walletMatchesNetwork } = useNetwork()
-
   const provider = walletContext.state.provider
+  const { chainId, walletMatchesNetwork } = useNetwork()
 
   const txName = 'Add External ERC721 Tokens'
 
@@ -168,25 +162,13 @@ const AddErc721Form = () => {
       txName,
       setTx,
       provider,
-      poolAddresses.prizeStrategy,
+      prizePoolContracts.prizeStrategy.address,
       externalErc721Address,
       externalErc721TokenIds.split(',').map((s) => s.trim())
     )
   }
 
-  useEffect(() => {
-    if (tx.completed && !tx.error) {
-      fetchPoolChainValues(
-        provider,
-        chainId,
-        poolAddresses,
-        prizePoolType,
-        setPoolChainValues,
-        contractVersions.prizeStrategy.contract,
-        setErrorState
-      )
-    }
-  }, [tx.completed, tx.error])
+  useOnTransactionCompleted(tx, refetchPoolChainValues)
 
   if (!usersAddress) {
     return <ConnectWalletButton className='w-full mt-4' />
@@ -205,7 +187,10 @@ const AddErc721Form = () => {
       <div className='my-4 text-sm sm:text-base text-accent-1'>
         1. Send the ERC721 token manually to the contract address below.
       </div>
-      <CopyableAddress className='ml-4 my-4 text-lg sm:text-xl' address={poolAddresses.prizePool} />
+      <CopyableAddress
+        className='ml-4 my-4 text-lg sm:text-xl'
+        address={prizePoolContracts.prizePool.address}
+      />
       <div className='mb-6 text-sm sm:text-base text-accent-1'>
         2. Add the ERC721 token contract address and the token ID to the external awards
         distribution list below.
@@ -263,15 +248,12 @@ const Row = (props) => {
 const RemoveAddressButton = (props) => {
   const { address, prevAddress } = props
   const [tx, setTx] = useState({})
-  const [poolAddresses] = useAtom(poolAddressesAtom)
-  const [prizePoolType] = useAtom(prizePoolTypeAtom)
-  const [usersAddress] = useAtom(usersAddressAtom)
-  const [contractVersions] = useAtom(contractVersionsAtom)
-  const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
-  const [errorState, setErrorState] = useAtom(errorStateAtom)
+
+  const { data: prizePoolContracts } = usePrizePoolContracts()
+  const usersAddress = useUsersAddress()
+  const { refetch: refetchPoolChainValues } = usePoolChainValues()
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
-  const { chainId } = useNetwork()
 
   const txName = 'Remove External ERC20 Token'
 
@@ -281,25 +263,13 @@ const RemoveAddressButton = (props) => {
       txName,
       setTx,
       provider,
-      poolAddresses.prizeStrategy,
+      prizePoolContracts.prizeStrategy.address,
       address,
       prevAddress
     )
   }
 
-  useEffect(() => {
-    if (tx.completed && !tx.error) {
-      fetchPoolChainValues(
-        provider,
-        chainId,
-        poolAddresses,
-        prizePoolType,
-        setPoolChainValues,
-        contractVersions.prizeStrategy.contract,
-        setErrorState
-      )
-    }
-  }, [tx.completed, tx.error])
+  useOnTransactionCompleted(tx, refetchPoolChainValues)
 
   if (!usersAddress) {
     return null
@@ -324,7 +294,7 @@ const RemoveAddressButton = (props) => {
           icon='x'
           strokeWidth='0.25rem'
           className={classnames(
-            'ml-3 sm:ml-4 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current text-red-1 trans hover:opacity-75 active:opacity-50'
+            'ml-3 sm:ml-4 w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current text-red-1 trans hover:opacity-75 active:opacity-50'
           )}
         />
       </button>

@@ -4,7 +4,7 @@ import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
 
 export const Tooltip = (props) => {
-  const { children, tip, className, id } = props
+  const { children, tip, className, id, effect } = props
   const ref = useRef(null)
 
   return (
@@ -22,7 +22,7 @@ export const Tooltip = (props) => {
         backgroundColor='#111'
         id={`${id}-tooltip`}
         place='top'
-        effect='solid'
+        effect={effect}
         data-multiline
         className='p-1 xs:p-2 max-w-3/4 sm:max-w-sm'
         overridePosition={({ left, top }, currentEvent, currentTarget, node) => {
@@ -51,5 +51,6 @@ export const Tooltip = (props) => {
 }
 
 Tooltip.defaultProps = {
-  id: 'pt'
+  id: 'pt',
+  effect: 'solid'
 }

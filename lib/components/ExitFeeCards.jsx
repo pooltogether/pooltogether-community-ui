@@ -1,16 +1,15 @@
 import React from 'react'
-import { useAtom } from 'jotai'
 
 import { Card, CardPrimaryText, CardTitle } from 'lib/components/Card'
-import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { getCreditMaturationDaysAndLimitPercentage } from 'lib/utils/format'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 
-export const ExitFeeCards = (props) => {
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
+export const ExitFeeCards = () => {
+  const { data: poolChainValues } = usePoolChainValues()
 
   const [creditMaturationInDays, creditLimitPercentage] = getCreditMaturationDaysAndLimitPercentage(
-    poolChainValues.ticketCreditRateMantissa,
-    poolChainValues.ticketCreditLimitMantissa
+    poolChainValues.config.ticketCreditRateMantissa,
+    poolChainValues.config.ticketCreditLimitMantissa
   )
 
   return (

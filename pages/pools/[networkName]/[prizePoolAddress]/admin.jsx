@@ -3,26 +3,24 @@ import FeatherIcon from 'feather-icons-react'
 
 import { AdminUI } from 'lib/components/AdminUI'
 import { ButtonLink } from 'lib/components/ButtonLink'
-
-import ManageImage from 'assets/images/manage-image.svg'
-import { useAtom } from 'jotai'
-import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
-import { shorten } from 'lib/utils/shorten'
 import { RelativeInternalLink } from 'lib/components/RelativeInternalLink'
 import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
 import { PoolData } from 'lib/components/PoolData'
 
+import ManageImage from 'assets/images/manage-image.svg'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+
 export default function IndexPage() {
   return (
-    <>
+    <PoolData>
       <AdminHeader />
       <OwnerWarning />
       <AdminUI />
       <div className='flex justify-center'>
         <RelativeInternalLink link='/home'>View Prize Pool</RelativeInternalLink>
       </div>
-    </>
+    </PoolData>
   )
 }
 
@@ -50,21 +48,27 @@ const AdminHeader = () => {
 }
 
 const OwnerWarning = () => {
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const [usersAddress] = useAtom(usersAddressAtom)
+  const { data: poolChainValues } = usePoolChainValues()
+  const usersAddress = useUsersAddress()
 
-  const owner = poolChainValues.owner
+  const owner = poolChainValues.config.owner
   const userIsOwner = owner?.toLowerCase() === usersAddress?.toLowerCase()
 
   if (!poolChainValues || !usersAddress || userIsOwner) return null
 
   return (
     <div className='p-4 border b-purple mb-4 sm:mb-10 rounded-xl flex flex-col sm:flex-row'>
-      <FeatherIcon icon='alert-triangle' className='mr-2 w-10 h-10 my-auto text-orange-500' />
-      <p>
-        Certain actions may only be performed by the owner of the pool. The wallet you have
-        connected (<BlockExplorerLink shorten address={usersAddress} />) is not the owner.
-      </p>
+      <FeatherIcon icon='alert-triangle' className='mr-4 w-10 h-10 my-auto text-orange-500' />
+      <div className='text-accent-1 text-sm sm:text0base'>
+        <p className='sm:my-0'>Certain actions may only be performed by the owner of the pool.</p>
+        <p className='sm:my-0'>
+          The wallet you have connected{' '}
+          <span className='inline-block'>
+            (<BlockExplorerLink shorten address={usersAddress} />)
+          </span>{' '}
+          is not the owner.
+        </p>
+      </div>
     </div>
   )
 }

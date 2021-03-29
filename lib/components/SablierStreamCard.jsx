@@ -1,38 +1,40 @@
 import React from 'react'
 import classnames from 'classnames'
-import { useAtom } from 'jotai'
 
 import { Card } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { getMaxPrecision, numberWithCommas } from 'lib/utils/numberWithCommas'
-import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { getDateFromSeconds } from 'lib/utils/getDateFromSeconds'
 import { secondsSinceEpoch } from 'lib/utils/secondsSinceEpoch'
 import { ethers } from 'ethers'
-import { contractVersionsAtom } from 'lib/hooks/useDetermineContractVersions'
 import compareVersions from 'compare-versions'
+import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { Tooltip } from 'lib/components/Tooltip'
 
 export const SablierStreamCard = (props) => {
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const [contractVersions] = useAtom(contractVersionsAtom)
+  const { data: prizePoolContracts } = usePrizePoolContracts()
+  const { data: poolChainValues } = usePoolChainValues()
 
   const { hideIfNoStream } = props
 
-  const { sablierStream } = poolChainValues
+  const sablierStream = poolChainValues.prize.sablierStream
 
-  if (!sablierStream) {
+  if (!sablierStream.id) {
     if (hideIfNoStream) return null
     return <EmptySablierStreamState />
   }
 
-  if (compareVersions(contractVersions.prizeStrategy.version, '3.3.0') < 0) {
+  if (compareVersions(prizePoolContracts.prizeStrategy.version, '3.3.0') < 0) {
     return (
-      <InvalidPrizeStrategyVersionForStreamState version={contractVersions.prizeStrategy.version} />
+      <InvalidPrizeStrategyVersionForStreamState
+        version={prizePoolContracts.prizeStrategy.version}
+      />
     )
   }
 
   const { amountPerPrizePeriod, tokenSymbol, startTime, stopTime, totalDeposit } = sablierStream
-  const { prizePeriodSeconds } = poolChainValues
+  const prizePeriodSeconds = poolChainValues.prize.prizePeriodSeconds
 
   const currentTime = ethers.BigNumber.from(secondsSinceEpoch())
   const streamTotalTime = stopTime.sub(startTime)
@@ -90,10 +92,12 @@ const StreamBar = (props) => {
   const { percentage } = props
 
   return (
-    <div className={classnames('w-full h-2 flex flex-row rounded-full overflow-hidden mt-2')}>
-      <div className='bg-secondary' style={{ width: `${percentage}%` }} />
-      <div className='bg-tertiary' style={{ width: `${100 - percentage}%` }} />
-    </div>
+    <Tooltip effect='float' id='sablier-stream-percentage' tip={`${percentage}%`}>
+      <div className={classnames('w-full h-2 flex flex-row rounded-full overflow-hidden mt-2')}>
+        <div className='bg-secondary' style={{ width: `${percentage}%` }} />
+        <div className='bg-tertiary' style={{ width: `${100 - percentage}%` }} />
+      </div>
+    </Tooltip>
   )
 }
 

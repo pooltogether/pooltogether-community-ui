@@ -1,14 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useAtom } from 'jotai'
 import PrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PrizePool'
 
 import { Button } from 'lib/components/Button'
 import { Card, CardSecondaryText } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { DAYS_STEP, MAX_EXIT_FEE_PERCENTAGE } from 'lib/constants'
-import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { sendTx } from 'lib/utils/sendTx'
-import { errorStateAtom } from 'lib/components/PoolData'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { TxMessage } from 'lib/components/TxMessage'
 import { TextInputGroup, TextInputGroupType } from 'lib/components/TextInputGroup'
@@ -16,11 +13,12 @@ import {
   getCreditMaturationDaysAndLimitPercentage,
   getCreditRateMantissaAndLimitMantissa
 } from 'lib/utils/format'
-import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
-import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
 import { useNetwork } from 'lib/hooks/useNetwork'
+import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 
 const handleSetCreditPlan = async (
   txName,
@@ -61,22 +59,17 @@ export const FairnessControlsCard = (props) => {
 }
 
 const FairnessControlsForm = (props) => {
-  const [poolAddresses, setPoolAddresses] = useAtom(poolAddressesAtom)
-  const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
-  const [prizePoolType] = useAtom(prizePoolTypeAtom)
-  const [contractVersions] = useAtom(contractVersionsAtom)
-  const [errorState, setErrorState] = useAtom(errorStateAtom)
-  const [usersAddress] = useAtom(usersAddressAtom)
   const [tx, setTx] = useState({})
-  const { chainId, walletMatchesNetwork } = useNetwork()
+  const { data: prizePoolContracts } = usePrizePoolContracts()
+  const { data: poolChainValues, refetch: refetchPoolChainValues } = usePoolChainValues()
+  const usersAddress = useUsersAddress()
+  const { walletMatchesNetwork } = useNetwork()
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
-
   const [creditMaturationInDays, creditLimitPercentage] = getCreditMaturationDaysAndLimitPercentage(
-    poolChainValues.ticketCreditRateMantissa,
-    poolChainValues.ticketCreditLimitMantissa
+    poolChainValues.config.ticketCreditRateMantissa,
+    poolChainValues.config.ticketCreditLimitMantissa
   )
-
   const [ticketCreditMaturationInDays, setTicketCreditMaturationInDays] = useState(
     creditMaturationInDays
   )
@@ -101,27 +94,14 @@ const FairnessControlsForm = (props) => {
       txName,
       setTx,
       provider,
-      poolAddresses.prizePool,
-      poolAddresses.ticket,
+      prizePoolContracts.prizePool.address,
+      prizePoolContracts.ticket.address,
       ticketCreditRateMantissa,
       ticketCreditLimitMantissa
     )
   }
 
-  // Update local data upon completion
-  useEffect(() => {
-    if (tx.completed && !tx.error) {
-      fetchPoolChainValues(
-        provider,
-        chainId,
-        poolAddresses,
-        prizePoolType,
-        setPoolChainValues,
-        contractVersions.prizeStrategy.contract,
-        setErrorState
-      )
-    }
-  }, [tx.completed, tx.error])
+  useOnTransactionCompleted(tx, refetchPoolChainValues)
 
   const resetState = (e) => {
     e.preventDefault()

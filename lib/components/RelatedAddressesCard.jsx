@@ -1,46 +1,45 @@
 import React, { useMemo } from 'react'
-import { useAtom } from 'jotai'
 import { Card } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
-import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { RowDataCell, Table } from 'lib/components/Table'
 import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
 import { CopyIcon } from 'lib/components/CopyIcon'
+import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 
 export const RelatedAddressesCard = (props) => {
-  const [poolAddresses] = useAtom(poolAddressesAtom)
+  const { data: prizePoolContracts } = usePrizePoolContracts()
   const rows = useMemo(() => {
     const rowData = [
       {
         contract: 'Ticket',
-        address: poolAddresses.ticket
+        address: prizePoolContracts.ticket.address
       },
       {
         contract: 'Sponsorship',
-        address: poolAddresses.sponsorship
+        address: prizePoolContracts.sponsorship.address
       },
       {
         contract: 'Prize pool',
-        address: poolAddresses.prizePool
+        address: prizePoolContracts.prizePool.address
       },
       {
         contract: 'Prize strategy',
-        address: poolAddresses.prizeStrategy
+        address: prizePoolContracts.prizeStrategy.address
       },
       {
         contract: 'ERC20 Token (Underlying)',
-        address: poolAddresses.token
+        address: prizePoolContracts.token.address
       },
       {
         contract: 'Random Number Generator (RNG)',
-        address: poolAddresses.rng
+        address: prizePoolContracts.rng.address
       }
     ]
 
     return rowData.map((data, index) => (
       <Row key={index} index={index} contract={data.contract} address={data.address} />
     ))
-  }, [poolAddresses])
+  }, [prizePoolContracts])
 
   return (
     <Card>
@@ -60,10 +59,10 @@ const Row = (props) => {
         {contract}
       </RowDataCell>
       <RowDataCell>
-        <BlockExplorerLink address={address} className='text-xs sm:text-base' />
+        <BlockExplorerLink address={address} className='text-xs sm:text-base text-accent-1' />
       </RowDataCell>
-      <td className=''>
-        <div className='flex justify-end'>
+      <td className='pb-2'>
+        <div className='flex justify-end text-accent-1 ml-2'>
           <CopyIcon text={address} />
         </div>
       </td>

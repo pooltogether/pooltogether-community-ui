@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react'
-import { useAtom } from 'jotai'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
 
@@ -10,19 +9,21 @@ import { NewPrizeCountdown } from 'lib/components/NewPrizeCountdown'
 import { useCoingeckoTokenData } from 'lib/hooks/useCoingeckoTokenData'
 import { useAwardsList } from 'lib/hooks/useAwardsList'
 import { RelativeInternalLink } from 'lib/components/RelativeInternalLink'
-import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 
 import Cactus from 'assets/images/cactus.svg'
 import { AwardPrizeTrigger } from 'lib/components/AwardPrizeCard'
-import { useTimeLeft } from 'lib/hooks/useTimeLeft'
+import { useTimeLeftBeforePrize } from 'lib/hooks/useTimeLeftBeforePrize'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 
 export const PrizeCard = (props) => {
   const { showLinks, className } = props
 
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const [usersAddress] = useAtom(usersAddressAtom)
-  const { timeRemaining } = useTimeLeft()
+  const { data: poolChainValues, isFetched: poolChainValuesIsFetched } = usePoolChainValues()
+  const usersAddress = useUsersAddress()
+  const { timeRemaining } = useTimeLeftBeforePrize()
+
+  if (!poolChainValuesIsFetched) return null
 
   const owner = poolChainValues.owner
   const userIsOwner = owner?.toLowerCase() === usersAddress?.toLowerCase()
