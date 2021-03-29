@@ -59,7 +59,7 @@ const TimeDisplay = (props) => {
 //   return (
 //     <Card className='mx-4'>
 //       <CardTitle>Unique Players</CardTitle>
-//       <CardPrimaryText>{`$${poolChainValues.sponsorshipSymbol}`}</CardPrimaryText>
+//       <CardPrimaryText>{`$${poolChainValues.sponsorship.symbol}`}</CardPrimaryText>
 //     </Card>
 //   )
 // }
