@@ -10,6 +10,7 @@ import { ethers } from 'ethers'
 import compareVersions from 'compare-versions'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { Tooltip } from 'lib/components/Tooltip'
 
 export const SablierStreamCard = (props) => {
   const { data: prizePoolContracts } = usePrizePoolContracts()
@@ -91,10 +92,12 @@ const StreamBar = (props) => {
   const { percentage } = props
 
   return (
-    <div className={classnames('w-full h-2 flex flex-row rounded-full overflow-hidden mt-2')}>
-      <div className='bg-secondary' style={{ width: `${percentage}%` }} />
-      <div className='bg-tertiary' style={{ width: `${100 - percentage}%` }} />
-    </div>
+    <Tooltip effect='float' id='sablier-stream-percentage' tip={`${percentage}%`}>
+      <div className={classnames('w-full h-2 flex flex-row rounded-full overflow-hidden mt-2')}>
+        <div className='bg-secondary' style={{ width: `${percentage}%` }} />
+        <div className='bg-tertiary' style={{ width: `${100 - percentage}%` }} />
+      </div>
+    </Tooltip>
   )
 }
 

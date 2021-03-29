@@ -59,7 +59,7 @@ const handleWithdrawInstantly = async (
     'Withdraw'
   )
 }
-// TODO: Add tx refetch listener to this app
+
 export const WithdrawForm = (props) => {
   const { setTx, withdrawAmount, setWithdrawAmount } = props
   const walletContext = useContext(WalletContext)
@@ -133,6 +133,7 @@ export const WithdrawForm = (props) => {
 
   const withdrawAmountUnformatted = parseNumString(withdrawAmount, tokenDecimals)
   const inputError = !withdrawAmountUnformatted
+
   const overBalance = withdrawAmountUnformatted?.gt(usersTicketBalanceUnformatted)
 
   const ticketBal = usersTicketBalance

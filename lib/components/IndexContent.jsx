@@ -42,7 +42,7 @@ const demoPools = {
   rinkeby: { chainId: 4, assets: ['dai', 'usdc', 'usdt'] }
 }
 
-export const IndexContent = (props) => {
+export const IndexContent = () => {
   const { chainId, name: networkName } = useNetwork()
 
   if (!SUPPORTED_NETWORKS.includes(chainId)) {
@@ -531,7 +531,7 @@ const OwnerAddress = (props) => {
 
   if (ownerAddress === CONTRACT_ADDRESSES[chainId].GovernanceTimelock) {
     return (
-      <div className='flex bg-purple-1 rounded-full px-2 width-fit-content'>
+      <div className='inline-flex bg-purple-1 rounded-full px-2 width-fit-content'>
         <BlockExplorerLink shorten address={ownerAddress}>
           PoolTogether
           <LinkIcon />

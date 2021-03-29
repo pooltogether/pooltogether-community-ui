@@ -15,6 +15,7 @@ import { getErc20InputProps } from 'lib/utils/getErc20InputProps'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
+import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 
 import Warning from 'assets/images/warning.svg'
 
@@ -152,13 +153,12 @@ const UnlockDepositsButton = () => {
     setTx({})
   }, [chainId])
 
-  // Update global data upon completion
-  useEffect(() => {
-    if (tx.completed && !tx.error) {
-      refetchPoolChainValues()
-      refetchUsersChainValues()
-    }
-  }, [tx.completed, tx.error])
+  const refetch = () => {
+    refetchPoolChainValues()
+    refetchUsersChainValues()
+  }
+
+  useOnTransactionCompleted(tx, refetch)
 
   if (!underlyingTokenSupportsAllowance) return null
 

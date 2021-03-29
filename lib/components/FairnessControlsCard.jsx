@@ -72,7 +72,7 @@ const FairnessControlsForm = (props) => {
   const [tx, setTx] = useState({})
   const { data: prizePoolContracts } = usePrizePoolContracts()
   const { data: poolChainValues, refetch: refetchPoolChainValues } = usePoolChainValues()
-  const [usersAddress] = useUsersAddress()
+  const usersAddress = useUsersAddress()
   const { walletMatchesNetwork } = useNetwork()
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider

@@ -59,10 +59,10 @@ const Row = (props) => {
         {contract}
       </RowDataCell>
       <RowDataCell>
-        <BlockExplorerLink address={address} className='text-xs sm:text-base' />
+        <BlockExplorerLink address={address} className='text-xs sm:text-base text-accent-1' />
       </RowDataCell>
-      <td className=''>
-        <div className='flex justify-end'>
+      <td className='pb-2'>
+        <div className='flex justify-end text-accent-1 ml-2'>
           <CopyIcon text={address} />
         </div>
       </td>

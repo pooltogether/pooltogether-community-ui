@@ -12,6 +12,7 @@ import { TxMessage } from 'lib/components/TxMessage'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 
 const handleStartAwardSubmit = async (walletMatchesNetwork, setTx, provider, contractAddress) => {
   const params = [
@@ -146,6 +147,8 @@ export const AwardPrizeTrigger = (props) => {
       refetchPoolChainValues()
     }
   }, [timeRemaining, tx.completed])
+
+  useOnTransactionCompleted(tx, refetchPoolChainValues)
 
   if (showTx) {
     return (

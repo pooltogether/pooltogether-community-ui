@@ -6,6 +6,7 @@ import { Button } from 'lib/components/Button'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { WALLETS } from 'lib/constants'
 import { NotificationBanner } from 'lib/components/NotificationBanners'
+import { NETWORK } from 'lib/utils/networks'
 
 export const ChangeWalletNetworkNotificationBanner = (props) => {
   const { walletConnected, walletMatchesNetwork, walletNetwork, view, chainId } = useNetwork()
@@ -36,7 +37,10 @@ const ChangeWalletNetworkNotification = (props) => {
   const ethereumNetworks = [1, 4, 42]
   const isSupportedEthereumNetwork = ethereumNetworks.includes(chainId)
 
-  const showConnectButton = walletIsMetaMask && !isSupportedEthereumNetwork
+  const connectableNetwork = [NETWORK.matic, NETWORK.mumbai, NETWORK.xdai]
+  const isConnectableNetwork = connectableNetwork.includes(chainId)
+
+  const showConnectButton = walletIsMetaMask && isConnectableNetwork
   const showBadWalletMessage = !walletIsMetaMask && !isSupportedEthereumNetwork
 
   return (

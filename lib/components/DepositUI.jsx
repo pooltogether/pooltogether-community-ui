@@ -65,7 +65,7 @@ export const DepositUI = (props) => {
 
   const txInFlight = tx.inWallet || tx.sent
 
-  const decimals = poolChainValues.tokenDecimals
+  const decimals = poolChainValues.token.decimals
   const depositAmountBN = parseNumString(depositAmount, decimals)
   const inputError = !depositAmountBN
 

@@ -94,7 +94,7 @@ const TotalDepositsCard = () => {
   if (!poolChainValuesIsFetched) return null
 
   const { symbol, decimals } = poolChainValues.token
-  const totalSupplyUnformatted = poolChainValues.totalSupplyUnformatted
+  const totalSupplyUnformatted = poolChainValues.ticket.totalSupplyUnformatted
   const totalSupply = numberWithCommas(totalSupplyUnformatted, { decimals })
 
   return (
