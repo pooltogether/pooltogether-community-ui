@@ -3,6 +3,7 @@ import React from 'react'
 import { Card, CardPrimaryText, CardTitle } from 'lib/components/Card'
 import { useTimeLeftBeforePrize } from 'lib/hooks/useTimeLeftBeforePrize'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { numberWithCommas } from 'lib/utils/numberWithCommas'
 
 export const PrizeDetailsCards = (props) => {
   return (
@@ -66,12 +67,14 @@ const TimeDisplay = (props) => {
 const TotalDeposits = () => {
   const { data: poolChainValues } = usePoolChainValues()
 
-  const total = poolChainValues.totalSupply
+  const { decimals } = poolChainValues.token
+  const totalSupplyUnformatted = poolChainValues.ticket.totalSupplyUnformatted
+  const totalSupply = numberWithCommas(totalSupplyUnformatted, { decimals })
 
   return (
     <Card className='ml-1 sm:ml-4'>
       <CardTitle>Total deposits</CardTitle>
-      <CardPrimaryText>{`${total} ${poolChainValues.token.symbol}`}</CardPrimaryText>
+      <CardPrimaryText>{`${totalSupply} ${poolChainValues.token.symbol}`}</CardPrimaryText>
     </Card>
   )
 }

@@ -95,13 +95,13 @@ const PoolAddress = () => {
       <div className='text-accent-1 font-bold title text-lg sm:text-4xl'>Pool's Info</div>
       <Card className='flex flex-col'>
         <CardTitle className='mb-2'>Pool's contract address</CardTitle>
-        <h4 className='font-normal mx-auto flex'>
+        <h5 className='font-normal mx-auto flex'>
           <BlockExplorerLink
             address={prizePoolContracts.prizePool.address}
             className='text-white'
           />
           <CopyIcon text={prizePoolContracts.prizePool.address} className='ml-4' />
-        </h4>
+        </h5>
       </Card>
     </>
   )
