@@ -130,6 +130,7 @@ export const WithdrawForm = (props) => {
 
   const withdrawAmountUnformatted = parseNumString(withdrawAmount, tokenDecimals)
   const inputError = !withdrawAmountUnformatted
+
   const overBalance = withdrawAmountUnformatted?.gt(usersTicketBalanceUnformatted)
 
   const ticketBal = usersTicketBalance
