@@ -5,7 +5,6 @@ import FeatherIcon from 'feather-icons-react'
 
 import { Button } from 'lib/components/Button'
 import { RightLabelButton, TextInputGroup } from 'lib/components/TextInputGroup'
-import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { useUserChainValues } from 'lib/hooks/useUserChainValues'
 import { sendTx } from 'lib/utils/sendTx'
 import { WalletContext } from 'lib/components/WalletContextProvider'
@@ -25,8 +24,6 @@ export const DepositForm = (props) => {
   const { walletMatchesNetwork } = useNetwork()
   const { data: poolChainValues, isFetched: poolChainValuesIsFetched } = usePoolChainValues()
   const { data: usersChainValues, isFetched: usersChainValuesIsFetched } = useUserChainValues()
-
-  if (!poolChainValuesIsFetched || !usersChainValuesIsFetched) return null
 
   const hasApprovedBalance = usersChainValues.underlyingTokenIsApproved
   const supportsAllowance = usersChainValues.underlyingTokenSupportsAllowance
@@ -51,8 +48,6 @@ export const DepositForm = (props) => {
   } catch (e) {
     console.warn(e)
   }
-
-  const tokenBal = usersTokenBalance
 
   if (poolIsLocked) {
     return (
@@ -88,7 +83,7 @@ export const DepositForm = (props) => {
             <RightLabelButton
               onClick={(e) => {
                 e.preventDefault()
-                setDepositAmount(tokenBal)
+                setDepositAmount(usersTokenBalance)
               }}
             >
               {numberWithCommas(usersTokenBalanceUnformatted, { decimals: tokenDecimals })}{' '}
@@ -106,17 +101,9 @@ export const DepositForm = (props) => {
 
       {overBalance && (
         <div className='text-yellow-1'>
-          You only have{' '}
-          {displayAmountInEther(usersTokenBalance, {
-            precision: tokenDecimals,
-            decimals: tokenDecimals
-          })}{' '}
+          You only have {numberWithCommas(usersTokenBalance, { decimals: tokenDecimals })}{' '}
           {tokenSymbol}. The maximum you can deposit is{' '}
-          {displayAmountInEther(usersTokenBalance, {
-            precision: tokenDecimals,
-            decimals: tokenDecimals
-          })}
-          .
+          {numberWithCommas(usersTokenBalance, { decimals: tokenDecimals })}.
         </div>
       )}
 

@@ -30,8 +30,11 @@
     },
     "verbose": true
   },
+  "devDependencies": {
+    "@next/bundle-analyzer": "^10.1.1"
+  },
   "dependencies": {
-    "@pooltogether/bnc-onboard": "1.20.1",
+    "@pooltogether/bnc-onboard": "1.20.2",
     "@pooltogether/current-pool-data": "3.3.2",
     "@pooltogether/etherplex": "1.0.2",
     "@pooltogether/pooltogether-contracts": "3.3.2",
@@ -55,14 +58,14 @@
     "jest": "^26.4.2",
     "jotai": "^0.11.2",
     "js-cookie": "^2.2.1",
-    "next": "9.4.4",
-    "next-images": "^1.4.0",
+    "next": "10.1.1",
+    "next-images": "^1.7.0",
     "postcss-easy-import": "^3.0.0",
-    "react": "16.13.1",
+    "react": "17.0.2",
     "react-copy-to-clipboard": "^5.0.2",
     "react-countup": "^4.3.3",
     "react-device-detect": "^1.13.1",
-    "react-dom": "16.13.1",
+    "react-dom": "17.0.2",
     "react-loader-spinner": "^3.1.14",
     "react-query": "^2.26.4",
     "react-toastify": "^6.0.5",
@@ -71,9 +74,6 @@
     "rollup": "2.17.1",
     "scheduler": "^0.20.1",
     "tailwindcss": "^1.7.6",
-    "webpack": "4"
-  },
-  "devDependencies": {
-    "@next/bundle-analyzer": "^9.4.4"
+    "webpack": "5.28.0"
   }
 }
