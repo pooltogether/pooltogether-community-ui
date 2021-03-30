@@ -49,7 +49,7 @@ const ChangeWalletNetworkNotification = (props) => {
     <div className='flex flex-col sm:flex-row justify-between items-center'>
       <span>
         👋 Your wallet is currently set to <b>{walletChainName}</b>. Please connect to{' '}
-        <b>{poolChainName}</b> to participate in this pool.
+        <b>{poolChainName}</b> to participate.
         <br className='hidden xs:block' />
         {showBadWalletMessage && (
           <span>
