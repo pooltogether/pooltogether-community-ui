@@ -315,7 +315,7 @@ module.exports = {
     }
   },
   variants: {
-    margins: ['first', 'last'],
+    // margin: ['first', 'last'],
     borderColor: ['hover', 'focus', 'active', 'focus-within'],
     textColor: ['responsive', 'hover', 'focus', 'active'],
     backgroundColor: ['responsive', 'hover', 'focus', 'active'],

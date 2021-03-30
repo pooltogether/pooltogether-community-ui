@@ -43,7 +43,7 @@ export const RelatedAddressesCard = (props) => {
 
   return (
     <Card>
-      <Collapse title='Related contract addresses'>
+      <Collapse title='Related contract addresses' openOnMount>
         <Table headers={['Contract', 'Address']} rows={rows} className='w-full table-auto' />
       </Collapse>
     </Card>
@@ -59,7 +59,11 @@ const Row = (props) => {
         {contract}
       </RowDataCell>
       <RowDataCell>
-        <BlockExplorerLink address={address} className='text-xs sm:text-base text-accent-1' />
+        <BlockExplorerLink
+          address={address}
+          className='text-xs sm:text-base text-accent-1'
+          iconClassName='ml-auto'
+        />
       </RowDataCell>
       <td className='pb-2'>
         <div className='flex justify-end text-accent-1 ml-2'>

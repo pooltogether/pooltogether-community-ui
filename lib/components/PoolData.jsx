@@ -23,11 +23,6 @@ import { IndexContent } from 'lib/components/IndexContent'
 export const getDataFetchingErrorMessage = (address, type, message) =>
   `Error fetching ${type} for prize pool with address: ${address}: ${message}. (maybe wrong Ethereum network or your IP is being rate-limited?)`
 
-const renderErrorMessage = (errorMsg) => {
-  console.error(errorMsg)
-  poolToast.error(errorMsg)
-}
-
 /**
  * Wraps app and populates Jotai pool data stores if applicable
  */
@@ -50,7 +45,10 @@ export const PoolData = (props) => {
     return <UnsupportedNetwork chainId={chainId} />
   }
 
-  if (!isValidAddress(prizePoolAddress) || prizePoolContracts?.invalidPrizePoolAddress) {
+  if (
+    prizePoolAddress !== undefined &&
+    (!isValidAddress(prizePoolAddress) || prizePoolContracts?.invalidPrizePoolAddress)
+  ) {
     return <InvalidAddress invalidAddress={prizePoolAddress} chainId={chainId} />
   }
 
@@ -79,7 +77,7 @@ const InvalidAddress = (props) => {
   return (
     <>
       <div className='border-2 border-primary px-7 py-4 rounded-xl mb-10 text-accent-1'>
-        <h1>☹️ Invalid address</h1>
+        <h1>⚠️ Invalid address</h1>
         <p>
           <b>{invalidAddress}</b> is not a valid prize pool address on <b>{networkView}</b>.
         </p>

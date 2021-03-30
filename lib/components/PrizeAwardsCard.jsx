@@ -11,7 +11,7 @@ import PrizeIllustration from 'assets/images/prize-illustration-transparent@2x.p
 export const PrizeAwardsCard = (props) => {
   return (
     <Card>
-      <Collapse title='Current prize details'>
+      <Collapse title='Current prize details' openOnMount>
         <PrizeAwardsTable />
       </Collapse>
     </Card>
