@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
 import { ethers } from 'ethers'
 
+import { BlockExplorerLink, LinkIcon } from 'lib/components/BlockExplorerLink'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 import { DepositForm } from 'lib/components/DepositForm'
 import { TxMessage } from 'lib/components/TxMessage'
@@ -61,7 +62,19 @@ export const DepositUI = (props) => {
   const ticketAddress = prizePoolContracts.ticket.address
   const tokenSymbol = poolChainValues.token.symbol
   const ticketSymbol = poolChainValues.ticket.symbol
-  const depositMessage = `You can deposit ${tokenSymbol} to be eligible to win the prizes in this pool. Once deposited you will receive ${ticketSymbol} and be entered to win until your ${tokenSymbol} is withdrawn.`
+
+  const depositMessage = (
+    <>
+      You can deposit{' '}
+      <span className='underline'>
+        <BlockExplorerLink address={poolChainValues.token.address}>
+          {tokenSymbol} <LinkIcon />
+        </BlockExplorerLink>
+      </span>{' '}
+      to be eligible to win the prizes in this pool. Once deposited you will receive {ticketSymbol}{' '}
+      and be entered to win until your {tokenSymbol} is withdrawn.
+    </>
+  )
 
   const txInFlight = tx.inWallet || tx.sent
 

@@ -37,7 +37,7 @@ const ChangeWalletNetworkNotification = (props) => {
   const ethereumNetworks = [1, 4, 42]
   const isSupportedEthereumNetwork = ethereumNetworks.includes(chainId)
 
-  const connectableNetwork = [NETWORK.matic, NETWORK.mumbai, NETWORK.xdai]
+  const connectableNetwork = [NETWORK.matic, NETWORK.mumbai, NETWORK.xdai, NETWORK.bsc]
   const isConnectableNetwork = connectableNetwork.includes(chainId)
 
   const showConnectButton = walletIsMetaMask && isConnectableNetwork
