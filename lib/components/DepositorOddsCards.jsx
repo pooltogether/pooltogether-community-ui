@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Card, CardPrimaryText, CardTitle } from 'lib/components/Card'
+import { Card, CardPrimaryText, CardSecondaryTitle } from 'lib/components/Card'
 import { calculateOdds } from 'lib/utils/calculateOdds'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
@@ -33,7 +33,7 @@ const TicketCard = () => {
 
   return (
     <Card small className='text-center' marginClasses='mb-4 mr-2'>
-      <CardTitle>My deposits</CardTitle>
+      <CardSecondaryTitle>My deposits</CardSecondaryTitle>
       <CardPrimaryText small>{`${balance} ${symbol}`}</CardPrimaryText>
     </Card>
   )
@@ -55,7 +55,7 @@ const OddsCard = () => {
   if (!odds) {
     return (
       <Card small className='text-center' marginClasses='mr-2'>
-        <CardTitle>My winning odds</CardTitle>
+        <CardSecondaryTitle>My winning odds</CardSecondaryTitle>
         <CardPrimaryText small>0</CardPrimaryText>
       </Card>
     )
@@ -65,7 +65,7 @@ const OddsCard = () => {
 
   return (
     <Card small className='text-center' marginClasses='mr-2'>
-      <CardTitle>My winning odds</CardTitle>
+      <CardSecondaryTitle>My winning odds</CardSecondaryTitle>
       <CardPrimaryText small>1 in {formattedOdds}</CardPrimaryText>
     </Card>
   )
@@ -82,7 +82,7 @@ const BalanceCard = () => {
 
   return (
     <Card small className='text-center' marginClasses='mb-4 ml-2'>
-      <CardTitle>My wallet balance</CardTitle>
+      <CardSecondaryTitle>My wallet balance</CardSecondaryTitle>
       <CardPrimaryText small>{`${balance} ${symbol}`}</CardPrimaryText>
     </Card>
   )
@@ -99,7 +99,7 @@ const TotalDepositsCard = () => {
 
   return (
     <Card small className='text-center' marginClasses='ml-2'>
-      <CardTitle>Total deposits</CardTitle>
+      <CardSecondaryTitle>Total deposits</CardSecondaryTitle>
       <CardPrimaryText small>{`${totalSupply} ${symbol}`}</CardPrimaryText>
     </Card>
   )

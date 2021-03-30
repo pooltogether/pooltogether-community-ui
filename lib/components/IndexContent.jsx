@@ -6,7 +6,7 @@ import classnames from 'classnames'
 
 import { NETWORKS, CONTRACT_ADDRESSES, POOL_ALIASES, SUPPORTED_NETWORKS } from 'lib/constants'
 import { ButtonLink } from 'lib/components/ButtonLink'
-import { Card } from 'lib/components/Card'
+import { Card, CardTitle } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
@@ -31,6 +31,7 @@ import UsdcSvg from 'assets/images/usdc-new-transparent.png'
 import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
+import { useIsOwnerPoolTogether } from 'lib/hooks/useIsOwnerPoolTogether'
 
 const demoAssetTypes = {
   dai: { label: 'DAI', logo: DaiSvg },
@@ -86,16 +87,6 @@ const PoolsLists = () => {
   )
 }
 
-const CardTitle = (props) => (
-  <div
-    className={classnames('font-bold text-base sm:text-2xl text-accent-1 flex', {
-      'mb-4': !props.noMargin
-    })}
-  >
-    {props.children}
-  </div>
-)
-
 const UnsupportedNetworkCard = () => {
   const { chainId } = useNetwork()
 
@@ -105,10 +96,10 @@ const UnsupportedNetworkCard = () => {
 
   return (
     <div className='text-left mb-10 border-2 border-primary rounded-lg px-7 py-4 text-accent-1'>
-      <CardTitle noMargin>☹️ Index Unavailable for {networkName}</CardTitle>
+      <CardTitle noMargin>☹️ Full Index Unavailable for {networkName}</CardTitle>
       <p>
-        Unfortunately due to limitations of Matic we can't dynamically compile a list of created
-        prize pools.
+        Unfortunately due to limitations of {networkName} we can't dynamically compile a list of
+        created prize pools.
       </p>
     </div>
   )
@@ -208,7 +199,7 @@ const DemoPoolButton = (props) => {
       as={`/pools/${networkName}/${address}/home`}
     >
       <a>
-        <div className='flex mb-4 last:mb-0 items-center py-2 px-4 inline-block bg-card hover:bg-card-selected trans border-2 border-highlight-3 hover:border-highlight-2 border-dashed rounded-lg '>
+        <div className='mb-4 last:mb-0 items-center py-2 px-4 inline-block bg-card hover:bg-card-selected trans border-2 border-highlight-3 hover:border-highlight-2 border-dashed rounded-lg '>
           {demoAssetTypes[assetType]?.logo && (
             <img
               src={demoAssetTypes[assetType]?.logo}
@@ -525,14 +516,15 @@ const UsersBalanceCell = (props) => {
   )
 }
 
-const OwnerAddress = (props) => {
-  const { ownerAddress } = props
-  const { chainId } = useNetwork()
+export const OwnerAddress = (props) => {
+  const { ownerAddress, copyable } = props
 
-  if (ownerAddress === CONTRACT_ADDRESSES[chainId].GovernanceTimelock) {
+  const ownerIsPoolTogether = useIsOwnerPoolTogether(ownerAddress)
+
+  if (ownerIsPoolTogether) {
     return (
       <div className='inline-flex bg-purple-1 rounded-full px-2 width-fit-content'>
-        <BlockExplorerLink shorten address={ownerAddress}>
+        <BlockExplorerLink copyable={copyable} shorten address={ownerAddress}>
           PoolTogether
           <LinkIcon />
         </BlockExplorerLink>

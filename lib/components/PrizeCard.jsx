@@ -3,7 +3,7 @@ import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
 
 import { ButtonRelativeLink } from 'lib/components/ButtonRelativeLink'
-import { Card, CardTitle } from 'lib/components/Card'
+import { Card, CardSecondaryTitle } from 'lib/components/Card'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { NewPrizeCountdown } from 'lib/components/NewPrizeCountdown'
 import { useCoingeckoTokenData } from 'lib/hooks/useCoingeckoTokenData'
@@ -86,13 +86,13 @@ const PrizeSection = (props) => {
   if (awardsWithBalances.length === 0) {
     return (
       <>
-        <CardTitle className='text-center mb-2 font-bold'>
+        <CardSecondaryTitle className='text-center mb-2 font-bold'>
           No prize data available at the moment
-        </CardTitle>
-        <CardTitle className='text-center'>
+        </CardSecondaryTitle>
+        <CardSecondaryTitle className='text-center'>
           We're growing new prizes worth winning for you.
-        </CardTitle>
-        <CardTitle className='text-center mb-8'>Check back on us soon!</CardTitle>
+        </CardSecondaryTitle>
+        <CardSecondaryTitle className='text-center mb-8'>Check back on us soon!</CardSecondaryTitle>
         <img
           alt='image of a cactus'
           src={Cactus}
@@ -105,7 +105,7 @@ const PrizeSection = (props) => {
   return (
     <>
       <Prizes awards={awardsWithBalances} />
-      <CardTitle className='text-center mb-8'>Current Prize</CardTitle>
+      <CardSecondaryTitle className='text-center mb-8'>Current Prize</CardSecondaryTitle>
     </>
   )
 }

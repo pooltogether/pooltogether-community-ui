@@ -13,6 +13,7 @@ import { useNetwork } from 'lib/hooks/useNetwork'
 import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { NETWORK } from 'lib/utils/networks'
 
 const handleDepositSubmit = async (
   walletMatchesNetwork,
@@ -39,7 +40,7 @@ const handleDepositSubmit = async (
   )
 }
 
-export const DepositUI = (props) => {
+export const DepositUI = () => {
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
   const { walletMatchesNetwork } = useNetwork()
@@ -134,6 +135,37 @@ export const DepositUI = (props) => {
           setDepositAmount
         }}
       />
+      <GetTokensOnL2Prompt token={poolChainValues.token} />
     </>
+  )
+}
+
+const BRIDGEABLE_NETWORKS = [NETWORK.matic]
+
+const GetTokensOnL2Prompt = (props) => {
+  const { chainId, view: networkView } = useNetwork()
+  const { token } = props
+  const { name, address } = token
+
+  if (!BRIDGEABLE_NETWORKS.includes(chainId)) {
+    return null
+  }
+
+  return (
+    <div className='text-accent-1 text-sm sm:text-base'>
+      Need{' '}
+      <BlockExplorerLink address={address} className='underline'>
+        {name}
+      </BlockExplorerLink>
+      ? Check out token bridging on{' '}
+      <a
+        href='https://zapper.fi/bridge'
+        target='_blank'
+        className='underline trans hover:opacity-70'
+      >
+        Zapper
+      </a>{' '}
+      or purchasing tokens with fiat for {networkView}.
+    </div>
   )
 }

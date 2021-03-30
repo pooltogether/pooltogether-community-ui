@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { AdminUI } from 'lib/components/AdminUI'
 import { StatsUI } from 'lib/components/StatsUI'
 import { Content, ContentPane, Tab, Tabs } from 'lib/components/Tabs'
-import { Card, CardTitle } from 'lib/components/Card'
+import { Card, CardSecondaryTitle } from 'lib/components/Card'
 import { ButtonLink } from 'lib/components/ButtonLink'
 
 import ManageImage from 'assets/images/manage-image.svg'
@@ -91,7 +91,7 @@ const PoolAddress = () => {
     <>
       <div className='text-accent-1 font-bold title text-lg sm:text-4xl'>Pool's Info</div>
       <Card className='flex flex-col'>
-        <CardTitle className='mb-2'>Pool's contract address</CardTitle>
+        <CardSecondaryTitle className='mb-2'>Pool's contract address</CardSecondaryTitle>
         <h5 className='font-normal mx-auto flex'>
           <BlockExplorerLink
             address={prizePoolContracts.prizePool.address}

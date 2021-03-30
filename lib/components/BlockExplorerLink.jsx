@@ -5,9 +5,10 @@ import React from 'react'
 import { formatBlockExplorerAddressUrl, formatBlockExplorerTxUrl } from 'lib/utils/networks'
 import { shorten as shortenHash } from 'lib/utils/shorten'
 import { useNetwork } from 'lib/hooks/useNetwork'
+import { CopyIcon } from 'lib/components/CopyIcon'
 
 export const BlockExplorerLink = (props) => {
-  const { address, tx, children, className, shorten, iconClassName } = props
+  const { address, tx, children, className, shorten, iconClassName, copyable } = props
   const { chainId } = useNetwork()
 
   let url
@@ -20,33 +21,36 @@ export const BlockExplorerLink = (props) => {
   const display = tx || address
 
   return (
-    <a
-      href={url}
-      className={`trans hover:opacity-70 ${className} inline-flex`}
-      target='_blank'
-      rel='noopener noreferrer'
-      title='View on Block Explorer'
-    >
-      {children || (
-        <div className='flex'>
-          <span
-            className={classnames('inline-block', {
-              'sm:hidden': !shorten
-            })}
-          >
-            {shortenHash(display)}
-          </span>
-          <span
-            className={classnames('hidden', {
-              'sm:inline-block': !shorten
-            })}
-          >
-            {display}
-          </span>
-          <LinkIcon className={iconClassName} />
-        </div>
-      )}
-    </a>
+    <>
+      <a
+        href={url}
+        className={`trans hover:opacity-70 ${className} inline-flex`}
+        target='_blank'
+        rel='noopener noreferrer'
+        title='View on Block Explorer'
+      >
+        {children || (
+          <div className='flex'>
+            <span
+              className={classnames('inline-block', {
+                'sm:hidden': !shorten
+              })}
+            >
+              {shortenHash(display)}
+            </span>
+            <span
+              className={classnames('hidden', {
+                'sm:inline-block': !shorten
+              })}
+            >
+              {display}
+            </span>
+            <LinkIcon className={iconClassName} />
+          </div>
+        )}
+      </a>
+      {copyable && <CopyIcon className='ml-2 my-auto' text={display} />}
+    </>
   )
 }
 

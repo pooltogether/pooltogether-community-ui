@@ -22,8 +22,8 @@ export const DepositForm = (props) => {
   const { inputError, handleSubmit, vars, stateSetters } = props
 
   const { walletMatchesNetwork } = useNetwork()
-  const { data: poolChainValues, isFetched: poolChainValuesIsFetched } = usePoolChainValues()
-  const { data: usersChainValues, isFetched: usersChainValuesIsFetched } = useUserChainValues()
+  const { data: poolChainValues } = usePoolChainValues()
+  const { data: usersChainValues } = useUserChainValues()
 
   const hasApprovedBalance = usersChainValues.underlyingTokenIsApproved
   const supportsAllowance = usersChainValues.underlyingTokenSupportsAllowance
