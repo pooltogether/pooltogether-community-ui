@@ -7,7 +7,6 @@ import { WalletContext } from 'lib/components/WalletContextProvider'
 import { WALLETS } from 'lib/constants'
 import { NotificationBanner } from 'lib/components/NotificationBanners'
 import { NETWORK } from 'lib/utils/networks'
-import { ButtonLink } from 'lib/components/ButtonLink'
 
 export const ChangeWalletNetworkNotificationBanner = (props) => {
   const { walletConnected, walletMatchesNetwork, walletNetwork, view, chainId } = useNetwork()
@@ -15,7 +14,7 @@ export const ChangeWalletNetworkNotificationBanner = (props) => {
   if (!walletConnected || walletMatchesNetwork) return null
 
   return (
-    <NotificationBanner className='bg-teal'>
+    <NotificationBanner className='bg-teal' canClose>
       <ChangeWalletNetworkNotification
         chainId={chainId}
         walletNetwork={walletNetwork}
