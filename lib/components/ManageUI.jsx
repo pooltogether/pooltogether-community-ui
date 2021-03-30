@@ -34,16 +34,14 @@ export const ManageUI = (props) => {
         <Tab setSelectedTab={setSelectedTab} selectedTab={selectedTab} hash={MANAGE_VIEW.stats}>
           Stats
         </Tab>
-        {userIsOwner && (
-          <Tab
-            setSelectedTab={setSelectedTab}
-            selectedTab={selectedTab}
-            hash={MANAGE_VIEW.admin}
-            className='ml-4 sm:ml-16'
-          >
-            Admin
-          </Tab>
-        )}
+        <Tab
+          setSelectedTab={setSelectedTab}
+          selectedTab={selectedTab}
+          hash={MANAGE_VIEW.admin}
+          className='ml-4 sm:ml-16'
+        >
+          Admin
+        </Tab>
       </Tabs>
 
       <Content>
@@ -51,14 +49,13 @@ export const ManageUI = (props) => {
           <StatsUI />
         </ContentPane>
 
-        {userIsOwner && (
-          <ContentPane selectedTab={selectedTab} hash={MANAGE_VIEW.admin}>
-            <AdminUI />
-          </ContentPane>
-        )}
+        <ContentPane selectedTab={selectedTab} hash={MANAGE_VIEW.admin}>
+          <AdminUI />
+        </ContentPane>
       </Content>
-      <div className='flex justify-center'>
+      <div className='flex justify-between w-3/4 sm:w-1/2 mx-auto'>
         <RelativeInternalLink link='/home'>View Prize Pool</RelativeInternalLink>
+        <RelativeInternalLink link='/admin'>Manage Pool</RelativeInternalLink>
       </div>
     </>
   )

@@ -14,7 +14,7 @@ import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 
-const handleStartAwardSubmit = async (setTx, provider, contractAddress) => {
+const handleStartAwardSubmit = async (walletMatchesNetwork, setTx, provider, contractAddress) => {
   const params = [
     {
       gasLimit: 300000
@@ -22,6 +22,7 @@ const handleStartAwardSubmit = async (setTx, provider, contractAddress) => {
   ]
 
   await sendTx(
+    walletMatchesNetwork,
     setTx,
     provider,
     contractAddress,
@@ -32,7 +33,12 @@ const handleStartAwardSubmit = async (setTx, provider, contractAddress) => {
   )
 }
 
-const handleCompleteAwardSubmit = async (setTx, provider, contractAddress) => {
+const handleCompleteAwardSubmit = async (
+  walletMatchesNetwork,
+  setTx,
+  provider,
+  contractAddress
+) => {
   const params = [
     {
       gasLimit: 700000
@@ -40,6 +46,7 @@ const handleCompleteAwardSubmit = async (setTx, provider, contractAddress) => {
   ]
 
   await sendTx(
+    walletMatchesNetwork,
     setTx,
     provider,
     contractAddress,
@@ -50,7 +57,7 @@ const handleCompleteAwardSubmit = async (setTx, provider, contractAddress) => {
   )
 }
 
-const handleCancelAward = async (setTx, provider, contractAddress) => {
+const handleCancelAward = async (walletMatchesNetwork, setTx, provider, contractAddress) => {
   const params = [
     {
       gasLimit: 300000
@@ -58,6 +65,7 @@ const handleCancelAward = async (setTx, provider, contractAddress) => {
   ]
 
   await sendTx(
+    walletMatchesNetwork,
     setTx,
     provider,
     contractAddress,
@@ -101,20 +109,36 @@ export const AwardPrizeTrigger = (props) => {
 
   const handleStartAwardClick = (e) => {
     e.preventDefault()
+
     setTxType('Start Award')
-    handleStartAwardSubmit(setTx, provider, prizePoolContracts.prizeStrategy.address)
+    handleStartAwardSubmit(
+      walletMatchesNetwork,
+      setTx,
+      provider,
+      prizePoolContracts.prizeStrategy.address
+    )
   }
 
   const handleCancelAwardClick = (e) => {
     e.preventDefault()
     setTxType('Cancel Award')
-    handleCancelAward(setTx, provider, prizePoolContracts.prizeStrategy.address)
+    handleCancelAward(
+      walletMatchesNetwork,
+      setTx,
+      provider,
+      prizePoolContracts.prizeStrategy.address
+    )
   }
 
   const handleCompleteAwardClick = (e) => {
     e.preventDefault()
     setTxType('Complete Award')
-    handleCompleteAwardSubmit(setTx, provider, prizePoolContracts.prizeStrategy.address)
+    handleCompleteAwardSubmit(
+      walletMatchesNetwork,
+      setTx,
+      provider,
+      prizePoolContracts.prizeStrategy.address
+    )
   }
 
   // If countdown has finished, trigger a chain data refetch
@@ -171,7 +195,7 @@ export const AwardPrizeTrigger = (props) => {
         <TimeDisplay days={days} hours={hours} minutes={minutes} seconds={seconds} />
       )}
       {isRngRequested && !canCompleteAward && (
-        <div className='flex'>
+        <div className='flex justify-center'>
           <FeatherIcon icon='lock' className='mr-2 my-auto w-3 h-3 sm:w-4 sm:h-4 stroke-current' />
           Pool is locked. Awarding in progress!
         </div>

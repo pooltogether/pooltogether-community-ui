@@ -17,7 +17,8 @@ export default function IndexPage() {
       <AdminHeader />
       <OwnerWarning />
       <AdminUI />
-      <div className='flex justify-center'>
+      <div className='flex justify-between w-3/4 sm:w-1/2 mx-auto'>
+        <RelativeInternalLink link='/manage'>View Pool Details</RelativeInternalLink>
         <RelativeInternalLink link='/home'>View Prize Pool</RelativeInternalLink>
       </div>
     </PoolData>
@@ -58,8 +59,8 @@ const OwnerWarning = () => {
 
   return (
     <div className='p-4 border b-purple mb-4 sm:mb-10 rounded-xl flex flex-col sm:flex-row'>
-      <FeatherIcon icon='alert-triangle' className='mr-4 w-10 h-10 my-auto text-orange-500' />
-      <div className='text-accent-1 text-sm sm:text0base'>
+      <FeatherIcon icon='alert-triangle' className='mr-2 w-10 h-10 my-auto text-orange-500' />
+      <div className='text-accent-1 text-sm'>
         <p className='sm:my-0'>Certain actions may only be performed by the owner of the pool.</p>
         <p className='sm:my-0'>
           The wallet you have connected{' '}

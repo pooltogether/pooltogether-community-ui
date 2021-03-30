@@ -2,20 +2,21 @@ import React, { useContext, useState } from 'react'
 import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
 import { ethers } from 'ethers'
 
+import { BlockExplorerLink, LinkIcon } from 'lib/components/BlockExplorerLink'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 import { DepositForm } from 'lib/components/DepositForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { parseNumString } from 'lib/utils/parseNumString'
 import { sendTx } from 'lib/utils/sendTx'
+import { useNetwork } from 'lib/hooks/useNetwork'
 import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
-import { BlockExplorerLink, LinkIcon } from 'lib/components/BlockExplorerLink'
-import { useNetwork } from 'lib/hooks/useNetwork'
 import { NETWORK } from 'lib/utils/networks'
 
 const handleDepositSubmit = async (
+  walletMatchesNetwork,
   setTx,
   provider,
   usersAddress,
@@ -28,6 +29,7 @@ const handleDepositSubmit = async (
   const params = [usersAddress, depositAmountBN, ticketAddress, referrer]
 
   await sendTx(
+    walletMatchesNetwork,
     setTx,
     provider,
     contractAddress,
@@ -41,6 +43,7 @@ const handleDepositSubmit = async (
 export const DepositUI = () => {
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
+  const { walletMatchesNetwork } = useNetwork()
   const usersAddress = useUsersAddress()
   const {
     data: prizePoolContracts,
@@ -60,7 +63,19 @@ export const DepositUI = () => {
   const ticketAddress = prizePoolContracts.ticket.address
   const tokenSymbol = poolChainValues.token.symbol
   const ticketSymbol = poolChainValues.ticket.symbol
-  const depositMessage = `You can deposit ${tokenSymbol} to be eligible to win the prizes in this pool. Once deposited you will receive ${ticketSymbol} and be entered to win until your ${tokenSymbol} is withdrawn.`
+
+  const depositMessage = (
+    <>
+      You can deposit{' '}
+      <span className='underline'>
+        <BlockExplorerLink address={poolChainValues.token.address}>
+          {tokenSymbol} <LinkIcon />
+        </BlockExplorerLink>
+      </span>{' '}
+      to be eligible to win the prizes in this pool. Once deposited you will receive {ticketSymbol}{' '}
+      and be entered to win until your {tokenSymbol} is withdrawn.
+    </>
+  )
 
   const txInFlight = tx.inWallet || tx.sent
 
@@ -104,6 +119,7 @@ export const DepositUI = () => {
         handleSubmit={(e) => {
           e.preventDefault()
           handleDepositSubmit(
+            walletMatchesNetwork,
             setTx,
             provider,
             usersAddress,

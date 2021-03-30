@@ -44,22 +44,15 @@ export const PrizeCard = (props) => {
           <ButtonRelativeLink link='/home' size='3xl' color='primary' fullWidth>
             Deposit to win
           </ButtonRelativeLink>
-          <div
-            className={classnames('flex mt-4 flex-grow', {
-              'justify-between': userIsOwner,
-              'justify-center': !userIsOwner
-            })}
-          >
-            {userIsOwner && (
-              <RelativeInternalLink link='/manage'>
-                Manage pool{' '}
-                <FeatherIcon
-                  icon='settings'
-                  strokeWidth='0.25rem'
-                  className={'ml-3 my-auto w-4 h-4 stroke-2 stroke-current'}
-                />
-              </RelativeInternalLink>
-            )}
+          <div className='flex mt-4 flex-grow justify-between'>
+            <RelativeInternalLink link='/manage'>
+              Manage pool{' '}
+              <FeatherIcon
+                icon='settings'
+                strokeWidth='0.25rem'
+                className={'ml-3 my-auto w-4 h-4 stroke-2 stroke-current'}
+              />
+            </RelativeInternalLink>
             <RelativeInternalLink link='/home'>
               Account balance{' '}
               <FeatherIcon
