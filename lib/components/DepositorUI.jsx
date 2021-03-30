@@ -23,8 +23,9 @@ export const DepositorUI = (props) => {
           <WithdrawUI />
         </Collapse>
       </Card>
-      <div className='flex justify-center'>
+      <div className='flex justify-between w-3/4 sm:w-1/2 mx-auto'>
         <RelativeInternalLink link='/manage'>View Pool Details</RelativeInternalLink>
+        <RelativeInternalLink link='/admin'>Manage Pool</RelativeInternalLink>
       </div>
     </>
   )

@@ -13,7 +13,7 @@ export const DepositorOddsCards = (props) => {
         <TicketCard />
         <BalanceCard />
       </div>
-      <div className='flex mb-4 sm:mb-10'>
+      <div className='flex mb-4'>
         <OddsCard />
         <TotalDepositsCard />
       </div>

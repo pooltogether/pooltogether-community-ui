@@ -8,15 +8,15 @@ import { RightLabelButton, TextInputGroup } from 'lib/components/TextInputGroup'
 import { useUserChainValues } from 'lib/hooks/useUserChainValues'
 import { sendTx } from 'lib/utils/sendTx'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import { useNetwork } from 'lib/hooks/useNetwork'
 import { InnerCard } from 'lib/components/Card'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
-
-import Warning from 'assets/images/warning.svg'
 import { getErc20InputProps } from 'lib/utils/getErc20InputProps'
+import { useNetwork } from 'lib/hooks/useNetwork'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
+
+import Warning from 'assets/images/warning.svg'
 
 export const DepositForm = (props) => {
   const { inputError, handleSubmit, vars, stateSetters } = props
@@ -54,7 +54,7 @@ export const DepositForm = (props) => {
       <InnerCard className='text-center'>
         <img src={Warning} className='w-10 sm:w-14 mx-auto mb-4' />
         <div className='text-accent-1 mb-4'>
-          This Prize Pool is not accepting deposits at this time.
+          This Prize Pool is unable to accept deposits at this time.
         </div>
         <div className='text-accent-1'>Deposits can be made once the prize has been awarded.</div>
         <div className='text-accent-1'>Check back soon!</div>
@@ -185,6 +185,7 @@ const UnlockDepositsButton = () => {
         if (tx.inWallet) return
 
         handleUnlockSubmit(
+          walletMatchesNetwork,
           setTx,
           provider,
           prizePoolContracts.token.address,
@@ -204,8 +205,24 @@ const UnlockDepositsButton = () => {
   )
 }
 
-const handleUnlockSubmit = async (setTx, provider, contractAddress, prizePoolAddress, decimals) => {
+const handleUnlockSubmit = async (
+  walletMatchesNetwork,
+  setTx,
+  provider,
+  contractAddress,
+  prizePoolAddress,
+  decimals
+) => {
   const params = [prizePoolAddress, ethers.utils.parseUnits('1000000000', decimals)]
 
-  await sendTx(setTx, provider, contractAddress, IERC20Abi, 'approve', params, 'Unlock Deposits')
+  await sendTx(
+    walletMatchesNetwork,
+    setTx,
+    provider,
+    contractAddress,
+    IERC20Abi,
+    'approve',
+    params,
+    'Unlock Deposits'
+  )
 }

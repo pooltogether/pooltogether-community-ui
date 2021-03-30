@@ -26,6 +26,7 @@ import Warning from 'assets/images/warning.svg'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 
 const handleWithdrawInstantly = async (
+  walletMatchesNetwork,
   setTx,
   provider,
   contractAddress,
@@ -48,6 +49,7 @@ const handleWithdrawInstantly = async (
   ]
 
   await sendTx(
+    walletMatchesNetwork,
     setTx,
     provider,
     contractAddress,
@@ -93,6 +95,7 @@ export const WithdrawForm = (props) => {
     e.preventDefault()
 
     handleWithdrawInstantly(
+      walletMatchesNetwork,
       setTx,
       provider,
       prizePoolAddress,
@@ -156,9 +159,11 @@ export const WithdrawForm = (props) => {
       <InnerCard className='text-center'>
         <img src={Warning} className='w-10 sm:w-14 mx-auto mb-4' />
         <div className='text-accent-1 mb-4'>
-          This Prize Pool is unable to withdraw at this time.
+          This Prize Pool is unable to accept withdrawals at this time.
         </div>
-        <div className='text-accent-1'>Withdraws can be made once the prize has been awarded.</div>
+        <div className='text-accent-1'>
+          Withdrawals can be made once the prize has been awarded.
+        </div>
         <div className='text-accent-1'>Check back soon!</div>
       </InnerCard>
     )

@@ -21,6 +21,7 @@ import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 
 const handleSetCreditPlan = async (
+  walletMatchesNetwork,
   txName,
   setTx,
   provider,
@@ -38,7 +39,16 @@ const handleSetCreditPlan = async (
     }
   ]
 
-  await sendTx(setTx, provider, prizePoolAddress, PrizePoolAbi, 'setCreditPlanOf', params, txName)
+  await sendTx(
+    walletMatchesNetwork,
+    setTx,
+    provider,
+    prizePoolAddress,
+    PrizePoolAbi,
+    'setCreditPlanOf',
+    params,
+    txName
+  )
 }
 
 export const FairnessControlsCard = (props) => {
@@ -91,6 +101,7 @@ const FairnessControlsForm = (props) => {
     )
 
     handleSetCreditPlan(
+      walletMatchesNetwork,
       txName,
       setTx,
       provider,

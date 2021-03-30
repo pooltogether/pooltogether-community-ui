@@ -18,7 +18,8 @@ export const Collapse = (props) => {
   return (
     <>
       <div
-        className={classnames('flex', headerClassName, headerMarginClassName, {
+        onClick={() => setShowContent(!showContent)}
+        className={classnames('cursor-pointer flex', headerClassName, headerMarginClassName, {
           'mb-4': showContent && !headerMarginClassName,
           'justify-between': title,
           'justify-end': title
@@ -37,7 +38,6 @@ export const Collapse = (props) => {
                 'rotate-180': showContent
               }
             )}
-            onClick={() => setShowContent(!showContent)}
           />
         )}
       </div>

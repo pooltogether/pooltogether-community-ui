@@ -1,15 +1,12 @@
 .pool-toast.Toastify__toast-container {
   background: transparent;
-  margin: 0 auto;
+  left: 4%;
   max-width: 1228px;
-  padding: 1rem;
   text-align: center;
   top: 0;
-  width: 100%;
+  transform: none;
+  width: 90%;
   z-index: 20000;
-
-  height: 50px;
-  width: 100%;
 }
 
 @screen sm {
@@ -41,7 +38,7 @@
   font-weight: 400;
   margin: 0 auto;
   min-height: 30px;
-  min-width: 100%;
+  /* min-width: 100%; */
   overflow: visible;
   padding: 0;
 }
@@ -128,7 +125,7 @@
   font-size: 1.125rem;
   font-weight: bold;
   margin: 0.5rem;
-  padding: 0.5rem 0.25rem;
+  padding: 0.5rem 2rem;
 }
 
 @screen sm {

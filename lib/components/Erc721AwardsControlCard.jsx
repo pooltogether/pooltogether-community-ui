@@ -26,6 +26,7 @@ import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 import PrizeIllustration from 'assets/images/prize-illustration-transparent@2x.png'
 
 const handleAddExternalErc721 = async (
+  walletMatchesNetwork,
   txName,
   setTx,
   provider,
@@ -42,6 +43,7 @@ const handleAddExternalErc721 = async (
   ]
 
   await sendTx(
+    walletMatchesNetwork,
     setTx,
     provider,
     prizeStrategyAddress,
@@ -53,6 +55,7 @@ const handleAddExternalErc721 = async (
 }
 
 const handleRemoveExternalErc721 = async (
+  walletMatchesNetwork,
   txName,
   setTx,
   provider,
@@ -69,6 +72,7 @@ const handleRemoveExternalErc721 = async (
   ]
 
   await sendTx(
+    walletMatchesNetwork,
     setTx,
     provider,
     prizeStrategyAddress,
@@ -159,6 +163,7 @@ const AddErc721Form = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     handleAddExternalErc721(
+      walletMatchesNetwork,
       txName,
       setTx,
       provider,
@@ -249,6 +254,7 @@ const RemoveAddressButton = (props) => {
   const { address, prevAddress } = props
   const [tx, setTx] = useState({})
 
+  const { walletMatchesNetwork } = useNetwork()
   const { data: prizePoolContracts } = usePrizePoolContracts()
   const usersAddress = useUsersAddress()
   const { refetch: refetchPoolChainValues } = usePoolChainValues()
@@ -260,6 +266,7 @@ const RemoveAddressButton = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     await handleRemoveExternalErc721(
+      walletMatchesNetwork,
       txName,
       setTx,
       provider,

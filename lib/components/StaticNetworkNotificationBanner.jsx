@@ -42,7 +42,7 @@ const StaticNetworkNotification = (props) => {
   return (
     <div className='flex flex-col'>
       <span>
-        This works on <b>{supportedNames}</b>.
+        This pool lives on <b>{supportedNames}</b>.
       </span>
       <span>
         Your wallet is currently set to <b>{networkWords}.</b>

@@ -8,11 +8,13 @@ import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { parseNumString } from 'lib/utils/parseNumString'
 import { sendTx } from 'lib/utils/sendTx'
+import { useNetwork } from 'lib/hooks/useNetwork'
 import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 
 const handleDepositSubmit = async (
+  walletMatchesNetwork,
   setTx,
   provider,
   usersAddress,
@@ -25,6 +27,7 @@ const handleDepositSubmit = async (
   const params = [usersAddress, depositAmountBN, ticketAddress, referrer]
 
   await sendTx(
+    walletMatchesNetwork,
     setTx,
     provider,
     contractAddress,
@@ -38,6 +41,7 @@ const handleDepositSubmit = async (
 export const DepositUI = (props) => {
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
+  const { walletMatchesNetwork } = useNetwork()
   const usersAddress = useUsersAddress()
   const {
     data: prizePoolContracts,
@@ -101,6 +105,7 @@ export const DepositUI = (props) => {
         handleSubmit={(e) => {
           e.preventDefault()
           handleDepositSubmit(
+            walletMatchesNetwork,
             setTx,
             provider,
             usersAddress,
