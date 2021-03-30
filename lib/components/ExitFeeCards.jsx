@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Card, CardPrimaryText, CardTitle } from 'lib/components/Card'
+import { Card, CardPrimaryText, CardSecondaryTitle } from 'lib/components/Card'
 import { getCreditMaturationDaysAndLimitPercentage } from 'lib/utils/format'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 
@@ -15,11 +15,11 @@ export const ExitFeeCards = () => {
   return (
     <div className='flex'>
       <Card className='mr-1 sm:mr-4'>
-        <CardTitle>Early exit fee</CardTitle>
+        <CardSecondaryTitle>Early exit fee</CardSecondaryTitle>
         <CardPrimaryText>{`${creditLimitPercentage}%`}</CardPrimaryText>
       </Card>
       <Card className='ml-1 sm:ml-4'>
-        <CardTitle>Exit fee decay time</CardTitle>
+        <CardSecondaryTitle>Exit fee decay time</CardSecondaryTitle>
         <CardPrimaryText>{`${creditMaturationInDays} day${
           creditMaturationInDays === 1 ? '' : 's'
         }`}</CardPrimaryText>

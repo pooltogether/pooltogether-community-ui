@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
+import { CardTitle } from 'lib/components/Card'
 
 export const Collapse = (props) => {
   const {
@@ -24,7 +25,7 @@ export const Collapse = (props) => {
           'justify-end': title
         })}
       >
-        {title && <div className='font-bold text-base sm:text-2xl text-accent-1 flex'>{title}</div>}
+        {title && <CardTitle>{title}</CardTitle>}
         {renderCustomIcon ? (
           renderCustomIcon({ showContent, setShowContent })
         ) : (

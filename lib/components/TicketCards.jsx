@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Card, CardPrimaryText, CardSecondaryText, CardTitle } from 'lib/components/Card'
+import { Card, CardPrimaryText, CardSecondaryText, CardSecondaryTitle } from 'lib/components/Card'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 
 export const TicketCards = (props) => {
@@ -17,7 +17,7 @@ const TicketCard = () => {
 
   return (
     <Card className='mr-1 sm:mr-4'>
-      <CardTitle>Ticket symbol & name</CardTitle>
+      <CardSecondaryTitle>Ticket symbol & name</CardSecondaryTitle>
       <CardPrimaryText>{`$${poolChainValues.ticket.symbol}`}</CardPrimaryText>
       <CardSecondaryText className='text-center'>{poolChainValues.ticket.name}</CardSecondaryText>
     </Card>
@@ -28,7 +28,7 @@ const SponsorshipCard = () => {
 
   return (
     <Card className='ml-1 sm:ml-4'>
-      <CardTitle>Sponsorship symbol & name</CardTitle>
+      <CardSecondaryTitle>Sponsorship symbol & name</CardSecondaryTitle>
       <CardPrimaryText>{`$${poolChainValues.sponsorship.symbol}`}</CardPrimaryText>
       <CardSecondaryText className='text-center'>
         {poolChainValues.sponsorship.name}

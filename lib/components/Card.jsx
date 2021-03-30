@@ -21,6 +21,15 @@ export const Card = (props) => {
   )
 }
 
+export const CardDetailsList = (props) => (
+  <ul
+    className='xs:bg-primary text-inverse rounded-lg p-0 xs:px-4 sm:px-10 xs:py-8 flex flex-col text-xs xs:text-base sm:text-lg'
+    id={props.id}
+  >
+    {props.children}
+  </ul>
+)
+
 export const InnerCard = (props) => (
   <div
     className={classnames(
@@ -33,6 +42,16 @@ export const InnerCard = (props) => (
 )
 
 export const CardTitle = (props) => (
+  <div
+    className={classnames('font-bold text-base sm:text-2xl text-accent-1 flex', {
+      'mb-4': !props.noMargin
+    })}
+  >
+    {props.children}
+  </div>
+)
+
+export const CardSecondaryTitle = (props) => (
   <div className={classnames('text-sm sm:text-base text-accent-1 text-center', props.className)}>
     {props.children}
   </div>

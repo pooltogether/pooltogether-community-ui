@@ -6,7 +6,7 @@ import classnames from 'classnames'
 
 import { NETWORKS, CONTRACT_ADDRESSES, POOL_ALIASES, SUPPORTED_NETWORKS } from 'lib/constants'
 import { ButtonLink } from 'lib/components/ButtonLink'
-import { Card } from 'lib/components/Card'
+import { Card, CardTitle } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
@@ -86,16 +86,6 @@ const PoolsLists = () => {
   )
 }
 
-const CardTitle = (props) => (
-  <div
-    className={classnames('font-bold text-base sm:text-2xl text-accent-1 flex', {
-      'mb-4': !props.noMargin
-    })}
-  >
-    {props.children}
-  </div>
-)
-
 const UnsupportedNetworkCard = () => {
   const { chainId } = useNetwork()
 
@@ -105,10 +95,10 @@ const UnsupportedNetworkCard = () => {
 
   return (
     <div className='text-left mb-10 border-2 border-primary rounded-lg px-7 py-4 text-accent-1'>
-      <CardTitle noMargin>☹️ Index Unavailable for {networkName}</CardTitle>
+      <CardTitle noMargin>☹️ Full Index Unavailable for {networkName}</CardTitle>
       <p>
-        Unfortunately due to limitations of Matic we can't dynamically compile a list of created
-        prize pools.
+        Unfortunately due to limitations of {networkName} we can't dynamically compile a list of
+        created prize pools.
       </p>
     </div>
   )

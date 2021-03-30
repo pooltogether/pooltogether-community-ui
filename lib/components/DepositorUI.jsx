@@ -7,12 +7,14 @@ import { PrizeCard } from 'lib/components/PrizeCard'
 import { WithdrawUI } from 'lib/components/WithdrawUI'
 import { DepositorOddsCards } from 'lib/components/DepositorOddsCards'
 import { RelativeInternalLink } from 'lib/components/RelativeInternalLink'
+import { PoolDepositorStats } from 'lib/components/PoolStats'
 
 export const DepositorUI = (props) => {
   return (
     <>
       <PrizeCard className='mb-4' />
       <DepositorOddsCards />
+      <PoolDepositorStats />
       <Card>
         <Collapse title='Deposit to win' openOnMount>
           <DepositUI />

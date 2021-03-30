@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Card, CardPrimaryText, CardTitle } from 'lib/components/Card'
+import { Card, CardPrimaryText, CardSecondaryTitle } from 'lib/components/Card'
 import { useTimeLeftBeforePrize } from 'lib/hooks/useTimeLeftBeforePrize'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
@@ -20,7 +20,7 @@ const TimeUntilPrizeCard = () => {
 
   return (
     <Card className='mr-1 sm:mr-4'>
-      <CardTitle>Time to next prize</CardTitle>
+      <CardSecondaryTitle>Time to next prize</CardSecondaryTitle>
       <TimeDisplay days={days} hours={hours} minutes={minutes} seconds={seconds} />
     </Card>
   )
@@ -58,7 +58,7 @@ const TimeDisplay = (props) => {
 
 //   return (
 //     <Card className='mx-4'>
-//       <CardTitle>Unique Players</CardTitle>
+//       <CardSecondaryTitle>Unique Players</CardSecondaryTitle>
 //       <CardPrimaryText>{`$${poolChainValues.sponsorship.symbol}`}</CardPrimaryText>
 //     </Card>
 //   )
@@ -73,7 +73,7 @@ const TotalDeposits = () => {
 
   return (
     <Card className='ml-1 sm:ml-4'>
-      <CardTitle>Total deposits</CardTitle>
+      <CardSecondaryTitle>Total deposits</CardSecondaryTitle>
       <CardPrimaryText>{`${totalSupply} ${poolChainValues.token.symbol}`}</CardPrimaryText>
     </Card>
   )

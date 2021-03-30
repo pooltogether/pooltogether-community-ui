@@ -7,6 +7,7 @@ import { WalletContext } from 'lib/components/WalletContextProvider'
 import { WALLETS } from 'lib/constants'
 import { CloseBannerButton, NotificationBanner } from 'lib/components/NotificationBanners'
 import { NETWORK } from 'lib/utils/networks'
+import { ButtonLink } from 'lib/components/ButtonLink'
 
 export const ChangeWalletNetworkNotificationBanner = (props) => {
   const { walletConnected, walletMatchesNetwork, walletNetwork, view, chainId } = useNetwork()
@@ -24,6 +25,7 @@ export const ChangeWalletNetworkNotificationBanner = (props) => {
   )
 }
 
+// TODO: Blocked on a guide for network changing
 const ChangeWalletNetworkNotification = (props) => {
   const { chainId, walletNetwork, poolChainName } = props
 
@@ -44,7 +46,7 @@ const ChangeWalletNetworkNotification = (props) => {
         👋 Your wallet is currently set to <b>{walletChainName}</b>. Please connect to{' '}
         <b>{poolChainName}</b> to participate in this pool.
       </span>
-      {showConnectButton && (
+      {showConnectButton ? (
         <Button
           size='xs'
           color='primary'
@@ -54,6 +56,18 @@ const ChangeWalletNetworkNotification = (props) => {
         >
           Connect to {poolChainName}
         </Button>
+      ) : (
+        <ButtonLink
+          size='xs'
+          color='primary'
+          paddingClasses='py-1 px-4'
+          className='mt-2 mx-auto sm:mx-0 sm:mt-0 mx'
+          href='https://www.google.com'
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          More info
+        </ButtonLink>
       )}
     </div>
   )
