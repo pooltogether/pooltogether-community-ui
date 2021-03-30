@@ -1,10 +1,8 @@
 import React from 'react'
 import { ethers } from 'ethers'
 
-import { Card, CardDetailsList, CardPrimaryText, CardTitle } from 'lib/components/Card'
+import { Card, CardDetailsList, CardTitle } from 'lib/components/Card'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
-
-import CompSvg from 'assets/images/comp.svg'
 import { PoolNumber } from 'lib/components/PoolNumber'
 import { Tooltip } from 'lib/components/Tooltip'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
@@ -19,6 +17,10 @@ import { calculateOdds } from 'lib/utils/calculateOdds'
 import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { getCreditMaturationDaysAndLimitPercentage } from 'lib/utils/format'
 import { useTimeLeftBeforePrize } from 'lib/hooks/useTimeLeftBeforePrize'
+import { useIsOwnerPoolTogether } from 'lib/hooks/useIsOwnerPoolTogether'
+import { shorten } from 'lib/utils/shorten'
+
+import CompSvg from 'assets/images/comp.svg'
 
 const PoolStatsCard = (props) => {
   return (
@@ -197,18 +199,21 @@ const SponsorshipStat = (props) => {
   )
 }
 
-const PoolOwnerStat = (props) => (
-  <Stat
-    title='Pool owner'
-    value={
-      <BlockExplorerLink
-        copyable
-        shorten
-        address={props.poolChainValues.config.owner}
-      ></BlockExplorerLink>
-    }
-  />
-)
+const PoolOwnerStat = (props) => {
+  const ownerAddress = props.poolChainValues.config.owner
+  const ownerIsPoolTogether = useIsOwnerPoolTogether(ownerAddress)
+  return (
+    <Stat
+      title='Pool owner'
+      value={
+        <BlockExplorerLink copyable address={ownerAddress}>
+          {ownerIsPoolTogether ? 'PoolTogether' : shorten(ownerAddress)}
+          <LinkIcon />
+        </BlockExplorerLink>
+      }
+    />
+  )
+}
 
 const NumberOfWinnersStat = (props) => (
   <Stat title='Number of winners' value={props.poolChainValues.config.numberOfWinners} />
@@ -218,11 +223,10 @@ const DepositTokenStat = (props) => (
   <Stat
     title='Deposit token'
     value={
-      <BlockExplorerLink
-        copyable
-        shorten
-        address={props.poolChainValues.token.address}
-      ></BlockExplorerLink>
+      <BlockExplorerLink copyable shorten address={props.poolChainValues.token.address}>
+        {props.poolChainValues.token.name}
+        <LinkIcon />
+      </BlockExplorerLink>
     }
   />
 )

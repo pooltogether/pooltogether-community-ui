@@ -56,19 +56,22 @@ const ChangeWalletNetworkNotification = (props) => {
         >
           Connect to {poolChainName}
         </Button>
-      ) : (
-        <ButtonLink
-          size='xs'
-          color='primary'
-          paddingClasses='py-1 px-4'
-          className='mt-2 mx-auto sm:mx-0 sm:mt-0 mx'
-          href='https://www.google.com'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          More info
-        </ButtonLink>
-      )}
+      ) : null}
     </div>
   )
 }
+
+// TODO: Render this in the false case once we have a link to an article
+// (
+//   <ButtonLink
+//     size='xs'
+//     color='primary'
+//     paddingClasses='py-1 px-4'
+//     className='mt-2 mx-auto sm:mx-0 sm:mt-0 mx'
+//     href='https://www.google.com'
+//     target='_blank'
+//     rel='noopener noreferrer'
+//   >
+//     More info
+//   </ButtonLink>
+// )
