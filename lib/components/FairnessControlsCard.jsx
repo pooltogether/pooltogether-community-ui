@@ -1,12 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import PrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PrizePool'
 
 import { Button } from 'lib/components/Button'
 import { Card, CardSecondaryText } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { DAYS_STEP, MAX_EXIT_FEE_PERCENTAGE } from 'lib/constants'
-import { sendTx } from 'lib/utils/sendTx'
-import { WalletContext } from 'lib/components/WalletContextProvider'
 import { TxMessage } from 'lib/components/TxMessage'
 import { TextInputGroup, TextInputGroupType } from 'lib/components/TextInputGroup'
 import {
@@ -14,6 +12,7 @@ import {
   getCreditRateMantissaAndLimitMantissa
 } from 'lib/utils/format'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
+import { useSendTransaction } from 'lib/hooks/useSendTransaction'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
@@ -21,34 +20,17 @@ import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 
 const handleSetCreditPlan = async (
-  walletMatchesNetwork,
+  sendTx,
   txName,
   setTx,
-  provider,
   prizePoolAddress,
   controlledTokenAddress,
   creditRateMantissa,
   creditLimitMantissa
 ) => {
-  const params = [
-    controlledTokenAddress,
-    creditRateMantissa,
-    creditLimitMantissa,
-    {
-      gasLimit: 200000
-    }
-  ]
+  const params = [controlledTokenAddress, creditRateMantissa, creditLimitMantissa]
 
-  await sendTx(
-    walletMatchesNetwork,
-    setTx,
-    provider,
-    prizePoolAddress,
-    PrizePoolAbi,
-    'setCreditPlanOf',
-    params,
-    txName
-  )
+  await sendTx(setTx, prizePoolAddress, PrizePoolAbi, 'setCreditPlanOf', txName, params)
 }
 
 export const FairnessControlsCard = (props) => {
@@ -73,9 +55,8 @@ const FairnessControlsForm = (props) => {
   const { data: prizePoolContracts } = usePrizePoolContracts()
   const { data: poolChainValues, refetch: refetchPoolChainValues } = usePoolChainValues()
   const usersAddress = useUsersAddress()
+  const sendTx = useSendTransaction()
   const { walletMatchesNetwork } = useNetwork()
-  const walletContext = useContext(WalletContext)
-  const provider = walletContext.state.provider
   const [creditMaturationInDays, creditLimitPercentage] = getCreditMaturationDaysAndLimitPercentage(
     poolChainValues.config.ticketCreditRateMantissa,
     poolChainValues.config.ticketCreditLimitMantissa
@@ -101,10 +82,9 @@ const FairnessControlsForm = (props) => {
     )
 
     handleSetCreditPlan(
-      walletMatchesNetwork,
+      sendTx,
       txName,
       setTx,
-      provider,
       prizePoolContracts.prizePool.address,
       prizePoolContracts.ticket.address,
       ticketCreditRateMantissa,

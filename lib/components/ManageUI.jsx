@@ -89,8 +89,7 @@ const PoolAddress = () => {
 
   return (
     <>
-      <div className='text-accent-1 font-bold title text-lg sm:text-4xl'>Pool's Info</div>
-      <Card className='flex flex-col'>
+      <Card className='flex flex-col mb-10'>
         <CardSecondaryTitle className='mb-2'>Pool's contract address</CardSecondaryTitle>
         <h5 className='font-normal mx-auto flex'>
           <BlockExplorerLink

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
 import { ethers } from 'ethers'
 
@@ -6,9 +6,8 @@ import { BlockExplorerLink, LinkIcon } from 'lib/components/BlockExplorerLink'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 import { DepositForm } from 'lib/components/DepositForm'
 import { TxMessage } from 'lib/components/TxMessage'
-import { WalletContext } from 'lib/components/WalletContextProvider'
 import { parseNumString } from 'lib/utils/parseNumString'
-import { sendTx } from 'lib/utils/sendTx'
+import { useSendTransaction } from 'lib/hooks/useSendTransaction'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
@@ -16,9 +15,8 @@ import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { NETWORK } from 'lib/utils/networks'
 
 const handleDepositSubmit = async (
-  walletMatchesNetwork,
+  sendTx,
   setTx,
-  provider,
   usersAddress,
   contractAddress,
   ticketAddress,
@@ -28,22 +26,10 @@ const handleDepositSubmit = async (
 
   const params = [usersAddress, depositAmountBN, ticketAddress, referrer]
 
-  await sendTx(
-    walletMatchesNetwork,
-    setTx,
-    provider,
-    contractAddress,
-    CompoundPrizePoolAbi,
-    'depositTo',
-    params,
-    'Deposit'
-  )
+  await sendTx(setTx, contractAddress, CompoundPrizePoolAbi, 'depositTo', 'Deposit', params)
 }
 
 export const DepositUI = () => {
-  const walletContext = useContext(WalletContext)
-  const provider = walletContext.state.provider
-  const { walletMatchesNetwork } = useNetwork()
   const usersAddress = useUsersAddress()
   const {
     data: prizePoolContracts,
@@ -56,6 +42,7 @@ export const DepositUI = () => {
     sent: false,
     completed: false
   })
+  const sendTx = useSendTransaction()
 
   if (!poolChainValuesIsFetched || !prizePoolContractsIsFetched) return null
 
@@ -113,15 +100,16 @@ export const DepositUI = () => {
 
   return (
     <>
-      <div className='mb-4 sm:mb-8 text-sm sm:text-base text-accent-1'>{depositMessage}</div>
+      <div id='deposit' className='mb-4 sm:mb-8 text-sm sm:text-base text-accent-1'>
+        {depositMessage}
+      </div>
       <DepositForm
         inputError={inputError}
         handleSubmit={(e) => {
           e.preventDefault()
           handleDepositSubmit(
-            walletMatchesNetwork,
+            sendTx,
             setTx,
-            provider,
             usersAddress,
             prizePoolAddress,
             ticketAddress,
