@@ -15,7 +15,7 @@ export const TicketCards = (props) => {
   const showAddButton = [WALLETS.metamask].includes(walletName) && Boolean(usersAddress)
 
   return (
-    <div className='flex'>
+    <div className='flex flex-col xs:flex-row'>
       <TicketCard poolChainValues={poolChainValues} showAddButton={showAddButton} />
       <SponsorshipCard poolChainValues={poolChainValues} showAddButton={showAddButton} />
     </div>

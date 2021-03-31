@@ -1,46 +1,30 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/PeriodicPrizeStrategy'
 
+import { CONTRACT_ADDRESSES } from 'lib/constants'
 import { Button } from 'lib/components/Button'
 import { Card, CardSecondaryText } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
-import { CONTRACT_ADDRESSES } from 'lib/constants'
-import { useNetwork } from 'lib/hooks/useNetwork'
-import { sendTx } from 'lib/utils/sendTx'
-import { WalletContext } from 'lib/components/WalletContextProvider'
+import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 import { TxMessage } from 'lib/components/TxMessage'
 import { useUsersAddress } from 'lib/hooks/useUsersAddress'
-import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
+import { useNetwork } from 'lib/hooks/useNetwork'
+import { useSendTransaction } from 'lib/hooks/useSendTransaction'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 
 const handleSetRngService = async (
-  walletMatchesNetwork,
+  sendTx,
   txName,
   setTx,
-  provider,
   prizeStrategyAddress,
   rngServiceAddress
 ) => {
-  const params = [
-    rngServiceAddress,
-    {
-      gasLimit: 200000
-    }
-  ]
+  const params = [rngServiceAddress]
 
-  await sendTx(
-    walletMatchesNetwork,
-    setTx,
-    provider,
-    prizeStrategyAddress,
-    PrizeStrategyAbi,
-    'setRngService',
-    params,
-    txName
-  )
+  await sendTx(setTx, prizeStrategyAddress, PrizeStrategyAbi, 'setRngService', txName, params)
 }
 
 export const RngServiceControlCard = (props) => {
@@ -64,8 +48,7 @@ const RngServiceControlForm = (props) => {
   const { refetch: refetchPoolChainValues } = usePoolChainValues()
   const { chainId, walletMatchesNetwork } = useNetwork()
   const [tx, setTx] = useState({})
-  const walletContext = useContext(WalletContext)
-  const provider = walletContext.state.provider
+  const sendTx = useSendTransaction()
 
   const rngServicesList = Object.keys(CONTRACT_ADDRESSES[chainId].RNG_SERVICE)
   const currentRngService = rngServicesList.find(
@@ -100,10 +83,9 @@ const RngServiceControlForm = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     handleSetRngService(
-      walletMatchesNetwork,
+      sendTx,
       txName,
       setTx,
-      provider,
       prizePoolContracts.prizeStrategy.address,
       CONTRACT_ADDRESSES[chainId].RNG_SERVICE[newRngService]
     )

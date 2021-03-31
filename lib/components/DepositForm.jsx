@@ -6,7 +6,6 @@ import FeatherIcon from 'feather-icons-react'
 import { Button } from 'lib/components/Button'
 import { RightLabelButton, TextInputGroup } from 'lib/components/TextInputGroup'
 import { useUserChainValues } from 'lib/hooks/useUserChainValues'
-import { sendTx } from 'lib/utils/sendTx'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { InnerCard } from 'lib/components/Card'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
@@ -205,24 +204,8 @@ const UnlockDepositsButton = () => {
   )
 }
 
-const handleUnlockSubmit = async (
-  walletMatchesNetwork,
-  setTx,
-  provider,
-  contractAddress,
-  prizePoolAddress,
-  decimals
-) => {
+const handleUnlockSubmit = async (sendTx, setTx, contractAddress, prizePoolAddress, decimals) => {
   const params = [prizePoolAddress, ethers.utils.parseUnits('1000000000', decimals)]
 
-  await sendTx(
-    walletMatchesNetwork,
-    setTx,
-    provider,
-    contractAddress,
-    IERC20Abi,
-    'approve',
-    params,
-    'Unlock Deposits'
-  )
+  await sendTx(setTx, contractAddress, IERC20Abi, 'approve', 'Unlock Deposits', params)
 }

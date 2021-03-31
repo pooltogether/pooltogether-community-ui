@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import { addSeconds } from 'date-fns'
 import PrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PrizePool'
@@ -7,11 +7,11 @@ import { Button } from 'lib/components/Button'
 import { RightLabelButton, TextInputGroup } from 'lib/components/TextInputGroup'
 import { Gauge } from 'lib/components/Gauge'
 import { InnerCard } from 'lib/components/Card'
-import { WalletContext } from 'lib/components/WalletContextProvider'
 import { useDebounce } from 'lib/hooks/useDebounce'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+import { useSendTransaction } from 'lib/hooks/useSendTransaction'
 import { useUserChainValues } from 'lib/hooks/useUserChainValues'
 import { calculateOdds } from 'lib/utils/calculateOdds'
 import { fetchExitFee } from 'lib/utils/fetchExitFee'
@@ -19,16 +19,14 @@ import { getErc20InputProps } from 'lib/utils/getErc20InputProps'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
 import { poolToast } from 'lib/utils/poolToast'
 import { parseNumString } from 'lib/utils/parseNumString'
-import { sendTx } from 'lib/utils/sendTx'
 import { subtractDates } from 'lib/utils/subtractDates'
 
 import Warning from 'assets/images/warning.svg'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 
 const handleWithdrawInstantly = async (
-  walletMatchesNetwork,
+  sendTx,
   setTx,
-  provider,
   contractAddress,
   ticketAddress,
   usersAddress,
@@ -48,25 +46,16 @@ const handleWithdrawInstantly = async (
     maxExitFee
   ]
 
-  await sendTx(
-    walletMatchesNetwork,
-    setTx,
-    provider,
-    contractAddress,
-    PrizePoolAbi,
-    'withdrawInstantlyFrom',
-    params,
-    'Withdraw'
-  )
+  await sendTx(setTx, contractAddress, PrizePoolAbi, 'withdrawInstantlyFrom', 'Withdraw', params)
 }
 
 export const WithdrawForm = (props) => {
   const { setTx, withdrawAmount, setWithdrawAmount } = props
-  const walletContext = useContext(WalletContext)
   const { data: prizePoolContracts } = usePrizePoolContracts()
   const { data: poolChainValues } = usePoolChainValues()
   const { data: usersChainValues } = useUserChainValues()
   const usersAddress = useUsersAddress()
+  const sendTx = useSendTransaction()
   const { name: networkName, walletMatchesNetwork } = useNetwork()
 
   const [exitFees, setExitFees] = useState({
@@ -86,7 +75,6 @@ export const WithdrawForm = (props) => {
   const tokenSymbol = poolChainValues.token.symbol
   const prizePoolAddress = prizePoolContracts.prizePool.address
   const ticketAddress = prizePoolContracts.ticket.address
-  const provider = walletContext.state.provider
   const usersTicketBalance = usersChainValues.usersTicketBalance
   const usersTicketBalanceUnformatted = usersChainValues.usersTicketBalanceUnformatted
   const { earlyExitFee, timelockDurationSeconds } = exitFees
@@ -95,9 +83,8 @@ export const WithdrawForm = (props) => {
     e.preventDefault()
 
     handleWithdrawInstantly(
-      walletMatchesNetwork,
+      sendTx,
       setTx,
-      provider,
       prizePoolAddress,
       ticketAddress,
       usersAddress,

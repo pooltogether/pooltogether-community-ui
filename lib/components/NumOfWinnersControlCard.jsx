@@ -1,45 +1,29 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/MultipleWinners'
 
 import { Button } from 'lib/components/Button'
 import { Card, CardSecondaryText } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
-import { sendTx } from 'lib/utils/sendTx'
-import { WalletContext } from 'lib/components/WalletContextProvider'
 import { TxMessage } from 'lib/components/TxMessage'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
+import { useSendTransaction } from 'lib/hooks/useSendTransaction'
 import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 
 const handleSetNumberOfWinners = async (
-  walletMatchesNetwork,
+  sendTx,
   txName,
   setTx,
-  provider,
   prizeStrategyAddress,
   numOfWinners
 ) => {
-  const params = [
-    numOfWinners,
-    {
-      gasLimit: 200000
-    }
-  ]
+  const params = [numOfWinners]
 
-  await sendTx(
-    walletMatchesNetwork,
-    setTx,
-    provider,
-    prizeStrategyAddress,
-    PrizeStrategyAbi,
-    'setNumberOfWinners',
-    params,
-    txName
-  )
+  await sendTx(setTx, prizeStrategyAddress, PrizeStrategyAbi, 'setNumberOfWinners', txName, params)
 }
 
 export const NumOfWinnersControlCard = (props) => {
@@ -76,10 +60,9 @@ const NumOfWinnersForm = (props) => {
   const { data: poolChainValues, refetch: refetchPoolChainValues } = usePoolChainValues()
   const usersAddress = useUsersAddress()
   const { walletMatchesNetwork } = useNetwork()
-  const walletContext = useContext(WalletContext)
-  const provider = walletContext.state.provider
   const currentNumOfWinners = poolChainValues.config.numberOfWinners
   const [newNumOfWinners, setNewNumOfWinners] = useState(currentNumOfWinners)
+  const sendTx = useSendTransaction()
 
   // Listen for external updates
   useEffect(() => {
@@ -91,10 +74,9 @@ const NumOfWinnersForm = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     handleSetNumberOfWinners(
-      walletMatchesNetwork,
+      sendTx,
       txName,
       setTx,
-      provider,
       prizePoolContracts.prizeStrategy.address,
       newNumOfWinners
     )

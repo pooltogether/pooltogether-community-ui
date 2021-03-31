@@ -12,8 +12,6 @@ import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { useCoingeckoTokenData } from 'lib/hooks/useCoingeckoTokenData'
-import { getDemoPoolContractAddress } from 'lib/utils/getDemoPoolContractAddress'
-import { shorten } from 'lib/utils/shorten'
 import { useAllCreatedPrizePoolsWithTokens } from 'lib/hooks/useAllCreatedPrizePoolsWithTokens'
 import { useAllUserTokenBalances } from 'lib/hooks/useAllUserTokenBalances'
 import { getPrecision, numberWithCommas } from 'lib/utils/numberWithCommas'
@@ -25,23 +23,7 @@ import { BlockExplorerLink, LinkIcon } from 'lib/components/BlockExplorerLink'
 import { NETWORK, NETWORK_DATA } from 'lib/utils/networks'
 import { UnsupportedNetwork } from 'lib/components/UnsupportedNetwork'
 
-import BatSvg from 'assets/images/bat-new-transparent.png'
-import DaiSvg from 'assets/images/dai-new-transparent.png'
-import UsdcSvg from 'assets/images/usdc-new-transparent.png'
-import UsdtSvg from 'assets/images/usdt-new-transparent.png'
-import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
-import ZrxSvg from 'assets/images/zrx-new-transparent.png'
 import { useIsOwnerPoolTogether } from 'lib/hooks/useIsOwnerPoolTogether'
-
-const demoAssetTypes = {
-  dai: { label: 'DAI', logo: DaiSvg },
-  uni: { label: 'UNI Stake' },
-  usdc: { label: 'USDC', logo: UsdcSvg },
-  usdt: { label: 'USDT', logo: UsdtSvg }
-}
-const demoPools = {
-  rinkeby: { chainId: 4, assets: ['dai', 'usdc', 'usdt'] }
-}
 
 export const IndexContent = () => {
   const { chainId, name: networkName } = useNetwork()
@@ -79,7 +61,6 @@ const PoolsLists = () => {
       <UnsupportedNetworkCard />
       <UsersPoolsCard createdPrizePools={createdPrizePools} tokenBalances={tokenBalances} />
       <GovernancePoolsCard createdPrizePools={createdPrizePools} tokenBalances={tokenBalances} />
-      <DemoPoolsCard />
       <AllPoolsCard createdPrizePools={createdPrizePools} tokenBalances={tokenBalances} />
       <ReferencePoolCard />
       <BuilderCard />
@@ -155,72 +136,6 @@ const BuilderCard = () => {
         <ViewButton text='Start Building' href={'https://builder.pooltogether.com/'} />
       </div>
     </Card>
-  )
-}
-
-const DemoPoolsCard = (props) => {
-  const walletContext = useContext(WalletContext)
-  const walletNetwork = walletContext._onboard.getState().network
-
-  const demoNetworkName = findKey(demoPools, { chainId: walletNetwork })
-  const demoPool = find(demoPools, { chainId: walletNetwork })
-
-  let networkDemoPools = []
-
-  demoPool?.assets.forEach((assetType) => {
-    const address = getDemoPoolContractAddress(demoNetworkName, assetType)
-    if (address) {
-      networkDemoPools.push({
-        assetType,
-        address: getDemoPoolContractAddress(demoNetworkName, assetType)
-      })
-    }
-  })
-
-  if (networkDemoPools.length === 0) return null
-
-  return (
-    <Card>
-      <CardTitle>🧪 Demo Pools</CardTitle>
-      {networkDemoPools.map((demoPool, index) => (
-        <DemoPoolButton key={index} {...demoPool} networkName={demoNetworkName} />
-      ))}
-    </Card>
-  )
-}
-
-const DemoPoolButton = (props) => {
-  const { address, assetType, networkName } = props
-
-  return (
-    <Link
-      key={`${networkName}-${assetType}`}
-      href='/pools/[networkName]/[prizePoolAddress]/home'
-      as={`/pools/${networkName}/${address}/home`}
-    >
-      <a>
-        <div className='mb-4 last:mb-0 items-center py-2 px-4 inline-block bg-card hover:bg-card-selected trans border-2 border-highlight-3 hover:border-highlight-2 border-dashed rounded-lg '>
-          {demoAssetTypes[assetType]?.logo && (
-            <img
-              src={demoAssetTypes[assetType]?.logo}
-              className='inline-block w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 mr-2'
-            />
-          )}
-
-          <div className='flex flex-col'>
-            <span className='text-blue text-base leading-none mb-1'>
-              {upperFirst(networkName)} {demoAssetTypes[assetType]?.label} Pool
-            </span>
-            <span className='text-xxs sm:text-base inline-block leading-none relative text-accent-3'>
-              {shorten(address)}{' '}
-              <span className='uppercase text-accent-3 opacity-50'>TESTNET DEMO</span>
-            </span>
-          </div>
-
-          <span className='ml-auto text-green-1 font-bold text-sm sm:text-base'>View</span>
-        </div>
-      </a>
-    </Link>
   )
 }
 

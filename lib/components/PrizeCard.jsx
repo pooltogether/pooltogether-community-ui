@@ -6,42 +6,28 @@ import { ButtonRelativeLink } from 'lib/components/ButtonRelativeLink'
 import { Card, CardSecondaryTitle } from 'lib/components/Card'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { NewPrizeCountdown } from 'lib/components/NewPrizeCountdown'
+import { RelativeInternalLink } from 'lib/components/RelativeInternalLink'
 import { useCoingeckoTokenData } from 'lib/hooks/useCoingeckoTokenData'
 import { useAwardsList } from 'lib/hooks/useAwardsList'
-import { RelativeInternalLink } from 'lib/components/RelativeInternalLink'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 
 import Cactus from 'assets/images/cactus.svg'
-import { AwardPrizeTrigger } from 'lib/components/AwardPrizeCard'
-import { useTimeLeftBeforePrize } from 'lib/hooks/useTimeLeftBeforePrize'
-import { useUsersAddress } from 'lib/hooks/useUsersAddress'
-import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 
 export const PrizeCard = (props) => {
   const { showLinks, className } = props
 
-  const { data: poolChainValues, isFetched: poolChainValuesIsFetched } = usePoolChainValues()
-  const usersAddress = useUsersAddress()
-  const { timeRemaining } = useTimeLeftBeforePrize()
+  const { isFetched: poolChainValuesIsFetched } = usePoolChainValues()
 
   if (!poolChainValuesIsFetched) return null
-
-  const owner = poolChainValues.owner
-  const userIsOwner = owner?.toLowerCase() === usersAddress?.toLowerCase()
 
   return (
     <Card className={classnames('flex flex-col mx-auto', className)}>
       <PrizeSection />
       <NewPrizeCountdown center />
 
-      {!timeRemaining && (
-        <div className='mt-8'>
-          <AwardPrizeTrigger hideTimeRemaining />
-        </div>
-      )}
-
       {showLinks && (
         <div className='flex flex-col mt-4 sm:mt-8 w-full sm:w-2/4 mx-auto'>
-          <ButtonRelativeLink link='/home' size='3xl' color='primary' fullWidth>
+          <ButtonRelativeLink link='/home#deposit' size='3xl' color='primary' fullWidth>
             Deposit to win
           </ButtonRelativeLink>
           <div className='flex mt-4 flex-grow justify-between'>
@@ -53,7 +39,7 @@ export const PrizeCard = (props) => {
                 className={'ml-3 my-auto w-4 h-4 stroke-2 stroke-current'}
               />
             </RelativeInternalLink>
-            <RelativeInternalLink link='/home'>
+            <RelativeInternalLink link='/home#deposit'>
               Account balance{' '}
               <FeatherIcon
                 icon='arrow-right'
@@ -105,7 +91,7 @@ const PrizeSection = (props) => {
   return (
     <>
       <Prizes awards={awardsWithBalances} />
-      <CardSecondaryTitle className='text-center mb-8'>Current Prize</CardSecondaryTitle>
+      <CardSecondaryTitle className='text-center mb-4 xs:mb-8'>Current Prize</CardSecondaryTitle>
     </>
   )
 }

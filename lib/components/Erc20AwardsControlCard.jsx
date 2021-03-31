@@ -1,23 +1,22 @@
-import React, { useContext, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/PeriodicPrizeStrategy'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
 
-import { useExternalErc20Awards } from 'lib/hooks/useExternalErc20Awards'
-import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { SENTINEL_ADDRESS } from 'lib/constants'
 import { RowDataCell, Table } from 'lib/components/Table'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { Card, InnerCard } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { Button } from 'lib/components/Button'
-import { WalletContext } from 'lib/components/WalletContextProvider'
-import { sendTx } from 'lib/utils/sendTx'
-import { SENTINEL_ADDRESS } from 'lib/constants'
 import { TxMessage } from 'lib/components/TxMessage'
-import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 import { CopyableAddress } from 'lib/components/CopyableAddress'
+import { useSendTransaction } from 'lib/hooks/useSendTransaction'
+import { useExternalErc20Awards } from 'lib/hooks/useExternalErc20Awards'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
@@ -25,58 +24,41 @@ import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 import PrizeIllustration from 'assets/images/prize-illustration-transparent@2x.png'
 
 const handleAddExternalErc20 = async (
-  walletMatchesNetwork,
+  sendTx,
   txName,
   setTx,
-  provider,
   prizeStrategyAddress,
   externalErc20
 ) => {
-  const params = [
-    externalErc20,
-    {
-      gasLimit: 200000
-    }
-  ]
+  const params = [externalErc20]
 
   await sendTx(
-    walletMatchesNetwork,
     setTx,
-    provider,
     prizeStrategyAddress,
     PrizeStrategyAbi,
     'addExternalErc20Award',
-    params,
-    txName
+    txName,
+    params
   )
 }
 
 const handleRemoveExternalErc20 = async (
-  walletMatchesNetwork,
+  sendTx,
   txName,
   setTx,
-  provider,
   prizeStrategyAddress,
   externalErc20,
   prevExternalErc20
 ) => {
-  const params = [
-    externalErc20,
-    prevExternalErc20,
-    {
-      gasLimit: 200000
-    }
-  ]
+  const params = [externalErc20, prevExternalErc20]
 
   await sendTx(
-    walletMatchesNetwork,
     setTx,
-    provider,
     prizeStrategyAddress,
     PrizeStrategyAbi,
     'removeExternalErc20Award',
-    params,
-    txName
+    txName,
+    params
   )
 }
 
@@ -138,9 +120,8 @@ const AddErc20Form = () => {
   const usersAddress = useUsersAddress()
   const { data: prizePoolContracts } = usePrizePoolContracts()
   const { refetch: refetchPoolChainValues } = usePoolChainValues()
-  const walletContext = useContext(WalletContext)
-  const provider = walletContext.state.provider
   const { walletMatchesNetwork } = useNetwork()
+  const sendTx = useSendTransaction()
 
   const txName = 'Add External ERC20 Token'
 
@@ -154,10 +135,9 @@ const AddErc20Form = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     handleAddExternalErc20(
-      walletMatchesNetwork,
+      sendTx,
       txName,
       setTx,
-      provider,
       prizePoolContracts.prizeStrategy.address,
       externalErc20Address
     )
@@ -229,19 +209,16 @@ const RemoveAddressButton = (props) => {
   const { data: prizePoolContracts } = usePrizePoolContracts()
   const usersAddress = useUsersAddress()
   const { refetch: refetchPoolChainValues } = usePoolChainValues()
-  const walletContext = useContext(WalletContext)
-  const provider = walletContext.state.provider
-  const { walletMatchesNetwork } = useNetwork()
+  const sendTx = useSendTransaction()
 
   const txName = 'Remove External ERC20 Token'
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     await handleRemoveExternalErc20(
-      walletMatchesNetwork,
+      sendTx,
       txName,
       setTx,
-      provider,
       prizePoolContracts.prizeStrategy.address,
       address,
       prevAddress
