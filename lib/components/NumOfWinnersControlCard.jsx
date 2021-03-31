@@ -8,6 +8,7 @@ import { TxMessage } from 'lib/components/TxMessage'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
+import { useSendTransaction } from 'lib/hooks/useSendTransaction'
 import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { useNetwork } from 'lib/hooks/useNetwork'
@@ -61,6 +62,7 @@ const NumOfWinnersForm = (props) => {
   const { walletMatchesNetwork } = useNetwork()
   const currentNumOfWinners = poolChainValues.config.numberOfWinners
   const [newNumOfWinners, setNewNumOfWinners] = useState(currentNumOfWinners)
+  const sendTx = useSendTransaction()
 
   // Listen for external updates
   useEffect(() => {
@@ -72,6 +74,7 @@ const NumOfWinnersForm = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     handleSetNumberOfWinners(
+      sendTx,
       txName,
       setTx,
       prizePoolContracts.prizeStrategy.address,
