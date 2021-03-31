@@ -16,6 +16,7 @@ import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 
 import Warning from 'assets/images/warning.svg'
+import { useSendTransaction } from 'lib/hooks/useSendTransaction'
 
 export const DepositForm = (props) => {
   const { inputError, handleSubmit, vars, stateSetters } = props
@@ -144,6 +145,7 @@ const UnlockDepositsButton = () => {
     refetchUsersChainValues()
   }
 
+  const sendTx = useSendTransaction()
   useOnTransactionCompleted(tx, refetch)
 
   if (!underlyingTokenSupportsAllowance) return null
@@ -181,12 +183,11 @@ const UnlockDepositsButton = () => {
       onClick={(e) => {
         e.preventDefault()
 
-        if (tx.inWallet) return
+        if (tx.inWallet && !tx.cancelled) return
 
         handleUnlockSubmit(
-          walletMatchesNetwork,
+          sendTx,
           setTx,
-          provider,
           prizePoolContracts.token.address,
           prizePoolContracts.prizePool.address,
           poolChainValues.token.decimals
@@ -204,8 +205,14 @@ const UnlockDepositsButton = () => {
   )
 }
 
-const handleUnlockSubmit = async (sendTx, setTx, contractAddress, prizePoolAddress, decimals) => {
+const handleUnlockSubmit = async (
+  sendTx,
+  setTx,
+  tokenContractAddress,
+  prizePoolAddress,
+  decimals
+) => {
   const params = [prizePoolAddress, ethers.utils.parseUnits('1000000000', decimals)]
 
-  await sendTx(setTx, contractAddress, IERC20Abi, 'approve', 'Unlock Deposits', params)
+  await sendTx(setTx, tokenContractAddress, IERC20Abi, 'approve', 'Unlock Deposits', params)
 }

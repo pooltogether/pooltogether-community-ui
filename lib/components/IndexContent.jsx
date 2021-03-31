@@ -58,31 +58,12 @@ const PoolsLists = () => {
 
   return (
     <>
-      <UnsupportedNetworkCard />
       <UsersPoolsCard createdPrizePools={createdPrizePools} tokenBalances={tokenBalances} />
       <GovernancePoolsCard createdPrizePools={createdPrizePools} tokenBalances={tokenBalances} />
       <AllPoolsCard createdPrizePools={createdPrizePools} tokenBalances={tokenBalances} />
       <ReferencePoolCard />
       <BuilderCard />
     </>
-  )
-}
-
-const UnsupportedNetworkCard = () => {
-  const { chainId } = useNetwork()
-
-  if (![NETWORK.matic, NETWORK.mumbai].includes(chainId)) return null
-
-  const networkName = NETWORK_DATA[chainId].view
-
-  return (
-    <div className='text-left mb-10 border-2 border-primary rounded-lg px-7 py-4 text-accent-1'>
-      <CardTitle noMargin>☹️ Full Index Unavailable for {networkName}</CardTitle>
-      <p>
-        Unfortunately due to limitations of {networkName} we can't dynamically compile a list of
-        created prize pools.
-      </p>
-    </div>
   )
 }
 
@@ -262,6 +243,7 @@ const AllPoolsCard = (props) => {
   const { createdPrizePools, tokenBalances } = props
 
   const walletContext = useContext(WalletContext)
+  const { chainId, view: networkView } = useNetwork()
   const [hideNoDeposits, setHideNoDeposits] = useState(createdPrizePools.length > 10)
   const [showFirstTen, setShowFirstTen] = useState(createdPrizePools.length > 10)
 
@@ -293,17 +275,19 @@ const AllPoolsCard = (props) => {
 
   if (createdPrizePools?.length === 0) return null
 
+  let tip = 'These pools created permissionlessly by anyone using the PoolTogether Builder'
+  if ([NETWORK.matic, NETWORK.mumbai].includes(chainId)) {
+    tip = `Unfortunately due to limitations of ${networkView} we can't dynamically compile a list of
+    created prize pools.`
+  }
+
   return (
     <Card>
       <Collapse
         title={
           <>
             🤿 All Pools
-            <Tooltip
-              id='all-pools'
-              className='ml-2 my-auto'
-              tip='These pools created permissionlessly by anyone using the PoolTogether Builder'
-            />
+            <Tooltip id='all-pools' className='ml-2 my-auto' tip={tip} />
           </>
         }
         containerClassName='mb-4 xs:mb-8'
