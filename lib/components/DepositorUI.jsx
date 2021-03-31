@@ -14,12 +14,12 @@ export const DepositorUI = (props) => {
     <>
       <PrizeCard className='mb-4' />
       {/* <DepositorOddsCards /> */}
-      <PoolDepositorStats />
       <Card>
         <Collapse title='Deposit to win' openOnMount>
           <DepositUI />
         </Collapse>
       </Card>
+      <PoolDepositorStats />
       <Card>
         <Collapse title='Withdraw'>
           <WithdrawUI />
