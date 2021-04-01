@@ -1546,6 +1546,11 @@
     lodash.merge "^4.6.2"
     zen-observable-ts "^0.8.20"
 
+"@pooltogether/evm-chains-extended@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@pooltogether/evm-chains-extended/-/evm-chains-extended-0.3.0.tgz#0fe1242bbe48537e5bc1ac7e34ff9a4549efc2e9"
+  integrity sha512-TtvBEuvFKtyU5/LaqW8MAMT87mECmAkq16CxgawINAHh2gx7vDyPmUJKvW8LwPku4QlNK4gkm5qrMSpKdWIYTw==
+
 "@pooltogether/fixed-point@1.0.0-beta.2":
   version "1.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/@pooltogether/fixed-point/-/fixed-point-1.0.0-beta.2.tgz#d76a1e77f21833e9b680296d65526b0ffd7415d7"
