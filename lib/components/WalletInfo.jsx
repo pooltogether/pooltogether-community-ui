@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
 import classnames from 'classnames'
 import FeatherIcon from 'feather-icons-react'
+import { getChain } from 'evm-chains-extended'
 
-import { NETWORKS } from 'lib/constants'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import { chainIdToName, networkColorClassname } from 'lib/utils/networks'
+import { networkColorClassname } from 'lib/utils/networks'
 import { shorten } from 'lib/utils/shorten'
 
 export const WalletInfo = () => {
@@ -26,10 +26,12 @@ export const WalletInfo = () => {
   let networkNameJsx = null
 
   if (chainId && chainId !== 1) {
-    let networkName = chainIdToName(chainId)
-    const formattedNetworkName = NETWORKS[networkName]?.view
-    if (formattedNetworkName) {
-      networkName = NETWORKS[networkName]?.view
+    const { network, name } = getChain(chainId)
+    const formattedNetworkName = name
+    let networkName = network
+
+    if (name) {
+      networkName = formattedNetworkName
     }
 
     networkNameJsx = (

@@ -1,16 +1,16 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 
+import { ETHEREUM_NETWORKS, WALLETS } from 'lib/constants'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { useAddNetworkToMetamask } from 'lib/hooks/useAddNetworkToMetamask'
 import { Button } from 'lib/components/Button'
 import { WalletContext } from 'lib/components/WalletContextProvider'
-import { WALLETS } from 'lib/constants'
 import { NotificationBanner } from 'lib/components/NotificationBanners'
 import { NETWORK } from 'lib/utils/networks'
-import { ButtonLink } from 'lib/components/ButtonLink'
+// import { ButtonLink } from 'lib/components/ButtonLink'
 
 export const ChangeWalletNetworkNotificationBanner = (props) => {
-  const { walletConnected, walletMatchesNetwork, walletNetwork, view, chainId } = useNetwork()
+  const { walletConnected, walletMatchesNetwork, walletNetwork, name, chainId } = useNetwork()
 
   if (!walletConnected || walletMatchesNetwork) return null
 
@@ -19,7 +19,7 @@ export const ChangeWalletNetworkNotificationBanner = (props) => {
       <ChangeWalletNetworkNotification
         chainId={chainId}
         walletNetwork={walletNetwork}
-        poolChainName={view}
+        poolChainName={name}
       />
     </NotificationBanner>
   )
@@ -33,13 +33,20 @@ const ChangeWalletNetworkNotification = (props) => {
   const addNetwork = useAddNetworkToMetamask(chainId)
 
   const walletName = wallet?.state?.wallet?.name
-  const { view: walletChainName } = walletNetwork
+  const { name: walletChainName } = walletNetwork
   const walletIsMetaMask = [WALLETS.metamask].includes(walletName)
 
-  const ethereumNetworks = [1, 4, 42]
-  const isSupportedEthereumNetwork = ethereumNetworks.includes(chainId)
+  const isSupportedEthereumNetwork = ETHEREUM_NETWORKS.includes(chainId)
 
-  const connectableNetwork = [NETWORK.matic, NETWORK.mumbai, NETWORK.xdai, NETWORK.bsc]
+  const connectableNetwork = [
+    NETWORK.matic,
+    NETWORK.mumbai,
+    NETWORK.xdai,
+    NETWORK.bsc,
+    NETWORK['bsc-testnet'],
+    NETWORK.poa,
+    NETWORK['poa-sokol']
+  ]
   const isConnectableNetwork = connectableNetwork.includes(chainId)
 
   const showConnectButton = walletIsMetaMask && isConnectableNetwork
@@ -68,7 +75,7 @@ const ChangeWalletNetworkNotification = (props) => {
           color='primary'
           onClick={() => addNetwork()}
           paddingClasses='py-1 px-4'
-          className='mt-2 mx-auto sm:mx-0 sm:mt-0 mx'
+          className='mt-2 mx-auto sm:mr-0 sm:ml-2 sm:mt-0'
         >
           Connect to {poolChainName}
         </Button>

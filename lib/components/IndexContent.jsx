@@ -1,35 +1,33 @@
 import React, { useContext, useMemo, useState } from 'react'
-import Link from 'next/link'
-import { find, findKey, upperFirst } from 'lodash'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
 
 import { NETWORKS, CONTRACT_ADDRESSES, POOL_ALIASES, SUPPORTED_NETWORKS } from 'lib/constants'
+import { WalletContext } from 'lib/components/WalletContextProvider'
 import { ButtonLink } from 'lib/components/ButtonLink'
 import { Card, CardTitle } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
-import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
-import { TextInputGroup } from 'lib/components/TextInputGroup'
-import { WalletContext } from 'lib/components/WalletContextProvider'
-import { useCoingeckoTokenData } from 'lib/hooks/useCoingeckoTokenData'
-import { useAllCreatedPrizePoolsWithTokens } from 'lib/hooks/useAllCreatedPrizePoolsWithTokens'
-import { useAllUserTokenBalances } from 'lib/hooks/useAllUserTokenBalances'
-import { getPrecision, numberWithCommas } from 'lib/utils/numberWithCommas'
-import { useNetwork } from 'lib/hooks/useNetwork'
 import { CheckboxInputGroup } from 'lib/components/CheckboxInputGroup'
 import { Tooltip } from 'lib/components/Tooltip'
 import { PoolTogetherLoading } from 'lib/components/PoolTogetherLoading'
 import { BlockExplorerLink, LinkIcon } from 'lib/components/BlockExplorerLink'
-import { NETWORK, NETWORK_DATA } from 'lib/utils/networks'
+import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
 import { UnsupportedNetwork } from 'lib/components/UnsupportedNetwork'
-
+import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { useIsOwnerPoolTogether } from 'lib/hooks/useIsOwnerPoolTogether'
+import { useCoingeckoTokenData } from 'lib/hooks/useCoingeckoTokenData'
+import { useAllCreatedPrizePoolsWithTokens } from 'lib/hooks/useAllCreatedPrizePoolsWithTokens'
+import { useNetwork } from 'lib/hooks/useNetwork'
+import { useAllUserTokenBalances } from 'lib/hooks/useAllUserTokenBalances'
+import { getPrecision, numberWithCommas } from 'lib/utils/numberWithCommas'
+import { NETWORK } from 'lib/utils/networks'
 
 export const IndexContent = () => {
-  const { chainId, name: networkName } = useNetwork()
+  const { name: networkName, walletNetwork } = useNetwork()
+  const walletChainId = walletNetwork?.chainId
 
-  if (!SUPPORTED_NETWORKS.includes(chainId)) {
-    return <UnsupportedNetwork chainId={chainId} networkName={networkName} />
+  if (walletChainId && !SUPPORTED_NETWORKS.includes(walletChainId)) {
+    return <UnsupportedNetwork walletChainId={walletChainId} networkName={networkName} />
   }
 
   return <PoolsLists />
@@ -69,18 +67,16 @@ const PoolsLists = () => {
 }
 
 const UnsupportedNetworkCard = () => {
-  const { chainId } = useNetwork()
+  const { chainId, network } = useNetwork()
 
   if (![NETWORK.matic, NETWORK.mumbai].includes(chainId)) return null
 
-  const networkName = NETWORK_DATA[chainId].view
-
   return (
     <div className='text-left mb-10 border-2 border-primary rounded-lg px-7 py-4 text-accent-1'>
-      <CardTitle noMargin>☹️ Full Index Unavailable for {networkName}</CardTitle>
+      <CardTitle noMargin>☹️ Full Index Unavailable for {network}</CardTitle>
       <p>
-        Unfortunately due to limitations of {networkName} we can't dynamically compile a list of
-        created prize pools.
+        Unfortunately due to limitations of {network} we can't dynamically compile a list of created
+        prize pools.
       </p>
     </div>
   )

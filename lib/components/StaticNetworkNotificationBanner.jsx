@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
-import classnames from 'classnames'
+import React, { useContext } from 'react'
+import { getChain } from 'evm-chains-extended'
 
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { SUPPORTED_NETWORKS } from 'lib/constants'
-import { chainIdToName, NETWORK_DATA } from 'lib/utils/networks'
-import { CloseBannerButton, NotificationBanner } from 'lib/components/NotificationBanners'
+import { NotificationBanner } from 'lib/components/NotificationBanners'
 
 export const StaticNetworkNotificationBanner = () => {
   const walletContext = useContext(WalletContext)
@@ -27,10 +26,10 @@ export const StaticNetworkNotificationBanner = () => {
 const StaticNetworkNotification = (props) => {
   const { chainId } = props
 
-  const networkName = NETWORK_DATA?.[chainId]?.view || 'Unknown'
+  const networkName = getChain(chainId)?.network || 'Unknown'
 
   const supportedNames = SUPPORTED_NETWORKS.reduce((names, networkId) => {
-    const name = NETWORK_DATA?.[networkId]?.view
+    const name = getChain(networkId)?.network
     if (name && names.indexOf(name) == -1) {
       names.push(name)
     }

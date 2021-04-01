@@ -12,12 +12,6 @@ export const Nav = (props) => {
   const walletContext = useContext(WalletContext)
   const usersAddress = walletContext._onboard.getState().address
 
-  const handleConnect = (e) => {
-    e.preventDefault()
-
-    walletContext.handleConnectWallet()
-  }
-
   return (
     <>
       <div className='nav-and-footer-container'>
