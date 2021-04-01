@@ -7,8 +7,6 @@ import FeatherIcon from 'feather-icons-react'
 import { DEFAULT_INPUT_GROUP_CLASSES, DEFAULT_INPUT_LABEL_CLASSES } from 'lib/constants'
 
 export const DropdownInputGroup = (props) => {
-  // Dropdown Logic
-
   const { id, formatValue, label, placeHolder, values, current, onValueSet, disabled } = props
 
   const [currentValue, setCurrentValue] = useState(current ? current : '')

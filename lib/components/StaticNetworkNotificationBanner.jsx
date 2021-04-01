@@ -12,7 +12,7 @@ export const StaticNetworkNotificationBanner = () => {
   const chainId = _onboard.getState().appNetworkId
   const networkSupported = SUPPORTED_NETWORKS.includes(chainId)
 
-  if (!_onboard.getState().wallet.name || networkSupported) {
+  if (!chainId || !_onboard.getState().wallet.name || networkSupported) {
     return null
   }
 
@@ -26,15 +26,26 @@ export const StaticNetworkNotificationBanner = () => {
 const StaticNetworkNotification = (props) => {
   const { chainId } = props
 
-  const networkName = getChain(chainId)?.network || 'Unknown'
+  const networkName = getChain(chainId)?.network || 'unknown'
 
-  const supportedNames = SUPPORTED_NETWORKS.reduce((names, networkId) => {
-    const name = getChain(networkId)?.network
-    if (name && names.indexOf(name) == -1) {
-      names.push(name)
+  let supportedNames = []
+  SUPPORTED_NETWORKS.forEach((networkId) => {
+    if (networkId === 31337 || networkId === 31337) {
+      return
     }
-    return names
-  }, []).join(', ')
+
+    const { shortName, network } = getChain(networkId)
+    console.log(networkId)
+    console.log(shortName, network)
+    const name = `${shortName} ${network}`
+    console.log(name)
+
+    // if (name && names.indexOf(name) == -1) {
+    //   names.push(name)
+    // }
+    supportedNames.push(name)
+  })
+  supportedNames = supportedNames.join(', ')
 
   let networkWords = `${networkName} 🥵`
 

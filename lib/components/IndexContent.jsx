@@ -1,6 +1,7 @@
 import React, { useContext, useMemo, useState } from 'react'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
+import { getChain } from 'evm-chains-extended'
 
 import { CONTRACT_ADDRESSES, POOL_ALIASES, SUPPORTED_NETWORKS } from 'lib/constants'
 import { WalletContext } from 'lib/components/WalletContextProvider'
@@ -20,7 +21,23 @@ import { useAllCreatedPrizePoolsWithTokens } from 'lib/hooks/useAllCreatedPrizeP
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { useAllUserTokenBalances } from 'lib/hooks/useAllUserTokenBalances'
 import { getPrecision, numberWithCommas } from 'lib/utils/numberWithCommas'
-import { NETWORKS, NETWORK } from 'lib/utils/networks'
+import { NETWORK, getNetworkNameAliasByChainId } from 'lib/utils/networks'
+
+export const NETWORK_OPTIONS = {
+  'mainnet': 1,
+  'ropsten': 3,
+  'rinkeby': 4,
+  'kovan': 42,
+  'bsc': 56,
+  'poa-sokol': 77,
+  'bsc-testnet': 97,
+  'poa': 99,
+  'xdai': 100,
+  'matic': 137,
+  // 'polygon': 137,
+  'local': 31337,
+  'mumbai': 80001
+}
 
 export const IndexContent = () => {
   const { name: networkName, walletNetwork } = useNetwork()
@@ -69,16 +86,19 @@ const ReferencePoolCard = () => {
   const [network, setNetwork] = useState('mainnet')
   const [contractAddress, setContractAddress] = useState('')
 
-  const formatValue = (key) => NETWORK[key]
+  const formatValue = (key) => {
+    if (key === 'local') {
+      return 'local'
+    }
+
+    const chainId = NETWORK[key]
+
+    return getChain(chainId).name
+  }
 
   const onValueSet = (network) => {
     setNetwork(network)
   }
-
-  const networkOptions = Object.keys(NETWORK).reduce((accumulator, key) => {
-    accumulator[NETWORK[key]] = key
-    return accumulator
-  }, {})
 
   return (
     <Card>
@@ -89,7 +109,8 @@ const ReferencePoolCard = () => {
           formatValue={formatValue}
           onValueSet={onValueSet}
           current={network}
-          values={networkOptions}
+          values={NETWORK_OPTIONS}
+          // values={NETWORK_OPTIONS}
         />
 
         <TextInputGroup
@@ -438,9 +459,11 @@ export const OwnerAddress = (props) => {
 }
 
 const Actions = (props) => {
-  const { chainId, name: networkName } = useNetwork()
+  const { chainId } = useNetwork()
   const { prizePool, ticket } = props
   const { prizePool: prizePoolAddress } = prizePool
+
+  const networkName = getNetworkNameAliasByChainId(chainId)
 
   const [as, href] = useMemo(() => {
     const poolAlias = Object.values(POOL_ALIASES).find(
