@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import CountUp from 'react-countup'
 import { usePreviousValue } from 'beautiful-react-hooks'
 
-export function PoolCountUp (props) {
+export function PoolCountUp(props) {
   const { bold, children, duration, fontSansRegular } = props
 
   let end = props.end

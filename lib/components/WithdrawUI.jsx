@@ -1,25 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { useAtom } from 'jotai'
+import React, { useEffect, useState } from 'react'
 
 import { TxMessage } from 'lib/components/TxMessage'
 import { WithdrawForm } from 'lib/components/WithdrawForm'
-import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
-import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { WalletContext } from 'lib/components/WalletContextProvider'
-import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
-import { errorStateAtom } from 'lib/components/PoolData'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
+import { useUserChainValues } from 'lib/hooks/useUserChainValues'
 
-export const WithdrawUI = (props) => {
-  const walletContext = useContext(WalletContext)
-  const provider = walletContext.state.provider
-  const [usersAddress] = useAtom(usersAddressAtom)
-  const [poolAddresses] = useAtom(poolAddressesAtom)
-  const [prizePoolType] = useAtom(prizePoolTypeAtom)
-  const [errorState, setErrorState] = useAtom(errorStateAtom)
-  const [contractVersions] = useAtom(contractVersionsAtom)
-  const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
+export const WithdrawUI = () => {
+  const { refetch: refetchPoolChainValues } = usePoolChainValues()
+  const { refetch: refetchUsersChainValues } = useUserChainValues()
+  const usersAddress = useUsersAddress()
 
   const [withdrawAmount, setWithdrawAmount] = useState('')
   const [tx, setTx] = useState({
@@ -27,6 +19,13 @@ export const WithdrawUI = (props) => {
     sent: false,
     completed: false
   })
+
+  const refetch = () => {
+    refetchPoolChainValues()
+    refetchUsersChainValues()
+  }
+
+  useOnTransactionCompleted(tx, refetch)
 
   const txInFlight = tx.inWallet || tx.sent
 
@@ -40,21 +39,8 @@ export const WithdrawUI = (props) => {
     })
   }
 
-  useEffect(() => {
-    if (tx.completed) {
-      fetchPoolChainValues(
-        provider,
-        poolAddresses,
-        prizePoolType,
-        setPoolChainValues,
-        contractVersions.prizeStrategy.contract,
-        setErrorState
-      )
-    }
-  }, [tx.completed])
-
   if (!usersAddress) {
-    return <ConnectWalletButton />
+    return <ConnectWalletButton className='w-full mt-4' />
   }
 
   const withdrawText = `You can choose to withdraw the deposited fund at any time. By withdrawing the fund, you

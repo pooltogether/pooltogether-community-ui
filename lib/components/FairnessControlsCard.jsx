@@ -1,45 +1,36 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { useAtom } from 'jotai'
+import React, { useState } from 'react'
 import PrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PrizePool'
 
 import { Button } from 'lib/components/Button'
 import { Card, CardSecondaryText } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { DAYS_STEP, MAX_EXIT_FEE_PERCENTAGE } from 'lib/constants'
-import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import { sendTx } from 'lib/utils/sendTx'
-import { errorStateAtom } from 'lib/components/PoolData'
-import { WalletContext } from 'lib/components/WalletContextProvider'
 import { TxMessage } from 'lib/components/TxMessage'
 import { TextInputGroup, TextInputGroupType } from 'lib/components/TextInputGroup'
 import {
   getCreditMaturationDaysAndLimitPercentage,
   getCreditRateMantissaAndLimitMantissa
 } from 'lib/utils/format'
-import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
-import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
+import { useSendTransaction } from 'lib/hooks/useSendTransaction'
+import { useNetwork } from 'lib/hooks/useNetwork'
+import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 
 const handleSetCreditPlan = async (
+  sendTx,
   txName,
   setTx,
-  provider,
   prizePoolAddress,
   controlledTokenAddress,
   creditRateMantissa,
   creditLimitMantissa
 ) => {
-  const params = [
-    controlledTokenAddress,
-    creditRateMantissa,
-    creditLimitMantissa,
-    {
-      gasLimit: 200000
-    }
-  ]
+  const params = [controlledTokenAddress, creditRateMantissa, creditLimitMantissa]
 
-  await sendTx(setTx, provider, prizePoolAddress, PrizePoolAbi, 'setCreditPlanOf', params, txName)
+  await sendTx(setTx, prizePoolAddress, PrizePoolAbi, 'setCreditPlanOf', txName, params)
 }
 
 export const FairnessControlsCard = (props) => {
@@ -60,21 +51,16 @@ export const FairnessControlsCard = (props) => {
 }
 
 const FairnessControlsForm = (props) => {
-  const [poolAddresses, setPoolAddresses] = useAtom(poolAddressesAtom)
-  const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
-  const [prizePoolType] = useAtom(prizePoolTypeAtom)
-  const [contractVersions] = useAtom(contractVersionsAtom)
-  const [errorState, setErrorState] = useAtom(errorStateAtom)
-  const [usersAddress] = useAtom(usersAddressAtom)
   const [tx, setTx] = useState({})
-  const walletContext = useContext(WalletContext)
-  const provider = walletContext.state.provider
-
+  const { data: prizePoolContracts } = usePrizePoolContracts()
+  const { data: poolChainValues, refetch: refetchPoolChainValues } = usePoolChainValues()
+  const usersAddress = useUsersAddress()
+  const sendTx = useSendTransaction()
+  const { walletMatchesNetwork } = useNetwork()
   const [creditMaturationInDays, creditLimitPercentage] = getCreditMaturationDaysAndLimitPercentage(
-    poolChainValues.ticketCreditRateMantissa,
-    poolChainValues.ticketCreditLimitMantissa
+    poolChainValues.config.ticketCreditRateMantissa,
+    poolChainValues.config.ticketCreditLimitMantissa
   )
-
   const [ticketCreditMaturationInDays, setTicketCreditMaturationInDays] = useState(
     creditMaturationInDays
   )
@@ -96,29 +82,17 @@ const FairnessControlsForm = (props) => {
     )
 
     handleSetCreditPlan(
+      sendTx,
       txName,
       setTx,
-      provider,
-      poolAddresses.prizePool,
-      poolAddresses.ticket,
+      prizePoolContracts.prizePool.address,
+      prizePoolContracts.ticket.address,
       ticketCreditRateMantissa,
       ticketCreditLimitMantissa
     )
   }
 
-  // Update local data upon completion
-  useEffect(() => {
-    if (tx.completed && !tx.error) {
-      fetchPoolChainValues(
-        provider,
-        poolAddresses,
-        prizePoolType,
-        setPoolChainValues,
-        contractVersions.prizeStrategy.contract,
-        setErrorState
-      )
-    }
-  }, [tx.completed, tx.error])
+  useOnTransactionCompleted(tx, refetchPoolChainValues)
 
   const resetState = (e) => {
     e.preventDefault()
@@ -126,7 +100,7 @@ const FairnessControlsForm = (props) => {
   }
 
   if (!usersAddress) {
-    return <ConnectWalletButton />
+    return <ConnectWalletButton className='w-full mt-4' />
   }
 
   if (tx.inWallet || tx.sent || tx.completed) {
@@ -168,7 +142,7 @@ const FairnessControlsForm = (props) => {
           unit='days'
         />
       </div>
-      <Button color='secondary' size='lg'>
+      <Button color='secondary' size='lg' disabled={!walletMatchesNetwork}>
         Update fairness rules
       </Button>
     </form>

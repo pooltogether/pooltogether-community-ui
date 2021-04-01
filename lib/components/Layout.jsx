@@ -4,6 +4,7 @@ import { Slide, ToastContainer } from 'react-toastify'
 import { Footer } from 'lib/components/Footer'
 import { Meta } from 'lib/components/Meta'
 import { Nav } from 'lib/components/Nav'
+import { NotificationBanners } from 'lib/components/NotificationBanners'
 
 export const Layout = (props) => {
   const { children } = props
@@ -12,16 +13,17 @@ export const Layout = (props) => {
     <>
       <Meta />
 
+      <NotificationBanners />
+
       <div
         className='flex flex-col w-full'
         style={{
           minHeight: '100vh'
         }}
       >
-
         <div className='pool-container flex flex-grow relative z-30 h-full page fadeIn animated'>
           <div className='flex flex-col flex-grow'>
-            <div id='top' className='main-nav relative spinner-hidden z-20 pt-2'>
+            <div id='top' className='main-nav relative spinner-hidden z-10 pt-2'>
               <Nav />
             </div>
             <div

@@ -1,34 +1,32 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ethers } from 'ethers'
-import { useAtom } from 'jotai'
+import { addSeconds } from 'date-fns'
 import PrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PrizePool'
 
 import { Button } from 'lib/components/Button'
 import { RightLabelButton, TextInputGroup } from 'lib/components/TextInputGroup'
-import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
-import { numberWithCommas } from 'lib/utils/numberWithCommas'
-import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
+import { Gauge } from 'lib/components/Gauge'
 import { InnerCard } from 'lib/components/Card'
 import { useDebounce } from 'lib/hooks/useDebounce'
-import { fetchExitFee } from 'lib/utils/fetchExitFee'
-import { networkAtom } from 'lib/hooks/useNetwork'
-import { WalletContext } from 'lib/components/WalletContextProvider'
-import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
-import { sendTx } from 'lib/utils/sendTx'
-
-import Warning from 'assets/images/warning.svg'
-import { poolToast } from 'lib/utils/poolToast'
+import { useNetwork } from 'lib/hooks/useNetwork'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+import { useSendTransaction } from 'lib/hooks/useSendTransaction'
+import { useUserChainValues } from 'lib/hooks/useUserChainValues'
 import { calculateOdds } from 'lib/utils/calculateOdds'
-import Link from 'next/link'
-import { Gauge } from 'lib/components/Gauge'
-import { addSeconds } from 'date-fns'
+import { fetchExitFee } from 'lib/utils/fetchExitFee'
+import { getErc20InputProps } from 'lib/utils/getErc20InputProps'
+import { numberWithCommas } from 'lib/utils/numberWithCommas'
+import { poolToast } from 'lib/utils/poolToast'
+import { parseNumString } from 'lib/utils/parseNumString'
 import { subtractDates } from 'lib/utils/subtractDates'
 
+import Warning from 'assets/images/warning.svg'
+import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
+
 const handleWithdrawInstantly = async (
+  sendTx,
   setTx,
-  provider,
   contractAddress,
   ticketAddress,
   usersAddress,
@@ -48,26 +46,17 @@ const handleWithdrawInstantly = async (
     maxExitFee
   ]
 
-  await sendTx(
-    setTx,
-    provider,
-    contractAddress,
-    PrizePoolAbi,
-    'withdrawInstantlyFrom',
-    params,
-    'Withdraw'
-  )
+  await sendTx(setTx, contractAddress, PrizePoolAbi, 'withdrawInstantlyFrom', 'Withdraw', params)
 }
 
 export const WithdrawForm = (props) => {
   const { setTx, withdrawAmount, setWithdrawAmount } = props
-
-  const walletContext = useContext(WalletContext)
-  const [poolAddresses] = useAtom(poolAddressesAtom)
-  const [usersAddress] = useAtom(usersAddressAtom)
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const [usersChainValues] = useAtom(userChainValuesAtom)
-  const [network] = useAtom(networkAtom)
+  const { data: prizePoolContracts } = usePrizePoolContracts()
+  const { data: poolChainValues } = usePoolChainValues()
+  const { data: usersChainValues } = useUserChainValues()
+  const usersAddress = useUsersAddress()
+  const sendTx = useSendTransaction()
+  const { name: networkName, walletMatchesNetwork } = useNetwork()
 
   const [exitFees, setExitFees] = useState({
     earlyExitFee: null,
@@ -77,21 +66,26 @@ export const WithdrawForm = (props) => {
   })
   const debouncedWithdrawAmount = useDebounce(withdrawAmount, 300)
 
-  const { prizePool, ticket: ticketAddress } = poolAddresses
-  const provider = walletContext.state.provider
-  const { usersTicketBalance } = usersChainValues
+  const ticketDecimals = poolChainValues.ticket.decimals
+  const ticketTotalSupply = poolChainValues.ticket.totalSupplyUnformatted
+  const numberOfWinners = poolChainValues.config.numberOfWinners
+  const poolIsLocked = poolChainValues.prize.isRngRequested
+  const tokenDecimals = poolChainValues.token.decimals
+  const maxTimelockDuration = poolChainValues.config.maxTimelockDuration
+  const tokenSymbol = poolChainValues.token.symbol
+  const prizePoolAddress = prizePoolContracts.prizePool.address
+  const ticketAddress = prizePoolContracts.ticket.address
+  const usersTicketBalance = usersChainValues.usersTicketBalance
+  const usersTicketBalanceUnformatted = usersChainValues.usersTicketBalanceUnformatted
   const { earlyExitFee, timelockDurationSeconds } = exitFees
-  const { isRngRequested, tokenDecimals, maxTimelockDuration } = poolChainValues
-  const poolIsLocked = isRngRequested
-  const tokenSymbol = poolChainValues.tokenSymbol
 
   const handleSubmit = (e) => {
     e.preventDefault()
 
     handleWithdrawInstantly(
+      sendTx,
       setTx,
-      provider,
-      prizePool,
+      prizePoolAddress,
       ticketAddress,
       usersAddress,
       withdrawAmount,
@@ -104,11 +98,11 @@ export const WithdrawForm = (props) => {
     const t = async () => {
       if (debouncedWithdrawAmount) {
         const result = await fetchExitFee(
-          network.name,
+          networkName,
           usersAddress,
-          prizePool,
+          prizePoolAddress,
           ticketAddress,
-          ethers.utils.parseUnits(debouncedWithdrawAmount, tokenDecimals)
+          parseNumString(debouncedWithdrawAmount, tokenDecimals)
         )
         setExitFees(result)
       } else {
@@ -124,25 +118,23 @@ export const WithdrawForm = (props) => {
     t()
   }, [debouncedWithdrawAmount])
 
-  const withdrawAmountBN = withdrawAmount
-    ? ethers.utils.parseUnits(withdrawAmount, tokenDecimals)
-    : ethers.utils.bigNumberify(0)
-  const overBalance = withdrawAmountBN.gt(usersTicketBalance)
-  const ticketBal = (usersTicketBalance && tokenDecimals)
-    ? ethers.utils.formatUnits(usersTicketBalance, tokenDecimals)
-    : '0'
-  
-  const {
-    ticketDecimals,
-    ticketTotalSupply,
-    numberOfWinners,
-  } = poolChainValues
-  const totalSupplyLessWithdrawAmountBN = ticketTotalSupply ?
-    ticketTotalSupply.sub(withdrawAmountBN) :
-    ethers.utils.bigNumberify(0)
+  const withdrawAmountUnformatted = parseNumString(withdrawAmount, tokenDecimals)
+  const inputError = !withdrawAmountUnformatted
+
+  const overBalance = withdrawAmountUnformatted?.gt(usersTicketBalanceUnformatted)
+
+  const ticketBal = usersTicketBalance
+
+  let usersNewTicketBalance = ethers.constants.Zero
+  let totalSupplyLessWithdrawAmountBN = ethers.BigNumber.from(0)
+  if (withdrawAmountUnformatted) {
+    usersNewTicketBalance = usersTicketBalanceUnformatted.sub(withdrawAmountUnformatted)
+    totalSupplyLessWithdrawAmountBN =
+      ticketTotalSupply && ticketTotalSupply.sub(withdrawAmountUnformatted)
+  }
 
   const newOdds = calculateOdds(
-    usersTicketBalance.sub(withdrawAmountBN),
+    usersNewTicketBalance,
     totalSupplyLessWithdrawAmountBN,
     ticketDecimals,
     numberOfWinners
@@ -154,15 +146,17 @@ export const WithdrawForm = (props) => {
       <InnerCard className='text-center'>
         <img src={Warning} className='w-10 sm:w-14 mx-auto mb-4' />
         <div className='text-accent-1 mb-4'>
-          This Prize Pool is unable to withdraw at this time.
+          This Prize Pool is unable to accept withdrawals at this time.
         </div>
-        <div className='text-accent-1'>Withdraws can be made once the prize has been awarded.</div>
+        <div className='text-accent-1'>
+          Withdrawals can be made once the prize has been awarded.
+        </div>
         <div className='text-accent-1'>Check back soon!</div>
       </InnerCard>
     )
   }
 
-  if (!poolIsLocked && usersTicketBalance && usersTicketBalance.lte(0)) {
+  if (!poolIsLocked && usersTicketBalance && usersTicketBalanceUnformatted.isZero()) {
     return (
       <div className='text-orange-600'>
         You have no tickets to withdraw. Deposit some {tokenSymbol} first!
@@ -170,19 +164,23 @@ export const WithdrawForm = (props) => {
     )
   }
 
+  const { min, step } = getErc20InputProps(tokenDecimals)
+
   return (
     <>
       <form onSubmit={handleSubmit}>
         <TextInputGroup
           id='withdrawAmount'
           name='withdrawAmount'
-          label='Withdraw amounts'
+          label='Withdraw amount'
           required
-          isError={overBalance}
+          isError={inputError || overBalance}
           type='number'
-          pattern='\d+'
+          min={min}
+          step={step}
           unit={tokenSymbol}
           onChange={(e) => setWithdrawAmount(e.target.value)}
+          disabled={!walletMatchesNetwork}
           value={withdrawAmount}
           rightLabel={
             <RightLabelButton
@@ -191,23 +189,25 @@ export const WithdrawForm = (props) => {
                 setWithdrawAmount(ticketBal)
               }}
             >
-              {numberWithCommas(ticketBal, { precision: 4 })} {tokenSymbol}
+              {numberWithCommas(usersTicketBalanceUnformatted, { decimals: tokenDecimals })}{' '}
+              {tokenSymbol}
             </RightLabelButton>
           }
         />
 
         {overBalance && (
           <div className='text-xs sm:text-sm text-red-600 sm:ml-4'>
-            The maximum you can withdraw is{' '}
-            {displayAmountInEther(usersTicketBalance, {
-              precision: 2,
-              decimals: tokenDecimals
-            })}{' '}
-            {tokenSymbol}.
+            The maximum you can withdraw is {ticketBal} {tokenSymbol}.
           </div>
         )}
 
-        {withdrawAmount && !overBalance && (
+        {inputError && (
+          <div className='text-xs sm:text-sm text-red-600 sm:ml-4'>
+            The amount you entered is invalid.
+          </div>
+        )}
+
+        {withdrawAmount && !overBalance && !inputError && (
           <span className='text-xs sm:text-sm text-orange-500 ml-0 sm:ml-4'>
             {newOdds ? (
               <>
@@ -260,6 +260,8 @@ export const WithdrawForm = (props) => {
 }
 
 const WithdrawButtons = (props) => {
+  const { walletMatchesNetwork } = useNetwork()
+
   const { overBalance, resetForm, exitFees, tokenSymbol, tokenDecimals } = props
   const { earlyExitFee, fetched: exitFeesFetched } = exitFees
 
@@ -267,12 +269,12 @@ const WithdrawButtons = (props) => {
     return (
       <div className='my-5 flex flex-col sm:flex-row '>
         <Button
-          disabled={overBalance}
+          disabled={overBalance || !walletMatchesNetwork}
           color='secondary'
           size='lg'
           fullWidth
           type='button'
-          className='mr-4'
+          className='mr-4 border-none'
           onClick={(e) => {
             e.preventDefault()
             resetForm()
@@ -280,7 +282,13 @@ const WithdrawButtons = (props) => {
         >
           Cancel withdrawal
         </Button>
-        <Button color='text_warning' size='lg' fullWidth className='ml-0 sm:ml-4 mt-4 sm:mt-0'>
+        <Button
+          color='text_warning'
+          size='lg'
+          disabled={!walletMatchesNetwork}
+          fullWidth
+          className='ml-0 sm:ml-4 mt-4 sm:mt-0'
+        >
           {`Withdraw anyway and pay ${ethers.utils.formatUnits(earlyExitFee, tokenDecimals)}
            ${tokenSymbol}`}
         </Button>
@@ -290,7 +298,11 @@ const WithdrawButtons = (props) => {
 
   return (
     <div className='my-5 flex flex-col sm:flex-row '>
-      <Button disabled={overBalance || !exitFeesFetched} color='warning' size='lg'>
+      <Button
+        disabled={overBalance || !exitFeesFetched || !walletMatchesNetwork}
+        color='warning'
+        size='lg'
+      >
         Withdraw
       </Button>
     </div>
@@ -314,7 +326,7 @@ const WithdrawGauge = (props) => {
           label={<GaugeLabel time={time} timeType={timeType} />}
         />
       </div>
-      <div className='block sm:hidden text-orange-500 text-center mb-2'>
+      <div className='block sm:hidden text-orange-500 text-center my-2'>
         {time} more {timeType} to go until free withdrawal
       </div>
     </>
@@ -351,7 +363,7 @@ const GaugeLabel = (props) => {
     <div className='flex flex-col'>
       <div className='text-8xl text-highlight-1 leading-none mt-4 font-bold'>{time}</div>
       <div className='text-xl text-highlight-1 mb-6 font-bold'>{timeType} left</div>
-      <div className='text-highlight-1'>
+      <div className='text-highlight-1 mt-3'>
         {time} more {timeType} to go until free withdrawal
       </div>
     </div>

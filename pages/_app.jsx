@@ -8,10 +8,8 @@ import { QueryCache, ReactQueryCacheProvider } from 'react-query'
 import { Layout } from 'lib/components/Layout'
 import { ThemeContextProvider } from 'lib/components/contextProviders/ThemeContextProvider'
 import { ErrorBoundary, CustomErrorBoundary } from 'lib/components/CustomErrorBoundary'
-import { PoolData } from 'lib/components/PoolData'
 
 import 'react-toastify/dist/ReactToastify.css'
-import '@reach/tooltip/styles.css'
 import '@reach/menu-button/styles.css'
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 
@@ -40,13 +38,11 @@ if (process.env.NEXT_JS_SENTRY_DSN) {
   Sentry.init({
     dsn: process.env.NEXT_JS_SENTRY_DSN,
     release: process.env.NEXT_JS_RELEASE_VERSION,
-    integrations: [
-      new Integrations.BrowserTracing(),
-    ],
+    integrations: [new Integrations.BrowserTracing()]
   })
 }
 
-function MyApp ({ Component, pageProps }) {
+function MyApp({ Component, pageProps }) {
   return (
     <ErrorBoundary>
       <DynamicWalletContextProvider>
@@ -55,9 +51,7 @@ function MyApp ({ Component, pageProps }) {
             <JotaiProvider>
               <Layout>
                 <CustomErrorBoundary>
-                  <PoolData>
-                    <Component {...pageProps} />
-                  </PoolData>
+                  <Component {...pageProps} />
                 </CustomErrorBoundary>
               </Layout>
             </JotaiProvider>

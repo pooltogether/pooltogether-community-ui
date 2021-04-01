@@ -1,49 +1,35 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { useAtom } from 'jotai'
+import React, { useEffect, useState } from 'react'
 import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/MultipleWinners'
 
 import { Button } from 'lib/components/Button'
 import { Card, CardSecondaryText } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
-import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import { sendTx } from 'lib/utils/sendTx'
-import { WalletContext } from 'lib/components/WalletContextProvider'
 import { TxMessage } from 'lib/components/TxMessage'
-import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
-import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
-import { contractVersionsAtom } from 'lib/hooks/useDetermineContractVersions'
+import { useSendTransaction } from 'lib/hooks/useSendTransaction'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
+import { useNetwork } from 'lib/hooks/useNetwork'
+import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 
 const handleSetNumberOfWinners = async (
+  sendTx,
   txName,
   setTx,
-  provider,
   prizeStrategyAddress,
   numOfWinners
 ) => {
-  const params = [
-    numOfWinners,
-    {
-      gasLimit: 200000
-    }
-  ]
+  const params = [numOfWinners]
 
-  await sendTx(
-    setTx,
-    provider,
-    prizeStrategyAddress,
-    PrizeStrategyAbi,
-    'setNumberOfWinners',
-    params,
-    txName
-  )
+  await sendTx(setTx, prizeStrategyAddress, PrizeStrategyAbi, 'setNumberOfWinners', txName, params)
 }
 
 export const NumOfWinnersControlCard = (props) => {
-  const [contractVersions] = useAtom(contractVersionsAtom)
+  const { data: prizePoolContracts } = usePrizePoolContracts()
 
-  if (contractVersions.prizeStrategy.contract === 'SingleRandomWinner') {
+  if (prizePoolContracts.prizeStrategy.contract === 'SingleRandomWinner') {
     return (
       <Card>
         <Collapse title='Number of winners'>
@@ -69,16 +55,14 @@ export const NumOfWinnersControlCard = (props) => {
 }
 
 const NumOfWinnersForm = (props) => {
-  const [poolAddresses, setPoolAddresses] = useAtom(poolAddressesAtom)
-  const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
-  const [usersAddress] = useAtom(usersAddressAtom)
   const [tx, setTx] = useState({})
-  const walletContext = useContext(WalletContext)
-  const provider = walletContext.state.provider
-
-  const currentNumOfWinners = poolChainValues.numberOfWinners
-
+  const { data: prizePoolContracts } = usePrizePoolContracts()
+  const { data: poolChainValues, refetch: refetchPoolChainValues } = usePoolChainValues()
+  const usersAddress = useUsersAddress()
+  const { walletMatchesNetwork } = useNetwork()
+  const currentNumOfWinners = poolChainValues.config.numberOfWinners
   const [newNumOfWinners, setNewNumOfWinners] = useState(currentNumOfWinners)
+  const sendTx = useSendTransaction()
 
   // Listen for external updates
   useEffect(() => {
@@ -89,18 +73,16 @@ const NumOfWinnersForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    handleSetNumberOfWinners(txName, setTx, provider, poolAddresses.prizeStrategy, newNumOfWinners)
+    handleSetNumberOfWinners(
+      sendTx,
+      txName,
+      setTx,
+      prizePoolContracts.prizeStrategy.address,
+      newNumOfWinners
+    )
   }
 
-  // Update local data upon completion
-  useEffect(() => {
-    if (tx.completed && !tx.error) {
-      setPoolChainValues({
-        ...poolChainValues,
-        numberOfWinners: newNumOfWinners
-      })
-    }
-  }, [tx.completed, tx.error])
+  useOnTransactionCompleted(tx, refetchPoolChainValues)
 
   const resetState = (e) => {
     e.preventDefault()
@@ -110,7 +92,7 @@ const NumOfWinnersForm = (props) => {
   }
 
   if (!usersAddress) {
-    return <ConnectWalletButton />
+    return <ConnectWalletButton className='w-full mt-4' />
   }
 
   if (tx.inWallet || tx.sent || tx.completed) {
@@ -132,7 +114,7 @@ const NumOfWinnersForm = (props) => {
           value={newNumOfWinners}
         />
       </div>
-      <Button color='secondary' size='lg'>
+      <Button color='secondary' size='lg' disabled={!walletMatchesNetwork}>
         Update winners
       </Button>
     </form>

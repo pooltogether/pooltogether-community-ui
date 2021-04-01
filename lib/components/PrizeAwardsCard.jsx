@@ -11,7 +11,7 @@ import PrizeIllustration from 'assets/images/prize-illustration-transparent@2x.p
 export const PrizeAwardsCard = (props) => {
   return (
     <Card>
-      <Collapse title='Current prize details'>
+      <Collapse title='Current prize details' openOnMount>
         <PrizeAwardsTable />
       </Collapse>
     </Card>
@@ -51,11 +51,17 @@ const PrizeAwardsTable = () => {
     )
   }
 
-  return <Table headers={['Value', 'Token name', 'Ticker']} rows={rows} className='w-full' />
+  return (
+    <Table
+      headers={['Value', 'Token name', 'Ticker', 'Prize source']}
+      rows={rows}
+      className='w-full '
+    />
+  )
 }
 
 const Row = (props) => {
-  const { formattedBalance, symbol, name } = props.award
+  const { formattedBalance, symbol, name, source } = props.award
 
   if (formattedBalance == 0) return null
 
@@ -65,7 +71,8 @@ const Row = (props) => {
         {formattedBalance}
       </RowDataCell>
       <RowDataCell>{name}</RowDataCell>
-      <RowDataCell className='text-accent-1'>{symbol}</RowDataCell>
+      <RowDataCell>{symbol}</RowDataCell>
+      <RowDataCell className='text-accent-1'>{source}</RowDataCell>
     </tr>
   )
 }

@@ -1,48 +1,52 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import classnames from 'classnames'
 
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { SUPPORTED_NETWORKS } from 'lib/constants'
-import { chainIdToName } from 'lib/utils/chainIdToName'
+import { chainIdToName, NETWORK_DATA } from 'lib/utils/networks'
+import { CloseBannerButton, NotificationBanner } from 'lib/components/NotificationBanners'
 
-export const StaticNetworkNotificationBanner = ({}) => {
-  let chainId
+export const StaticNetworkNotificationBanner = () => {
   const walletContext = useContext(WalletContext)
   const { _onboard } = walletContext || {}
 
-  if (!_onboard.getState().wallet.name) {
+  const chainId = _onboard.getState().appNetworkId
+  const networkSupported = SUPPORTED_NETWORKS.includes(chainId)
+
+  if (!_onboard.getState().wallet.name || networkSupported) {
     return null
   }
 
-  chainId = _onboard.getState().appNetworkId
-  const networkName = chainIdToName(chainId)
+  return (
+    <NotificationBanner className='bg-red-1'>
+      <StaticNetworkNotification chainId={chainId} />
+    </NotificationBanner>
+  )
+}
+
+const StaticNetworkNotification = (props) => {
+  const { chainId } = props
+
+  const networkName = NETWORK_DATA?.[chainId]?.view || 'Unknown'
 
   const supportedNames = SUPPORTED_NETWORKS.reduce((names, networkId) => {
-    const name = chainIdToName(networkId)
+    const name = NETWORK_DATA?.[networkId]?.view
     if (name && names.indexOf(name) == -1) {
       names.push(name)
     }
     return names
   }, []).join(', ')
 
-  const networkSupported = SUPPORTED_NETWORKS.includes(chainId)
-
   let networkWords = `${networkName} 🥵`
-  if (networkSupported) {
-    networkWords = `${networkName} 👍`
-  }
 
   return (
-    <div
-      className={classnames('text-sm sm:text-base lg:text-lg sm:px-6 py-2 sm:py-3', {
-        'text-white bg-red-1': !networkSupported,
-        'text-default bg-purple-1': networkSupported
-      })}
-    >
-      <div className='text-center px-4'>
-        This works on {supportedNames}. Your wallet is currently set to{' '}
-        <span className='font-bold'>{networkWords}</span>
-      </div>
+    <div className='flex flex-col'>
+      <span>
+        This pool lives on <b>{supportedNames}</b>.
+      </span>
+      <span>
+        Your wallet is currently set to <b>{networkWords}.</b>
+      </span>
     </div>
   )
 }

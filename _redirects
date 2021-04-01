@@ -1,7 +1,9 @@
-/:poolAlias/home /[poolAlias]/home.html     200
-/:poolAlias/manage /[poolAlias]/manage.html 200
-/:poolAlias /[poolAlias].html               200
+/:poolAlias/home                              /[poolAlias]/home.html                              200
+/:poolAlias/manage                            /[poolAlias]/manage.html                            200
+/:poolAlias                                   /[poolAlias].html                                   200
 
-/pools/:networkName/:prizePoolAddress/home /pools/[networkName]/[prizePoolAddress]/home.html     200
-/pools/:networkName/:prizePoolAddress/manage /pools/[networkName]/[prizePoolAddress]/manage.html 200
-/pools/:networkName/:prizePoolAddress /pools/[networkName]/[prizePoolAddress].html               200
+/pools/:networkName/:prizePoolAddress/home    /pools/[networkName]/[prizePoolAddress]/home.html   200
+/pools/:networkName/:prizePoolAddress/manage  /pools/[networkName]/[prizePoolAddress]/manage.html 200
+/pools/:networkName/:prizePoolAddress/admin   /pools/[networkName]/[prizePoolAddress]/admin.html  200
+/pools/:networkName/:prizePoolAddress         /pools/[networkName]/[prizePoolAddress].html        200
+/pools/:networkName                           /pools/[networkName].html                           200

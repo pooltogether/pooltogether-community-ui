@@ -1,60 +1,46 @@
-import React from 'react'
-import { useAtom } from 'jotai'
+import React, { useMemo } from 'react'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
 
 import { ButtonRelativeLink } from 'lib/components/ButtonRelativeLink'
-import { Card, CardTitle } from 'lib/components/Card'
+import { Card, CardSecondaryTitle } from 'lib/components/Card'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { NewPrizeCountdown } from 'lib/components/NewPrizeCountdown'
-import { useCoingeckoTokenData } from 'lib/hooks/useCoingeckoTokenData'
-import { networkAtom } from 'lib/hooks/useNetwork'
-import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import { useAwardsList } from 'lib/hooks/useAwardsList'
 import { RelativeInternalLink } from 'lib/components/RelativeInternalLink'
-import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
+import { useCoingeckoTokenData } from 'lib/hooks/useCoingeckoTokenData'
+import { useAwardsList } from 'lib/hooks/useAwardsList'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 
 import Cactus from 'assets/images/cactus.svg'
 
 export const PrizeCard = (props) => {
   const { showLinks, className } = props
 
-  const [network] = useAtom(networkAtom)
-  const [poolAddresses] = useAtom(poolAddressesAtom)
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const [usersAddress] = useAtom(usersAddressAtom)
+  const { isFetched: poolChainValuesIsFetched } = usePoolChainValues()
 
-  const owner = poolChainValues.owner
-  const userIsOwner = owner?.toLowerCase() === usersAddress?.toLowerCase()
+  if (!poolChainValuesIsFetched) return null
 
   return (
     <Card className={classnames('flex flex-col mx-auto', className)}>
       <PrizeSection />
       <NewPrizeCountdown center />
+
       {showLinks && (
         <div className='flex flex-col mt-4 sm:mt-8 w-full sm:w-2/4 mx-auto'>
-          <ButtonRelativeLink link='/home' size='3xl' color='primary' fullWidth>
+          <ButtonRelativeLink link='/home#deposit' size='3xl' color='primary' fullWidth>
             Deposit to win
           </ButtonRelativeLink>
-          <div
-            className={classnames('flex mt-4 flex-grow', {
-              'justify-between': userIsOwner,
-              'justify-center': !userIsOwner
-            })}
-          >
-            {userIsOwner && (
-              <RelativeInternalLink link='/manage'>
-                Manage pool{' '}
-                <FeatherIcon
-                  icon='settings'
-                  strokeWidth='0.25rem'
-                  className={'ml-3 my-auto w-4 h-4 stroke-2 stroke-current'}
-                />
-              </RelativeInternalLink>
-            )}
-            <RelativeInternalLink link='/home'>
-              My Account{' '}
+          <div className='flex mt-4 flex-grow justify-between'>
+            <RelativeInternalLink link='/manage'>
+              Manage pool{' '}
+              <FeatherIcon
+                icon='settings'
+                strokeWidth='0.25rem'
+                className={'ml-3 my-auto w-4 h-4 stroke-2 stroke-current'}
+              />
+            </RelativeInternalLink>
+            <RelativeInternalLink link='/home#deposit'>
+              Account balance{' '}
               <FeatherIcon
                 icon='arrow-right'
                 strokeWidth='0.25rem'
@@ -71,6 +57,10 @@ export const PrizeCard = (props) => {
 const PrizeSection = (props) => {
   const { awards, loading } = useAwardsList()
 
+  const awardsWithBalances = useMemo(() => awards.filter((token) => !token.balance.isZero()), [
+    awards
+  ])
+
   if (loading) {
     return (
       <div className={'p-10'}>
@@ -79,16 +69,16 @@ const PrizeSection = (props) => {
     )
   }
 
-  if (awards.length === 0) {
+  if (awardsWithBalances.length === 0) {
     return (
       <>
-        <CardTitle className='text-center mb-2 font-bold'>
+        <CardSecondaryTitle className='text-center mb-2 font-bold'>
           No prize data available at the moment
-        </CardTitle>
-        <CardTitle className='text-center'>
+        </CardSecondaryTitle>
+        <CardSecondaryTitle className='text-center'>
           We're growing new prizes worth winning for you.
-        </CardTitle>
-        <CardTitle className='text-center mb-8'>Check back on us soon!</CardTitle>
+        </CardSecondaryTitle>
+        <CardSecondaryTitle className='text-center mb-8'>Check back on us soon!</CardSecondaryTitle>
         <img
           alt='image of a cactus'
           src={Cactus}
@@ -100,23 +90,22 @@ const PrizeSection = (props) => {
 
   return (
     <>
-      <Prizes />
-      <CardTitle className='text-center mb-8'>Current Prize</CardTitle>
+      <Prizes awards={awardsWithBalances} />
+      <CardSecondaryTitle className='text-center mb-4 xs:mb-8'>Current Prize</CardSecondaryTitle>
     </>
   )
 }
 
 const Prizes = (props) => {
-  const { awards, loading } = useAwardsList()
-  const awardsWithBalances = awards.filter((token) => !token.balance.isZero())
+  const { awards } = props
 
-  if (awardsWithBalances.length === 1) {
+  if (awards.length === 1) {
     return <SinglePrizeItem token={awards[0]} />
   }
 
   return (
     <ul className='flex flex-col max-w-xs mx-auto' style={{ minWidth: '190px' }}>
-      {awardsWithBalances.map((token, index) => {
+      {awards.map((token, index) => {
         return <PrizeListItem small={awards.length > 6} key={index} token={token} index={index} />
       })}
     </ul>

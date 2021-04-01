@@ -1,95 +1,90 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { ethers } from 'ethers'
-import { atom, useAtom } from 'jotai'
+import React from 'react'
 import { useRouter } from 'next/router'
 
-import { LoadingDots } from 'lib/components/LoadingDots'
-import { usePoolAddresses } from 'lib/hooks/usePoolAddresses'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
-import { useUserChainValues } from 'lib/hooks/useUserChainValues'
 import { poolToast } from 'lib/utils/poolToast'
-import { useExternalErc20Awards } from 'lib/hooks/useExternalErc20Awards'
 import { useNetwork } from 'lib/hooks/useNetwork'
-import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
+import { SUPPORTED_NETWORKS } from 'lib/constants'
+import { PoolTogetherLoading } from 'lib/components/PoolTogetherLoading'
+import { useExternalErc20Awards } from 'lib/hooks/useExternalErc20Awards'
 import { useExternalErc721Awards } from 'lib/hooks/useExternalErc721Awards'
-import { useDetermineContractVersions } from 'lib/hooks/useDetermineContractVersions'
+import { useUserChainValues } from 'lib/hooks/useUserChainValues'
+import { IncompatibleContractWarning } from 'lib/components/IncompatibleContractWarning'
+import { UnsupportedNetwork } from 'lib/components/UnsupportedNetwork'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+import { usePrizePooladdress } from 'lib/hooks/usePrizePoolAddress'
+import { isValidAddress } from 'lib/utils/isValidAddress'
+import { chainIdToName, chainIdToView } from 'lib/utils/networks'
+import { IndexContent } from 'lib/components/IndexContent'
 
 // http://localhost:3000/pools/rinkeby/0xd1E58Db0d67DB3f28fFa412Db58aCeafA0fEF8fA#admin
 
 export const getDataFetchingErrorMessage = (address, type, message) =>
   `Error fetching ${type} for prize pool with address: ${address}: ${message}. (maybe wrong Ethereum network or your IP is being rate-limited?)`
 
-const renderErrorMessage = (errorMsg) => {
-  console.error(errorMsg)
-  poolToast.error(errorMsg)
-}
-
-// Jotai Atoms
-export const errorStateAtom = atom({})
-
 /**
  * Wraps app and populates Jotai pool data stores if applicable
  */
 export const PoolData = (props) => {
-  const router = useRouter()
-  const { poolAlias, prizePoolAddress } = router.query
+  const { chainId } = useNetwork()
 
-  const [errorState] = useAtom(errorStateAtom)
+  const usersAddress = useUsersAddress()
 
-  // If there's no address, we don't need to check it or fetch data
-  if (!poolAlias && !prizePoolAddress) {
-    return props.children
+  const prizePoolAddress = usePrizePooladdress()
+  const {
+    isFetched: prizePoolContractsIsFetched,
+    data: prizePoolContracts
+  } = usePrizePoolContracts()
+  const { isFetched: poolChainValuesIsFetched } = usePoolChainValues()
+  const { isFetched: usersChainValuesIsFetched } = useUserChainValues()
+  const { isFetched: externalErc20AwardsIsFetched } = useExternalErc20Awards()
+  const { isFetched: externalErc721AwardsIsFetched } = useExternalErc721Awards()
+
+  if (!SUPPORTED_NETWORKS.includes(chainId)) {
+    return <UnsupportedNetwork chainId={chainId} />
   }
 
-  if (prizePoolAddress) {
-    try {
-      ethers.utils.getAddress(String(prizePoolAddress))
-    } catch (e) {
-      poolToast.error(`Incorrect pool address for path: ${window.location.pathname}`)
-      throw new Error(`Incorrectly formatted Ethereum address for GET path entered`)
-    }
+  if (
+    prizePoolAddress !== undefined &&
+    (!isValidAddress(prizePoolAddress) || prizePoolContracts?.invalidPrizePoolAddress)
+  ) {
+    return <InvalidAddress invalidAddress={prizePoolAddress} chainId={chainId} />
   }
 
-  // Error Catching
-  if (errorState.error) {
-    if (errorState.errorMessage) {
-      renderErrorMessage(errorState.errorMessage)
-    }
+  const loading =
+    !poolChainValuesIsFetched ||
+    !prizePoolContractsIsFetched ||
+    !externalErc20AwardsIsFetched ||
+    !externalErc721AwardsIsFetched ||
+    (usersAddress && !usersChainValuesIsFetched)
+
+  if (loading) {
+    return <PoolTogetherLoading />
   }
 
   return (
-    <PoolDataInitialization>
-      {errorState.view}
+    <>
+      <IncompatibleContractWarning />
       {props.children}
-    </PoolDataInitialization>
+    </>
   )
 }
 
-/**
- * Main wrapper for the data fetching
- */
-const PoolDataInitialization = (props) => {
-  useDetermineContractVersions()
-  useNetwork()
-  useUsersAddress()
-  usePoolAddresses()
-  const [poolChainValues] = usePoolChainValues()
-  useUserChainValues()
-  useExternalErc20Awards()
-  useExternalErc721Awards()
-
-  const [errorState] = useAtom(errorStateAtom)
-
-  if (poolChainValues.loading) {
-    return (
-      <div className='text-center text-xl'>
-        {errorState.view}
-
-        <LoadingDots />
-        <h2>Loading ...</h2>
+const InvalidAddress = (props) => {
+  const { invalidAddress, chainId } = props
+  const networkView = chainIdToView(chainId)
+  return (
+    <>
+      <div className='border-2 border-primary px-7 py-4 rounded-xl mb-10 text-accent-1'>
+        <h1>⚠️ Invalid address</h1>
+        <p>
+          <b>{invalidAddress}</b> is not a valid prize pool address on <b>{networkView}</b>.
+        </p>
+        <p>Possibly wrong network?</p>
       </div>
-    )
-  }
-
-  return props.children
+      <h2 className='mb-4 text-accent-1'>{networkView} Prize Pools</h2>
+      <IndexContent />
+    </>
+  )
 }

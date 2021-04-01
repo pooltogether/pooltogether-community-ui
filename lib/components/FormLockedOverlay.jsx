@@ -46,5 +46,5 @@ export const FormLockedOverlay = (props) => {
 FormLockedOverlay.defaultProps = {
   flexColJustifyClass: 'justify-center',
   topMarginClass: 'sm:-mt-4',
-  zLayerClass: 'z-20'
+  zLayerClass: 'z-10'
 }

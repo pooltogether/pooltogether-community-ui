@@ -1,36 +1,40 @@
 import React, { useState } from 'react'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
+import { CardTitle } from 'lib/components/Card'
 
 export const Collapse = (props) => {
-  const { title, children, className, openOnMount } = props
+  const {
+    title,
+    children,
+    openOnMount,
+    renderCustomIcon,
+    headerClassName,
+    headerMarginClassName,
+    containerClassName
+  } = props
 
   const [showContent, setShowContent] = useState(openOnMount)
 
   return (
     <>
       <div
-        className={classnames('flex cursor-pointer', className, {
-          'mb-4 sm:mb-8': showContent,
+        onClick={() => setShowContent(!showContent)}
+        className={classnames('cursor-pointer flex', headerClassName, headerMarginClassName, {
+          'mb-4': showContent && !headerMarginClassName,
           'justify-between': title,
           'justify-end': title
         })}
-        onClick={() => setShowContent(!showContent)}
       >
-        {title && <div className='font-bold text-base sm:text-2xl text-accent-1'>{title}</div>}
-        <FeatherIcon
-          icon='chevron-down'
-          strokeWidth='0.25rem'
-          className={classnames(
-            'ml-3 sm:ml-4 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current text-accent-1',
-            {
-              'rotate-180': showContent
-            }
-          )}
-        />
+        {title && <CardTitle noMargin>{title}</CardTitle>}
+        {renderCustomIcon ? (
+          renderCustomIcon({ showContent, setShowContent })
+        ) : (
+          <Chevron rotate={showContent} onClick={() => setShowContent(!showContent)} />
+        )}
       </div>
       <div
-        className={classnames({
+        className={classnames(containerClassName, {
           hidden: !showContent
         })}
       >
@@ -43,3 +47,17 @@ export const Collapse = (props) => {
 Collapse.defaultProps = {
   openOnMount: false
 }
+
+export const Chevron = (props) => (
+  <FeatherIcon
+    icon='chevron-down'
+    strokeWidth='0.25rem'
+    className={classnames(
+      'ml-3 sm:ml-4 w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current text-accent-1 cursor-pointer trans',
+      {
+        'rotate-180': props.rotate
+      }
+    )}
+    onClick={props.onClick}
+  />
+)

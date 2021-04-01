@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
-import { useAtom } from 'jotai'
+import React from 'react'
 
-import { Card, CardPrimaryText, CardTitle } from 'lib/components/Card'
-import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
-import { useTimeLeft } from 'lib/hooks/useTimeLeft'
+import { Card, CardPrimaryText, CardSecondaryTitle } from 'lib/components/Card'
+import { useTimeLeftBeforePrize } from 'lib/hooks/useTimeLeftBeforePrize'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { numberWithCommas } from 'lib/utils/numberWithCommas'
 
 export const PrizeDetailsCards = (props) => {
   return (
@@ -17,11 +16,11 @@ export const PrizeDetailsCards = (props) => {
 }
 
 const TimeUntilPrizeCard = () => {
-  const { days, hours, minutes, seconds } = useTimeLeft()
+  const { days, hours, minutes, seconds } = useTimeLeftBeforePrize()
 
   return (
     <Card className='mr-1 sm:mr-4'>
-      <CardTitle>Time to next prize</CardTitle>
+      <CardSecondaryTitle>Time to next prize</CardSecondaryTitle>
       <TimeDisplay days={days} hours={hours} minutes={minutes} seconds={seconds} />
     </Card>
   )
@@ -54,25 +53,28 @@ const TimeDisplay = (props) => {
   )
 }
 
-const PlayersCard = () => {
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
+// const PlayersCard = () => {
+// const { data: poolChainValues } = usePoolChainValues()
 
-  return (
-    <Card className='mx-4'>
-      <CardTitle>Unique Players</CardTitle>
-      <CardPrimaryText>{`$${poolChainValues.sponsorshipSymbol}`}</CardPrimaryText>
-    </Card>
-  )
-}
+//   return (
+//     <Card className='mx-4'>
+//       <CardSecondaryTitle>Unique Players</CardSecondaryTitle>
+//       <CardPrimaryText>{`$${poolChainValues.sponsorship.symbol}`}</CardPrimaryText>
+//     </Card>
+//   )
+// }
 
 const TotalDeposits = () => {
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const total = displayAmountInEther(poolChainValues.poolTotalSupply, poolChainValues.tokenDecimals)
+  const { data: poolChainValues } = usePoolChainValues()
+
+  const { decimals } = poolChainValues.token
+  const totalSupplyUnformatted = poolChainValues.ticket.totalSupplyUnformatted
+  const totalSupply = numberWithCommas(totalSupplyUnformatted, { decimals })
 
   return (
     <Card className='ml-1 sm:ml-4'>
-      <CardTitle>Total deposits</CardTitle>
-      <CardPrimaryText>{`${total} ${poolChainValues.tokenSymbol}`}</CardPrimaryText>
+      <CardSecondaryTitle>Total deposits</CardSecondaryTitle>
+      <CardPrimaryText>{`${totalSupply} ${poolChainValues.token.symbol}`}</CardPrimaryText>
     </Card>
   )
 }

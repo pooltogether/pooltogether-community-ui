@@ -20,14 +20,14 @@ export const CopyableAddress = (props) => {
           {address}
           <FeatherIcon
             icon='copy'
-            className='ml-2 sm:ml-4 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current'
+            className='ml-2 sm:ml-4 w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current'
           />
         </span>
         <span className='flex sm:hidden'>
           {shorten(address)}
           <FeatherIcon
             icon='copy'
-            className='ml-2 sm:ml-4 my-auto w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current'
+            className='ml-2 sm:ml-4 w-3 h-3 sm:w-4 sm:h-4 my-auto stroke-current'
           />
         </span>
       </div>

@@ -18,7 +18,7 @@ const COLOR_CLASSES = {
     backgroundClasses:
       'bg-green-400 bg-opacity-0 hover:bg-opacity-15 focus:bg-opacity-15 active:bg-opacity-15',
     borderClasses: 'border border-transparent',
-    textColorClasses: 'text-highlight-2 underline hover:no-underline active:no-underline'
+    textColorClasses: 'text-highlight-2'
   },
   danger: {
     backgroundClasses: 'bg-transparent',
@@ -38,7 +38,7 @@ const COLOR_CLASSES = {
     backgroundClasses:
       'bg-orange-500 bg-opacity-0 hover:bg-opacity-15 focus:bg-opacity-15 active:bg-opacity-15',
     borderClasses: 'border border-transparent',
-    textColorClasses: 'text-orange-500 underline hover:no-underline active:no-underline'
+    textColorClasses: 'text-orange-500'
   },
   disabled: {
     backgroundClasses: 'bg-transparent',
@@ -175,41 +175,25 @@ const getRoundedClasses = (roundedClasses) => {
 }
 
 export function ButtonLink(props) {
-  let {
-    children,
-    as,
-    href,
-  } = props
+  let { children, as, href } = props
 
   const classes = getButtonClasses(props)
 
-  const linkProps = pick(props, [
-    'target',
-    'rel',
-  ])
+  const linkProps = pick(props, ['target', 'rel'])
 
   if (!as) {
-    return <a
-      {...linkProps}
-      href={href}
-      className={classes}
-      onClick={(e) => e.stopPropagation()}
-    >
-      {children}
-    </a>
-  } else {
-    return <Link
-      href={href}
-      as={as}
-      scroll={false}
-    >
-      <a
-        {...linkProps}
-        className={classes}
-        onClick={(e) => e.stopPropagation()}
-      >
+    return (
+      <a {...linkProps} href={href} className={classes} onClick={(e) => e.stopPropagation()}>
         {children}
       </a>
-    </Link>
+    )
+  } else {
+    return (
+      <Link href={href} as={as} scroll={false}>
+        <a {...linkProps} className={classes} onClick={(e) => e.stopPropagation()}>
+          {children}
+        </a>
+      </Link>
+    )
   }
 }

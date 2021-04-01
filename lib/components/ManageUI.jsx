@@ -1,17 +1,18 @@
 import React, { useState } from 'react'
-import { useAtom } from 'jotai'
 
 import { AdminUI } from 'lib/components/AdminUI'
 import { StatsUI } from 'lib/components/StatsUI'
 import { Content, ContentPane, Tab, Tabs } from 'lib/components/Tabs'
-import { Card, CardTitle } from 'lib/components/Card'
+import { Card, CardSecondaryTitle } from 'lib/components/Card'
 import { ButtonLink } from 'lib/components/ButtonLink'
-import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
-import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
-import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 
 import ManageImage from 'assets/images/manage-image.svg'
+import { RelativeInternalLink } from 'lib/components/RelativeInternalLink'
+import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
+import { CopyIcon } from 'lib/components/CopyIcon'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 
 const MANAGE_VIEW = Object.freeze({
   stats: '#stats',
@@ -20,10 +21,9 @@ const MANAGE_VIEW = Object.freeze({
 
 export const ManageUI = (props) => {
   const [selectedTab, setSelectedTab] = useState(window.location.hash || MANAGE_VIEW.stats)
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
-  const [usersAddress] = useAtom(usersAddressAtom)
-
-  const owner = poolChainValues.owner
+  const { data: poolChainValues } = usePoolChainValues()
+  const usersAddress = useUsersAddress()
+  const owner = poolChainValues.config.owner
   const userIsOwner = owner?.toLowerCase() === usersAddress?.toLowerCase()
 
   return (
@@ -34,16 +34,14 @@ export const ManageUI = (props) => {
         <Tab setSelectedTab={setSelectedTab} selectedTab={selectedTab} hash={MANAGE_VIEW.stats}>
           Stats
         </Tab>
-        {userIsOwner && (
-          <Tab
-            setSelectedTab={setSelectedTab}
-            selectedTab={selectedTab}
-            hash={MANAGE_VIEW.admin}
-            className='ml-4 sm:ml-16'
-          >
-            Admin
-          </Tab>
-        )}
+        <Tab
+          setSelectedTab={setSelectedTab}
+          selectedTab={selectedTab}
+          hash={MANAGE_VIEW.admin}
+          className='ml-4 sm:ml-16'
+        >
+          Admin
+        </Tab>
       </Tabs>
 
       <Content>
@@ -51,12 +49,14 @@ export const ManageUI = (props) => {
           <StatsUI />
         </ContentPane>
 
-        {userIsOwner && (
-          <ContentPane selectedTab={selectedTab} hash={MANAGE_VIEW.admin}>
-            <AdminUI />
-          </ContentPane>
-        )}
+        <ContentPane selectedTab={selectedTab} hash={MANAGE_VIEW.admin}>
+          <AdminUI />
+        </ContentPane>
       </Content>
+      <div className='flex justify-between w-3/4 sm:w-1/2 mx-auto'>
+        <RelativeInternalLink link='/home'>View Prize Pool</RelativeInternalLink>
+        <RelativeInternalLink link='/admin'>Manage Pool</RelativeInternalLink>
+      </div>
     </>
   )
 }
@@ -85,16 +85,19 @@ const ManageHeader = () => {
 }
 
 const PoolAddress = () => {
-  const [poolAddresses] = useAtom(poolAddressesAtom)
+  const { data: prizePoolContracts } = usePrizePoolContracts()
 
   return (
     <>
-      <div className='text-accent-1 font-bold title text-lg sm:text-4xl'>Pool's Info</div>
-      <Card className='flex flex-col'>
-        <CardTitle className='mb-2'>Pool's contract address</CardTitle>
-        <EtherscanAddressLink address={poolAddresses.prizePool} className='mx-auto text-white'>
-          {poolAddresses.prizePool}
-        </EtherscanAddressLink>
+      <Card className='flex flex-col mb-10'>
+        <CardSecondaryTitle className='mb-2'>Pool's contract address</CardSecondaryTitle>
+        <h5 className='font-normal mx-auto flex'>
+          <BlockExplorerLink
+            address={prizePoolContracts.prizePool.address}
+            className='text-white'
+          />
+          <CopyIcon text={prizePoolContracts.prizePool.address} className='ml-4' />
+        </h5>
       </Card>
     </>
   )

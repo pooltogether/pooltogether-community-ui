@@ -4,22 +4,19 @@ import addSeconds from 'date-fns/addSeconds'
 import { useInterval } from 'beautiful-react-hooks'
 
 import { subtractDates } from 'lib/utils/subtractDates'
-import { useAtom } from 'jotai'
-import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 
 const ONE_SECOND = 1000
 
 export const NewPrizeCountdown = (props) => {
   const { center, textAlign, textSize } = props
-  const [poolChainValues] = useAtom(poolChainValuesAtom)
+  const { data: poolChainValues } = usePoolChainValues()
 
   let flashy = props.flashy === false ? false : true
 
   const [secondsRemaining, setSecondsRemaining] = useState(null)
 
-  const secs =
-    poolChainValues?.prizePeriodRemainingSeconds &&
-    parseInt(poolChainValues?.prizePeriodRemainingSeconds.toString(), 10)
+  const secs = parseInt(poolChainValues.prize.prizePeriodRemainingSeconds.toString(), 10)
 
   useEffect(() => {
     setSecondsRemaining(secs)
@@ -38,7 +35,7 @@ export const NewPrizeCountdown = (props) => {
   const { days, hours, minutes, seconds } = subtractDates(futureDate, currentDate)
 
   let msg
-  if (poolChainValues?.isRngRequested) {
+  if (poolChainValues.prize.isRngRequested) {
     return (
       <p
         className={classnames(textSize, 'font-bold', {
@@ -60,11 +57,8 @@ export const NewPrizeCountdown = (props) => {
 
   // 86400 seconds = 1 day
   // 3600 seconds = 1 hour
-  const textColor = secondsRemaining >= 86400 ?
-    'green-1' :
-    secondsRemaining >= 3600 ?
-      'yellow-1' :
-      'red-1'
+  const textColor =
+    secondsRemaining >= 86400 ? 'green-1' : secondsRemaining >= 3600 ? 'yellow-1' : 'red-1'
 
   const LeftSideJsx = ({ digit }) => {
     return (

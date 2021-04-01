@@ -41,7 +41,8 @@ module.exports = {
         'teal': 'var(--color-bg-teal)',
         'accent-grey-1': 'var(--color-bg-accent-grey-1)',
         'accent-grey-2': 'var(--color-bg-accent-grey-2)',
-        'purple-1': 'var(--color-bg-purple-1)'
+        'purple-1': 'var(--color-bg-purple-1)',
+        'purple-2': 'var(--color-bg-purple-2)'
       },
       textColor: {
         'accent-1': 'var(--color-text-accent-1)',
@@ -314,7 +315,7 @@ module.exports = {
     }
   },
   variants: {
-    margins: ['first'],
+    // margin: ['first', 'last'],
     borderColor: ['hover', 'focus', 'active', 'focus-within'],
     textColor: ['responsive', 'hover', 'focus', 'active'],
     backgroundColor: ['responsive', 'hover', 'focus', 'active'],

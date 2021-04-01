@@ -6,6 +6,7 @@ import { FairnessControlsCard } from 'lib/components/FairnessControlsCard'
 import { NumOfWinnersControlCard } from 'lib/components/NumOfWinnersControlCard'
 import { RngServiceControlCard } from 'lib/components/RngServiceControlCard'
 import { AwardPrizeCard } from 'lib/components/AwardPrizeCard'
+import { SablierStreamCard } from 'lib/components/SablierStreamCard'
 
 export const AdminUI = (props) => {
   return (
@@ -13,6 +14,7 @@ export const AdminUI = (props) => {
       <AwardPrizeCard />
       <Erc20AwardsControlCard />
       <Erc721AwardsControlCard />
+      <SablierStreamCard />
       <RngServiceControlCard />
       <NumOfWinnersControlCard />
       <FairnessControlsCard />
