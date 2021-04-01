@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { useRouter } from 'next/router'
 
 import { ETHEREUM_NETWORKS, WALLETS } from 'lib/constants'
 import { useNetwork } from 'lib/hooks/useNetwork'
@@ -51,11 +52,15 @@ const ChangeWalletNetworkNotification = (props) => {
   const showConnectButton = walletIsMetaMask && isConnectableNetwork
   const showBadWalletMessage = !walletIsMetaMask && !isSupportedEthereumNetwork
 
+  const router = useRouter()
+  const isPool = Boolean(router?.query?.poolAlias || router?.query?.prizePoolAddress)
+  const words = isPool ? 'this pool' : 'these pools'
+
   return (
     <div className='flex flex-col sm:flex-row justify-between items-center'>
       <span>
         👋 Your wallet is currently set to <b>{walletChainName}</b>. Please connect to{' '}
-        <b>{poolChainName}</b> to participate.
+        <b>{poolChainName}</b> to participate in {words}.
         <br className='hidden xs:block' />
         {showBadWalletMessage && (
           <span>

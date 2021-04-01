@@ -21,6 +21,7 @@ import { useAllCreatedPrizePoolsWithTokens } from 'lib/hooks/useAllCreatedPrizeP
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { useAllUserTokenBalances } from 'lib/hooks/useAllUserTokenBalances'
 import { getPrecision, numberWithCommas } from 'lib/utils/numberWithCommas'
+import { testAddress } from 'lib/utils/testAddress'
 import { NETWORK, getNetworkNameAliasByChainId } from 'lib/utils/networks'
 
 export const NETWORK_OPTIONS = {
@@ -100,6 +101,8 @@ const ReferencePoolCard = () => {
     setNetwork(network)
   }
 
+  const error = testAddress(contractAddress)
+
   return (
     <Card>
       <Collapse title='🔍 Lookup pool by contract address'>
@@ -125,7 +128,7 @@ const ReferencePoolCard = () => {
           <ViewButton
             as={`/pools/${network}/${contractAddress}/home`}
             href='/pools/[networkName]/[prizePoolAddress]/home'
-            disabled={!contractAddress}
+            disabled={!contractAddress || error}
           />
         </div>
       </Collapse>
@@ -460,7 +463,7 @@ export const OwnerAddress = (props) => {
 
 const Actions = (props) => {
   const { chainId } = useNetwork()
-  const { prizePool, ticket } = props
+  const { prizePool } = props
   const { prizePool: prizePoolAddress } = prizePool
 
   const networkName = getNetworkNameAliasByChainId(chainId)

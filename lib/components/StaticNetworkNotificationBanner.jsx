@@ -35,14 +35,8 @@ const StaticNetworkNotification = (props) => {
     }
 
     const { shortName, network } = getChain(networkId)
-    console.log(networkId)
-    console.log(shortName, network)
     const name = `${shortName} ${network}`
-    console.log(name)
 
-    // if (name && names.indexOf(name) == -1) {
-    //   names.push(name)
-    // }
     supportedNames.push(name)
   })
   supportedNames = supportedNames.join(', ')
@@ -52,10 +46,8 @@ const StaticNetworkNotification = (props) => {
   return (
     <div className='flex flex-col'>
       <span>
-        This pool lives on <b>{supportedNames}</b>.
-      </span>
-      <span>
-        Your wallet is currently set to <b>{networkWords}.</b>
+        PoolTogether works on <b className='capitalize'>{supportedNames}</b>. Your wallet is
+        currently set to <b className='capitalize'>{networkWords}.</b>
       </span>
     </div>
   )
