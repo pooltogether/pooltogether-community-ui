@@ -2,7 +2,7 @@ import React, { useContext, useMemo, useState } from 'react'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
 
-import { NETWORKS, CONTRACT_ADDRESSES, POOL_ALIASES, SUPPORTED_NETWORKS } from 'lib/constants'
+import { CONTRACT_ADDRESSES, POOL_ALIASES, SUPPORTED_NETWORKS } from 'lib/constants'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { ButtonLink } from 'lib/components/ButtonLink'
 import { Card, CardTitle } from 'lib/components/Card'
@@ -20,7 +20,7 @@ import { useAllCreatedPrizePoolsWithTokens } from 'lib/hooks/useAllCreatedPrizeP
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { useAllUserTokenBalances } from 'lib/hooks/useAllUserTokenBalances'
 import { getPrecision, numberWithCommas } from 'lib/utils/numberWithCommas'
-import { NETWORK } from 'lib/utils/networks'
+import { NETWORKS, NETWORK } from 'lib/utils/networks'
 
 export const IndexContent = () => {
   const { name: networkName, walletNetwork } = useNetwork()
@@ -56,7 +56,6 @@ const PoolsLists = () => {
 
   return (
     <>
-      <UnsupportedNetworkCard />
       <UsersPoolsCard createdPrizePools={createdPrizePools} tokenBalances={tokenBalances} />
       <GovernancePoolsCard createdPrizePools={createdPrizePools} tokenBalances={tokenBalances} />
       <AllPoolsCard createdPrizePools={createdPrizePools} tokenBalances={tokenBalances} />
@@ -66,31 +65,20 @@ const PoolsLists = () => {
   )
 }
 
-const UnsupportedNetworkCard = () => {
-  const { chainId, network } = useNetwork()
-
-  if (![NETWORK.matic, NETWORK.mumbai].includes(chainId)) return null
-
-  return (
-    <div className='text-left mb-10 border-2 border-primary rounded-lg px-7 py-4 text-accent-1'>
-      <CardTitle noMargin>☹️ Full Index Unavailable for {network}</CardTitle>
-      <p>
-        Unfortunately due to limitations of {network} we can't dynamically compile a list of created
-        prize pools.
-      </p>
-    </div>
-  )
-}
-
 const ReferencePoolCard = () => {
   const [network, setNetwork] = useState('mainnet')
   const [contractAddress, setContractAddress] = useState('')
 
-  const formatValue = (key) => NETWORKS[key].view
+  const formatValue = (key) => NETWORK[key]
 
   const onValueSet = (network) => {
     setNetwork(network)
   }
+
+  const networkOptions = Object.keys(NETWORK).reduce((accumulator, key) => {
+    accumulator[NETWORK[key]] = key
+    return accumulator
+  }, {})
 
   return (
     <Card>
@@ -101,7 +89,7 @@ const ReferencePoolCard = () => {
           formatValue={formatValue}
           onValueSet={onValueSet}
           current={network}
-          values={NETWORKS}
+          values={networkOptions}
         />
 
         <TextInputGroup
@@ -258,6 +246,7 @@ const AllPoolsCard = (props) => {
   const { createdPrizePools, tokenBalances } = props
 
   const walletContext = useContext(WalletContext)
+  const { chainId, view: networkView } = useNetwork()
   const [hideNoDeposits, setHideNoDeposits] = useState(createdPrizePools.length > 10)
   const [showFirstTen, setShowFirstTen] = useState(createdPrizePools.length > 10)
 
@@ -289,17 +278,19 @@ const AllPoolsCard = (props) => {
 
   if (createdPrizePools?.length === 0) return null
 
+  let tip = 'These pools created permissionlessly by anyone using the PoolTogether Builder'
+  if ([NETWORK.matic, NETWORK.mumbai].includes(chainId)) {
+    tip = `Unfortunately due to limitations of ${networkView} we can't dynamically compile a list of
+    created prize pools.`
+  }
+
   return (
     <Card>
       <Collapse
         title={
           <>
             🤿 All Pools
-            <Tooltip
-              id='all-pools'
-              className='ml-2 my-auto'
-              tip='These pools created permissionlessly by anyone using the PoolTogether Builder'
-            />
+            <Tooltip id='all-pools' className='ml-2 my-auto' tip={tip} />
           </>
         }
         containerClassName='mb-4 xs:mb-8'

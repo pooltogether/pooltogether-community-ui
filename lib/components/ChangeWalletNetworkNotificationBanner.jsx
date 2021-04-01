@@ -7,7 +7,6 @@ import { Button } from 'lib/components/Button'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { NotificationBanner } from 'lib/components/NotificationBanners'
 import { NETWORK } from 'lib/utils/networks'
-// import { ButtonLink } from 'lib/components/ButtonLink'
 
 export const ChangeWalletNetworkNotificationBanner = (props) => {
   const { walletConnected, walletMatchesNetwork, walletNetwork, name, chainId } = useNetwork()
@@ -15,7 +14,7 @@ export const ChangeWalletNetworkNotificationBanner = (props) => {
   if (!walletConnected || walletMatchesNetwork) return null
 
   return (
-    <NotificationBanner className='bg-teal'>
+    <NotificationBanner className='bg-teal' canClose>
       <ChangeWalletNetworkNotification
         chainId={chainId}
         walletNetwork={walletNetwork}
@@ -56,7 +55,7 @@ const ChangeWalletNetworkNotification = (props) => {
     <div className='flex flex-col sm:flex-row justify-between items-center'>
       <span>
         👋 Your wallet is currently set to <b>{walletChainName}</b>. Please connect to{' '}
-        <b>{poolChainName}</b> to participate in this pool.
+        <b>{poolChainName}</b> to participate.
         <br className='hidden xs:block' />
         {showBadWalletMessage && (
           <span>
