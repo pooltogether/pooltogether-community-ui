@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { getChain } from 'evm-chains-extended'
+import { getChain } from '@pooltogether/evm-chains-extended'
 
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { SUPPORTED_NETWORKS } from 'lib/constants'

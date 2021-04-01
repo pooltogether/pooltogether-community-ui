@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useState } from 'react'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
-import { getChain } from 'evm-chains-extended'
+import { getChain } from '@pooltogether/evm-chains-extended'
 
 import { CONTRACT_ADDRESSES, POOL_ALIASES, SUPPORTED_NETWORKS } from 'lib/constants'
 import { WalletContext } from 'lib/components/WalletContextProvider'

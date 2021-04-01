@@ -1,6 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
-import { getChain } from 'evm-chains-extended'
+import { getChain } from '@pooltogether/evm-chains-extended'
 
 import { SUPPORTED_NETWORKS } from 'lib/constants'
 import { networkColorClassname } from 'lib/utils/networks'

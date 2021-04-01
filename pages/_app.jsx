@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
 import { Provider as JotaiProvider } from 'jotai'
 import { QueryCache, ReactQueryCacheProvider } from 'react-query'
+import BscLogo from '@pooltogether/evm-chains-extended/dist/umd/images/bsc-logo.png'
 
 import { Layout } from 'lib/components/Layout'
 import { ThemeContextProvider } from 'lib/components/contextProviders/ThemeContextProvider'
@@ -51,6 +52,8 @@ function MyApp({ Component, pageProps }) {
             <JotaiProvider>
               <Layout>
                 <CustomErrorBoundary>
+                  <img src={BscLogo} width='200' height='200' />
+
                   <Component {...pageProps} />
                 </CustomErrorBoundary>
               </Layout>

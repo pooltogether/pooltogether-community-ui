@@ -1,5 +1,5 @@
 import React from 'react'
-import { getChain } from 'evm-chains-extended'
+import { getChain } from '@pooltogether/evm-chains-extended'
 
 import { SUPPORTED_NETWORKS } from 'lib/constants'
 import { PoolTogetherLoading } from 'lib/components/PoolTogetherLoading'
