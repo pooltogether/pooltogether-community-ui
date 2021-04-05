@@ -51,8 +51,6 @@ function MyApp({ Component, pageProps }) {
             <JotaiProvider>
               <Layout>
                 <CustomErrorBoundary>
-                  <img src={BscLogo} width='200' height='200' />
-
                   <Component {...pageProps} />
                 </CustomErrorBoundary>
               </Layout>

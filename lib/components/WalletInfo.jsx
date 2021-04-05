@@ -4,6 +4,7 @@ import FeatherIcon from 'feather-icons-react'
 import { getChain } from '@pooltogether/evm-chains-extended'
 
 import { WalletContext } from 'lib/components/WalletContextProvider'
+import { NetworkIcon } from 'lib/components/NetworkIcon'
 import { networkColorClassname } from 'lib/utils/networks'
 import { shorten } from 'lib/utils/shorten'
 
@@ -25,7 +26,7 @@ export const WalletInfo = () => {
   let innerContent = null
   let networkNameJsx = null
 
-  if (chainId && chainId !== 1) {
+  if (chainId) {
     const { network, name } = getChain(chainId)
     const formattedNetworkName = name
     let networkName = network
@@ -44,13 +45,16 @@ export const WalletInfo = () => {
   if (address && walletName) {
     innerContent = (
       <>
-        <div className='leading-snug text-highlight-3 trans'>
+        <div className='flex flex-col items-end leading-snug text-highlight-3 trans'>
           <span className='text-highlight-3 hover:text-highlight-1 overflow-ellipsis block w-full no-underline'>
             {shorten(address)}
           </span>
 
-          <span className='block sm:inline-block rounded-lg text-default'>
-            {walletName} {networkNameJsx}
+          <span className='flex items-center text-default'>{walletName}</span>
+
+          <span className='flex items-center'>
+            <NetworkIcon sizeClasses='w-3 h-3' chainId={chainId} />
+            {networkNameJsx}
           </span>
         </div>
 
@@ -58,7 +62,7 @@ export const WalletInfo = () => {
           onClick={() => _onboard.walletReset()}
           className={classnames(
             'text-lightPurple-500 hover:text-white trans ml-2 outline-none focus:outline-none',
-            'block border rounded-full w-4 h-4 sm:w-5 sm:h-5 text-center text-lg',
+            'block border rounded-full w-4 h-4 text-center text-lg',
             'border-purple-700 hover:bg-lightPurple-700',
             'trans'
           )}

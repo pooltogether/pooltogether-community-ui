@@ -38,7 +38,7 @@ export const Nav = (props) => {
           </div>
 
           <div className='w-2/5 lg:w-1/5 flex justify-end h-full items-center text-right'>
-            <div className='mt-0 sm:mt-0 text-xxs sm:text-sm tracking-wide text-right spinner-hidden'>
+            <div className='mt-0 sm:mt-0 text-xxs sm:text-xs tracking-wide text-right spinner-hidden'>
               {usersAddress ? <WalletInfo {...props} /> : <ConnectWalletButton size='sm' />}
             </div>
           </div>
