@@ -1,13 +1,13 @@
 import React from 'react'
 import { getChain } from '@pooltogether/evm-chains-extended'
 
-import { SUPPORTED_NETWORKS } from 'lib/constants'
 import { PoolTogetherLoading } from 'lib/components/PoolTogetherLoading'
 import { IncompatibleContractWarning } from 'lib/components/IncompatibleContractWarning'
 import { IndexContent } from 'lib/components/IndexContent'
 import { UnsupportedNetwork } from 'lib/components/UnsupportedNetwork'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { useNetwork } from 'lib/hooks/useNetwork'
+import { useWalletNetwork } from 'lib/hooks/useWalletNetwork'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { useExternalErc20Awards } from 'lib/hooks/useExternalErc20Awards'
 import { useExternalErc721Awards } from 'lib/hooks/useExternalErc721Awards'
@@ -26,9 +26,7 @@ export const getDataFetchingErrorMessage = (address, type, message) =>
  */
 export const PoolData = (props) => {
   const { chainId } = useNetwork()
-
-  const { walletNetwork } = useNetwork()
-  const walletChainId = walletNetwork?.chainId
+  const { walletOnUnsupportedNetwork } = useWalletNetwork()
 
   const usersAddress = useUsersAddress()
 
@@ -42,8 +40,8 @@ export const PoolData = (props) => {
   const { isFetched: externalErc20AwardsIsFetched } = useExternalErc20Awards()
   const { isFetched: externalErc721AwardsIsFetched } = useExternalErc721Awards()
 
-  if (walletChainId && !SUPPORTED_NETWORKS.includes(walletChainId)) {
-    return <UnsupportedNetwork walletChainId={walletChainId} />
+  if (walletOnUnsupportedNetwork) {
+    return <UnsupportedNetwork />
   }
 
   if (

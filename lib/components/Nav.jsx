@@ -1,16 +1,15 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import Link from 'next/link'
 
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
-import { WalletContext } from 'lib/components/WalletContextProvider'
 import { WalletInfo } from 'lib/components/WalletInfo'
+import { useWalletNetwork } from 'lib/hooks/useWalletNetwork'
 
 import PoolLogo from 'assets/images/pooltogether-logo.svg'
 import PoolPLogo from 'assets/images/pooltogether-white-mark.svg'
 
 export const Nav = (props) => {
-  const walletContext = useContext(WalletContext)
-  const usersAddress = walletContext._onboard.getState().address
+  const { walletConnected } = useWalletNetwork()
 
   return (
     <>
@@ -39,7 +38,7 @@ export const Nav = (props) => {
 
           <div className='w-2/5 lg:w-1/5 flex justify-end h-full items-center text-right'>
             <div className='mt-0 sm:mt-0 text-xxs sm:text-xs tracking-wide text-right spinner-hidden'>
-              {usersAddress ? <WalletInfo {...props} /> : <ConnectWalletButton size='sm' />}
+              {walletConnected ? <WalletInfo {...props} /> : <ConnectWalletButton size='sm' />}
             </div>
           </div>
         </nav>

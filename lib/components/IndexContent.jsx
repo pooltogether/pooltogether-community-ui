@@ -19,6 +19,7 @@ import { useIsOwnerPoolTogether } from 'lib/hooks/useIsOwnerPoolTogether'
 import { useCoingeckoTokenData } from 'lib/hooks/useCoingeckoTokenData'
 import { useAllCreatedPrizePoolsWithTokens } from 'lib/hooks/useAllCreatedPrizePoolsWithTokens'
 import { useNetwork } from 'lib/hooks/useNetwork'
+import { useWalletNetwork } from 'lib/hooks/useWalletNetwork'
 import { useAllUserTokenBalances } from 'lib/hooks/useAllUserTokenBalances'
 import { getPrecision, numberWithCommas } from 'lib/utils/numberWithCommas'
 import { isValidAddress } from 'lib/utils/isValidAddress'
@@ -41,8 +42,8 @@ export const NETWORK_OPTIONS = {
 }
 
 export const IndexContent = () => {
-  const { name: networkName, walletNetwork } = useNetwork()
-  const walletChainId = walletNetwork?.chainId
+  const { name: networkName } = useNetwork()
+  const { walletChainId } = useWalletNetwork()
 
   if (
     (walletChainId && !SUPPORTED_NETWORKS.includes(walletChainId)) ||

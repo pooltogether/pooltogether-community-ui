@@ -3,10 +3,11 @@ import classnames from 'classnames'
 import { getChain } from '@pooltogether/evm-chains-extended'
 
 import { SUPPORTED_NETWORKS } from 'lib/constants'
+import { useWalletNetwork } from 'lib/hooks/useWalletNetwork'
 import { networkColorClassname } from 'lib/utils/networks'
 
-export const UnsupportedNetwork = (props) => {
-  const { walletChainId } = props
+export const UnsupportedNetwork = () => {
+  const { walletChainId } = useWalletNetwork()
 
   return (
     <div className='flex flex-col'>
@@ -33,11 +34,15 @@ export const UnsupportedNetwork = (props) => {
 
 const Network = (props) => {
   const { chainId } = props
-  const viewName = chainId && getChain(chainId)?.name
+  let viewName = 'an unknown network'
+
+  try {
+    viewName = getChain(chainId)?.name
+  } catch (e) {}
 
   return (
     <span className={classnames(networkColorClassname(props.chainId))}>
-      <b>{viewName || 'an unknown network'}</b>
+      <b>{viewName}</b>
       <small className='ml-1 text-highlight-1'>{`chainId: ${chainId}`}</small>
     </span>
   )
