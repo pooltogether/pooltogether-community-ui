@@ -21,7 +21,7 @@ import { useAllCreatedPrizePoolsWithTokens } from 'lib/hooks/useAllCreatedPrizeP
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { useAllUserTokenBalances } from 'lib/hooks/useAllUserTokenBalances'
 import { getPrecision, numberWithCommas } from 'lib/utils/numberWithCommas'
-import { testAddress } from 'lib/utils/testAddress'
+import { isValidAddress } from 'lib/utils/isValidAddress'
 import { NETWORK, getNetworkNameAliasByChainId } from 'lib/utils/networks'
 
 export const NETWORK_OPTIONS = {
@@ -44,7 +44,10 @@ export const IndexContent = () => {
   const { name: networkName, walletNetwork } = useNetwork()
   const walletChainId = walletNetwork?.chainId
 
-  if (walletChainId && !SUPPORTED_NETWORKS.includes(walletChainId)) {
+  if (
+    (walletChainId && !SUPPORTED_NETWORKS.includes(walletChainId)) ||
+    typeof walletChainId === 'undefined'
+  ) {
     return <UnsupportedNetwork walletChainId={walletChainId} networkName={networkName} />
   }
 
@@ -101,7 +104,7 @@ const ReferencePoolCard = () => {
     setNetwork(network)
   }
 
-  const error = testAddress(contractAddress)
+  const error = isValidAddress(contractAddress)
 
   return (
     <Card>
@@ -113,7 +116,6 @@ const ReferencePoolCard = () => {
           onValueSet={onValueSet}
           current={network}
           values={NETWORK_OPTIONS}
-          // values={NETWORK_OPTIONS}
         />
 
         <TextInputGroup

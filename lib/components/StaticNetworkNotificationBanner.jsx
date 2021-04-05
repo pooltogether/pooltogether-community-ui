@@ -1,32 +1,27 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { getChain } from '@pooltogether/evm-chains-extended'
 
-import { WalletContext } from 'lib/components/WalletContextProvider'
 import { SUPPORTED_NETWORKS } from 'lib/constants'
+import { useWalletNetwork } from 'lib/hooks/useWalletNetwork'
 import { NotificationBanner } from 'lib/components/NotificationBanners'
 
 export const StaticNetworkNotificationBanner = () => {
-  const walletContext = useContext(WalletContext)
-  const { _onboard } = walletContext || {}
+  const { walletConnected, walletChainId } = useWalletNetwork()
+  const networkSupported = SUPPORTED_NETWORKS.includes(walletChainId)
 
-  const chainId = _onboard.getState().appNetworkId
-  const networkSupported = SUPPORTED_NETWORKS.includes(chainId)
-
-  if (!chainId || !_onboard.getState().wallet.name || networkSupported) {
+  if (!walletConnected || networkSupported) {
     return null
   }
 
   return (
     <NotificationBanner className='bg-red-1'>
-      <StaticNetworkNotification chainId={chainId} />
+      <StaticNetworkNotification />
     </NotificationBanner>
   )
 }
 
-const StaticNetworkNotification = (props) => {
-  const { chainId } = props
-
-  const networkName = getChain(chainId)?.network || 'unknown'
+const StaticNetworkNotification = () => {
+  const { walletNetworkShortName } = useWalletNetwork()
 
   let supportedNames = []
   SUPPORTED_NETWORKS.forEach((networkId) => {
@@ -39,15 +34,12 @@ const StaticNetworkNotification = (props) => {
 
     supportedNames.push(name)
   })
-  supportedNames = supportedNames.join(', ')
-
-  let networkWords = `${networkName} 🥵`
 
   return (
     <div className='flex flex-col'>
       <span>
-        PoolTogether works on <b className='capitalize'>{supportedNames}</b>. Your wallet is
-        currently set to <b className='capitalize'>{networkWords}.</b>
+        PoolTogether works on <b className='capitalize'>{supportedNames.join(', ')}</b>. Your wallet
+        is currently set to <b className='capitalize'>{walletNetworkShortName} 🥵.</b>
       </span>
     </div>
   )

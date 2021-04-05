@@ -30,7 +30,7 @@ export const NotificationBanner = (props) => {
         props.className
       )}
     >
-      <div className='max-w-screen-sm mx-auto flex-grow px-6'>{props.children}</div>
+      <div className='max-w-screen-sm mx-auto flex-grow px-8'>{props.children}</div>
       {canClose && <CloseBannerButton closeBanner={() => setUserHasClosedBanner(true)} />}
     </div>
   )

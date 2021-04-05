@@ -27,12 +27,13 @@ export const WalletInfo = () => {
   let networkNameJsx = null
 
   if (chainId) {
-    const { network, name } = getChain(chainId)
-    const formattedNetworkName = name
-    let networkName = network
-
-    if (name) {
-      networkName = formattedNetworkName
+    let network = {}
+    let networkName = 'unknown network'
+    try {
+      network = getChain(chainId)
+      networkName = network.name || network.network
+    } catch (error) {
+      // console.warn(error)
     }
 
     networkNameJsx = (

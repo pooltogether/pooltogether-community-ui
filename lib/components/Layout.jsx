@@ -32,7 +32,7 @@ export const Layout = (props) => {
                 flex: 1
               }}
             >
-              <div className='px-4 sm:px-8 lg:px-12 my-4 w-100 max-w-screen-sm flex flex-col flex-grow'>
+              <div className='px-4 sm:px-8 my-4 w-100 max-w-screen-sm flex flex-col flex-grow'>
                 {React.cloneElement(children, {
                   ...props
                 })}

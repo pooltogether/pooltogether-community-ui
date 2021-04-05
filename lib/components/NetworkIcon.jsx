@@ -1,7 +1,7 @@
 import React from 'react'
 import classnames from 'classnames'
 
-import EthLogo from '@pooltogether/evm-chains-extended/dist/umd/images/eth-logo.png'
+// import EthLogo from '@pooltogether/evm-chains-extended/dist/umd/images/eth-logo.png'
 import BscLogo from '@pooltogether/evm-chains-extended/dist/umd/images/bsc-logo.png'
 import PoALogo from '@pooltogether/evm-chains-extended/dist/umd/images/poa-logo.png'
 import XDaiLogo from '@pooltogether/evm-chains-extended/dist/umd/images/xdai-logo.png'
@@ -17,7 +17,7 @@ export const NetworkIcon = (props) => {
 
   let src
   if (ETHEREUM_NETWORKS.includes(chainId)) {
-    src = EthLogo
+    // src = EthLogo
   } else if (chainId === 97 || chainId === 56) {
     src = BscLogo
   } else if (chainId === 77 || chainId === 99) {
