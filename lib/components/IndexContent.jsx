@@ -42,14 +42,10 @@ export const NETWORK_OPTIONS = {
 }
 
 export const IndexContent = () => {
-  const { name: networkName } = useNetwork()
-  const { walletChainId } = useWalletNetwork()
+  const { walletOnUnsupportedNetwork } = useWalletNetwork()
 
-  if (
-    (walletChainId && !SUPPORTED_NETWORKS.includes(walletChainId)) ||
-    typeof walletChainId === 'undefined'
-  ) {
-    return <UnsupportedNetwork walletChainId={walletChainId} networkName={networkName} />
+  if (walletOnUnsupportedNetwork) {
+    return <UnsupportedNetwork />
   }
 
   return <PoolsLists />
