@@ -2,11 +2,12 @@ import React from 'react'
 import { useRouter } from 'next/router'
 
 import { ETHEREUM_NETWORKS, WALLETS } from 'lib/constants'
+import { Button } from 'lib/components/Button'
+import { NetworkIcon } from 'lib/components/NetworkIcon'
+import { NotificationBanner } from 'lib/components/NotificationBanners'
 import { useAddNetworkToMetamask } from 'lib/hooks/useAddNetworkToMetamask'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { useWalletNetwork } from 'lib/hooks/useWalletNetwork'
-import { Button } from 'lib/components/Button'
-import { NotificationBanner } from 'lib/components/NotificationBanners'
 import { NETWORK } from 'lib/utils/networks'
 
 export const ChangeWalletNetworkNotificationBanner = (props) => {
@@ -25,7 +26,7 @@ export const ChangeWalletNetworkNotificationBanner = (props) => {
 // TODO: Blocked on a guide for network changing
 const ChangeWalletNetworkNotification = (props) => {
   const { name: poolChainName, chainId: poolChainId } = useNetwork()
-  const { walletName, walletNetworkShortName } = useWalletNetwork()
+  const { walletName, walletNetworkShortName, walletChainId } = useWalletNetwork()
 
   const addNetwork = useAddNetworkToMetamask(poolChainId)
   const walletIsMetaMask = [WALLETS.metamask].includes(walletName)
@@ -53,8 +54,17 @@ const ChangeWalletNetworkNotification = (props) => {
   return (
     <div className='flex flex-col sm:flex-row justify-between items-center'>
       <span>
-        👋 Your wallet is currently set to <b>{walletNetworkShortName}</b>. Please connect to{' '}
-        <b>{poolChainName}</b> to participate in {words}.
+        👋 Your wallet is currently set to{' '}
+        <span className='inline-flex items-center'>
+          <NetworkIcon sizeClasses='w-3 h-3' chainId={walletChainId} />
+          <b>{walletNetworkShortName}</b>
+        </span>
+        . Please connect to{' '}
+        <span className='inline-flex items-center'>
+          <NetworkIcon sizeClasses='w-3 h-3' chainId={poolChainId} />
+          <b>{poolChainName}</b>
+        </span>{' '}
+        to participate in {words}.
         <br className='hidden xs:block' />
         {showBadWalletMessage && (
           <span>

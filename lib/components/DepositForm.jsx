@@ -74,7 +74,6 @@ export const DepositForm = (props) => {
           unit={tokenSymbol}
           required
           disabled={(supportsAllowance && !hasApprovedBalance) || !walletMatchesNetwork}
-          type='number'
           min={min}
           step={step}
           onChange={(e) => setDepositAmount(e.target.value)}

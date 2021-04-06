@@ -2,8 +2,9 @@ import React from 'react'
 import { getChain } from '@pooltogether/evm-chains-extended'
 
 import { SUPPORTED_NETWORKS } from 'lib/constants'
-import { useWalletNetwork } from 'lib/hooks/useWalletNetwork'
+import { NetworkIcon } from 'lib/components/NetworkIcon'
 import { NotificationBanner } from 'lib/components/NotificationBanners'
+import { useWalletNetwork } from 'lib/hooks/useWalletNetwork'
 
 export const StaticNetworkNotificationBanner = () => {
   const { walletConnected, walletChainId } = useWalletNetwork()
@@ -21,7 +22,7 @@ export const StaticNetworkNotificationBanner = () => {
 }
 
 const StaticNetworkNotification = () => {
-  const { walletNetworkShortName } = useWalletNetwork()
+  const { walletNetworkShortName, walletChainId } = useWalletNetwork()
 
   let supportedNames = []
   SUPPORTED_NETWORKS.forEach((networkId) => {
@@ -39,7 +40,12 @@ const StaticNetworkNotification = () => {
     <div className='flex flex-col'>
       <span>
         PoolTogether works on <b className='capitalize'>{supportedNames.join(', ')}</b>. Your wallet
-        is currently set to <b className='capitalize'>{walletNetworkShortName} 🥵.</b>
+        is currently set to{' '}
+        <span className='inline-flex items-center'>
+          <NetworkIcon sizeClasses='w-3 h-3' chainId={walletChainId} />
+          <b className='capitalize'>{walletNetworkShortName}</b>
+        </span>
+        🥵.
       </span>
     </div>
   )

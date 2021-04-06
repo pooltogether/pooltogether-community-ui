@@ -1,11 +1,11 @@
 import React from 'react'
 import classnames from 'classnames'
 
-import EthLogo from '@pooltogether/evm-chains-extended/dist/umd/images/eth-logo.png'
-import BscLogo from '@pooltogether/evm-chains-extended/dist/umd/images/bsc-logo.png'
-import PoALogo from '@pooltogether/evm-chains-extended/dist/umd/images/poa-logo.png'
-import XDaiLogo from '@pooltogether/evm-chains-extended/dist/umd/images/xdai-logo.png'
-import PolygonLogo from '@pooltogether/evm-chains-extended/dist/umd/images/polygon-matic-logo.png'
+import EthLogo from '@pooltogether/evm-chains-extended/dist/umd/images/ethereum-icon.png'
+import BscLogo from '@pooltogether/evm-chains-extended/dist/umd/images/bsc-icon-1.png'
+import PoALogo from '@pooltogether/evm-chains-extended/dist/umd/images/poa-icon.png'
+import XDaiLogo from '@pooltogether/evm-chains-extended/dist/umd/images/xdai-icon.png'
+import PolygonLogo from '@pooltogether/evm-chains-extended/dist/umd/images/polygon-icon.png'
 
 import { ETHEREUM_NETWORKS } from 'lib/constants'
 

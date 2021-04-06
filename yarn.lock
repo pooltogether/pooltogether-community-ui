@@ -1546,6 +1546,13 @@
     lodash.merge "^4.6.2"
     zen-observable-ts "^0.8.20"
 
+"@pooltogether/evm-chains-extended@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@pooltogether/evm-chains-extended/-/evm-chains-extended-0.4.3.tgz#01bf32b6a5fc93437b7e02f9380c53e976e7a2c1"
+  integrity sha512-yG2U+5IjwqAjBOmEcP7WmdLs2DSBxM1VPWqQ1Wjelo3/E24aUVe2/ftTEcRwoJXfE1sqYH4sAUoNGl+O3Tbijg==
+  dependencies:
+    evm-chains "^0.2.0"
+
 "@pooltogether/fixed-point@1.0.0-beta.2":
   version "1.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/@pooltogether/fixed-point/-/fixed-point-1.0.0-beta.2.tgz#d76a1e77f21833e9b680296d65526b0ffd7415d7"
@@ -6233,6 +6240,11 @@ events@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/events/-/events-3.3.0.tgz#31a95ad0a924e2d2c419a813aeb2c4e878ea7400"
   integrity sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==
+
+evm-chains@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/evm-chains/-/evm-chains-0.2.0.tgz#401354aa2b474bb9b34e796d328f281e67d07349"
+  integrity sha512-iMpFpmKT9VydfIUpRFoQHNzLdZ3WSNagiq6PABqWDSRwAA9OW+dpKYczkvJ/WSUesGWgcfzYoKRvfusn/9bBYA==
 
 evp_bytestokey@^1.0.0, evp_bytestokey@^1.0.3:
   version "1.0.3"

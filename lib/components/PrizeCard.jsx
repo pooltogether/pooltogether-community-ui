@@ -137,7 +137,7 @@ const PrizeListItem = (props) => {
   const imageUrl = tokenData?.image?.small
 
   return (
-    <li key={index + token.symbol} className='flex w-full justify-between mb-2'>
+    <li key={index + token.symbol} className='flex w-full items-center justify-between mb-2'>
       <span
         className={classnames('font-bold text-flashy leading-none', {
           'text-md sm:text-xl': small,
@@ -147,7 +147,7 @@ const PrizeListItem = (props) => {
         {token.formattedBalance}
       </span>
       <div
-        className={classnames('flex ml-4 mt-auto', {
+        className={classnames('flex ml-2', {
           'text-sm sm:text-lg': small,
           'text-lg sm:text-3xl': !small
         })}
