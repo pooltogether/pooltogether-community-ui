@@ -39,13 +39,7 @@ export const PoolStats = () => (
   </PoolStatsCard>
 )
 
-export const PoolDepositorStats = () => (
-  <PoolStatsCard>
-    <DepositorStatsList />
-  </PoolStatsCard>
-)
-
-const CompleteStatsList = () => {
+export const CompleteStatsList = () => {
   const { data: poolChainValues } = usePoolChainValues()
   return (
     <>
@@ -62,22 +56,6 @@ const CompleteStatsList = () => {
       <ReserveStat poolChainValues={poolChainValues} />
       <ReserveRateStat poolChainValues={poolChainValues} />
       <AprStats poolChainValues={poolChainValues} />
-    </>
-  )
-}
-
-const DepositorStatsList = () => {
-  const { data: poolChainValues } = usePoolChainValues()
-
-  return (
-    <>
-      <UsersStats poolChainValues={poolChainValues} />
-      <NumberOfWinnersStat poolChainValues={poolChainValues} />
-      <DepositsStat poolChainValues={poolChainValues} />
-      <SponsorshipStat poolChainValues={poolChainValues} />
-      <YieldSourceStat poolChainValues={poolChainValues} />
-      <DepositTokenStat poolChainValues={poolChainValues} />
-      <PoolOwnerStat poolChainValues={poolChainValues} />
     </>
   )
 }
@@ -128,18 +106,31 @@ const Stat = (props) => {
 
 // Users stats
 
-const UsersStats = (props) => {
+export const UsersStats = (props) => {
   const usersAddress = useUsersAddress()
+
   const { data: usersChainValues } = useUserChainValues()
+  const { data: poolChainValues } = usePoolChainValues()
 
   if (!usersAddress) return null
 
   return (
     <>
-      <UsersDepositsStat {...props} usersChainValues={usersChainValues} />
-      <UsersWalletBalanceStat {...props} usersChainValues={usersChainValues} />
-      <UsersOddsStat {...props} usersChainValues={usersChainValues} />
-      <Line />
+      <UsersDepositsStat
+        {...props}
+        poolChainValues={poolChainValues}
+        usersChainValues={usersChainValues}
+      />
+      <UsersWalletBalanceStat
+        {...props}
+        poolChainValues={poolChainValues}
+        usersChainValues={usersChainValues}
+      />
+      <UsersOddsStat
+        {...props}
+        poolChainValues={poolChainValues}
+        usersChainValues={usersChainValues}
+      />
     </>
   )
 }
