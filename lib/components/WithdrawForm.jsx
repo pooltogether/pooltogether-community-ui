@@ -56,7 +56,7 @@ export const WithdrawForm = (props) => {
   const { data: usersChainValues } = useUserChainValues()
   const usersAddress = useUsersAddress()
   const sendTx = useSendTransaction()
-  const { name: networkName, walletMatchesNetwork } = useNetwork()
+  const { chainId, walletMatchesNetwork } = useNetwork()
 
   const [exitFees, setExitFees] = useState({
     earlyExitFee: null,
@@ -98,7 +98,7 @@ export const WithdrawForm = (props) => {
     const t = async () => {
       if (debouncedWithdrawAmount) {
         const result = await fetchExitFee(
-          networkName,
+          chainId,
           usersAddress,
           prizePoolAddress,
           ticketAddress,

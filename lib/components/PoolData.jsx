@@ -1,22 +1,20 @@
 import React from 'react'
-import { useRouter } from 'next/router'
+import { getChain } from '@pooltogether/evm-chains-extended'
 
-import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
-import { poolToast } from 'lib/utils/poolToast'
-import { useNetwork } from 'lib/hooks/useNetwork'
-import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
-import { SUPPORTED_NETWORKS } from 'lib/constants'
 import { PoolTogetherLoading } from 'lib/components/PoolTogetherLoading'
+import { IncompatibleContractWarning } from 'lib/components/IncompatibleContractWarning'
+import { IndexContent } from 'lib/components/IndexContent'
+import { UnsupportedNetwork } from 'lib/components/UnsupportedNetwork'
+import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
+import { useNetwork } from 'lib/hooks/useNetwork'
+import { useWalletNetwork } from 'lib/hooks/useWalletNetwork'
+import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { useExternalErc20Awards } from 'lib/hooks/useExternalErc20Awards'
 import { useExternalErc721Awards } from 'lib/hooks/useExternalErc721Awards'
 import { useUserChainValues } from 'lib/hooks/useUserChainValues'
-import { IncompatibleContractWarning } from 'lib/components/IncompatibleContractWarning'
-import { UnsupportedNetwork } from 'lib/components/UnsupportedNetwork'
 import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { usePrizePooladdress } from 'lib/hooks/usePrizePoolAddress'
 import { isValidAddress } from 'lib/utils/isValidAddress'
-import { chainIdToName, chainIdToView } from 'lib/utils/networks'
-import { IndexContent } from 'lib/components/IndexContent'
 
 // http://localhost:3000/pools/rinkeby/0xd1E58Db0d67DB3f28fFa412Db58aCeafA0fEF8fA#admin
 
@@ -28,6 +26,7 @@ export const getDataFetchingErrorMessage = (address, type, message) =>
  */
 export const PoolData = (props) => {
   const { chainId } = useNetwork()
+  const { walletOnUnsupportedNetwork } = useWalletNetwork()
 
   const usersAddress = useUsersAddress()
 
@@ -41,8 +40,8 @@ export const PoolData = (props) => {
   const { isFetched: externalErc20AwardsIsFetched } = useExternalErc20Awards()
   const { isFetched: externalErc721AwardsIsFetched } = useExternalErc721Awards()
 
-  if (!SUPPORTED_NETWORKS.includes(chainId)) {
-    return <UnsupportedNetwork chainId={chainId} />
+  if (walletOnUnsupportedNetwork) {
+    return <UnsupportedNetwork />
   }
 
   if (
@@ -73,7 +72,8 @@ export const PoolData = (props) => {
 
 const InvalidAddress = (props) => {
   const { invalidAddress, chainId } = props
-  const networkView = chainIdToView(chainId)
+  const networkView = getChain(chainId)?.name
+
   return (
     <>
       <div className='border-2 border-primary px-7 py-4 rounded-xl mb-10 text-accent-1'>

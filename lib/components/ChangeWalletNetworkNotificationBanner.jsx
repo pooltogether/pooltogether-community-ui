@@ -1,54 +1,60 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React from 'react'
+import { useRouter } from 'next/router'
 
-import { useNetwork } from 'lib/hooks/useNetwork'
+import { ETHEREUM_NETWORKS, WALLETS } from 'lib/constants'
 import { useAddNetworkToMetamask } from 'lib/hooks/useAddNetworkToMetamask'
+import { useNetwork } from 'lib/hooks/useNetwork'
+import { useWalletNetwork } from 'lib/hooks/useWalletNetwork'
 import { Button } from 'lib/components/Button'
-import { WalletContext } from 'lib/components/WalletContextProvider'
-import { WALLETS } from 'lib/constants'
 import { NotificationBanner } from 'lib/components/NotificationBanners'
 import { NETWORK } from 'lib/utils/networks'
 
 export const ChangeWalletNetworkNotificationBanner = (props) => {
-  const { walletConnected, walletMatchesNetwork, walletNetwork, view, chainId } = useNetwork()
+  const { walletConnected } = useWalletNetwork()
+  const { walletMatchesNetwork } = useNetwork()
 
   if (!walletConnected || walletMatchesNetwork) return null
 
   return (
     <NotificationBanner className='bg-teal' canClose>
-      <ChangeWalletNetworkNotification
-        chainId={chainId}
-        walletNetwork={walletNetwork}
-        poolChainName={view}
-      />
+      <ChangeWalletNetworkNotification />
     </NotificationBanner>
   )
 }
 
 // TODO: Blocked on a guide for network changing
 const ChangeWalletNetworkNotification = (props) => {
-  const { chainId, walletNetwork, poolChainName } = props
+  const { name: poolChainName, chainId: poolChainId } = useNetwork()
+  const { walletName, walletNetworkShortName } = useWalletNetwork()
 
-  const wallet = useContext(WalletContext)
-  const addNetwork = useAddNetworkToMetamask(chainId)
-
-  const walletName = wallet?.state?.wallet?.name
-  const { view: walletChainName } = walletNetwork
+  const addNetwork = useAddNetworkToMetamask(poolChainId)
   const walletIsMetaMask = [WALLETS.metamask].includes(walletName)
 
-  const ethereumNetworks = [1, 4, 42]
-  const isSupportedEthereumNetwork = ethereumNetworks.includes(chainId)
+  const isSupportedEthereumNetwork = ETHEREUM_NETWORKS.includes(poolChainId)
 
-  const connectableNetwork = [NETWORK.matic, NETWORK.mumbai, NETWORK.xdai, NETWORK.bsc]
-  const isConnectableNetwork = connectableNetwork.includes(chainId)
+  const connectableNetwork = [
+    NETWORK.matic,
+    NETWORK.mumbai,
+    NETWORK.xdai,
+    NETWORK.bsc,
+    NETWORK['bsc-testnet'],
+    NETWORK.poa,
+    NETWORK['poa-sokol']
+  ]
+  const isConnectableNetwork = connectableNetwork.includes(poolChainId)
 
   const showConnectButton = walletIsMetaMask && isConnectableNetwork
   const showBadWalletMessage = !walletIsMetaMask && !isSupportedEthereumNetwork
 
+  const router = useRouter()
+  const isPool = Boolean(router?.query?.poolAlias || router?.query?.prizePoolAddress)
+  const words = isPool ? 'this pool' : 'these pools'
+
   return (
     <div className='flex flex-col sm:flex-row justify-between items-center'>
       <span>
-        👋 Your wallet is currently set to <b>{walletChainName}</b>. Please connect to{' '}
-        <b>{poolChainName}</b> to participate.
+        👋 Your wallet is currently set to <b>{walletNetworkShortName}</b>. Please connect to{' '}
+        <b>{poolChainName}</b> to participate in {words}.
         <br className='hidden xs:block' />
         {showBadWalletMessage && (
           <span>
@@ -67,7 +73,7 @@ const ChangeWalletNetworkNotification = (props) => {
           color='primary'
           onClick={() => addNetwork()}
           paddingClasses='py-1 px-4'
-          className='mt-2 mx-auto sm:mx-0 sm:mt-0 mx'
+          className='mt-2 mx-auto sm:mr-0 sm:ml-2 sm:mt-0'
         >
           Connect to {poolChainName}
         </Button>

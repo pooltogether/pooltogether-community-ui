@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import FeatherIcon from 'feather-icons-react'
+import { useAtom } from 'jotai'
+import { getChain } from '@pooltogether/evm-chains-extended'
 
+import { NETWORKS_TO_IGNORE_VERSION_CHECKS, SUPPORTED_NETWORKS } from 'lib/constants'
+import { EMPTY_ERROR_STATE, errorStateAtom } from 'lib/atoms'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
-import { NETWORKS_TO_IGNORE_VERSION_CHECKS, SUPPORTED_NETWORKS } from 'lib/constants'
-import { chainIdToName } from 'lib/utils/networks'
-import { useAtom } from 'jotai'
-import { EMPTY_ERROR_STATE, errorStateAtom } from 'lib/atoms'
 
 export const IncompatibleContractWarning = (props) => {
   const [errorState, setErrorState] = useAtom(errorStateAtom)
   const { data: prizePoolContracts } = usePrizePoolContracts()
-  const { chainId, name: networkName } = useNetwork()
+  const { chainId: poolChainId, name: networkName } = useNetwork()
 
   const [hideWarning, setHideWarning] = useState(false)
   const [showMoreInfo, setShowMoreInfo] = useState(false)
@@ -28,7 +28,7 @@ export const IncompatibleContractWarning = (props) => {
   if (
     hideWarning ||
     unknownContracts.length === 0 ||
-    NETWORKS_TO_IGNORE_VERSION_CHECKS.includes(chainId)
+    NETWORKS_TO_IGNORE_VERSION_CHECKS.includes(poolChainId)
   ) {
     return null
   }
@@ -92,11 +92,12 @@ export const IncompatibleContractWarning = (props) => {
           </p>
           <p>Possibly try one of the following networks:</p>
           <ul className='flex flex-col mt-2'>
-            {SUPPORTED_NETWORKS.map((network) => {
-              if (network === chainId || network === 31337 || network === 1234) return null
-              const networkName = chainIdToName(network)
+            {SUPPORTED_NETWORKS.map((_chainId) => {
+              if (_chainId === poolChainId || _chainId === 31337 || _chainId === 1234) return null
+              const networkName = getChain(_chainId)?.network
+
               return (
-                <li className='ml-2' key={network}>
+                <li className='ml-2' key={_chainId}>
                   <a
                     className='text-green-1 trans hover:text-inverse'
                     href={`/pools/${networkName}/${prizePoolAddress}`}

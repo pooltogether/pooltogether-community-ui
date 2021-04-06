@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { ethers } from 'ethers'
 import Onboard from '@pooltogether/bnc-onboard'
 import Cookies from 'js-cookie'
+import { ethers } from 'ethers'
 
 import { SELECTED_WALLET_COOKIE_KEY } from 'lib/constants'
-import { nameToChainId } from 'lib/utils/networks'
+import { NETWORK } from 'lib/utils/networks'
 
 const debug = require('debug')('WalletContextProvider')
 
@@ -12,7 +12,6 @@ const INFURA_KEY = process.env.NEXT_JS_INFURA_KEY
 const FORTMATIC_KEY = process.env.NEXT_JS_FORTMATIC_API_KEY
 const PORTIS_KEY = process.env.NEXT_JS_PORTIS_API_KEY
 
-// let networkName = 'mainnet'
 let networkName = 'rinkeby'
 const RPC_URL =
   networkName && INFURA_KEY
@@ -131,7 +130,7 @@ let _onboard
 const initializeOnboard = (setOnboardState) => {
   _onboard = Onboard({
     hideBranding: true,
-    networkId: nameToChainId(networkName),
+    networkId: NETWORK[networkName],
     darkMode: true,
     walletSelect: {
       wallets: WALLETS_CONFIG

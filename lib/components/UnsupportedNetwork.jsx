@@ -1,16 +1,19 @@
 import React from 'react'
 import classnames from 'classnames'
+import { getChain } from '@pooltogether/evm-chains-extended'
 
 import { SUPPORTED_NETWORKS } from 'lib/constants'
-import { chainIdToName, networkColorClassname } from 'lib/utils/networks'
+import { useWalletNetwork } from 'lib/hooks/useWalletNetwork'
+import { networkColorClassname } from 'lib/utils/networks'
 
-export const UnsupportedNetwork = (props) => {
-  const { chainId } = props
+export const UnsupportedNetwork = () => {
+  const { walletChainId } = useWalletNetwork()
+
   return (
-    <div className='flex flex-col text-center my-auto'>
-      <h1 className='mb-8'>⚠️ Unsupported network ⚠️</h1>
-      <div>
-        You're currently connected to <Network chainId={chainId} />.
+    <div className='flex flex-col'>
+      <h3 className='mb-4'>⚠️ Unsupported network ⚠️</h3>
+      <div className='mb-1'>
+        You're currently connected to <Network chainId={walletChainId} />.
       </div>
       <div className='mb-4'>
         Please connect your wallet to one of the following supported networks:
@@ -19,7 +22,7 @@ export const UnsupportedNetwork = (props) => {
         {SUPPORTED_NETWORKS.map((network) => {
           if ([31337, 1234].includes(network)) return null
           return (
-            <li className='ml-2 xs:ml-4' key={network}>
+            <li key={network}>
               <Network chainId={network} />
             </li>
           )
@@ -29,9 +32,18 @@ export const UnsupportedNetwork = (props) => {
   )
 }
 
-const Network = (props) => (
-  <span className={classnames('capitalize', networkColorClassname(props.chainId))}>
-    <b>{chainIdToName(props.chainId)}</b>
-    <small className='ml-1'>{`network id: ${props.chainId}`}</small>
-  </span>
-)
+const Network = (props) => {
+  const { chainId } = props
+  let viewName = 'an unknown network'
+
+  try {
+    viewName = getChain(chainId)?.name
+  } catch (e) {}
+
+  return (
+    <span className={classnames(networkColorClassname(props.chainId))}>
+      <b>{viewName}</b>
+      <small className='ml-1 text-highlight-1'>{`chainId: ${chainId}`}</small>
+    </span>
+  )
+}

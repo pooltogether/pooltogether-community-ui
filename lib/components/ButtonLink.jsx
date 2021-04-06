@@ -1,7 +1,7 @@
 import React from 'react'
 import classnames from 'classnames'
 import Link from 'next/link'
-import { pick, isUndefined } from 'lodash'
+import { pick } from 'lodash'
 
 const COLOR_CLASSES = {
   primary: {
@@ -175,13 +175,19 @@ const getRoundedClasses = (roundedClasses) => {
 }
 
 export function ButtonLink(props) {
-  let { children, as, href } = props
+  let { children, as, href, disabled } = props
 
   const classes = getButtonClasses(props)
 
   const linkProps = pick(props, ['target', 'rel'])
 
-  if (!as) {
+  if (disabled) {
+    return (
+      <a {...linkProps} className={classes}>
+        {children}
+      </a>
+    )
+  } else if (!as) {
     return (
       <a {...linkProps} href={href} className={classes} onClick={(e) => e.stopPropagation()}>
         {children}

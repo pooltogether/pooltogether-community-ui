@@ -1,35 +1,51 @@
 import React, { useContext, useMemo, useState } from 'react'
-import Link from 'next/link'
-import { find, findKey, upperFirst } from 'lodash'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
+import { getChain } from '@pooltogether/evm-chains-extended'
 
-import { NETWORKS, CONTRACT_ADDRESSES, POOL_ALIASES, SUPPORTED_NETWORKS } from 'lib/constants'
+import { CONTRACT_ADDRESSES, POOL_ALIASES, SUPPORTED_NETWORKS } from 'lib/constants'
+import { WalletContext } from 'lib/components/WalletContextProvider'
 import { ButtonLink } from 'lib/components/ButtonLink'
 import { Card, CardTitle } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
-import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
-import { TextInputGroup } from 'lib/components/TextInputGroup'
-import { WalletContext } from 'lib/components/WalletContextProvider'
-import { useCoingeckoTokenData } from 'lib/hooks/useCoingeckoTokenData'
-import { useAllCreatedPrizePoolsWithTokens } from 'lib/hooks/useAllCreatedPrizePoolsWithTokens'
-import { useAllUserTokenBalances } from 'lib/hooks/useAllUserTokenBalances'
-import { getPrecision, numberWithCommas } from 'lib/utils/numberWithCommas'
-import { useNetwork } from 'lib/hooks/useNetwork'
 import { CheckboxInputGroup } from 'lib/components/CheckboxInputGroup'
 import { Tooltip } from 'lib/components/Tooltip'
 import { PoolTogetherLoading } from 'lib/components/PoolTogetherLoading'
 import { BlockExplorerLink, LinkIcon } from 'lib/components/BlockExplorerLink'
-import { NETWORK, NETWORK_DATA } from 'lib/utils/networks'
+import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
 import { UnsupportedNetwork } from 'lib/components/UnsupportedNetwork'
-
+import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { useIsOwnerPoolTogether } from 'lib/hooks/useIsOwnerPoolTogether'
+import { useCoingeckoTokenData } from 'lib/hooks/useCoingeckoTokenData'
+import { useAllCreatedPrizePoolsWithTokens } from 'lib/hooks/useAllCreatedPrizePoolsWithTokens'
+import { useNetwork } from 'lib/hooks/useNetwork'
+import { useWalletNetwork } from 'lib/hooks/useWalletNetwork'
+import { useAllUserTokenBalances } from 'lib/hooks/useAllUserTokenBalances'
+import { getPrecision, numberWithCommas } from 'lib/utils/numberWithCommas'
+import { isValidAddress } from 'lib/utils/isValidAddress'
+import { NETWORK, getNetworkNameAliasByChainId } from 'lib/utils/networks'
+
+export const NETWORK_OPTIONS = {
+  'mainnet': 1,
+  'ropsten': 3,
+  'rinkeby': 4,
+  'kovan': 42,
+  'bsc': 56,
+  'poa-sokol': 77,
+  'bsc-testnet': 97,
+  'poa': 99,
+  'xdai': 100,
+  'matic': 137,
+  // 'polygon': 137,
+  'local': 31337,
+  'mumbai': 80001
+}
 
 export const IndexContent = () => {
-  const { chainId, name: networkName } = useNetwork()
+  const { walletOnUnsupportedNetwork } = useWalletNetwork()
 
-  if (!SUPPORTED_NETWORKS.includes(chainId)) {
-    return <UnsupportedNetwork chainId={chainId} networkName={networkName} />
+  if (walletOnUnsupportedNetwork) {
+    return <UnsupportedNetwork />
   }
 
   return <PoolsLists />
@@ -71,11 +87,21 @@ const ReferencePoolCard = () => {
   const [network, setNetwork] = useState('mainnet')
   const [contractAddress, setContractAddress] = useState('')
 
-  const formatValue = (key) => NETWORKS[key].view
+  const formatValue = (key) => {
+    if (key === 'local') {
+      return 'local'
+    }
+
+    const chainId = NETWORK[key]
+
+    return getChain(chainId).name
+  }
 
   const onValueSet = (network) => {
     setNetwork(network)
   }
+
+  const error = isValidAddress(contractAddress)
 
   return (
     <Card>
@@ -86,7 +112,7 @@ const ReferencePoolCard = () => {
           formatValue={formatValue}
           onValueSet={onValueSet}
           current={network}
-          values={NETWORKS}
+          values={NETWORK_OPTIONS}
         />
 
         <TextInputGroup
@@ -101,7 +127,7 @@ const ReferencePoolCard = () => {
           <ViewButton
             as={`/pools/${network}/${contractAddress}/home`}
             href='/pools/[networkName]/[prizePoolAddress]/home'
-            disabled={!contractAddress}
+            disabled={!contractAddress || error}
           />
         </div>
       </Collapse>
@@ -435,9 +461,11 @@ export const OwnerAddress = (props) => {
 }
 
 const Actions = (props) => {
-  const { chainId, name: networkName } = useNetwork()
-  const { prizePool, ticket } = props
+  const { chainId } = useNetwork()
+  const { prizePool } = props
   const { prizePool: prizePoolAddress } = prizePool
+
+  const networkName = getNetworkNameAliasByChainId(chainId)
 
   const [as, href] = useMemo(() => {
     const poolAlias = Object.values(POOL_ALIASES).find(

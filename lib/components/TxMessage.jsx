@@ -1,19 +1,14 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import classnames from 'classnames'
 import Loader from 'react-loader-spinner'
 import FeatherIcon from 'feather-icons-react'
 
 import { Button } from 'lib/components/Button'
 import { InnerCard } from 'lib/components/Card'
-import { WalletContext } from 'lib/components/WalletContextProvider'
 import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
 
 export const TxMessage = (props) => {
-  const walletContext = useContext(WalletContext)
-  const { _onboard } = walletContext || {}
-  const chainId = _onboard.getState().appNetworkId
-
-  const { tx, txType, resetButtonText, handleReset, className } = props
+  const { tx, resetButtonText, handleReset, className } = props
 
   const txInWallet = tx.inWallet && !tx.sent
   const txSent = tx.sent && !tx.completed
