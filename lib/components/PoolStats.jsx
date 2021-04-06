@@ -21,8 +21,9 @@ import { useIsOwnerPoolTogether } from 'lib/hooks/useIsOwnerPoolTogether'
 import { shorten } from 'lib/utils/shorten'
 
 import CompSvg from 'assets/images/comp.svg'
+import PoolSvg from 'assets/images/pool-icon.svg'
 
-const PoolStatsCard = (props) => {
+const PoolStatsCardLayout = (props) => {
   return (
     <Card>
       <div className='flex justify-between'>
@@ -33,13 +34,19 @@ const PoolStatsCard = (props) => {
   )
 }
 
-export const PoolStats = () => (
-  <PoolStatsCard>
+export const PoolStatsCard = () => (
+  <PoolStatsCardLayout>
     <CompleteStatsList />
-  </PoolStatsCard>
+  </PoolStatsCardLayout>
 )
 
-export const CompleteStatsList = () => {
+export const PoolDepositorStatsCard = () => (
+  <PoolStatsCardLayout>
+    <DepositorStatsList />
+  </PoolStatsCardLayout>
+)
+
+const CompleteStatsList = () => {
   const { data: poolChainValues } = usePoolChainValues()
   return (
     <>
@@ -60,16 +67,35 @@ export const CompleteStatsList = () => {
   )
 }
 
+const DepositorStatsList = () => {
+  const { data: poolChainValues } = usePoolChainValues()
+
+  return (
+    <>
+      <UsersStats poolChainValues={poolChainValues} />
+      <Line />
+      <NumberOfWinnersStat poolChainValues={poolChainValues} />
+      <DepositsStat poolChainValues={poolChainValues} />
+      <SponsorshipStat poolChainValues={poolChainValues} />
+      <YieldSourceStat poolChainValues={poolChainValues} />
+      <DepositTokenStat poolChainValues={poolChainValues} />
+      <PoolOwnerStat poolChainValues={poolChainValues} />
+      <AprStats poolChainValues={poolChainValues} />
+    </>
+  )
+}
+
 // Generic stat component
 
 const Stat = (props) => {
   const {
     title,
-    tokenSymbol,
     convertedValue,
     sourceName,
     sourceImage,
     tokenAmount,
+    tokenSymbol,
+    tokenImage,
     value,
     percent,
     tooltip
@@ -87,14 +113,15 @@ const Stat = (props) => {
         {value && <span className='ml-2 flex'>{value}</span>}
       </span>
       {tokenSymbol && tokenAmount && (
-        <span>
+        <span className='flex items-center'>
           {Boolean(convertedValue) && (
             <>
               <span className='opacity-30'>(${numberWithCommas(convertedValue)})</span>{' '}
             </>
           )}
           <PoolNumber>{numberWithCommas(tokenAmount)}</PoolNumber>
-          <span>{tokenSymbol}</span>
+          {tokenImage && <img src={tokenImage} className='ml-2 w-4' />}
+          <span className='ml-2'>{tokenSymbol}</span>
         </span>
       )}
       {percent && <span>{displayPercentage(percent)}%</span>}
@@ -106,7 +133,7 @@ const Stat = (props) => {
 
 // Users stats
 
-export const UsersStats = (props) => {
+const UsersStats = (props) => {
   const usersAddress = useUsersAddress()
 
   const { data: usersChainValues } = useUserChainValues()
@@ -347,11 +374,14 @@ const AprStats = (props) => {
 const DailyPoolDistributionStat = (props) => {
   const { poolChainValues } = props
 
+  const isPool = poolChainValues.tokenFaucet.dripToken.symbol === 'POOL'
+
   return (
     <Stat
       title={`Daily ${poolChainValues.tokenFaucet.dripToken.symbol} distribution`}
       tokenSymbol={poolChainValues.tokenFaucet.dripToken.symbol}
       tokenAmount={poolChainValues.tokenFaucet.dripRatePerDay}
+      tokenImage={isPool && PoolSvg}
     />
   )
 }
