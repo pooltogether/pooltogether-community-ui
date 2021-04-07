@@ -12,7 +12,7 @@ const INFURA_KEY = process.env.NEXT_JS_INFURA_KEY
 const FORTMATIC_KEY = process.env.NEXT_JS_FORTMATIC_API_KEY
 const PORTIS_KEY = process.env.NEXT_JS_PORTIS_API_KEY
 
-let networkName = 'rinkeby'
+let networkName = 'mainnet'
 const RPC_URL =
   networkName && INFURA_KEY
     ? `https://${networkName}.infura.io/v3/${INFURA_KEY}`
