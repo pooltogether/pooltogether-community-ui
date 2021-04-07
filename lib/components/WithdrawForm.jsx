@@ -160,7 +160,7 @@ export const WithdrawForm = (props) => {
   if (!poolIsLocked && usersTicketBalance && usersTicketBalanceUnformatted.isZero()) {
     return (
       <div className='text-orange-600'>
-        You have no tickets to withdraw. Deposit some {tokenSymbol} first!
+        You have no deposit to withdraw. Deposit some {tokenSymbol} first!
       </div>
     )
   }
