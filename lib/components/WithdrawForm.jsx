@@ -121,13 +121,14 @@ export const WithdrawForm = (props) => {
   const withdrawAmountUnformatted = parseNumString(withdrawAmount, tokenDecimals)
   const inputError = !withdrawAmountUnformatted
 
-  const overBalance = withdrawAmountUnformatted?.gt(usersTicketBalanceUnformatted)
+  const overBalance =
+    usersTicketBalanceUnformatted && withdrawAmountUnformatted?.gt(usersTicketBalanceUnformatted)
 
   const ticketBal = usersTicketBalance
 
   let usersNewTicketBalance = ethers.constants.Zero
   let totalSupplyLessWithdrawAmountBN = ethers.BigNumber.from(0)
-  if (withdrawAmountUnformatted) {
+  if (withdrawAmountUnformatted && usersTicketBalanceUnformatted) {
     usersNewTicketBalance = usersTicketBalanceUnformatted.sub(withdrawAmountUnformatted)
     totalSupplyLessWithdrawAmountBN =
       ticketTotalSupply && ticketTotalSupply.sub(withdrawAmountUnformatted)
