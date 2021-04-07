@@ -136,10 +136,10 @@ const Stat = (props) => {
 const UsersStats = (props) => {
   const usersAddress = useUsersAddress()
 
-  const { data: usersChainValues } = useUserChainValues()
-  const { data: poolChainValues } = usePoolChainValues()
+  const { data: usersChainValues, isFetched: usersChainValuesIsFetched } = useUserChainValues()
+  const { data: poolChainValues, isFetched: poolChainValuesIsFetched } = usePoolChainValues()
 
-  if (!usersAddress) return null
+  if (!usersAddress || !usersChainValuesIsFetched || !poolChainValuesIsFetched) return null
 
   return (
     <>
@@ -180,7 +180,7 @@ const UsersOddsStat = (props) => {
   const { poolChainValues, usersChainValues } = props
 
   const odds = calculateOdds(
-    usersChainValues.usersTicketBalanceUnformatted,
+    usersChainValues?.usersTicketBalanceUnformatted,
     poolChainValues.ticket.totalSupplyUnformatted,
     poolChainValues.ticket.decimals,
     poolChainValues.config.numberOfWinners

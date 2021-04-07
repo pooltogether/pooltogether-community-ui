@@ -75,8 +75,8 @@ export const WithdrawForm = (props) => {
   const tokenSymbol = poolChainValues.token.symbol
   const prizePoolAddress = prizePoolContracts.prizePool.address
   const ticketAddress = prizePoolContracts.ticket.address
-  const usersTicketBalance = usersChainValues.usersTicketBalance
-  const usersTicketBalanceUnformatted = usersChainValues.usersTicketBalanceUnformatted
+  const usersTicketBalance = usersChainValues?.usersTicketBalance
+  const usersTicketBalanceUnformatted = usersChainValues?.usersTicketBalanceUnformatted
   const { earlyExitFee, timelockDurationSeconds } = exitFees
 
   const handleSubmit = (e) => {
