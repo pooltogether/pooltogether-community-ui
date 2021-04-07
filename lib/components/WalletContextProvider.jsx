@@ -30,7 +30,8 @@ const APP_NAME = 'PoolTogether'
 
 const walletConnectOptions = {
   infuraKey: INFURA_KEY,
-  preferred: true
+  preferred: true,
+  bridge: 'https://pooltogether.bridge.walletconnect.org/'
 }
 
 const WALLETS_CONFIG = [
