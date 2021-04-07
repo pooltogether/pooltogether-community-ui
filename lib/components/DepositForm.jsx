@@ -25,9 +25,9 @@ export const DepositForm = (props) => {
   const { data: poolChainValues } = usePoolChainValues()
   const { data: usersChainValues } = useUserChainValues()
 
-  const hasApprovedBalance = usersChainValues.underlyingTokenIsApproved
-  const supportsAllowance = usersChainValues.underlyingTokenSupportsAllowance
-  const { usersTokenBalance, usersTokenBalanceUnformatted } = usersChainValues
+  const hasApprovedBalance = usersChainValues?.underlyingTokenIsApproved
+  const supportsAllowance = usersChainValues?.underlyingTokenSupportsAllowance
+  const { usersTokenBalance, usersTokenBalanceUnformatted } = usersChainValues || {}
   const { symbol: tokenSymbol, decimals: tokenDecimals } = poolChainValues.token
   const poolIsLocked = poolChainValues.prize.isRngRequested
 
@@ -131,8 +131,8 @@ const UnlockDepositsButton = () => {
   const [tx, setTx] = useState({})
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
-  const hasApprovedBalance = usersChainValues.underlyingTokenIsApproved
-  const underlyingTokenSupportsAllowance = usersChainValues.underlyingTokenSupportsAllowance
+  const hasApprovedBalance = usersChainValues?.underlyingTokenIsApproved
+  const underlyingTokenSupportsAllowance = usersChainValues?.underlyingTokenSupportsAllowance
 
   // Reset on network change
   useEffect(() => {
