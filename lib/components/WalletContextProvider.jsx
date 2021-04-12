@@ -12,7 +12,7 @@ const INFURA_KEY = process.env.NEXT_JS_INFURA_KEY
 const FORTMATIC_KEY = process.env.NEXT_JS_FORTMATIC_API_KEY
 const PORTIS_KEY = process.env.NEXT_JS_PORTIS_API_KEY
 
-let networkName = 'rinkeby'
+let networkName = 'mainnet'
 const RPC_URL =
   networkName && INFURA_KEY
     ? `https://${networkName}.infura.io/v3/${INFURA_KEY}`
@@ -36,12 +36,21 @@ const walletConnectOptions = {
 
 const WALLETS_CONFIG = [
   { walletName: 'metamask', preferred: true },
-  { walletName: 'coinbase', preferred: true },
+  {
+    walletName: 'walletConnect',
+    ...walletConnectOptions
+  },
   { walletName: 'rainbow', preferred: true, ...walletConnectOptions },
   { walletName: 'argent', preferred: true, ...walletConnectOptions },
   { walletName: 'trustWallet', preferred: true, ...walletConnectOptions },
   { walletName: 'gnosisSafe', preferred: true, ...walletConnectOptions },
   { walletName: 'trust', preferred: true, rpcUrl: RPC_URL },
+  { walletName: 'coinbase', preferred: true },
+  {
+    walletName: 'walletLink',
+    preferred: true,
+    rpcUrl: RPC_URL
+  },
   {
     walletName: 'trezor',
     preferred: true,
@@ -58,15 +67,6 @@ const WALLETS_CONFIG = [
     walletName: 'fortmatic',
     preferred: true,
     apiKey: FORTMATIC_KEY
-  },
-  {
-    walletName: 'walletConnect',
-    ...walletConnectOptions
-  },
-  {
-    walletName: 'walletLink',
-    preferred: true,
-    rpcUrl: RPC_URL
   },
   {
     walletName: 'imToken',

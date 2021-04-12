@@ -33,7 +33,6 @@ export const NETWORK_OPTIONS = {
   'bsc': 56,
   'poa-sokol': 77,
   'bsc-testnet': 97,
-  'poa': 99,
   'xdai': 100,
   'matic': 137,
   // 'polygon': 137,

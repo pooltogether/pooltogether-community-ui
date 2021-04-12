@@ -44,7 +44,7 @@ const StaticNetworkNotification = () => {
         <span className='inline-flex items-center'>
           <NetworkIcon sizeClasses='w-3 h-3' chainId={walletChainId} />
           <b className='capitalize'>{walletNetworkShortName}</b>
-        </span>
+        </span>{' '}
         🥵.
       </span>
     </div>
