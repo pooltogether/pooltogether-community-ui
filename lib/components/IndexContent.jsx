@@ -29,6 +29,7 @@ export const NETWORK_OPTIONS = {
   'mainnet': 1,
   'ropsten': 3,
   'rinkeby': 4,
+  'goerli': 5,
   'kovan': 42,
   'bsc': 56,
   'poa-sokol': 77,
