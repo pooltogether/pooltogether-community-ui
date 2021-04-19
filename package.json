@@ -31,11 +31,13 @@
     "verbose": true
   },
   "devDependencies": {
+    "@babel/core": "^7.13.15",
+    "@babel/preset-env": "^7.13.15",
     "@next/bundle-analyzer": "^10.1.1"
   },
   "dependencies": {
     "@pooltogether/bnc-onboard": "1.22.1",
-    "@pooltogether/current-pool-data": "3.3.3",
+    "@pooltogether/current-pool-data": "3.3.8",
     "@pooltogether/etherplex": "1.0.2",
     "@pooltogether/evm-chains-extended": "^0.4.3",
     "@pooltogether/pooltogether-contracts": "3.3.7",

@@ -183,41 +183,14 @@ const GovernancePoolsCard = (props) => {
 
   return (
     <Card>
-      <Collapse
-        title={
-          <>
-            🏆 Governance Pools
-            <Tooltip
-              id='governance-pools'
-              className='ml-2 my-auto'
-              tip='These pools are owned and maintained by PoolTogether governance'
-            />
-          </>
-        }
-        containerClassName='mb-4 xs:mb-8'
-        headerMarginClassName='mb-4'
-        renderCustomIcon={({ showContent, setShowContent }) => (
-          <FeatherIcon
-            icon='settings'
-            className={classnames(
-              'ml-3 sm:ml-4 w-4 h-4 my-auto stroke-current text-accent-1 trans cursor-pointer',
-              {
-                'rotate-90': showContent
-              }
-            )}
-            onClick={() => setShowContent(!showContent)}
-          />
-        )}
-      >
-        <div className='flex'>
-          <span className='ml-auto my-auto text-xs leading-snug'>Hide pools with no deposits</span>
-          <CheckboxInputGroup
-            checked={hideNoDeposits}
-            handleClick={() => setHideNoDeposits(!hideNoDeposits)}
-            marginClasses='ml-2'
-          />
-        </div>
-      </Collapse>
+      <CardTitle>
+        🏆 Governance Pools{' '}
+        <Tooltip
+          id='governance-pools'
+          className='ml-2 my-auto'
+          tip='These pools are owned and maintained by PoolTogether governance'
+        />
+      </CardTitle>
       <ListHeaders />
       <ul>{pools}</ul>
     </Card>
@@ -270,7 +243,7 @@ const AllPoolsCard = (props) => {
 
   const walletContext = useContext(WalletContext)
   const { chainId, view: networkView } = useNetwork()
-  const [hideNoDeposits, setHideNoDeposits] = useState(createdPrizePools.length > 10)
+  const [hideNoDeposits, setHideNoDeposits] = useState(false)
   const [showFirstTen, setShowFirstTen] = useState(createdPrizePools.length > 10)
 
   const isWalletConnected = Boolean(walletContext._onboard.getState().address)
