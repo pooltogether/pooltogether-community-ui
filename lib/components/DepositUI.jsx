@@ -92,7 +92,7 @@ export const DepositUI = () => {
           txType='Deposit'
           tx={tx}
           handleReset={resetState}
-          resetButtonText='Deposit more'
+          resetButtonText='Deposit again'
         />
       </>
     )
