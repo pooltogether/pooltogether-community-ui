@@ -234,7 +234,7 @@ const PoolOwnerStat = (props) => {
 }
 
 const NumberOfWinnersStat = (props) => (
-  <Stat title='Number of winners' value={props.poolChainValues.config.numberOfWinners} />
+  <Stat title='Winners / prize period' value={props.poolChainValues.config.numberOfWinners} />
 )
 
 const DepositTokenStat = (props) => (

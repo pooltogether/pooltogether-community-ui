@@ -131,7 +131,7 @@ export const DepositUI = () => {
 const BRIDGEABLE_NETWORKS = [NETWORK.matic]
 
 const GetTokensOnL2Prompt = (props) => {
-  const { chainId, view: networkView } = useNetwork()
+  const { chainId, chain } = useNetwork()
   const { token } = props
   const { name, address } = token
 
@@ -153,7 +153,7 @@ const GetTokensOnL2Prompt = (props) => {
       >
         Zapper
       </a>{' '}
-      or purchasing tokens with fiat for {networkView}.
+      or purchasing tokens with fiat for {chain}.
     </div>
   )
 }
