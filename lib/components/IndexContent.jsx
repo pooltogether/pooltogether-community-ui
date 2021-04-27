@@ -140,7 +140,7 @@ const BuilderCard = () => {
     <Card>
       <div className='w-full flex flex-row'>
         <CardTitle noMargin>🔨 Pool Builder</CardTitle>
-        <ViewButton text='Start Building' href={'https://builder.pooltogether.com/'} />
+        <ViewButton label='Start Building' href={'https://builder.pooltogether.com/'} />
       </div>
     </Card>
   )
@@ -442,7 +442,7 @@ const Actions = (props) => {
 
   const [as, href] = useMemo(() => {
     const poolAlias = Object.values(POOL_ALIASES).find(
-      (poolAlias) => poolAlias.poolAddress === prizePoolAddress.toLowerCase()
+      (poolAlias) => poolAlias.poolAddress.toLowerCase() === prizePoolAddress.toLowerCase()
     )
     if (poolAlias) {
       const as = `/${poolAlias.alias}`
@@ -471,10 +471,10 @@ const ViewButton = (props) => (
     className='ml-auto'
     disabled={props.disabled}
   >
-    {props.text}
+    {props.label}
   </ButtonLink>
 )
 
 ViewButton.defaultProps = {
-  text: 'View'
+  label: 'View'
 }
