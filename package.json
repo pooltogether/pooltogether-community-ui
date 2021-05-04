@@ -36,7 +36,7 @@
     "@next/bundle-analyzer": "^10.1.1"
   },
   "dependencies": {
-    "@pooltogether/bnc-onboard": "1.22.1",
+    "@pooltogether/bnc-onboard": "1.25.0-b",
     "@pooltogether/current-pool-data": "3.4.0",
     "@pooltogether/etherplex": "1.1.1",
     "@pooltogether/evm-chains-extended": "^0.4.3",
