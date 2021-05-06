@@ -64,7 +64,7 @@ export const PoolData = (props) => {
 
   return (
     <>
-      <IncompatibleContractWarning />
+      {/* <IncompatibleContractWarning /> */}
       {props.children}
     </>
   )

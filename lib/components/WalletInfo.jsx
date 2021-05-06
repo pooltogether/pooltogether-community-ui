@@ -5,8 +5,10 @@ import { getChain } from '@pooltogether/evm-chains-extended'
 
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { NetworkIcon } from 'lib/components/NetworkIcon'
+import { useEnsName } from 'lib/hooks/useEnsName'
 import { networkColorClassname } from 'lib/utils/networks'
 import { shorten } from 'lib/utils/shorten'
+import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
 
 export const WalletInfo = () => {
   const walletContext = useContext(WalletContext)
@@ -22,6 +24,8 @@ export const WalletInfo = () => {
     walletName = currentState.wallet.name
     chainId = currentState.appNetworkId
   }
+
+  const { shortenedEnsName } = useEnsName(address)
 
   let innerContent = null
   let networkNameJsx = null
@@ -48,7 +52,9 @@ export const WalletInfo = () => {
       <>
         <div className='flex flex-col items-end leading-snug text-highlight-3 trans'>
           <span className='text-highlight-3 hover:text-highlight-1 overflow-ellipsis block w-full no-underline'>
-            {shorten(address)}
+            <BlockExplorerLink address={address}>
+              {shortenedEnsName ? shortenedEnsName : shorten(address)}
+            </BlockExplorerLink>
           </span>
 
           <span className='flex items-center text-default'>{walletName}</span>
@@ -74,9 +80,5 @@ export const WalletInfo = () => {
     )
   }
 
-  return (
-    <>
-      <div className='relative flex justify-end items-center'>{innerContent}</div>
-    </>
-  )
+  return <div className='relative flex justify-end items-center'>{innerContent}</div>
 }
