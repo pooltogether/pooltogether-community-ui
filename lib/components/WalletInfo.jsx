@@ -25,7 +25,7 @@ export const WalletInfo = () => {
     chainId = currentState.appNetworkId
   }
 
-  const ensName = useEnsName(address)
+  const { shortenedEnsName } = useEnsName(address)
 
   let innerContent = null
   let networkNameJsx = null
@@ -53,7 +53,7 @@ export const WalletInfo = () => {
         <div className='flex flex-col items-end leading-snug text-highlight-3 trans'>
           <span className='text-highlight-3 hover:text-highlight-1 overflow-ellipsis block w-full no-underline'>
             <BlockExplorerLink address={address}>
-              {ensName ? ensName.substr(0, 30) : shorten(address)}
+              {shortenedEnsName ? shortenedEnsName : shorten(address)}
             </BlockExplorerLink>
           </span>
 
