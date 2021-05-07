@@ -101,7 +101,7 @@ const ReferencePoolCard = () => {
     setNetwork(network)
   }
 
-  const error = isValidAddress(contractAddress)
+  const _isValidAddress = isValidAddress(contractAddress)
 
   return (
     <Card>
@@ -119,7 +119,7 @@ const ReferencePoolCard = () => {
           id='contractAddress'
           label={<>Prize Pool contract address:</>}
           required
-          onChange={(e) => setContractAddress(e.target.value)}
+          onChange={(e) => setContractAddress(e.target.value.trim())}
           value={contractAddress}
         />
 
@@ -127,7 +127,7 @@ const ReferencePoolCard = () => {
           <ViewButton
             as={`/pools/${network}/${contractAddress}/home`}
             href='/pools/[networkName]/[prizePoolAddress]/home'
-            disabled={!contractAddress || error}
+            disabled={!_isValidAddress}
           />
         </div>
       </Collapse>
