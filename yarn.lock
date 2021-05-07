@@ -2427,6 +2427,11 @@
   resolved "https://registry.yarnpkg.com/@pooltogether/current-pool-data/-/current-pool-data-3.4.0.tgz#a8cb8ef70e121c983beed941678c2b0fff66ec56"
   integrity sha512-mFw97zw5op68gnhVpRzYQpKnOnJ/4Dpmv85nJmV3RqR2w7Ke/F7QGYZ3QPM5UNJEPxSrPi3is99pk6hyPubLLQ==
 
+"@pooltogether/current-pool-data@^3.4.3":
+  version "3.4.10"
+  resolved "https://registry.yarnpkg.com/@pooltogether/current-pool-data/-/current-pool-data-3.4.10.tgz#7fdc14ba31aa13686e7fadb0846b2a964df0826b"
+  integrity sha512-rrHcEBNKM2Pn9lPRPiorZ+TGEHtF6OKkYxz5MA3vqCGTuK8Teth3cEkPXAzFOQLf2gKuzhc7s1vX+G8EytqHBQ==
+
 "@pooltogether/etherplex@1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@pooltogether/etherplex/-/etherplex-1.1.1.tgz#330f326ce8fbfd4f4aae70d5fd02d5baa3e9195e"
@@ -2476,6 +2481,15 @@
   version "1.0.0-beta.1"
   resolved "https://registry.yarnpkg.com/@pooltogether/uniform-random-number/-/uniform-random-number-1.0.0-beta.1.tgz#72257401fe8536e95f9f812f1d249262659084a7"
   integrity sha512-V4iqLOpNFNhnUqfKRlvqUeRwvKaODdz+qn4Qi65C3iMOnDb0J31tBvyhwKbhP4wauNuUN64WfepqkkxET9U7EQ==
+
+"@pooltogether/utilities@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@pooltogether/utilities/-/utilities-0.0.6.tgz#3fff412703507caa7a10e559971e81e99faffdc4"
+  integrity sha512-WuHLjbMXbx+oSNzUVPfrMM2jeVCQazEio+2tSiMRw6LeNWugwW4s11a5rVc5s7KK+xh0juVRBK9a3Y2xmF1Pgw==
+  dependencies:
+    "@pooltogether/current-pool-data" "^3.4.3"
+    ethers "^5.1.2"
+    lodash.clonedeep "^4.5.0"
 
 "@pooltogether/yield-source-interface@^1.0.1":
   version "1.0.1"
@@ -7229,7 +7243,7 @@ ethers@^4.0.45:
     uuid "2.0.1"
     xmlhttprequest "1.8.0"
 
-ethers@^5.1.4:
+ethers@^5.1.2, ethers@^5.1.4:
   version "5.1.4"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.1.4.tgz#8ae973705ed962f8f41dc59693704002a38dd18b"
   integrity sha512-EAPQ/fgGRu0PoR/VNFnHTMOtG/IZ0AItdW55C9T8ffmVu0rnyllZL404eBF66elJehOLz2kxnUrhXpE7TCpW7g==
@@ -9964,6 +9978,11 @@ locate-path@^5.0.0:
   integrity sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==
   dependencies:
     p-locate "^4.1.0"
+
+lodash.clonedeep@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+  integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
 
 lodash.debounce@^4.0.8:
   version "4.0.8"

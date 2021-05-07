@@ -1,5 +1,6 @@
 import React from 'react'
 import { getChain } from '@pooltogether/evm-chains-extended'
+import { isValidAddress } from '@pooltogether/utilities'
 
 import { PoolTogetherLoading } from 'lib/components/PoolTogetherLoading'
 import { IncompatibleContractWarning } from 'lib/components/IncompatibleContractWarning'
@@ -14,7 +15,6 @@ import { useExternalErc721Awards } from 'lib/hooks/useExternalErc721Awards'
 import { useUserChainValues } from 'lib/hooks/useUserChainValues'
 import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { usePrizePoolAddress } from 'lib/hooks/usePrizePoolAddress'
-import { isValidAddress } from 'lib/utils/isValidAddress'
 
 // http://localhost:3000/pools/rinkeby/0xd1E58Db0d67DB3f28fFa412Db58aCeafA0fEF8fA#admin
 

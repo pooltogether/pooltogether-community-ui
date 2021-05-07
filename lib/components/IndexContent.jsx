@@ -1,6 +1,7 @@
 import React, { useContext, useMemo, useState } from 'react'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
+import { isValidAddress } from '@pooltogether/utilities'
 import { getChain } from '@pooltogether/evm-chains-extended'
 
 import { CONTRACT_ADDRESSES, POOL_ALIASES, SUPPORTED_NETWORKS } from 'lib/constants'
@@ -22,7 +23,6 @@ import { useNetwork } from 'lib/hooks/useNetwork'
 import { useWalletNetwork } from 'lib/hooks/useWalletNetwork'
 import { useAllUserTokenBalances } from 'lib/hooks/useAllUserTokenBalances'
 import { getPrecision, numberWithCommas } from 'lib/utils/numberWithCommas'
-import { isValidAddress } from 'lib/utils/isValidAddress'
 import { NETWORK, getNetworkNameAliasByChainId } from 'lib/utils/networks'
 
 export const NETWORK_OPTIONS = {
