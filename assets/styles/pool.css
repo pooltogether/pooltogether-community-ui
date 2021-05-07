@@ -48,12 +48,11 @@ select:-internal-autofill-selected {
 }
 
 html {
-  overflow-x: hidden;
+  height: 100%;
 }
 
 body {
   @apply font-sans-regular;
-  overflow-x: hidden;
 }
 
 hr {

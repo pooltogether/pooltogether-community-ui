@@ -50,7 +50,7 @@ reach-portal {
 
 [data-reach-menu-list],
 [data-reach-menu-items] {
-  @apply py-0 text-xxxs xs:text-sm sm:text-lg lg:text-xl rounded-lg shadow-lg;
+  @apply py-0 text-xs xs:text-sm rounded-lg shadow-lg;
 }
 
 .theme-dark [data-reach-menu-list],
@@ -59,7 +59,12 @@ reach-portal {
 }
 
 [data-reach-menu-item] {
-  @apply px-3 py-2 font-bold text-primary rounded-lg my-0 sm:my-0;
+  @apply px-3 py-2 font-bold text-primary my-0 sm:my-0;
+}
+
+[data-reach-menu-item]:first-child,
+[data-reach-menu-item]:last-child {
+  @apply rounded-lg;
 }
 
 [data-reach-menu-item]:first-child {

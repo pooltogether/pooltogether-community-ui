@@ -3,10 +3,12 @@ import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
 import { isValidAddress } from '@pooltogether/utilities'
 import { getChain } from '@pooltogether/evm-chains-extended'
+import { useRouter } from 'next/router'
 
 import { CONTRACT_ADDRESSES, POOL_ALIASES, SUPPORTED_NETWORKS } from 'lib/constants'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { ButtonLink } from 'lib/components/ButtonLink'
+import { Button } from 'lib/components/Button'
 import { Card, CardTitle } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { CheckboxInputGroup } from 'lib/components/CheckboxInputGroup'
@@ -87,6 +89,8 @@ const ReferencePoolCard = () => {
   const [network, setNetwork] = useState('mainnet')
   const [contractAddress, setContractAddress] = useState('')
 
+  const router = useRouter()
+
   const formatValue = (key) => {
     if (key === 'local') {
       return 'local'
@@ -103,33 +107,50 @@ const ReferencePoolCard = () => {
 
   const _isValidAddress = isValidAddress(contractAddress)
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (isValidAddress(contractAddress)) {
+      document.body.scrollTo(0, 0)
+      router.push(
+        '/pools/[networkName]/[prizePoolAddress]/home',
+        `/pools/${network}/${contractAddress}/home`
+      )
+    }
+  }
+
   return (
     <Card>
       <Collapse title='🔍 Lookup pool by contract address'>
-        <DropdownInputGroup
-          id='network-dropdown'
-          label={'Network the Pool is on:'}
-          formatValue={formatValue}
-          onValueSet={onValueSet}
-          current={network}
-          values={NETWORK_OPTIONS}
-        />
-
-        <TextInputGroup
-          id='contractAddress'
-          label={<>Prize Pool contract address:</>}
-          required
-          onChange={(e) => setContractAddress(e.target.value.trim())}
-          value={contractAddress}
-        />
-
-        <div className='mt-4 ml-auto'>
-          <ViewButton
-            as={`/pools/${network}/${contractAddress}/home`}
-            href='/pools/[networkName]/[prizePoolAddress]/home'
-            disabled={!_isValidAddress}
+        <form onSubmit={handleSubmit}>
+          <DropdownInputGroup
+            id='network-dropdown'
+            label={'Network the Pool is on:'}
+            formatValue={formatValue}
+            onValueSet={onValueSet}
+            current={network}
+            values={NETWORK_OPTIONS}
           />
-        </div>
+
+          <TextInputGroup
+            id='contractAddress'
+            label={<>Prize Pool contract address:</>}
+            required
+            onChange={(e) => setContractAddress(e.target.value.trim())}
+            value={contractAddress}
+          />
+
+          <div className='mt-4 ml-auto'>
+            <Button
+              disabled={!_isValidAddress}
+              size='base'
+              color='tertiary'
+              paddingClasses='px-4 xs:px-10 py-1 sm:py-2'
+              className='ml-auto border-2 border-highlight-1 no-underline hover:border-transparent'
+            >
+              View
+            </Button>
+          </div>
+        </form>
       </Collapse>
     </Card>
   )
