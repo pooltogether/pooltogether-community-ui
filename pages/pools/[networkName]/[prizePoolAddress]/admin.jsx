@@ -9,7 +9,7 @@ import { PoolData } from 'lib/components/PoolData'
 
 import ManageImage from 'assets/images/manage-image.svg'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
-import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+import { useUsersAddress } from '@pooltogether/hooks'
 
 export default function IndexPage() {
   return (

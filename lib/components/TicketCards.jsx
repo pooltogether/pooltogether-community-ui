@@ -1,17 +1,15 @@
-import React, { useContext } from 'react'
+import React from 'react'
+import { useOnboard, useUsersAddress } from '@pooltogether/hooks'
 
 import { Card, CardPrimaryText, CardSecondaryText, CardSecondaryTitle } from 'lib/components/Card'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
-import { WalletContext } from 'lib/components/WalletContextProvider'
 import { WALLETS } from 'lib/constants'
 import { Button } from 'lib/components/Button'
-import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 
 export const TicketCards = (props) => {
   const { data: poolChainValues } = usePoolChainValues()
   const usersAddress = useUsersAddress()
-  const wallet = useContext(WalletContext)
-  const walletName = wallet?.state?.wallet?.name
+  const { walletName } = useOnboard()
   const showAddButton = [WALLETS.metamask].includes(walletName) && Boolean(usersAddress)
 
   return (

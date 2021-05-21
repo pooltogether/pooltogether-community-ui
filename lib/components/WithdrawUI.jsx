@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { TxMessage } from 'lib/components/TxMessage'
 import { WithdrawForm } from 'lib/components/WithdrawForm'
-import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+import { useUsersAddress } from '@pooltogether/hooks'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import dynamic from 'next/dynamic'
+import { useInitializeOnboard } from '@pooltogether/hooks'
 import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
 import { Provider as JotaiProvider } from 'jotai'
@@ -29,11 +29,6 @@ import 'assets/styles/reach--custom.css'
 
 const queryCache = new QueryCache()
 
-const DynamicWalletContextProvider = dynamic(
-  () => import('lib/components/WalletContextProvider').then((mod) => mod.WalletContextProvider),
-  { ssr: false }
-)
-
 if (process.env.NEXT_JS_SENTRY_DSN) {
   Sentry.init({
     dsn: process.env.NEXT_JS_SENTRY_DSN,
@@ -43,6 +38,8 @@ if (process.env.NEXT_JS_SENTRY_DSN) {
 }
 
 function MyApp({ Component, pageProps }) {
+  useInitializeOnboard()
+
   // ChunkLoadErrors happen when someone has the app loaded, then we deploy a
   // new release, and the user's app points to previous chunks that no longer exist
   useEffect(() => {
@@ -56,19 +53,17 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <ErrorBoundary>
-      <DynamicWalletContextProvider>
-        <ReactQueryCacheProvider queryCache={queryCache}>
-          <ThemeContextProvider>
-            <JotaiProvider>
-              <Layout>
-                <CustomErrorBoundary>
-                  <Component {...pageProps} />
-                </CustomErrorBoundary>
-              </Layout>
-            </JotaiProvider>
-          </ThemeContextProvider>
-        </ReactQueryCacheProvider>
-      </DynamicWalletContextProvider>
+      <ReactQueryCacheProvider queryCache={queryCache}>
+        <ThemeContextProvider>
+          <JotaiProvider>
+            <Layout>
+              <CustomErrorBoundary>
+                <Component {...pageProps} />
+              </CustomErrorBoundary>
+            </Layout>
+          </JotaiProvider>
+        </ThemeContextProvider>
+      </ReactQueryCacheProvider>
     </ErrorBoundary>
   )
 }

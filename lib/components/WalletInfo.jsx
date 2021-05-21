@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { useOnboard } from '@pooltogether/hooks'
 import classnames from 'classnames'
 import FeatherIcon from 'feather-icons-react'
 import { getChain } from '@pooltogether/evm-chains-extended'
@@ -11,18 +12,12 @@ import { shorten } from 'lib/utils/shorten'
 import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
 
 export const WalletInfo = () => {
-  const walletContext = useContext(WalletContext)
-  const { _onboard } = walletContext || {}
-  const currentState = _onboard.getState()
+  const { address, walletName, network, disconnectWallet } = useOnboard()
 
-  let address
-  let walletName
   let chainId = 1
 
-  if (currentState) {
-    address = currentState.address
-    walletName = currentState.wallet.name
-    chainId = currentState.appNetworkId
+  if (network) {
+    chainId = network
   }
 
   const { shortenedEnsName } = useEnsName(address)
@@ -66,7 +61,7 @@ export const WalletInfo = () => {
         </div>
 
         <button
-          onClick={() => _onboard.walletReset()}
+          onClick={disconnectWallet}
           className={classnames(
             'text-lightPurple-500 hover:text-white trans ml-2 outline-none focus:outline-none',
             'block border rounded-full w-4 h-4 text-center text-lg',

@@ -16,7 +16,7 @@ import { useSendTransaction } from 'lib/hooks/useSendTransaction'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
-import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+import { useUsersAddress } from '@pooltogether/hooks'
 import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 
 const handleSetCreditPlan = async (
@@ -61,25 +61,21 @@ const FairnessControlsForm = (props) => {
     poolChainValues.config.ticketCreditRateMantissa,
     poolChainValues.config.ticketCreditLimitMantissa
   )
-  const [ticketCreditMaturationInDays, setTicketCreditMaturationInDays] = useState(
-    creditMaturationInDays
-  )
-  const [ticketCreditLimitPercentage, setTicketCreditLimitPercentage] = useState(
-    creditLimitPercentage
-  )
+  const [ticketCreditMaturationInDays, setTicketCreditMaturationInDays] =
+    useState(creditMaturationInDays)
+  const [ticketCreditLimitPercentage, setTicketCreditLimitPercentage] =
+    useState(creditLimitPercentage)
 
   const txName = 'Set Credit Plan'
 
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    const [
-      ticketCreditRateMantissa,
-      ticketCreditLimitMantissa
-    ] = getCreditRateMantissaAndLimitMantissa(
-      ticketCreditMaturationInDays,
-      ticketCreditLimitPercentage
-    )
+    const [ticketCreditRateMantissa, ticketCreditLimitMantissa] =
+      getCreditRateMantissaAndLimitMantissa(
+        ticketCreditMaturationInDays,
+        ticketCreditLimitPercentage
+      )
 
     handleSetCreditPlan(
       sendTx,
