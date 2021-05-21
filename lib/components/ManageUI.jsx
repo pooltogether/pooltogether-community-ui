@@ -10,7 +10,7 @@ import ManageImage from 'assets/images/manage-image.svg'
 import { RelativeInternalLink } from 'lib/components/RelativeInternalLink'
 import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
 import { CopyIcon } from 'lib/components/CopyIcon'
-import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+import { useUsersAddress } from '@pooltogether/hooks'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 

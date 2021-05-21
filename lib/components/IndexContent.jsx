@@ -1,12 +1,12 @@
-import React, { useContext, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
+import { useOnboard } from '@pooltogether/hooks'
 import { isValidAddress } from '@pooltogether/utilities'
 import { getChain } from '@pooltogether/evm-chains-extended'
 import { useRouter } from 'next/router'
 
 import { CONTRACT_ADDRESSES, POOL_ALIASES, SUPPORTED_NETWORKS } from 'lib/constants'
-import { WalletContext } from 'lib/components/WalletContextProvider'
 import { ButtonLink } from 'lib/components/ButtonLink'
 import { Button } from 'lib/components/Button'
 import { Card, CardTitle } from 'lib/components/Card'
@@ -169,11 +169,9 @@ const BuilderCard = () => {
 
 const GovernancePoolsCard = (props) => {
   const { createdPrizePools, tokenBalances } = props
-  const walletContext = useContext(WalletContext)
+  const { isWalletConnected } = useOnboard()
   const { chainId } = useNetwork()
   const [hideNoDeposits, setHideNoDeposits] = useState(false)
-
-  const isWalletConnected = Boolean(walletContext._onboard.getState().address)
 
   const pools = useMemo(() => {
     if (!createdPrizePools || !tokenBalances) return []
@@ -221,9 +219,7 @@ const GovernancePoolsCard = (props) => {
 const UsersPoolsCard = (props) => {
   const { createdPrizePools, tokenBalances } = props
 
-  const walletContext = useContext(WalletContext)
-
-  const isWalletConnected = Boolean(walletContext._onboard.getState().address)
+  const { isWalletConnected } = useOnboard()
 
   const pools = useMemo(() => {
     if (!createdPrizePools || !tokenBalances || !isWalletConnected) return []
@@ -262,12 +258,10 @@ const UsersPoolsCard = (props) => {
 const AllPoolsCard = (props) => {
   const { createdPrizePools, tokenBalances } = props
 
-  const walletContext = useContext(WalletContext)
+  const { isWalletConnected } = useOnboard()
   const { chainId, view: networkView } = useNetwork()
   const [hideNoDeposits, setHideNoDeposits] = useState(false)
   const [showFirstTen, setShowFirstTen] = useState(createdPrizePools.length > 10)
-
-  const isWalletConnected = Boolean(walletContext._onboard.getState().address)
 
   const pools = useMemo(() => {
     if (!createdPrizePools || !tokenBalances) return []
@@ -356,8 +350,7 @@ const AllPoolsCard = (props) => {
 const sortByTvl = (a, b) => Number(b.props.ticket.totalSupply) - Number(a.props.ticket.totalSupply)
 
 const ListHeaders = (props) => {
-  const walletContext = useContext(WalletContext)
-  const isWalletConnected = Boolean(walletContext._onboard.getState().address)
+  const { isWalletConnected } = useOnboard()
 
   return (
     <div className='w-full flex text-accent-1 text-xs mb-2'>
@@ -370,8 +363,7 @@ const ListHeaders = (props) => {
 }
 
 const PoolRow = (props) => {
-  const walletContext = useContext(WalletContext)
-  const isWalletConnected = Boolean(walletContext._onboard.getState().address)
+  const { isWalletConnected } = useOnboard()
 
   return (
     <li className='flex flex-row mb-4 last:mb-0 w-full'>

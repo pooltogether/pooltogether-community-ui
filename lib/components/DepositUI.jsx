@@ -9,7 +9,7 @@ import { TxMessage } from 'lib/components/TxMessage'
 import { parseNumString } from 'lib/utils/parseNumString'
 import { useSendTransaction } from 'lib/hooks/useSendTransaction'
 import { useNetwork } from 'lib/hooks/useNetwork'
-import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+import { useUsersAddress } from '@pooltogether/hooks'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { NETWORK } from 'lib/utils/networks'
@@ -31,10 +31,8 @@ const handleDepositSubmit = async (
 
 export const DepositUI = () => {
   const usersAddress = useUsersAddress()
-  const {
-    data: prizePoolContracts,
-    isFetched: prizePoolContractsIsFetched
-  } = usePrizePoolContracts()
+  const { data: prizePoolContracts, isFetched: prizePoolContractsIsFetched } =
+    usePrizePoolContracts()
   const { data: poolChainValues, isFetched: poolChainValuesIsFetched } = usePoolChainValues()
   const [depositAmount, setDepositAmount] = useState('')
   const [tx, setTx] = useState({

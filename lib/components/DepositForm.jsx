@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ethers } from 'ethers'
+import { useOnboard } from '@pooltogether/hooks'
 import IERC20Abi from '@pooltogether/pooltogether-contracts/abis/IERC20Upgradeable'
 import FeatherIcon from 'feather-icons-react'
 
 import { Button } from 'lib/components/Button'
 import { RightLabelButton, TextInputGroup } from 'lib/components/TextInputGroup'
 import { useUserChainValues } from 'lib/hooks/useUserChainValues'
-import { WalletContext } from 'lib/components/WalletContextProvider'
 import { InnerCard } from 'lib/components/Card'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
 import { getErc20InputProps } from 'lib/utils/getErc20InputProps'
@@ -129,8 +129,7 @@ const UnlockDepositsButton = () => {
 
   const { chainId, walletMatchesNetwork } = useNetwork()
   const [tx, setTx] = useState({})
-  const walletContext = useContext(WalletContext)
-  const provider = walletContext.state.provider
+  const { provider } = useOnboard()
   const hasApprovedBalance = usersChainValues?.underlyingTokenIsApproved
   const underlyingTokenSupportsAllowance = usersChainValues?.underlyingTokenSupportsAllowance
 

@@ -1,20 +1,14 @@
-import React, { useContext } from 'react'
+import React from 'react'
+import { useOnboard } from '@pooltogether/hooks'
 
 import { Button } from 'lib/components/Button'
-import { WalletContext } from 'lib/components/WalletContextProvider'
 
 export const ConnectWalletButton = (props) => {
   const { children, ...buttonProps } = props
-  const walletContext = useContext(WalletContext)
-
-  const handleConnect = (e) => {
-    e.preventDefault()
-
-    walletContext.handleConnectWallet()
-  }
+  const { connectWallet } = useOnboard()
 
   return (
-    <Button type='button' onClick={handleConnect} {...buttonProps}>
+    <Button type='button' onClick={connectWallet} {...buttonProps}>
       {children}
     </Button>
   )

@@ -19,7 +19,7 @@ import { useSendTransaction } from 'lib/hooks/useSendTransaction'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { useExternalErc721Awards } from 'lib/hooks/useExternalErc721Awards'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
-import { useUsersAddress } from 'lib/hooks/useUsersAddress'
+import { useUsersAddress } from '@pooltogether/hooks'
 import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 
 import PrizeIllustration from 'assets/images/prize-illustration-transparent@2x.png'
