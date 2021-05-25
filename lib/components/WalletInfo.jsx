@@ -4,7 +4,6 @@ import classnames from 'classnames'
 import FeatherIcon from 'feather-icons-react'
 import { getChain } from '@pooltogether/evm-chains-extended'
 
-import { WalletContext } from 'lib/components/WalletContextProvider'
 import { NetworkIcon } from 'lib/components/NetworkIcon'
 import { useEnsName } from 'lib/hooks/useEnsName'
 import { networkColorClassname } from 'lib/utils/networks'
