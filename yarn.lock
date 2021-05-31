@@ -2755,7 +2755,7 @@
   resolved "https://registry.yarnpkg.com/@pooltogether/current-pool-data/-/current-pool-data-3.4.18.tgz#b9a6577a6793e52065233638faa8f1deb518a105"
   integrity sha512-4iFmyIjufnKxtOeEFlLzifK9e9WkWYIND2RquH5NwbiwWIqtO7szPI5Ai/SNrj2YtRd9N4zJqggljYU7dUNSKg==
 
-"@pooltogether/etherplex@1.1.1":
+"@pooltogether/etherplex@1.1.1", "@pooltogether/etherplex@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@pooltogether/etherplex/-/etherplex-1.1.1.tgz#330f326ce8fbfd4f4aae70d5fd02d5baa3e9195e"
   integrity sha512-fKk3/YnAhwjdA83hP7+mXIjRQm40o/+uwdbSWdz0mIgccEwQFkHKXJRGhpM25aclwa5Yiu/p6+sxTHUTpTTM9Q==
@@ -2777,13 +2777,15 @@
   resolved "https://registry.yarnpkg.com/@pooltogether/fixed-point/-/fixed-point-1.0.0-beta.2.tgz#d76a1e77f21833e9b680296d65526b0ffd7415d7"
   integrity sha512-aUw4R0Z2oM0AK3W4LIXyBaojTOzRRbhLDHX0egeuvxfjy4gBb6X66v81gI7Wngg/7O0y9QL/B8jWkUnAFzhTig==
 
-"@pooltogether/hooks@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@pooltogether/hooks/-/hooks-0.0.6.tgz#a2308310c42df154f6088d033fb9b13e1f657d09"
-  integrity sha512-Oyey5kxp/g34oiAhOkfEpfdWIcksJKNcmyiz3CcVeZChQIkeMsNdrLg2QvU+FWX7HVZorNUVT8JCTE6rJdpErw==
+"@pooltogether/hooks@^0.0.15":
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/@pooltogether/hooks/-/hooks-0.0.15.tgz#bb594c4111a26d9987f47d8953c88541e4e77f43"
+  integrity sha512-uwlX8fy7veUwft+OLlV5NgzRmgXVghmIteKRi3H/XmMLWTeeE+z/ftBDC7zPIx9g64wL6ckLNbU4a+XxsUVUvg==
   dependencies:
     "@pooltogether/bnc-onboard" "^1.25.0-b"
-    "@pooltogether/utilities" "^0.0.17"
+    "@pooltogether/etherplex" "^1.1.1"
+    "@pooltogether/evm-chains-extended" "^0.4.3"
+    "@pooltogether/utilities" "^0.0.21"
     ethers "^5.1.4"
     jotai "^0.16.5"
     js-cookie "^2.2.1"
@@ -2820,6 +2822,15 @@
   version "0.0.17"
   resolved "https://registry.yarnpkg.com/@pooltogether/utilities/-/utilities-0.0.17.tgz#0d0ac7482331cc8596819c7332372291c302418d"
   integrity sha512-T1Sy7e1hCJo3CclMoG348AylO89C5NGJWqCpMK55i2AYsBAfAeAO0T3qkicRatrEA3O8tEPfyUKuflHjG2wzUQ==
+  dependencies:
+    "@pooltogether/current-pool-data" "^3.4.3"
+    ethers "^5.1.2"
+    lodash.clonedeep "^4.5.0"
+
+"@pooltogether/utilities@^0.0.21":
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/@pooltogether/utilities/-/utilities-0.0.21.tgz#9b7e7fa1851d65b17138373c57980323624ed30b"
+  integrity sha512-P8BlQ8jMD2SuCSKjW+oKYEgw9RlLPebP/TWSh8cgbKR761tRpLhUJJenbaqoy8K2F6wNIzzaICNvnAlrToRc6Q==
   dependencies:
     "@pooltogether/current-pool-data" "^3.4.3"
     ethers "^5.1.2"
