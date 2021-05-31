@@ -8,14 +8,14 @@ import { NETWORK } from 'lib/utils/networks'
 
 const debug = require('debug')('WalletContextProvider')
 
-const INFURA_KEY = process.env.NEXT_JS_INFURA_KEY
+const INFURA_ID = process.env.NEXT_JS_INFURA_ID
 const FORTMATIC_KEY = process.env.NEXT_JS_FORTMATIC_API_KEY
 const PORTIS_KEY = process.env.NEXT_JS_PORTIS_API_KEY
 
 let networkName = 'mainnet'
 const RPC_URL =
-  networkName && INFURA_KEY
-    ? `https://${networkName}.infura.io/v3/${INFURA_KEY}`
+  networkName && INFURA_ID
+    ? `https://${networkName}.infura.io/v3/${INFURA_ID}`
     : 'http://localhost:8545'
 
 let cookieOptions = { sameSite: 'strict' }
@@ -29,7 +29,7 @@ if (process.env.NEXT_JS_DOMAIN_NAME) {
 const APP_NAME = 'PoolTogether'
 
 const walletConnectOptions = {
-  infuraKey: INFURA_KEY,
+  infuraKey: INFURA_ID,
   preferred: true,
   bridge: 'https://pooltogether.bridge.walletconnect.org/'
 }
