@@ -2642,10 +2642,10 @@
   resolved "https://registry.yarnpkg.com/@pooltogether/fixed-point/-/fixed-point-1.0.0-beta.2.tgz#d76a1e77f21833e9b680296d65526b0ffd7415d7"
   integrity sha512-aUw4R0Z2oM0AK3W4LIXyBaojTOzRRbhLDHX0egeuvxfjy4gBb6X66v81gI7Wngg/7O0y9QL/B8jWkUnAFzhTig==
 
-"@pooltogether/hooks@^0.0.21":
-  version "0.0.21"
-  resolved "https://registry.yarnpkg.com/@pooltogether/hooks/-/hooks-0.0.21.tgz#c2d85eb353d353c44ed771fe1775512ca93fdc23"
-  integrity sha512-E26pfCzCnKI0MAIBJhdipiq8qjFUue2XR93ftoa4cHbXrc2uMbp+az7KlrIMfUlORoj6c7OI7LBtMXPLN/fjaA==
+"@pooltogether/hooks@^0.0.23":
+  version "0.0.23"
+  resolved "https://registry.yarnpkg.com/@pooltogether/hooks/-/hooks-0.0.23.tgz#71fb3907114dc68e70390fff5accaa7fa02a1757"
+  integrity sha512-4Fvla4lEDnjAqSnQngoOpVnuGFG8CEtRwuD5b4TXHca5ZF+V2GoBwdMKTkx+jmA2Yzkw3G5hoodv568Wk1ZvnA==
   dependencies:
     "@pooltogether/bnc-onboard" "^1.25.0-b"
     "@pooltogether/etherplex" "^1.1.1"
