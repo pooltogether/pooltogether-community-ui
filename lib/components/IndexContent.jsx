@@ -71,12 +71,6 @@ const PoolsLists = () => {
     tokenBalancedIsFetching ||
     createdPrizePoolsIsFetching
   ) {
-    console.log(
-      createdPrizePoolsIsFetched,
-      !tokenBalancesIsFetched,
-      tokenBalancedIsFetching,
-      createdPrizePoolsIsFetching
-    )
     return <PoolTogetherLoading />
   }
 
