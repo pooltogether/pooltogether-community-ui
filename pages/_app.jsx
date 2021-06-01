@@ -27,7 +27,7 @@ import 'assets/styles/themes.css'
 import 'assets/styles/bnc-onboard--custom.css'
 import 'assets/styles/reach--custom.css'
 
-export const queryClient = new QueryClient()
+const queryClient = new QueryClient()
 
 if (process.env.NEXT_JS_SENTRY_DSN) {
   Sentry.init({
