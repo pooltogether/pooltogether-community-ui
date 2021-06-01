@@ -3,7 +3,7 @@ import { useInitializeOnboard } from '@pooltogether/hooks'
 import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
 import { Provider as JotaiProvider } from 'jotai'
-import { QueryCache, ReactQueryCacheProvider } from 'react-query'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
 import { Layout } from 'lib/components/Layout'
 import { ThemeContextProvider } from 'lib/components/contextProviders/ThemeContextProvider'
@@ -27,7 +27,7 @@ import 'assets/styles/themes.css'
 import 'assets/styles/bnc-onboard--custom.css'
 import 'assets/styles/reach--custom.css'
 
-const queryCache = new QueryCache()
+const queryClient = new QueryClient()
 
 if (process.env.NEXT_JS_SENTRY_DSN) {
   Sentry.init({
@@ -53,7 +53,7 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <ErrorBoundary>
-      <ReactQueryCacheProvider queryCache={queryCache}>
+      <QueryClientProvider client={queryClient}>
         <ThemeContextProvider>
           <JotaiProvider>
             <Layout>
@@ -63,7 +63,7 @@ function MyApp({ Component, pageProps }) {
             </Layout>
           </JotaiProvider>
         </ThemeContextProvider>
-      </ReactQueryCacheProvider>
+      </QueryClientProvider>
     </ErrorBoundary>
   )
 }
