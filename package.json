@@ -66,7 +66,7 @@
     "date-fns": "^2.16.1",
     "ethers": "^5.3.0",
     "feather-icons-react": "^0.4.1",
-    "framer-motion": "^4.1.17",
+    "framer-motion": "3.7.0",
     "jest": "^26.4.2",
     "jotai": "^0.14.0",
     "js-cookie": "^2.2.1",
