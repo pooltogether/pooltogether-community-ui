@@ -15,7 +15,11 @@
     "format": "yarn prettier --write .",
     "check-format": "yarn prettier --check .",
     "link-hooks": "cd node_modules/react && yarn link && cd ../react-query && yarn link && cd ../react-dom && yarn link && cd ../jotai && yarn link && cd ../.. && yarn link @pooltogether/hooks",
-    "unlink-hooks": "cd node_modules/react && yarn unlink && cd ../react-query && yarn unlink && cd ../react-dom && yarn unlink && cd ../jotai && yarn unlink && cd ../.. && yarn unlink @pooltogether/hooks && yarn install --force"
+    "unlink-hooks": "cd node_modules/react && yarn unlink && cd ../react-query && yarn unlink && cd ../react-dom && yarn unlink && cd ../jotai && yarn unlink && cd ../.. && yarn unlink @pooltogether/hooks && yarn install --force",
+    "link-components": "cd node_modules/react && yarn link && cd ../react-dom && yarn link && cd ../jotai && yarn link && cd ../framer-motion && cd ../lodash && cd ../next && cd ../react-i18next && cd ../tailwindcss && yarn link && yarn link && yarn link && yarn link && yarn link && cd ../.. && yarn link @pooltogether/pooltogether-react-tailwind-ui",
+    "unlink-components": "cd node_modules/react && yarn unlink && cd ../react-dom && yarn unlink && cd ../jotai && yarn unlink && cd ../framer-motion  && yarn unlink && cd ../lodash  && yarn unlink && cd ../next  && yarn unlink && cd ../react-i18next && yarn unlink && cd ../tailwindcss && yarn unlink && cd ../.. && yarn unlink @pooltogether/pooltogether-react-tailwind-ui && yarn install --force",
+    "link-components-and-hooks": "cd node_modules/react && yarn link && cd ../react-dom && yarn link && cd ../jotai && yarn link && cd ../framer-motion && cd ../lodash && cd ../next && cd ../react-i18next && cd ../tailwindcss && yarn link && yarn link && yarn link && yarn link && yarn link && cd ../.. && yarn link @pooltogether/pooltogether-react-tailwind-ui && yarn link @pooltogether/hooks",
+    "unlink-components-and-hooks": "cd node_modules/react && yarn unlink && cd ../react-dom && yarn unlink && cd ../jotai && yarn unlink && cd ../framer-motion  && yarn unlink && cd ../lodash  && yarn unlink && cd ../next  && yarn unlink && cd ../react-i18next && yarn unlink && cd ../tailwindcss && yarn unlink && cd ../.. && yarn unlink @pooltogether/pooltogether-react-tailwind-ui && yarn unlink @pooltogether/hooks && yarn install --force"
   },
   "jest": {
     "collectCoverageFrom": [
