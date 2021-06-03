@@ -14,8 +14,8 @@
     "distrelease": "export NEXT_JS_RELEASE_VERSION=$SENTRY_PROJECT:$(sentry-cli releases propose-version) && yarn build && yarn release",
     "format": "yarn prettier --write .",
     "check-format": "yarn prettier --check .",
-    "link-hooks": "cd node_modules/react && yarn link && cd ../react-query && yarn link && cd ../react-dom && yarn link && cd ../.. && yarn link @pooltogether/hooks",
-    "unlink-hooks": "cd node_modules/react && yarn unlink && cd ../react-query && yarn unlink && cd ../react-dom && yarn unlink && cd ../.. && yarn unlink @pooltogether/hooks && yarn install --force"
+    "link-hooks": "cd node_modules/react && yarn link && cd ../react-query && yarn link && cd ../react-dom && yarn link && cd ../jotai && yarn link && cd ../.. && yarn link @pooltogether/hooks",
+    "unlink-hooks": "cd node_modules/react && yarn unlink && cd ../react-query && yarn unlink && cd ../react-dom && yarn unlink && cd ../jotai && yarn unlink && cd ../.. && yarn unlink @pooltogether/hooks && yarn install --force"
   },
   "jest": {
     "collectCoverageFrom": [
