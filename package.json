@@ -38,11 +38,10 @@
     "@next/bundle-analyzer": "^10.1.1"
   },
   "dependencies": {
-    "@pooltogether/bnc-onboard": "1.25.0-c",
     "@pooltogether/current-pool-data": "3.4.0",
     "@pooltogether/etherplex": "1.1.1",
     "@pooltogether/evm-chains-extended": "^0.4.3",
-    "@pooltogether/hooks": "0.0.24",
+    "@pooltogether/hooks": "0.0.20",
     "@pooltogether/pooltogether-contracts": "3.3.8",
     "@pooltogether/pooltogether-rng-contracts": "^1.1.2",
     "@pooltogether/utilities": "^0.0.21",
