@@ -1,5 +1,10 @@
 import React, { useEffect } from 'react'
-import { useInitializeOnboard } from '@pooltogether/hooks'
+import {
+  useInitCookieOptions,
+  useInitializeOnboard,
+  useInitInfuraId,
+  useInitReducedMotion
+} from '@pooltogether/hooks'
 import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
 import { Provider as JotaiProvider } from 'jotai'
@@ -38,8 +43,6 @@ if (process.env.NEXT_JS_SENTRY_DSN) {
 }
 
 function MyApp({ Component, pageProps }) {
-  useInitializeOnboard()
-
   // ChunkLoadErrors happen when someone has the app loaded, then we deploy a
   // new release, and the user's app points to previous chunks that no longer exist
   useEffect(() => {
@@ -53,19 +56,34 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <ThemeContextProvider>
-          <JotaiProvider>
-            <Layout>
-              <CustomErrorBoundary>
-                <Component {...pageProps} />
-              </CustomErrorBoundary>
-            </Layout>
-          </JotaiProvider>
-        </ThemeContextProvider>
-      </QueryClientProvider>
+      <JotaiProvider>
+        <QueryClientProvider client={queryClient}>
+          <InitPoolTogetherHooks>
+            <ThemeContextProvider>
+              <Layout>
+                <CustomErrorBoundary>
+                  <Component {...pageProps} />
+                </CustomErrorBoundary>
+              </Layout>
+            </ThemeContextProvider>
+          </InitPoolTogetherHooks>
+        </QueryClientProvider>
+      </JotaiProvider>
     </ErrorBoundary>
   )
+}
+
+const InitPoolTogetherHooks = ({ children }) => {
+  useInitInfuraId(process.env.NEXT_JS_INFURA_ID)
+  useInitReducedMotion(Boolean(process.env.NEXT_JS_REDUCE_MOTION))
+  useInitCookieOptions(process.env.NEXT_JS_DOMAIN_NAME)
+  useInitializeOnboard({
+    infuraId: process.env.NEXT_JS_INFURA_ID,
+    fortmaticKey: process.env.NEXT_JS_FORTMATIC_API_KEY,
+    portisKey: process.env.NEXT_JS_PORTIS_API_KEY,
+    defaultNetworkName: process.env.NEXT_JS_DEFAULT_ETHEREUM_NETWORK_NAME
+  })
+  return children
 }
 
 export default MyApp
