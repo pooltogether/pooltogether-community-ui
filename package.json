@@ -43,7 +43,7 @@
     "@pooltogether/etherplex": "1.1.1",
     "@pooltogether/evm-chains-extended": "^0.4.3",
     "@pooltogether/hooks": "^0.1.0",
-    "@pooltogether/pooltogether-contracts": "3.3.8",
+    "@pooltogether/pooltogether-contracts": "pooltogether/pooltogether-pool-contracts#feature/prizesplit",
     "@pooltogether/pooltogether-rng-contracts": "^1.1.2",
     "@pooltogether/utilities": "^0.0.17",
     "@reach/menu-button": "^0.11.2",
