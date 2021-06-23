@@ -4,14 +4,14 @@ import classnames from 'classnames'
 
 import { ChangeWalletNetworkNotificationBanner } from 'lib/components/ChangeWalletNetworkNotificationBanner'
 import { StaticNetworkNotificationBanner } from 'lib/components/StaticNetworkNotificationBanner'
-import { CustomYieldNotificationBanner } from 'lib/components/CustomYieldNotificationBanner'
+import { UnauditedYieldSourceBanner } from 'lib/components/UnauditedYieldSourceBanner'
 
 export const NotificationBanners = (props) => {
   return (
     <div className='flex flex-col sticky t-0 z-50'>
       <StaticNetworkNotificationBanner />
       <ChangeWalletNetworkNotificationBanner />
-      <CustomYieldNotificationBanner />
+      <UnauditedYieldSourceBanner />
     </div>
   )
 }

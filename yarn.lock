@@ -3055,15 +3055,6 @@
   resolved "https://registry.yarnpkg.com/@pooltogether/uniform-random-number/-/uniform-random-number-1.0.0-beta.1.tgz#72257401fe8536e95f9f812f1d249262659084a7"
   integrity sha512-V4iqLOpNFNhnUqfKRlvqUeRwvKaODdz+qn4Qi65C3iMOnDb0J31tBvyhwKbhP4wauNuUN64WfepqkkxET9U7EQ==
 
-"@pooltogether/utilities@^0.0.17":
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/@pooltogether/utilities/-/utilities-0.0.17.tgz#0d0ac7482331cc8596819c7332372291c302418d"
-  integrity sha512-T1Sy7e1hCJo3CclMoG348AylO89C5NGJWqCpMK55i2AYsBAfAeAO0T3qkicRatrEA3O8tEPfyUKuflHjG2wzUQ==
-  dependencies:
-    "@pooltogether/current-pool-data" "^3.4.3"
-    ethers "^5.1.2"
-    lodash.clonedeep "^4.5.0"
-
 "@pooltogether/utilities@^0.0.21":
   version "0.0.21"
   resolved "https://registry.yarnpkg.com/@pooltogether/utilities/-/utilities-0.0.21.tgz#9b7e7fa1851d65b17138373c57980323624ed30b"
@@ -3072,6 +3063,16 @@
     "@pooltogether/current-pool-data" "^3.4.3"
     ethers "^5.1.2"
     lodash.clonedeep "^4.5.0"
+
+"@pooltogether/utilities@^0.0.26":
+  version "0.0.26"
+  resolved "https://registry.yarnpkg.com/@pooltogether/utilities/-/utilities-0.0.26.tgz#f80636e60521421893ca22ffca182119cb7120a4"
+  integrity sha512-Fzx77yYGd3EM6/bk46Z81z/b5/GP5SZo7qHBiNB5wDLboWPOS5YHyp3LMNlnLvVWAzpugvHEbYoXQDoFWqjHCg==
+  dependencies:
+    "@pooltogether/current-pool-data" "^3.4.3"
+    ethers "^5.3.0"
+    lodash.clonedeep "^4.5.0"
+    query-string "^7.0.0"
 
 "@pooltogether/yield-source-interface@^1.0.1":
   version "1.0.1"
@@ -8288,6 +8289,11 @@ fill-range@^7.0.1:
   dependencies:
     to-regex-range "^5.0.1"
 
+filter-obj@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/filter-obj/-/filter-obj-1.1.0.tgz#9b311112bc6c6127a16e016c6c5d7f19e0805c5b"
+  integrity sha1-mzERErxsYSehbgFsbF1/GeCAXFs=
+
 finalhandler@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/finalhandler/-/finalhandler-1.1.2.tgz#b7e7d000ffd11938d0fdb053506f6ebabe9f587d"
@@ -12552,6 +12558,16 @@ query-string@^5.0.1:
     decode-uri-component "^0.2.0"
     object-assign "^4.1.0"
     strict-uri-encode "^1.0.0"
+
+query-string@^7.0.0:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-7.0.1.tgz#45bd149cf586aaa582dffc7ec7a8ad97dd02f75d"
+  integrity sha512-uIw3iRvHnk9to1blJCG3BTc+Ro56CBowJXKmNNAm3RulvPBzWLRqKSiiDk+IplJhsydwtuNMHi8UGQFcCLVfkA==
+  dependencies:
+    decode-uri-component "^0.2.0"
+    filter-obj "^1.1.0"
+    split-on-first "^1.0.0"
+    strict-uri-encode "^2.0.0"
 
 querystring-es3@0.2.1, querystring-es3@^0.2.0:
   version "0.2.1"

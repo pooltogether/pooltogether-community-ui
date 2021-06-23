@@ -1,14 +1,12 @@
 import React from 'react'
+import FeatherIcon from 'feather-icons-react'
 import { ethers } from 'ethers'
 
 import { Card, CardDetailsList, CardTitle } from 'lib/components/Card'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { PoolNumber } from 'lib/components/PoolNumber'
 import { Tooltip } from 'lib/components/Tooltip'
-import { numberWithCommas } from 'lib/utils/numberWithCommas'
-import { displayPercentage } from 'lib/utils/displayPercentage'
 import { usePrizePoolType } from 'lib/hooks/usePrizePoolType'
-import { PRIZE_POOL_TYPE } from 'lib/constants'
 import { BlockExplorerLink, LinkIcon } from 'lib/components/BlockExplorerLink'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
@@ -18,9 +16,15 @@ import { useUsersAddress } from '@pooltogether/hooks'
 import { getCreditMaturationDaysAndLimitPercentage } from 'lib/utils/format'
 import { useTimeLeftBeforePrize } from 'lib/hooks/useTimeLeftBeforePrize'
 import { useIsOwnerPoolTogether } from 'lib/hooks/useIsOwnerPoolTogether'
+import { numberWithCommas } from 'lib/utils/numberWithCommas'
+import { displayPercentage } from 'lib/utils/displayPercentage'
 import { shorten } from 'lib/utils/shorten'
+import {
+  formatYieldSourceName,
+  formatYieldSourceImage,
+  COMPOUND_FINANCE_SOURCE_NAME
+} from 'lib/utils/yieldSourceFormatters'
 
-import CompSvg from 'assets/images/comp.svg'
 import PoolSvg from 'assets/images/pool-icon.svg'
 
 const PoolStatsCardLayout = (props) => {
@@ -224,7 +228,7 @@ const PoolOwnerStat = (props) => {
     <Stat
       title='Pool owner'
       value={
-        <BlockExplorerLink copyable address={ownerAddress}>
+        <BlockExplorerLink address={ownerAddress}>
           {ownerIsPoolTogether ? 'PoolTogether' : shorten(ownerAddress)}
           <LinkIcon />
         </BlockExplorerLink>
@@ -241,7 +245,7 @@ const DepositTokenStat = (props) => (
   <Stat
     title='Deposit token'
     value={
-      <BlockExplorerLink copyable shorten address={props.poolChainValues.token.address}>
+      <BlockExplorerLink shorten address={props.poolChainValues.token.address}>
         {props.poolChainValues.token.name}
         <LinkIcon />
       </BlockExplorerLink>
@@ -266,36 +270,21 @@ const ReserveRateStat = (props) => (
   />
 )
 
-const CUSTOM_YIELD_SOURCE_NAMES = {
-  1: {
-    '0x829df2cb6748b9fd619efcd23cc5c351957ecac9': 'rari'
-  }
-}
-
-const CUSTOM_YIELD_SOURCE_IMAGES = {
-  rari: '/custom-yield-source-images/rari.png'
-}
-
 const YieldSourceStat = (props) => {
   const prizePoolType = usePrizePoolType()
   const { chainId } = useNetwork()
   const { data: prizePoolContracts } = usePrizePoolContracts()
   const yieldSourceAddress = prizePoolContracts.yieldSource.address
 
-  let sourceImage, sourceName
-  if (prizePoolType === PRIZE_POOL_TYPE.compound) {
-    sourceName = 'Compound Finance'
-    sourceImage = CompSvg
-  } else if (prizePoolType === PRIZE_POOL_TYPE.yield) {
-    sourceName = CUSTOM_YIELD_SOURCE_NAMES?.[chainId]?.[yieldSourceAddress] || 'Custom Yield Source'
-    sourceImage = '/ticket-bg--light-sm.png'
-    const providedCustomImage = CUSTOM_YIELD_SOURCE_IMAGES[sourceName]
-    if (providedCustomImage) {
-      sourceImage = providedCustomImage
-    }
-  } else {
-    sourceName = <EmptyItem />
+  let sourceName
+
+  const customYieldSourceName = formatYieldSourceName(chainId, yieldSourceAddress, prizePoolType)
+
+  if (customYieldSourceName) {
+    sourceName = customYieldSourceName
   }
+
+  const sourceImage = formatYieldSourceImage(sourceName, prizePoolType)
 
   return (
     <Stat
@@ -307,7 +296,7 @@ const YieldSourceStat = (props) => {
           </BlockExplorerLink>
         ) : null
       }
-      sourceName={sourceName}
+      sourceName={sourceName || <EmptyItem />}
       sourceImage={sourceImage}
     />
   )
