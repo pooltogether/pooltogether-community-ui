@@ -1,5 +1,4 @@
 import React from 'react'
-import FeatherIcon from 'feather-icons-react'
 import { ethers } from 'ethers'
 
 import { Card, CardDetailsList, CardTitle } from 'lib/components/Card'
@@ -19,11 +18,7 @@ import { useIsOwnerPoolTogether } from 'lib/hooks/useIsOwnerPoolTogether'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
 import { displayPercentage } from 'lib/utils/displayPercentage'
 import { shorten } from 'lib/utils/shorten'
-import {
-  formatYieldSourceName,
-  formatYieldSourceImage,
-  COMPOUND_FINANCE_SOURCE_NAME
-} from 'lib/utils/yieldSourceFormatters'
+import { formatYieldSourceName, formatYieldSourceImage } from 'lib/utils/yieldSourceFormatters'
 
 import PoolSvg from 'assets/images/pool-icon.svg'
 
@@ -52,6 +47,7 @@ export const PoolDepositorStatsCard = () => (
 
 const CompleteStatsList = () => {
   const { data: poolChainValues } = usePoolChainValues()
+
   return (
     <>
       <TimeUntilPrizeState poolChainValues={poolChainValues} />
@@ -73,11 +69,16 @@ const CompleteStatsList = () => {
 
 const DepositorStatsList = () => {
   const { data: poolChainValues } = usePoolChainValues()
+  const usersAddress = useUsersAddress()
 
   return (
     <>
-      <UsersStats poolChainValues={poolChainValues} />
-      <Line />
+      {usersAddress && (
+        <>
+          <UsersStats poolChainValues={poolChainValues} />
+          <Line />
+        </>
+      )}
       <NumberOfWinnersStat poolChainValues={poolChainValues} />
       <DepositsStat poolChainValues={poolChainValues} />
       <SponsorshipStat poolChainValues={poolChainValues} />
@@ -262,13 +263,18 @@ const ReserveStat = (props) => (
   />
 )
 
-const ReserveRateStat = (props) => (
-  <Stat
-    title={'Reserve rate'}
-    percent={props.poolChainValues.reserve.rate}
-    tooltip='Percent of each prize deposited into reserve'
-  />
-)
+const ReserveRateStat = (props) => {
+  console.log(props.poolChainValues.reserve.rate)
+  const reserveRatePercent = props.poolChainValues.reserve.rate * 100
+
+  return (
+    <Stat
+      title={'Reserve rate'}
+      percent={reserveRatePercent}
+      tooltip='Percent of each prize deposited into reserve'
+    />
+  )
+}
 
 const YieldSourceStat = (props) => {
   const prizePoolType = usePrizePoolType()
@@ -284,7 +290,7 @@ const YieldSourceStat = (props) => {
     sourceName = customYieldSourceName
   }
 
-  const sourceImage = formatYieldSourceImage(sourceName, prizePoolType)
+  const sourceImage = formatYieldSourceImage(prizePoolType, sourceName)
 
   return (
     <Stat

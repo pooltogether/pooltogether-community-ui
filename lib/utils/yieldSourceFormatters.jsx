@@ -4,7 +4,7 @@ import { PRIZE_POOL_TYPE } from 'lib/constants'
 
 import CompSvg from 'assets/images/comp.svg'
 
-export const DEFAULT_STAKE_SOURCE_NAME = 'N/A - Prize staked by owner'
+export const DEFAULT_STAKE_SOURCE_NAME = '--'
 export const DEFAULT_CUSTOM_YIELD_SOURCE_NAME = 'Custom Yield Source'
 export const COMPOUND_FINANCE_SOURCE_NAME = 'Compound Finance'
 
@@ -12,8 +12,11 @@ export const DEFAULT_SOURCE_IMG = '/file-text.svg'
 
 const CUSTOM_YIELD_SOURCE_NAME_OVERRIDES = {
   1: {
-    '0x829df2cb6748b9fd619efcd23cc5c351957ecac9': 'rari',
-    '0x9858ac37e385e52da6385d828cfe55a182d8ffa6': 'sushi'
+    '0x829df2cb6748b9fd619efcd23cc5c351957ecac9': 'Rari',
+    '0x9858ac37e385e52da6385d828cfe55a182d8ffa6': 'Sushi'
+  },
+  137: {
+    '0x3c7cdfb942eb98cce7e4d004e2927788cd9e54fe': 'Aave'
   }
 }
 
@@ -43,7 +46,7 @@ export const formatYieldSourceName = (chainId, yieldSourceAddress, prizePoolType
   return sourceName
 }
 
-export const formatYieldSourceImage = (sourceName, prizePoolType) => {
+export const formatYieldSourceImage = (prizePoolType, sourceName) => {
   let sourceImage = DEFAULT_SOURCE_IMG
 
   const customImage = CUSTOM_YIELD_SOURCE_IMAGES[sourceName?.toLowerCase()]
