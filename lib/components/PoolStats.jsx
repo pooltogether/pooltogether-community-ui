@@ -264,7 +264,6 @@ const ReserveStat = (props) => (
 )
 
 const ReserveRateStat = (props) => {
-  console.log(props.poolChainValues.reserve.rate)
   const reserveRatePercent = props.poolChainValues.reserve.rate * 100
 
   return (

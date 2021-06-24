@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@pooltogether/bnc-onboard": "1.25.0-b",
-    "@pooltogether/current-pool-data": "3.4.0",
+    "@pooltogether/current-pool-data": "3.4.23",
     "@pooltogether/etherplex": "1.1.1",
     "@pooltogether/evm-chains-extended": "^0.4.4",
     "@pooltogether/hooks": "^0.1.0",
