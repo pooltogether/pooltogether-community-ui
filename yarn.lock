@@ -1963,7 +1963,7 @@
   resolved "https://registry.yarnpkg.com/@pooltogether/current-pool-data/-/current-pool-data-3.4.0.tgz#a8cb8ef70e121c983beed941678c2b0fff66ec56"
   integrity sha512-mFw97zw5op68gnhVpRzYQpKnOnJ/4Dpmv85nJmV3RqR2w7Ke/F7QGYZ3QPM5UNJEPxSrPi3is99pk6hyPubLLQ==
 
-"@pooltogether/current-pool-data@^3.4.18", "@pooltogether/current-pool-data@^3.4.3":
+"@pooltogether/current-pool-data@^3.4.3":
   version "3.4.21"
   resolved "https://registry.yarnpkg.com/@pooltogether/current-pool-data/-/current-pool-data-3.4.21.tgz#17a51c4aea7af06909bf1423a60578785459bb27"
   integrity sha512-4Ss5S9iykyI4tfy055pdESNMBqtOuelryMDsCzCI2bB7i0as4Ki1ljXR0AiMnvlp+e9kJO2AxNcnNghoZYUq1w==
@@ -2003,12 +2003,12 @@
     framer-motion "^4.1.17"
     js-cookie "^2.2.1"
 
-"@pooltogether/pooltogether-contracts@pooltogether/pooltogether-pool-contracts#feature/prizesplit":
-  version "3.3.10"
-  resolved "https://codeload.github.com/pooltogether/pooltogether-pool-contracts/tar.gz/ab5d68f15fe16600d0453b7dcc159bc118467ecc"
+"@pooltogether/pooltogether-contracts@3.4.1-alpha.5":
+  version "3.4.1-alpha.5"
+  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.4.1-alpha.5.tgz#b6d6f188c8663980f4dd2e6e45bd049a1d4796f6"
+  integrity sha512-PWd/S8WcmOp3Q82tYnYJ6cGG/0Q/PYCJ9y/KKRzK4VxP5ypFAdkP0j4YBDPnK9l46CXw/p6x/KhD/ESo+pB5xg==
   dependencies:
     "@openzeppelin/contracts-upgradeable" "3.4.0"
-    "@pooltogether/current-pool-data" "^3.4.18"
     "@pooltogether/fixed-point" "1.0.0-beta.2"
     "@pooltogether/pooltogether-rng-contracts" "1.0.0"
     "@pooltogether/uniform-random-number" "1.0.0-beta.1"
@@ -2162,11 +2162,6 @@
     "@types/warning" "^3.0.0"
     tslib "^2.0.0"
     warning "^4.0.3"
-
-"@react-hook/latest@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@react-hook/latest/-/latest-1.0.3.tgz#c2d1d0b0af8b69ec6e2b3a2412ba0768ac82db80"
-  integrity sha512-dy6duzl+JnAZcDbNTfmaP3xHiKtbXYOaz3G51MGVljh548Y8MWzTr+PHLOfvpypEVW9zwvl+VyKjbWKEVbV1Rg==
 
 "@resolver-engine/core@^0.3.3":
   version "0.3.3"

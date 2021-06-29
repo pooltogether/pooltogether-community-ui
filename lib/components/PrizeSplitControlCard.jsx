@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { constants } from 'ethers'
-import { intersectionWith, isEqual } from 'lodash'
+import { isEqual } from 'lodash'
 import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/MultipleWinners'
 import { isValidAddress } from '@pooltogether/utilities'
 import { poolToast } from 'lib/utils/poolToast'
@@ -11,14 +11,13 @@ import useCounter from 'lib/hooks/useCounter'
 import { Card, CardSecondaryText } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { TxMessage } from 'lib/components/TxMessage'
-import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { TextInputGroup, TextInputGroupType } from 'lib/components/TextInputGroup'
 import { DropdownInputGroup } from 'lib/components/DropdownInputGroup'
 import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 import { useSendTransaction } from 'lib/hooks/useSendTransaction'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
+import { usePrizeSplitValues } from 'lib/hooks/usePrizeSplitValues'
 import { idx } from 'lib/utils/idx'
-import { useNetwork } from 'lib/hooks/useNetwork'
 import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 
 const convertPercentageToSingleDecimalPrecision = (value) => {
@@ -30,10 +29,23 @@ const convertPercentageToSingleDecimalPrecision = (value) => {
  * @description Convert form input to smart contract inputs
  * @param {*} prizeSplit
  */
-const convertFormToPrizeSplitConfig = (prizeSplit) => {
-  return {
-    ...prizeSplit,
-    percentage: prizeSplit.percentage * 10
+const convertFormToPrizeSplitConfig = async (prizeSplit, { provider, poolToast }) => {
+  if (isValidAddress(prizeSplit.target)) {
+    return {
+      ...prizeSplit,
+      percentage: convertPercentageToSingleDecimalPrecision(prizeSplit.percentage)
+    }
+  } else {
+    const ensResolved = await provider.resolveName(prizeSplit.target)
+    if (isValidAddress(ensResolved)) {
+      return {
+        ...prizeSplit,
+        target: ensResolved,
+        percentage: convertPercentageToSingleDecimalPrecision(prizeSplit.percentage)
+      }
+    } else {
+      poolToast.error(`Update Prize Split: Unable to resolve ENS address`)
+    }
   }
 }
 
@@ -60,14 +72,14 @@ const convertFormToPrizeSplitsConfig = async (
       token: prizeSplit1Token
     })
   } else if (prizeSplit1Target && prizeSplit1Target != constants.AddressZero) {
-    try {
-      const ensResolved = await provider.getResolver(prizeSplit1Target)
+    const ensResolved = await provider.resolveName(prizeSplit1Target)
+    if (isValidAddress(ensResolved)) {
       prizeSplitMerged.push({
-        target: ensResolved.address,
+        target: ensResolved,
         percentage: convertPercentageToSingleDecimalPrecision(prizeSplit1Percentage),
         token: prizeSplit1Token
       })
-    } catch (error) {
+    } else {
       poolToast.error(`First Prize Split: Unable to resolve ENS address`)
       return
     }
@@ -84,15 +96,15 @@ const convertFormToPrizeSplitsConfig = async (
       token: prizeSplit2Token
     })
   } else if (count == 2 && prizeSplit2Target && prizeSplit2Target != constants.AddressZero) {
-    try {
-      const ensResolved = await provider.getResolver(prizeSplit2Target)
+    const ensResolved = await provider.resolveName(prizeSplit2Target)
+    if (isValidAddress(ensResolved)) {
       prizeSplitMerged.push({
-        target: ensResolved.address,
+        target: ensResolved,
         percentage: convertPercentageToSingleDecimalPrecision(prizeSplit2Percentage),
         token: prizeSplit2Token
       })
-    } catch (error) {
-      poolToast.error(`Second Prize Split: Unable to resolve ENS address`)
+    } else {
+      poolToast.error(`First Prize Split: Unable to resolve ENS address`)
       return
     }
   }
@@ -141,89 +153,97 @@ const handleSetPrizeSplits = async (sendTx, txName, setTx, prizeStrategyAddress,
  */
 export const PrizeSplitControlCard = (props) => {
   const { data: prizePoolContracts } = usePrizePoolContracts()
+  const {
+    data: prizeSplitsValues,
+    refetch: refetchprizeSplitsValues,
+    isSuccess
+  } = usePrizeSplitValues(prizePoolContracts.prizeStrategy.address)
 
-  if (prizePoolContracts.prizeStrategy.contract === 'SingleRandomWinner') {
+  if (isSuccess) {
+    if (prizePoolContracts.prizeStrategy.contract === 'SingleRandomWinner') {
+      return (
+        <Card>
+          <Collapse title='Prize Split'>
+            <CardSecondaryText className='mb-4'>
+              Prize splits unavailable in single winner prize strategies.
+            </CardSecondaryText>
+          </Collapse>
+        </Card>
+      )
+    }
+
     return (
       <Card>
         <Collapse title='Prize Split'>
-          <CardSecondaryText className='mb-4'>
-            Prize splits unavailable in single winner prize strategies.
+          <CardSecondaryText className='mb-8'>
+            The pool owner can decide a fixed percent of the interest accrued on every prize to go
+            to a specific address. You can add up to two additional awards.
           </CardSecondaryText>
+          <PrizeSplitForm
+            prizePoolContracts={prizePoolContracts}
+            prizeSplitsValues={prizeSplitsValues}
+            refetchprizeSplitsValues={refetchprizeSplitsValues}
+          />
         </Collapse>
       </Card>
     )
   }
-
-  return (
-    <Card>
-      <Collapse title='Prize Split'>
-        <CardSecondaryText className='mb-8'>
-          The pool owner can decide a fixed percent of the interest accrued on every prize to go to
-          a specific address. You can add up to two additional awards.
-        </CardSecondaryText>
-        <PrizeSplitForm />
-      </Collapse>
-    </Card>
-  )
+  return null
 }
 
 const PrizeSplitForm = (props) => {
   const [tx, setTx] = useState({})
   const counter = useCounter(1, { min: 0, max: 2 })
-  const { data: prizePoolContracts } = usePrizePoolContracts()
-  const { data: poolChainValues, refetch: refetchPoolChainValues } = usePoolChainValues()
   const usersAddress = useUsersAddress()
-  const { walletMatchesNetwork } = useNetwork()
-  const currentNumOfWinners = poolChainValues.config.numberOfWinners
-  const [newNumOfWinners, setNewNumOfWinners] = useState(currentNumOfWinners)
   const sendTx = useSendTransaction()
   const { provider } = useOnboard()
 
+  const { prizePoolContracts, prizeSplitsValues, refetchprizeSplitsValues } = props
+
   const txName = 'Set PrizeStrategy prize split'
-  console.log(poolChainValues, 'PrizeSplitForm')
 
   useEffect(() => {
-    if (idx(poolChainValues, (_) => _.prize.prizeSplits)) {
-      counter.set(poolChainValues.prize.prizeSplits.length)
+    if (idx(prizeSplitsValues, (_) => _.prizeSplits)) {
+      counter.set(prizeSplitsValues.prizeSplits.length)
     }
-  }, [poolChainValues])
+  }, [prizeSplitsValues])
 
   // Form Value State
   const [prizeSplit1Target, setPrizeSplit1Target] = useState(
-    idx(poolChainValues, (_) => _.prize.prizeSplits[0].target || constants.AddressZero)
+    idx(prizeSplitsValues, (_) => _.prizeSplits[0].target || constants.AddressZero)
   )
   const [prizeSplit1Percentage, setPrizeSplit1Percentage] = useState(
-    idx(poolChainValues, (_) => _.prize.prizeSplits[0].percentage / 10 || 0)
+    idx(prizeSplitsValues, (_) => _.prizeSplits[0].percentage / 10 || 0)
   )
 
   const [prizeSplit1TokenType, setPrizeSplit1TokenType] = useState(
-    `${idx(poolChainValues, (_) => _.prize.prizeSplits[0].token)}`
+    `${idx(prizeSplitsValues, (_) => _.prizeSplits[0].token)}`
   )
 
   const [prizeSplit2Target, setPrizeSplit2Target] = useState(
-    idx(poolChainValues, (_) => _.prize.prizeSplits[1].target || constants.AddressZero)
+    idx(prizeSplitsValues, (_) => _.prizeSplits[1].target || constants.AddressZero)
   )
   const [prizeSplit2Percentage, setPrizeSplit2Percentage] = useState(
-    idx(poolChainValues, (_) => _.prize.prizeSplits[1].percentage / 10 || '1')
+    idx(prizeSplitsValues, (_) => _.prizeSplits[1].percentage / 10 || '1')
   )
 
   const [prizeSplit2TokenType, setPrizeSplit2TokenType] = useState(
-    `${idx(poolChainValues, (_) => _.prize.prizeSplits[1].token)}`
+    `${idx(prizeSplitsValues, (_) => _.prizeSplits[1].token)}`
   )
 
   const [isPrizeSplitTouched, setIsPrizeSplitTouched] = useState(false)
   useEffect(() => {
-    if (idx(poolChainValues, (_) => _.prize.prizeSplits)) {
+    if (idx(prizeSplitsValues, (_) => _.prizeSplits)) {
       const prizeSplitsChain = [
         {
-          target: idx(poolChainValues, (_) => _.prize.prizeSplits[0].target),
-          percentage: idx(poolChainValues, (_) => _.prize.prizeSplits[0].percentage),
-          token: `${idx(poolChainValues, (_) => _.prize.prizeSplits[0].token)}`
+          target: idx(prizeSplitsValues, (_) => _.prizeSplits[0].target),
+          percentage: idx(prizeSplitsValues, (_) => _.prizeSplits[0].percentage),
+          token: `${idx(prizeSplitsValues, (_) => _.prizeSplits[0].token)}`
         },
         {
-          target: idx(poolChainValues, (_) => _.prize.prizeSplits[1].target),
-          percentage: idx(poolChainValues, (_) => _.prize.prizeSplits[1].percentage),
-          token: `${idx(poolChainValues, (_) => _.prize.prizeSplits[1].token)}`
+          target: idx(prizeSplitsValues, (_) => _.prizeSplits[1].target),
+          percentage: idx(prizeSplitsValues, (_) => _.prizeSplits[1].percentage),
+          token: `${idx(prizeSplitsValues, (_) => _.prizeSplits[1].token)}`
         }
       ]
 
@@ -239,13 +259,11 @@ const PrizeSplitForm = (props) => {
           token: prizeSplit2TokenType
         }
       ]
-      console.log(prizeSplitsChain, prizeSplitsConfig, 'prizeSplitsConfig')
       const prizeSplitTouched = isEqual(prizeSplitsChain, prizeSplitsConfig)
-      console.log(prizeSplitTouched, 'isEqual')
       setIsPrizeSplitTouched(prizeSplitTouched)
     }
   }, [
-    poolChainValues,
+    prizeSplitsValues,
     prizeSplit1Target,
     prizeSplit1Percentage,
     prizeSplit1TokenType,
@@ -264,7 +282,6 @@ const PrizeSplitForm = (props) => {
       prizeSplit2Percentage,
       prizeSplit2TokenType
     )
-    console.log(prizeSplits, 'prizeSplits')
     e.preventDefault()
     handleSetPrizeSplits(
       sendTx,
@@ -275,23 +292,41 @@ const PrizeSplitForm = (props) => {
     )
   }
 
-  const handleSetPrizeSplit = (prizeSplit, prizeSplitIndex) => {
-    setPrizeSplit(
-      sendTx,
-      txName,
-      setTx,
-      prizePoolContracts.prizeStrategy.address,
-      convertFormToPrizeSplitConfig(prizeSplit),
-      prizeSplitIndex
-    )
+  const handleSetPrizeSplit = async (prizeSplit, prizeSplitIndex) => {
+    const prizeSplitConfig = await convertFormToPrizeSplitConfig(prizeSplit, {
+      provider,
+      poolToast
+    })
+
+    if (prizeSplitConfig) {
+      setPrizeSplit(
+        sendTx,
+        txName,
+        setTx,
+        prizePoolContracts.prizeStrategy.address,
+        prizeSplitConfig,
+        prizeSplitIndex
+      )
+    }
   }
 
-  useOnTransactionCompleted(tx, refetchPoolChainValues)
+  const handleRemovePrizeSplit = (index) => {
+    if (index == 1) {
+      setPrizeSplit1Target(constants.AddressZero)
+      setPrizeSplit1Percentage(undefined)
+      setPrizeSplit1TokenType(undefined)
+    } else {
+      setPrizeSplit2Target(constants.AddressZero)
+      setPrizeSplit2Percentage(undefined)
+      setPrizeSplit2TokenType(undefined)
+    }
+    counter.decr(1)
+  }
+
+  useOnTransactionCompleted(tx, refetchprizeSplitsValues)
 
   const resetState = (e) => {
     e.preventDefault()
-
-    setNewNumOfWinners(currentNumOfWinners)
     setTx({})
   }
 
@@ -307,6 +342,7 @@ const PrizeSplitForm = (props) => {
     <form onSubmit={handleSubmit}>
       {(counter.value == 1 || counter.value == 2) && (
         <PrizeSplitPosition
+          prizeSplitsLength={prizeSplitsValues.prizeSplits.length}
           index={0}
           position={1}
           target={prizeSplit1Target}
@@ -316,10 +352,12 @@ const PrizeSplitForm = (props) => {
           tokenType={prizeSplit1TokenType}
           setTokenType={setPrizeSplit1TokenType}
           handleSetPrizeSplit={handleSetPrizeSplit}
+          provider={provider}
         />
       )}
       {counter.value == 2 && (
         <PrizeSplitPosition
+          prizeSplitsLength={prizeSplitsValues.prizeSplits.length}
           index={1}
           position={2}
           target={prizeSplit2Target}
@@ -329,6 +367,7 @@ const PrizeSplitForm = (props) => {
           tokenType={prizeSplit2TokenType}
           setTokenType={setPrizeSplit2TokenType}
           handleSetPrizeSplit={handleSetPrizeSplit}
+          provider={provider}
         />
       )}
 
@@ -347,7 +386,7 @@ const PrizeSplitForm = (props) => {
           disabled={counter.value == 0}
           type='button'
           color='danger'
-          onClick={() => counter.decr(1)}
+          onClick={() => handleRemovePrizeSplit(counter.value)}
         >
           Remove PrizeSplit
         </Button>
@@ -368,6 +407,7 @@ const PrizeSplitForm = (props) => {
 
 const PrizeSplitPosition = (props) => {
   const {
+    prizeSplitsLength,
     index,
     position,
     target,
@@ -392,6 +432,13 @@ const PrizeSplitPosition = (props) => {
 
   const formatValue = (key) => idx(tokenTypeOptions, (_) => _[key].label)
 
+  const [isReadyToBeUpdated, setIsReadyToBeUpdated] = useState(false)
+  useEffect(() => {
+    if (index < prizeSplitsLength && target && percentage && tokenType != 'undefined') {
+      setIsReadyToBeUpdated(true)
+    }
+  }, [target, percentage, tokenType])
+
   return (
     <>
       <div className='flex justify-between align-center'>
@@ -399,6 +446,7 @@ const PrizeSplitPosition = (props) => {
           Additional Prize Split {position}
         </h3>
         <Button
+          disabled={!isReadyToBeUpdated}
           color='warning'
           type='button'
           className='self-center font-bold rounded-full text-green-1 border border-green-1 hover:text-white hover:bg-lightPurple-1000 text-xxs sm:text-base mt-4 mr-3 pt-2 pb-2 px-3 sm:px-6 trans'
