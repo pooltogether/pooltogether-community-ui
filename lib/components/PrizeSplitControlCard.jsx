@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { constants } from 'ethers'
+import { constants, utils } from 'ethers'
 import { isEqual } from 'lodash'
 import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/MultipleWinners'
 import { isValidAddress } from '@pooltogether/utilities'
@@ -20,8 +20,82 @@ import { usePrizeSplitValues } from 'lib/hooks/usePrizeSplitValues'
 import { idx } from 'lib/utils/idx'
 import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 
+/**
+ * @name handleSetPrizeSplit
+ * @param {*} sendTx
+ * @param {*} txName
+ * @param {*} setTx
+ * @param {*} prizeStrategyAddress
+ * @param {*} prizeSplit
+ * @param {*} prizeSplitIndex
+ */
+const setPrizeSplit = async (
+  sendTx,
+  txName,
+  setTx,
+  prizeStrategyAddress,
+  prizeSplit,
+  prizeSplitIndex
+) => {
+  const params = [prizeSplit, prizeSplitIndex]
+  await sendTx(setTx, prizeStrategyAddress, PrizeStrategyAbi, 'setPrizeSplit', txName, params)
+}
+
+/**
+ * @name handleSetPrizeSplits
+ * @param {*} sendTx
+ * @param {*} txName
+ * @param {*} setTx
+ * @param {*} prizeStrategyAddress
+ * @param {*} prizeSplits
+ */
+const handleSetPrizeSplits = async (sendTx, txName, setTx, prizeStrategyAddress, prizeSplits) => {
+  const params = [prizeSplits]
+  await sendTx(setTx, prizeStrategyAddress, PrizeStrategyAbi, 'setPrizeSplits', txName, params)
+}
+
+/**
+ * @name convertPercentageToSingleDecimalPrecision
+ * @description Convert 0-100 range to 0-1000 range for single decimal precision.
+ * @param {*} value
+ */
 const convertPercentageToSingleDecimalPrecision = (value) => {
   return Number(value) * 10
+}
+
+/**
+ * @name convertPercentageToSingleDecimalPrecision
+ * @description Create token type options list based off tokens array position.
+ * @param {*} ticket
+ * @param {*} sponsorship
+ * @param {*} tokens
+ */
+const createTokenTypeOptions = (ticket, sponsorship, tokens) => {
+  let tokenTypeOptions = {}
+  if (utils.getAddress(ticket) == utils.getAddress(tokens[0])) {
+    tokenTypeOptions = {
+      0: {
+        value: 0,
+        label: 'Ticket'
+      },
+      1: {
+        value: 1,
+        label: 'Sponsorship'
+      }
+    }
+  } else if (utils.getAddress(sponsorship) == utils.getAddress(tokens[0])) {
+    tokenTypeOptions = {
+      0: {
+        value: 0,
+        label: 'Sponsorship'
+      },
+      1: {
+        value: 1,
+        label: 'Ticket'
+      }
+    }
+  }
+  return tokenTypeOptions
 }
 
 /**
@@ -113,40 +187,6 @@ const convertFormToPrizeSplitsConfig = async (
 }
 
 /**
- * @name handleSetPrizeSplit
- * @param {*} sendTx
- * @param {*} txName
- * @param {*} setTx
- * @param {*} prizeStrategyAddress
- * @param {*} prizeSplit
- * @param {*} prizeSplitIndex
- */
-const setPrizeSplit = async (
-  sendTx,
-  txName,
-  setTx,
-  prizeStrategyAddress,
-  prizeSplit,
-  prizeSplitIndex
-) => {
-  const params = [prizeSplit, prizeSplitIndex]
-  await sendTx(setTx, prizeStrategyAddress, PrizeStrategyAbi, 'setPrizeSplit', txName, params)
-}
-
-/**
- * @name handleSetPrizeSplits
- * @param {*} sendTx
- * @param {*} txName
- * @param {*} setTx
- * @param {*} prizeStrategyAddress
- * @param {*} prizeSplits
- */
-const handleSetPrizeSplits = async (sendTx, txName, setTx, prizeStrategyAddress, prizeSplits) => {
-  const params = [prizeSplits]
-  await sendTx(setTx, prizeStrategyAddress, PrizeStrategyAbi, 'setPrizeSplits', txName, params)
-}
-
-/**
  * @name PrizeSplitControlCard
  * @description A display card for managing the PrizeSplit configuration.
  * @param {*} props
@@ -157,7 +197,10 @@ export const PrizeSplitControlCard = (props) => {
     data: prizeSplitsValues,
     refetch: refetchprizeSplitsValues,
     isSuccess
-  } = usePrizeSplitValues(prizePoolContracts.prizeStrategy.address)
+  } = usePrizeSplitValues(
+    prizePoolContracts.prizeStrategy.address,
+    prizePoolContracts.prizePool.address
+  )
 
   if (isSuccess) {
     if (prizePoolContracts.prizeStrategy.contract === 'SingleRandomWinner') {
@@ -353,6 +396,7 @@ const PrizeSplitForm = (props) => {
           setTokenType={setPrizeSplit1TokenType}
           handleSetPrizeSplit={handleSetPrizeSplit}
           provider={provider}
+          prizeSplitsValues={prizeSplitsValues}
         />
       )}
       {counter.value == 2 && (
@@ -368,6 +412,7 @@ const PrizeSplitForm = (props) => {
           setTokenType={setPrizeSplit2TokenType}
           handleSetPrizeSplit={handleSetPrizeSplit}
           provider={provider}
+          prizeSplitsValues={prizeSplitsValues}
         />
       )}
 
@@ -416,21 +461,9 @@ const PrizeSplitPosition = (props) => {
     setPercentage,
     tokenType,
     setTokenType,
-    handleSetPrizeSplit
+    handleSetPrizeSplit,
+    prizeSplitsValues
   } = props
-
-  const tokenTypeOptions = {
-    0: {
-      value: 0,
-      label: 'Ticket'
-    },
-    1: {
-      value: 1,
-      label: 'Sponsorship'
-    }
-  }
-
-  const formatValue = (key) => idx(tokenTypeOptions, (_) => _[key].label)
 
   const [isReadyToBeUpdated, setIsReadyToBeUpdated] = useState(false)
   useEffect(() => {
@@ -439,24 +472,18 @@ const PrizeSplitPosition = (props) => {
     }
   }, [target, percentage, tokenType])
 
+  const formatValue = (key) => idx(tokenTypeOptions, (_) => _[key].label)
+  const tokenTypeOptions = createTokenTypeOptions(
+    prizeSplitsValues.ticket,
+    prizeSplitsValues.sponsorship,
+    prizeSplitsValues.tokens
+  )
+
   return (
     <>
-      <div className='flex justify-between align-center'>
-        <h3 className='font-normal mt-10 mb-5 ml-4 lg:ml-8 text-base lg:text-xl'>
-          Additional Prize Split {position}
-        </h3>
-        <Button
-          disabled={!isReadyToBeUpdated}
-          color='warning'
-          type='button'
-          className='self-center font-bold rounded-full text-green-1 border border-green-1 hover:text-white hover:bg-lightPurple-1000 text-xxs sm:text-base mt-4 mr-3 pt-2 pb-2 px-3 sm:px-6 trans'
-          onClick={() =>
-            handleSetPrizeSplit({ target: target, percentage: percentage, token: tokenType }, index)
-          }
-        >
-          Update PrizeSplit
-        </Button>
-      </div>
+      <h3 className='font-normal mt-10 mb-5 ml-4 lg:ml-8 text-base lg:text-xl'>
+        Additional Prize Split {position}
+      </h3>
       <div className='grid grid-cols-5'>
         <TextInputGroup
           id='_prizeSplitRecipient'
