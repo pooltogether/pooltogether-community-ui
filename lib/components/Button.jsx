@@ -162,7 +162,7 @@ export const Button = (props) => {
   className = classnames(
     backgroundClasses,
     borderClasses,
-    // textColorClasses,
+    textColorClasses,
     defaultClasses,
     paddingClasses,
     roundedClasses,
