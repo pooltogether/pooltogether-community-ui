@@ -2003,10 +2003,10 @@
     framer-motion "^4.1.17"
     js-cookie "^2.2.1"
 
-"@pooltogether/pooltogether-contracts@3.4.1-alpha.5":
-  version "3.4.1-alpha.5"
-  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.4.1-alpha.5.tgz#b6d6f188c8663980f4dd2e6e45bd049a1d4796f6"
-  integrity sha512-PWd/S8WcmOp3Q82tYnYJ6cGG/0Q/PYCJ9y/KKRzK4VxP5ypFAdkP0j4YBDPnK9l46CXw/p6x/KhD/ESo+pB5xg==
+"@pooltogether/pooltogether-contracts@^3.4.3":
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.4.3.tgz#f3a8f16bd14b1c9a09f225e916ae0b5b2597a7c9"
+  integrity sha512-gW6nBBZ4cMb12uqutyXCovVJ4UedMBSyrvxb6jBPobGXK161M+4yGcOAxF+Pl0mQ1kJYV5XxADRVvBtHgWtOWQ==
   dependencies:
     "@openzeppelin/contracts-upgradeable" "3.4.0"
     "@pooltogether/fixed-point" "1.0.0-beta.2"
