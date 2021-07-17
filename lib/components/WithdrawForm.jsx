@@ -61,7 +61,6 @@ export const WithdrawForm = (props) => {
 
   const [exitFees, setExitFees] = useState({
     earlyExitFee: null,
-    timelockDurationSeconds: null,
     credit: null,
     fetched: false
   })
@@ -72,13 +71,12 @@ export const WithdrawForm = (props) => {
   const numberOfWinners = poolChainValues.config.numberOfWinners
   const poolIsLocked = poolChainValues.prize.isRngRequested
   const tokenDecimals = poolChainValues.token.decimals
-  const maxTimelockDuration = poolChainValues.config.maxTimelockDuration
   const tokenSymbol = poolChainValues.token.symbol
   const prizePoolAddress = prizePoolContracts.prizePool.address
   const ticketAddress = prizePoolContracts.ticket.address
   const usersTicketBalance = usersChainValues?.usersTicketBalance
   const usersTicketBalanceUnformatted = usersChainValues?.usersTicketBalanceUnformatted
-  const { earlyExitFee, timelockDurationSeconds } = exitFees
+  const { earlyExitFee } = exitFees
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -109,7 +107,6 @@ export const WithdrawForm = (props) => {
       } else {
         setExitFees({
           earlyExitFee: null,
-          timelockDurationSeconds: null,
           credit: null,
           fetched: false
         })
@@ -227,10 +224,10 @@ export const WithdrawForm = (props) => {
 
         {earlyExitFee && !earlyExitFee.isZero() && (
           <div className='flex mt-8 sm:mb-0 flex-col sm:flex-row'>
-            <WithdrawGauge
+            {/* <WithdrawGauge
               timelockDurationSeconds={timelockDurationSeconds}
               maxTimelockDuration={maxTimelockDuration}
-            />
+            /> */}
 
             <InnerCard className='text-center height-fit-content sm:mt-6'>
               <div className='text-base sm:text-xl text-accent-1 mb-4'>
@@ -311,63 +308,63 @@ const WithdrawButtons = (props) => {
   )
 }
 
-const WithdrawGauge = (props) => {
-  const { timelockDurationSeconds, maxTimelockDuration } = props
+// const WithdrawGauge = (props) => {
+//   const { timelockDurationSeconds, maxTimelockDuration } = props
 
-  const percentTimeRemaining =
-    timelockDurationSeconds &&
-    maxTimelockDuration &&
-    Math.round((timelockDurationSeconds.toNumber() / maxTimelockDuration.toNumber()) * 100)
-  const { time, timeType } = getTimeLeftDisplayValues(timelockDurationSeconds.toNumber())
+//   const percentTimeRemaining =
+//     timelockDurationSeconds &&
+//     maxTimelockDuration &&
+//     Math.round((timelockDurationSeconds.toNumber() / maxTimelockDuration.toNumber()) * 100)
+//   const { time, timeType } = getTimeLeftDisplayValues(timelockDurationSeconds.toNumber())
 
-  return (
-    <>
-      <div className='hidden sm:block mr-0 sm:mr-20 ml-0 sm:ml-8' style={{ maxHeight: '240px' }}>
-        <Gauge
-          value={Math.abs(100 - percentTimeRemaining)}
-          label={<GaugeLabel time={time} timeType={timeType} />}
-        />
-      </div>
-      <div className='block sm:hidden text-orange-500 text-center my-2'>
-        {time} more {timeType} to go until free withdrawal
-      </div>
-    </>
-  )
-}
+//   return (
+//     <>
+//       <div className='hidden sm:block mr-0 sm:mr-20 ml-0 sm:ml-8' style={{ maxHeight: '240px' }}>
+//         <Gauge
+//           value={Math.abs(100 - percentTimeRemaining)}
+//           label={<GaugeLabel time={time} timeType={timeType} />}
+//         />
+//       </div>
+//       <div className='block sm:hidden text-orange-500 text-center my-2'>
+//         {time} more {timeType} to go until free withdrawal
+//       </div>
+//     </>
+//   )
+// }
 
-const getTimeLeftDisplayValues = (secondsLeft) => {
-  const currentDate = new Date(Date.now())
-  const futureDate = addSeconds(currentDate, secondsLeft)
-  const { days, hours, minutes, seconds } = subtractDates(futureDate, currentDate)
+// const getTimeLeftDisplayValues = (secondsLeft) => {
+//   const currentDate = new Date(Date.now())
+//   const futureDate = addSeconds(currentDate, secondsLeft)
+//   const { days, hours, minutes, seconds } = subtractDates(futureDate, currentDate)
 
-  let time = 0
-  let timeType = ''
-  if (days) {
-    time = days
-    timeType = days === 1 ? 'day' : 'days'
-  } else if (hours) {
-    time = hours
-    timeType = hours === 1 ? 'hour' : 'hours'
-  } else if (minutes) {
-    time = minutes
-    timeType = minutes === 1 ? 'minute' : 'minutes'
-  } else {
-    time = seconds
-    timeType = seconds === 1 ? 'second' : 'seconds'
-  }
-  return { time, timeType }
-}
+//   let time = 0
+//   let timeType = ''
+//   if (days) {
+//     time = days
+//     timeType = days === 1 ? 'day' : 'days'
+//   } else if (hours) {
+//     time = hours
+//     timeType = hours === 1 ? 'hour' : 'hours'
+//   } else if (minutes) {
+//     time = minutes
+//     timeType = minutes === 1 ? 'minute' : 'minutes'
+//   } else {
+//     time = seconds
+//     timeType = seconds === 1 ? 'second' : 'seconds'
+//   }
+//   return { time, timeType }
+// }
 
-const GaugeLabel = (props) => {
-  const { time, timeType } = props
+// const GaugeLabel = (props) => {
+//   const { time, timeType } = props
 
-  return (
-    <div className='flex flex-col'>
-      <div className='text-8xl text-highlight-1 leading-none mt-4 font-bold'>{time}</div>
-      <div className='text-xl text-highlight-1 mb-6 font-bold'>{timeType} left</div>
-      <div className='text-highlight-1 mt-3'>
-        {time} more {timeType} to go until free withdrawal
-      </div>
-    </div>
-  )
-}
+//   return (
+//     <div className='flex flex-col'>
+//       <div className='text-8xl text-highlight-1 leading-none mt-4 font-bold'>{time}</div>
+//       <div className='text-xl text-highlight-1 mb-6 font-bold'>{timeType} left</div>
+//       <div className='text-highlight-1 mt-3'>
+//         {time} more {timeType} to go until free withdrawal
+//       </div>
+//     </div>
+//   )
+// }
