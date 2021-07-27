@@ -1,18 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { AdminUI } from 'lib/components/AdminUI'
 import { StatsUI } from 'lib/components/StatsUI'
 import { Content, ContentPane, Tab, Tabs } from 'lib/components/Tabs'
 import { Card, CardSecondaryTitle } from 'lib/components/Card'
 import { ButtonLink } from 'lib/components/ButtonLink'
-
-import ManageImage from 'assets/images/manage-image.svg'
 import { RelativeInternalLink } from 'lib/components/RelativeInternalLink'
 import { BlockExplorerLink } from 'lib/components/BlockExplorerLink'
+import { RelativeNavLinks } from 'lib/components/RelativeNavLinks'
 import { CopyIcon } from 'lib/components/CopyIcon'
-import { useUsersAddress } from '@pooltogether/hooks'
-import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
+
+import ManageImage from 'assets/images/manage-image.svg'
 
 const MANAGE_VIEW = Object.freeze({
   stats: '#stats',
@@ -20,11 +19,12 @@ const MANAGE_VIEW = Object.freeze({
 })
 
 export const ManageUI = (props) => {
-  const [selectedTab, setSelectedTab] = useState(window.location.hash || MANAGE_VIEW.stats)
-  const { data: poolChainValues } = usePoolChainValues()
-  const usersAddress = useUsersAddress()
-  const owner = poolChainValues.config.owner
-  const userIsOwner = owner?.toLowerCase() === usersAddress?.toLowerCase()
+  const hash = window.location.hash
+  const [selectedTab, setSelectedTab] = useState(hash || MANAGE_VIEW.stats)
+
+  useEffect(() => {
+    setSelectedTab(hash || MANAGE_VIEW.stats)
+  }, [hash])
 
   return (
     <>
@@ -53,10 +53,8 @@ export const ManageUI = (props) => {
           <AdminUI />
         </ContentPane>
       </Content>
-      <div className='flex justify-between w-3/4 sm:w-1/2 mx-auto'>
-        <RelativeInternalLink link='/home'>View Prize Pool</RelativeInternalLink>
-        <RelativeInternalLink link='/admin'>Manage Pool</RelativeInternalLink>
-      </div>
+
+      <RelativeNavLinks />
     </>
   )
 }
