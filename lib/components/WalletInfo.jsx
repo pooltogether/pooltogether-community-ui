@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { useOnboard } from '@pooltogether/hooks'
+import { useOnboard } from '@pooltogether/bnc-onboard-hooks'
 import classnames from 'classnames'
 import FeatherIcon from 'feather-icons-react'
 import { getChain } from '@pooltogether/evm-chains-extended'

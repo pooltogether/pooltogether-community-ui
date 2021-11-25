@@ -1,0 +1,86 @@
+{
+  "name": "@pooltogether/react-components",
+  "version": "1.4.1",
+  "description": "PoolTogether UI elements in a shared lib",
+  "author": "PoolTogether",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "config.js",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pooltogether/pooltogether-react-components.git"
+  },
+  "keywords": [
+    "react",
+    "library",
+    "components",
+    "tailwindcss"
+  ],
+  "scripts": {
+    "reinstall": "rm -rf ./node_modules && yarn",
+    "start": "tsdx watch --onSuccess \"yalc push\"",
+    "build": "tsdx build",
+    "test": "tsdx test --passWithNoTests",
+    "lint": "tsdx lint",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "module": "dist/react-components.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/react-components.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/react-components.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "peerDependencies": {
+    "@pooltogether/current-pool-data": "^3.7.2",
+    "@pooltogether/hooks": "^1.2.0",
+    "@pooltogether/utilities": "^0.0.43",
+    "eth-revert-reason": "^1.0.3",
+    "ethers": "^5.5.1",
+    "feather-icons-react": "^0.4.1",
+    "framer-motion": "^4.1.17",
+    "jotai": "^0.16.10",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-query": "^3.16.0",
+    "tailwindcss": "^1.7.6"
+  },
+  "dependencies": {
+    "@download/blockies": "^1.0.3",
+    "@pooltogether/evm-chains-extended": "^0.5.3",
+    "@reach/dialog": "^0.15.0",
+    "@reach/menu-button": "^0.15.1",
+    "@reach/popover": "^0.15.0",
+    "@reach/visually-hidden": "0.15.0",
+    "classnames": "^2.2.6",
+    "deep-equal": "^2.0.5",
+    "js-cookie": "^2.2.1",
+    "react-content-loader": "^6.0.3",
+    "react-copy-to-clipboard": "^5.0.3",
+    "react-device-detect": "^1.15.0",
+    "react-hotkeys": "^2.0.0",
+    "react-loader-spinner": "^4.0.0",
+    "react-toastify": "^6.0.8",
+    "react-tooltip": "^4.2.21"
+  },
+  "yalcSig": "1d90e1b2cd0c0ae3490de423040c0753"
+}

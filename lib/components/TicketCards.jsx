@@ -1,6 +1,7 @@
 import React from 'react'
-import { useOnboard, useUsersAddress } from '@pooltogether/hooks'
+import { useOnboard } from '@pooltogether/bnc-onboard-hooks'
 
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { Card, CardPrimaryText, CardSecondaryText, CardSecondaryTitle } from 'lib/components/Card'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
 import { WALLETS } from 'lib/constants'

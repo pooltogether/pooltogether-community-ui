@@ -1,0 +1,664 @@
+* {
+  /* --sushiswap-radial-gradient: linear-gradient(var(--color-bg-card), var(--color-bg-card)),
+    radial-gradient(circle at top left, #3471d5 40%, #cf30c7); */
+  --uniswap-radial-gradient: linear-gradient(var(--color-bg-card), var(--color-bg-card)),
+    radial-gradient(circle at top left, #feccd2 40%, rgba(240, 47, 198, 0.9));
+
+  --flashyGradient: linear-gradient(
+    40deg,
+    #ff9304 0%,
+    #ff04ea 10%,
+    #9b4beb 20%,
+    #0e8dd6 30%,
+    #0bc6df 40%,
+    #07d464 50%,
+    #dfd105 60%,
+    #ff04ab 78%,
+    #8933eb 90%,
+    #3b89ff 100%
+  );
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
+html,
+body,
+table {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background-color: #79ffe1;
+  color: var(--color-text-inverse);
+}
+
+hr {
+  border: 0;
+  height: 0;
+  border-top: 3px solid rgba(60, 8, 165, 0.3);
+  border-bottom: none;
+  background: transparent;
+  margin: 20px auto;
+  width: 90%;
+}
+
+.theme-light hr {
+  border-color: var(--color-bg-accent-grey-3);
+}
+
+a {
+  text-decoration: none;
+  text-underline-position: from-font;
+  @apply cursor-pointer;
+}
+
+.nav--account-transactions-button__loader {
+  transform: scale(0.8);
+}
+
+.nav--account-transactions-button .loader01 {
+  top: 5px;
+}
+
+@screen lg {
+  .nav--account-transactions-button .loader01 {
+    top: 4px;
+  }
+}
+
+.nav--account-transactions-button:hover {
+  @apply bg-purple text-white;
+}
+
+.nav--account-transactions-button:hover div,
+.nav--account-transactions-button:hover .nav--account-transactions-button__address {
+  @apply bg-purple text-white;
+}
+
+.nav--account-transactions-button:hover .loader01 {
+  border-color: white;
+  border-right-color: transparent;
+}
+
+.footer a {
+  @apply text-primary border-0;
+}
+
+.footer a:hover {
+  @apply text-secondary;
+}
+
+.footer .img-link:hover {
+  @apply border-0 no-underline;
+}
+
+.pt-panel {
+  width: calc(100% + 64px);
+}
+
+@screen sm {
+  .pt-panel {
+    width: 100%;
+  }
+}
+
+@screen lg {
+  .pt-panel {
+    width: 100%;
+  }
+}
+
+.pool-logo {
+  height: 50px;
+  position: relative;
+  z-index: 1;
+  width: 29px;
+}
+
+.pool-logo:hover {
+  background-color: transparent;
+}
+
+@screen xs {
+  .pool-logo {
+    height: 60px;
+    width: 35px;
+  }
+}
+
+@screen sm {
+  .pool-logo {
+    height: 60px;
+    width: 138px;
+  }
+}
+
+.pool-logo:after {
+  content: '';
+  background-size: cover;
+  bottom: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 2;
+}
+
+@screen sm {
+  .pool-logo:after {
+    height: 60px;
+    width: 151px;
+  }
+}
+
+.confettiCanvas {
+  bottom: 0;
+  pointer-events: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: opacity 4000ms;
+  z-index: 1000000;
+}
+
+.confettiCanvas.active {
+  opacity: 1;
+}
+
+.close-button {
+  outline: none;
+  font-size: 26px;
+  z-index: 1823775;
+}
+
+.close-button:focus,
+.close-button:active {
+  outline: none;
+}
+
+.banner-text {
+  font-size: calc(2vw + 17px);
+  line-height: 1.2;
+  margin-bottom: 4rem;
+  margin-top: 0;
+}
+
+@screen xs {
+  .banner-text {
+    margin-top: 1rem;
+    margin-bottom: 4rem;
+    padding-left: 6vw;
+    padding-right: 6vw;
+  }
+}
+
+@screen sm {
+  .banner-text {
+    font-size: calc(2vw + 20px);
+    margin-top: 1rem;
+    margin-bottom: 4rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+@screen lg {
+  .banner-text {
+    margin-top: 0.75rem;
+  }
+}
+
+@screen sm {
+  .transactions-ui-list {
+    max-height: 40vh;
+  }
+}
+
+.pool-row-left-col {
+  max-width: 247px;
+}
+
+@screen xs {
+  .pool-row-left-col {
+    max-width: 80%;
+  }
+}
+
+@screen sm {
+  .pool-row-left-col {
+    max-width: 350px;
+  }
+}
+
+@screen lg {
+  .pool-row-left-col {
+    max-width: 400px;
+  }
+}
+
+.pool-row-left-col--inner {
+  width: 184px;
+}
+
+@screen sm {
+  .pool-row-left-col--inner {
+    width: 230px;
+  }
+}
+
+.pool-row-right-col {
+  max-width: 247px;
+}
+
+@screen xs {
+  .pool-row-right-col {
+    max-width: 80%;
+  }
+}
+
+@screen sm {
+  .pool-row-right-col {
+    max-width: 280px;
+  }
+}
+
+.max-chart-width {
+  max-width: 270px;
+}
+
+@screen xs {
+  .max-chart-width {
+    max-width: 360px;
+  }
+}
+
+@screen sm {
+  .max-chart-width {
+    max-width: 490px;
+  }
+}
+
+@screen lg {
+  .max-chart-width {
+    max-width: 1000px;
+  }
+}
+
+.min-w-chip {
+  min-width: 186px;
+}
+
+@screen xs {
+  .min-w-chip {
+    min-width: 206px;
+  }
+}
+
+.card-icon {
+  position: relative;
+  height: 10px;
+  top: -2px;
+}
+
+@screen sm {
+  .card-icon {
+    height: 12px;
+  }
+}
+
+@screen lg {
+  .card-icon {
+    height: 14px;
+  }
+}
+
+.list-item--icon {
+  top: 0;
+}
+
+@screen sm {
+  .list-item--icon {
+    top: 3px;
+  }
+}
+
+@media screen and (max-height: 500px) {
+  #manage-tickets-action-dropdown {
+    display: none;
+  }
+  .liquidity-cap {
+    display: none;
+  }
+  .odds-box {
+    display: none;
+  }
+  .ticket {
+    display: none;
+  }
+  .pane-title {
+    display: none;
+  }
+}
+
+@media screen and (max-height: 600px) {
+  .deposit-info-list {
+    padding: 0 !important;
+  }
+
+  .deposit-info-list li {
+    padding-bottom: 3px !important;
+  }
+}
+
+.glow {
+  animation: glow 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 1px rgb(212, 230, 52), 1px 1px 2px #fff, 2px 2px 5px #fff;
+  }
+  to {
+    text-shadow: 0 0 2px #fff, 0 0 3px #0ff, 5px 5px 4px #fff;
+  }
+}
+
+.pink-purple-gradient {
+  background-image: linear-gradient(40deg, #9c48ba 20%, #4c249f 100%);
+}
+
+.theme-light .pink-purple-gradient {
+  background-image: linear-gradient(40deg, #ffb9f0 20%, #eee5ff 100%);
+}
+
+.border-uniswap-gradient {
+  background-image: var(--uniswap-radial-gradient);
+}
+
+.border-b-8-gradient {
+  border-bottom: solid 8px transparent;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.warning-modal {
+  margin-left: 5%;
+  margin-right: 5%;
+  width: 90%;
+}
+
+@screen xs {
+  .warning-modal {
+    @apply w-2/3 mx-auto;
+  }
+}
+
+@screen sm {
+  .warning-modal {
+    @apply w-1/2;
+  }
+}
+
+@screen lg {
+  .warning-modal {
+    @apply w-1/3;
+  }
+}
+
+.time-remaining-chart--big-num {
+  max-height: 76px;
+}
+
+@screen sm {
+  .time-remaining-chart--big-num {
+    max-height: 100px;
+  }
+}
+
+@screen lg {
+  .countdown-wrapper {
+    width: 300px;
+  }
+}
+
+@media screen and (max-width: 1032px) and (min-width: 941px) {
+  .custom-prize-box-padding {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+.wizard-fixed-top-banner {
+  width: 90%;
+}
+
+@screen sm {
+  .wizard-fixed-top-banner {
+    width: 872px;
+  }
+}
+
+@screen lg {
+  .wizard-fixed-top-banner {
+    width: 780px;
+  }
+}
+
+.modal-no-header {
+  @apply bg-default h-full;
+}
+
+@screen sm {
+  .modal-no-header {
+    @apply h-auto;
+    background: transparent;
+  }
+}
+
+.modal-no-header--close {
+  height: 20px;
+  width: 20px;
+  position: fixed;
+
+  right: 30px;
+  top: 20px;
+}
+
+@screen sm {
+  .modal-no-header--close {
+    position: absolute;
+    right: 40px;
+    top: -40px;
+  }
+}
+
+@screen lg {
+  .modal-no-header--close {
+    right: 140px;
+  }
+}
+
+.__react_component_tooltip.type-custom {
+  font-size: 16px;
+}
+
+.__react_component_tooltip.show.type-custom {
+  opacity: 0.97;
+  padding: 8px 21px 20px;
+  box-shadow: 0px 0px 8px #000;
+}
+
+@screen xs {
+  .__react_component_tooltip.show.type-custom {
+    padding: 8px 21px;
+  }
+}
+
+.notched-box {
+  position: relative;
+}
+
+.notched-corner {
+  /* @apply bg-body; */
+
+  position: absolute;
+  height: 10px;
+  width: 10px;
+  border: 1px solid transparent;
+}
+
+.notched-top-left {
+  top: -1px;
+  left: -1px;
+  border-radius: 0 0 100% 0;
+  border-width: 0 1px 1px 0;
+}
+
+.notched-top-right {
+  top: -1px;
+  right: -1px;
+  border-radius: 0 0 0 100%;
+  border-width: 0 0 1px 1px;
+}
+
+.notched-bottom-left {
+  bottom: 0;
+  left: -1px;
+  border-radius: 0 100% 0 0;
+  border-width: 1px 1px 0 0;
+}
+
+.notched-bottom-right {
+  bottom: 0;
+  right: -1px;
+  border-radius: 100% 0 0 0;
+  border-width: 1px 0 0 1px;
+}
+
+.new-btn {
+  @apply font-sans bg-new-btn text-purple rounded-sm font-semibold leading-normal;
+
+  transition: box-shadow 0.15s;
+}
+
+.new-btn:not([disabled]):hover,
+.new-btn:not([disabled]):focus {
+  @apply text-purple bg-new-btn-hover;
+
+  box-shadow: 0 0 0 3px rgba(53, 240, 208, 0.5);
+}
+
+.new-btn:not([disabled]):active {
+  box-shadow: 0 0 0 2px rgba(53, 240, 208, 0.3);
+}
+
+.new-btn:disabled {
+  background-color: #2b2d6c;
+  color: #8679b8;
+}
+
+.accordion-content-placeholder {
+  transform-origin: top center;
+}
+
+.accordion-header {
+  cursor: pointer;
+}
+
+.accordion-motion-content {
+  overflow: hidden;
+}
+
+.filters-width-hover .filter-icons {
+  transition: all 0.3s ease-in-out;
+  width: 85px;
+}
+
+.filters-width-hover:hover .filter-icons {
+  width: 128px;
+}
+
+.bg-prize-amount {
+  background-size: contain;
+  background-position: top center;
+  background-repeat: no-repeat;
+
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+@screen xs {
+  .bg-prize-amount {
+    height: 260px;
+  }
+}
+@screen sm {
+  .bg-prize-amount {
+    height: 250px;
+  }
+}
+@screen lg {
+  .bg-prize-amount {
+    height: 290px;
+  }
+}
+
+.bg-prize-amount--small {
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.lightning-bolts {
+  background-image: url('/lightning-bolts@2x.png');
+  background-size: contain;
+  background-position: top center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  left: 0;
+  top: 20px;
+  height: 100px;
+  overflow: hidden;
+  position: absolute;
+
+  margin-left: -1%;
+  width: 100%;
+}
+
+@screen sm {
+  .lightning-bolts {
+    margin-left: -12%;
+    width: 120%;
+  }
+}
+
+.border-gradient {
+  background: url('/bg-prize-amount--small@2x.png') padding-box,
+    linear-gradient(
+        130deg,
+        rgb(76, 36, 159) 0%,
+        rgb(23, 225, 253) 50%,
+        rgb(255, 119, 225) 70%,
+        rgb(245 221 12) 90%
+      )
+      border-box;
+  border-radius: 10px;
+  border: 4px solid transparent;
+  width: 100%;
+}

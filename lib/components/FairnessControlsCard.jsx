@@ -16,7 +16,7 @@ import { useSendTransaction } from 'lib/hooks/useSendTransaction'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
-import { useUsersAddress } from '@pooltogether/hooks'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { useOnTransactionCompleted } from 'lib/hooks/useOnTransactionCompleted'
 
 const handleSetCreditPlan = async (

@@ -1,0 +1,39 @@
+@screen sm {
+  .card-min-height-desktop {
+    min-height: 210px;
+  }
+}
+
+@screen lg {
+  .card-min-height-desktop {
+    min-height: 250px;
+  }
+}
+
+.interactable-card {
+  border: 0.1rem dashed transparent;
+}
+
+.theme-dark .interactable-card:hover,
+.theme-dark .interactable-card:focus,
+.theme-dark .interactable-card:active,
+.theme-dark .interactable-card.selected,
+.theme-light .interactable-card:hover,
+.theme-light .interactable-card:focus,
+.theme-light .interactable-card:active,
+.theme-light .interactable-card.selected {
+  /* border: 0.1rem dashed var(--color-border-highlight-1); */
+}
+
+.theme-light .interactable-card {
+  border: 0.1rem solid var(--color-border-accent-1);
+}
+
+.theme-light .non-interactable-card {
+  box-shadow: none;
+  border: 0.1rem solid var(--color-border-accent-1);
+}
+
+.theme-dark .non-interactable-card {
+  @apply shadow-md;
+}

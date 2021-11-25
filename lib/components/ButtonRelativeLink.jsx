@@ -1,11 +1,12 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import { omit } from 'lodash'
+import { ButtonLink, SquareLink } from '@pooltogether/react-components'
 
-import { ButtonLink } from 'lib/components/ButtonLink'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { getNetworkNameAliasByChainId } from 'lib/utils/networks'
+import Link from 'next/link'
 
 export const ButtonRelativeLink = (props) => {
   const router = useRouter()
@@ -24,11 +25,11 @@ export const ButtonRelativeLink = (props) => {
     as = `/${poolAlias}${props.link}`
   }
 
-  const newProps = omit(props, ['link'])
+  console.log({ href, as })
 
   return (
-    <ButtonLink {...newProps} href={href} as={as}>
-      {props.children}
-    </ButtonLink>
+    <Link href={href} as={as}>
+      <SquareLink>{props.children}</SquareLink>
+    </Link>
   )
 }

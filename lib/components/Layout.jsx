@@ -16,12 +16,12 @@ export const Layout = (props) => {
       <NotificationBanners />
 
       <div
-        className='flex flex-col w-full'
+        className='flex flex-col w-full page-bg'
         style={{
           minHeight: '100vh'
         }}
       >
-        <div className='pool-container flex flex-grow relative z-30 h-full page fadeIn animated'>
+        <div className='pool-container  flex flex-grow relative z-30 h-full page fadeIn animated'>
           <div className='flex flex-col flex-grow'>
             <div id='top' className='main-nav relative spinner-hidden z-10 pt-2'>
               <Nav />
