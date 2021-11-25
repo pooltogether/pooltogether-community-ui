@@ -13,7 +13,7 @@ import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
 import { useExternalErc20Awards } from 'lib/hooks/useExternalErc20Awards'
 import { useExternalErc721Awards } from 'lib/hooks/useExternalErc721Awards'
 import { useUserChainValues } from 'lib/hooks/useUserChainValues'
-import { useUsersAddress } from '@pooltogether/hooks'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 import { usePrizePoolAddress } from 'lib/hooks/usePrizePoolAddress'
 
 // http://localhost:3000/pools/rinkeby/0xd1E58Db0d67DB3f28fFa412Db58aCeafA0fEF8fA#admin

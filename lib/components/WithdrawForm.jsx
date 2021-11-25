@@ -10,7 +10,7 @@ import { InnerCard } from 'lib/components/Card'
 import { useDebounce } from 'lib/hooks/useDebounce'
 import { useNetwork } from 'lib/hooks/useNetwork'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
-import { useReadProvider, useUsersAddress } from '@pooltogether/hooks'
+import { useReadProvider } from '@pooltogether/hooks'
 import { useSendTransaction } from 'lib/hooks/useSendTransaction'
 import { useUserChainValues } from 'lib/hooks/useUserChainValues'
 import { calculateOdds } from 'lib/utils/calculateOdds'
@@ -23,6 +23,7 @@ import { subtractDates } from 'lib/utils/subtractDates'
 
 import Warning from 'assets/images/warning.svg'
 import { usePrizePoolContracts } from 'lib/hooks/usePrizePoolContracts'
+import { useUsersAddress } from 'lib/hooks/useUsersAddress'
 
 const handleWithdrawInstantly = async (
   sendTx,
@@ -57,7 +58,7 @@ export const WithdrawForm = (props) => {
   const usersAddress = useUsersAddress()
   const sendTx = useSendTransaction()
   const { chainId, walletMatchesNetwork } = useNetwork()
-  const { readProvider, isReadProviderReady } = useReadProvider(chainId)
+  const readProvider = useReadProvider(chainId)
 
   const [exitFees, setExitFees] = useState({
     earlyExitFee: null,
@@ -95,7 +96,7 @@ export const WithdrawForm = (props) => {
 
   useEffect(() => {
     const t = async () => {
-      if (debouncedWithdrawAmount && isReadProviderReady) {
+      if (debouncedWithdrawAmount && readProvider) {
         const result = await fetchExitFee(
           readProvider,
           usersAddress,

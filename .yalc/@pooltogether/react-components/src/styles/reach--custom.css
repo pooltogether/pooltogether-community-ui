@@ -1,0 +1,159 @@
+@keyframes slide-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-down[data-reach-menu-list],
+.slide-down[data-reach-menu-items] {
+  @apply border;
+
+  border-radius: 8px;
+  border-color: transparent;
+  animation: slide-down 0.2s ease;
+}
+
+/* TOOLTIPS / PTHINTS */
+.device-is-touch [data-reach-tooltip] {
+  top: 154px !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  left: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  height: 100vh !important;
+  border-radius: 0 !important;
+}
+
+[data-reach-tooltip] {
+  @apply text-inverse bg-primary rounded-lg;
+  box-shadow: 0 -10px 10px -1px rgba(0, 0, 0, 0.1), 0 20px 20px -3px rgba(0, 0, 0, 0.1),
+    rgba(14, 16, 40, 0.2) 0px 15px 30px;
+  border: 0;
+  max-width: 30rem;
+  padding: 1.25rem 2rem;
+  pointer-events: initial;
+  white-space: initial;
+  z-index: 1823774;
+}
+
+[data-reach-tooltip] * {
+  font-size: 14px !important;
+}
+
+@screen sm {
+  [data-reach-tooltip] {
+    border-radius: 8px;
+    max-width: 30rem;
+  }
+}
+
+@screen sm {
+  [data-reach-tooltip] * {
+    font-size: initial !important;
+  }
+}
+
+/* MENUS / DROPDOWNS */
+[data-reach-popover] {
+  z-index: 5001;
+}
+
+[data-reach-menu-list],
+[data-reach-menu-items] {
+  @apply py-0 text-xxs xs:text-sm rounded-lg shadow-lg;
+}
+
+.theme-dark [data-reach-menu-list],
+.theme-dark [data-reach-menu-items] {
+  @apply bg-card;
+}
+
+[data-reach-menu-item] {
+  @apply px-3 py-2 font-bold text-primary rounded-lg my-0 sm:my-0;
+}
+
+[data-reach-menu-item]:first-child {
+  @apply rounded-b-none;
+}
+
+[data-reach-menu-item]:last-child {
+  @apply rounded-t-none;
+}
+
+.theme-dark [data-reach-menu-item] {
+  @apply text-accent-1;
+}
+
+@screen sm {
+  [data-reach-menu-item] {
+    @apply px-5 py-3;
+  }
+}
+
+.theme-dark [data-reach-menu-item].selected {
+  @apply text-white bg-card-selected;
+}
+
+.theme-dark [data-reach-menu-item]:hover {
+  @apply text-white bg-highlight-5;
+}
+
+.theme-light [data-reach-menu-item].selected {
+  @apply text-default bg-accent-grey-1;
+}
+
+.theme-light [data-reach-menu-item]:hover {
+  @apply bg-highlight-1 text-white;
+}
+
+/* DIALOG / MODALS */
+.dialog-inner-content {
+  flex: 1;
+}
+
+[data-reach-dialog-content] {
+  background: transparent;
+  max-width: initial;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100%;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.dialog-inner {
+  height: 100%;
+  width: 100%;
+}
+
+.dialog-inner-content {
+  height: 100%;
+  width: 100%;
+}
+
+[data-reach-dialog-overlay] {
+  background: var(--color-bg-overlay);
+  backdrop-filter: blur(2px);
+  border-radius: 0;
+  bottom: 0;
+  top: 0;
+  right: 0;
+  left: 0;
+  overflow: auto;
+  position: fixed;
+  z-index: 19000;
+}
+
+[data-reach-dialog-content] > div,
+[data-reach-dialog-content] > button {
+  pointer-events: initial;
+}

@@ -1,0 +1,145 @@
+* {
+  --sidebar-width-sm: 224px;
+  --sidebar-width-lg: 260px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-delay: -1s !important;
+    background-attachment: initial !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: auto;
+}
+
+.nav--pool-logo-container {
+  width: 50px;
+}
+
+@screen xs {
+  .nav--pool-logo-container {
+    width: 80px;
+  }
+}
+
+@screen sm {
+  .nav--pool-logo-container {
+    min-width: 154px;
+  }
+}
+
+@screen lg {
+  .nav-and-footer-container {
+    max-width: 1400px;
+  }
+}
+
+.top-side-nav {
+  max-width: 234px;
+}
+
+@screen lg {
+  .top-side-nav {
+    max-width: 268px;
+  }
+}
+
+/* Sizes */
+
+.w-fit-content {
+  width: fit-content;
+}
+
+.h-fit-content {
+  height: fit-content;
+}
+
+/* Page Layout */
+
+.grid-page-wrapper {
+  @apply text-inverse;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    'grid-header-wrapper'
+    'grid-content-with-footer';
+}
+
+.grid-header-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr auto;
+  grid-template-areas: 'grid-banner' 'grid-header';
+  position: sticky;
+  top: 0;
+}
+
+.desktop-content-wrapper {
+  max-width: 1460px;
+}
+
+.grid-banner {
+  grid-area: grid-banner;
+}
+
+.grid-content-with-footer {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr auto;
+  grid-template-areas:
+    'grid-content'
+    'grid-footer';
+  grid-area: grid-content-with-footer;
+}
+
+.grid-header-wrapper {
+  grid-area: grid-header-wrapper;
+}
+
+.grid-header {
+  grid-area: grid-header;
+}
+
+.grid-header > div {
+  max-width: 1460px;
+}
+
+.grid-footer {
+  grid-area: grid-footer;
+}
+
+.grid-content {
+  grid-area: grid-content;
+}
+
+@screen lg {
+  .grid-content {
+    max-width: 1060px;
+  }
+}
+
+.grid-side-nav {
+  grid-area: grid-side-nav;
+}
+
+.push-sidebar-padding {
+  padding-left: var(--sidebar-width-sm);
+}
+
+@screen lg {
+  .push-sidebar-padding {
+    padding-left: var(--sidebar-width-lg);
+  }
+}

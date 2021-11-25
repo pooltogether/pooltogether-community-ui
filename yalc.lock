@@ -1,0 +1,8 @@
+{
+  "version": "v1",
+  "packages": {
+    "@pooltogether/react-components": {
+      "signature": "1d90e1b2cd0c0ae3490de423040c0753"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
-import { useOnboard } from '@pooltogether/hooks'
+import { useOnboard } from '@pooltogether/bnc-onboard-hooks'
 import { isValidAddress } from '@pooltogether/utilities'
 import { getChain } from '@pooltogether/evm-chains-extended'
 import { useRouter } from 'next/router'

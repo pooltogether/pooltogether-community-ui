@@ -1,36 +1,32 @@
 import React, { useEffect } from 'react'
-import {
-  useInitCookieOptions,
-  useInitializeOnboard,
-  useInitInfuraId,
-  useInitReducedMotion
-} from '@pooltogether/hooks'
+import { useInitCookieOptions, useInitRpcApiKeys, useInitReducedMotion } from '@pooltogether/hooks'
 import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
 import { Provider as JotaiProvider } from 'jotai'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { useInitializeOnboard } from '@pooltogether/bnc-onboard-hooks'
 
 import { Layout } from 'lib/components/Layout'
-import { ThemeContextProvider } from 'lib/components/contextProviders/ThemeContextProvider'
+import { ThemeContextProvider } from '@pooltogether/react-components'
 import { ErrorBoundary, CustomErrorBoundary } from 'lib/components/CustomErrorBoundary'
 
 import 'react-toastify/dist/ReactToastify.css'
 import '@reach/menu-button/styles.css'
-import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
+// import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 
 import 'assets/styles/index.css'
 import 'assets/styles/layout.css'
-import 'assets/styles/loader.css'
-import 'assets/styles/pool.css'
-import 'assets/styles/pool-toast.css'
-import 'assets/styles/utils.css'
-import 'assets/styles/animations.css'
-import 'assets/styles/transitions.css'
-import 'assets/styles/typography.css'
-import 'assets/styles/themes.css'
 
-import 'assets/styles/bnc-onboard--custom.css'
-import 'assets/styles/reach--custom.css'
+// import 'assets/styles/loader.css'
+// import 'assets/styles/pool.css'
+// import 'assets/styles/pool-toast.css'
+// import 'assets/styles/utils.css'
+// import 'assets/styles/animations.css'
+// import 'assets/styles/transitions.css'
+// import 'assets/styles/typography.css'
+// import 'assets/styles/themes.css'
+
+// import 'assets/styles/reach--custom.css'
 
 const queryClient = new QueryClient()
 
@@ -74,7 +70,15 @@ function MyApp({ Component, pageProps }) {
 }
 
 const InitPoolTogetherHooks = ({ children }) => {
-  useInitInfuraId(process.env.NEXT_JS_INFURA_ID)
+  useInitRpcApiKeys({
+    infura: {
+      mainnet: process.env.NEXT_JS_INFURA_ID_MAINNET || process.env.NEXT_JS_INFURA_ID,
+      polygon: process.env.NEXT_JS_INFURA_ID_POLYGON || process.env.NEXT_JS_INFURA_ID
+    },
+    quicknode: {
+      bsc: process.env.NEXT_JS_QUICKNODE_ID
+    }
+  })
   useInitReducedMotion(Boolean(process.env.NEXT_JS_REDUCE_MOTION))
   useInitCookieOptions(process.env.NEXT_JS_DOMAIN_NAME)
   useInitializeOnboard({

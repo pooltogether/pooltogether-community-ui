@@ -1,0 +1,16 @@
+/* vx tooltip uses inline styles so override them with !important everything! :) */
+.vx-chart-tooltip {
+  color: var(--color-text-inverse) !important;
+  background: white !important;
+  box-shadow: 0 -10px 10px -1px rgba(0, 0, 0, 0.05), 0 20px 20px -3px rgba(0, 0, 0, 0.1),
+    rgba(14, 16, 60, 0.08) 0px 15px 30px !important;
+  border: 0 !important;
+  color: #210a45 !important;
+  font-size: 1rem !important;
+  padding: 1rem 1.5rem !important;
+  border-radius: 8px !important;
+  pointer-events: initial !important;
+  max-width: 16rem !important;
+  white-space: initial !important;
+  z-index: 1823774 !important;
+}

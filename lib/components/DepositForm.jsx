@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ethers } from 'ethers'
-import { useOnboard } from '@pooltogether/hooks'
+import { useOnboard } from '@pooltogether/bnc-onboard-hooks'
 import IERC20Abi from '@pooltogether/pooltogether-contracts/abis/IERC20Upgradeable'
 import FeatherIcon from 'feather-icons-react'
 
