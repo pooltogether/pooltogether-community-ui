@@ -170,3 +170,7 @@ body {
     padding: 0.5rem;
   }
 }
+
+.bg-transparent {
+  background: transparent;
+}

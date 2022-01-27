@@ -420,3 +420,7 @@ input[type='text'] {
   background-size: 1000% auto;
   animation: cycleBackgroundPos 15000ms infinite steps(100);
 }
+
+.bg-transparent {
+  background: transparent;
+}

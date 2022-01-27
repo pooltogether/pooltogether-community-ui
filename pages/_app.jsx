@@ -12,21 +12,9 @@ import { ErrorBoundary, CustomErrorBoundary } from 'lib/components/CustomErrorBo
 
 import 'react-toastify/dist/ReactToastify.css'
 import '@reach/menu-button/styles.css'
-// import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 
 import 'assets/styles/index.css'
 import 'assets/styles/layout.css'
-
-// import 'assets/styles/loader.css'
-// import 'assets/styles/pool.css'
-// import 'assets/styles/pool-toast.css'
-// import 'assets/styles/utils.css'
-// import 'assets/styles/animations.css'
-// import 'assets/styles/transitions.css'
-// import 'assets/styles/typography.css'
-// import 'assets/styles/themes.css'
-
-// import 'assets/styles/reach--custom.css'
 
 const queryClient = new QueryClient()
 
@@ -38,7 +26,7 @@ if (process.env.NEXT_JS_SENTRY_DSN) {
   })
 }
 
-function MyApp({ Component, pageProps }) {
+function MyApp ({ Component, pageProps }) {
   // ChunkLoadErrors happen when someone has the app loaded, then we deploy a
   // new release, and the user's app points to previous chunks that no longer exist
   useEffect(() => {
