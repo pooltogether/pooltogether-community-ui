@@ -27,7 +27,9 @@ export const PrizeCard = (props) => {
 
       {showLinks && (
         <div className='flex flex-col mt-4 sm:mt-8 w-full sm:w-2/4 mx-auto'>
-          <ButtonRelativeLink link='/home#deposit'>Deposit to win</ButtonRelativeLink>
+          <ButtonRelativeLink className='text-center' link='/home#deposit'>
+            Deposit to win
+          </ButtonRelativeLink>
           <div className='flex mt-4 flex-grow justify-between'>
             <RelativeInternalLink link='/manage'>
               Manage pool{' '}

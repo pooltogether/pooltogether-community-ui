@@ -29,7 +29,7 @@ export const ButtonRelativeLink = (props) => {
 
   return (
     <Link href={href} as={as}>
-      <SquareLink>{props.children}</SquareLink>
+      <SquareLink className={props.className}>{props.children}</SquareLink>
     </Link>
   )
 }
