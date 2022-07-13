@@ -4,13 +4,13 @@ import { omit } from 'lodash'
 
 const COLOR_CLASSES = {
   primary: {
-    backgroundClasses: 'bg-green-400 hover:bg-opacity-80',
-    borderClasses: 'border border-green-1 active:shadow-green focus:shadow-green',
+    backgroundClasses: 'bg-green hover:bg-opacity-80',
+    borderClasses: 'border border-green active:shadow-green focus:shadow-green',
     textColorClasses: 'text-primary'
   },
   secondary: {
-    backgroundClasses: 'bg-green-400 bg-opacity-0 hover:bg-opacity-15 active:bg-opacity-15',
-    borderClasses: 'border border-green-1 active:shadow-green focus:shadow-green',
+    backgroundClasses: 'bg-opacity-0 hover:bg-opacity-15 active:bg-opacity-15',
+    borderClasses: 'border border-green active:shadow-green focus:shadow-green',
     textColorClasses: 'text-highlight-2'
   },
   tertiary: {

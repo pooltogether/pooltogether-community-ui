@@ -68,7 +68,7 @@ export const WalletInfo = () => {
             'trans'
           )}
         >
-          <FeatherIcon icon='x' className={classnames('w-3 h-3 hover:text-white m-auto')} />
+          <FeatherIcon icon='x' className={classnames('w-3 h-3 text-default hover:text-white m-auto')} />
         </button>
       </>
     )
