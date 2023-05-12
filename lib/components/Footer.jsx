@@ -61,7 +61,7 @@ export const Footer = () => {
 
               <a
                 className='img-link inline-block trans mr-3 lg:mr-0 lg:ml-4 w-5 h-5 '
-                href='https://discord.gg/hxPhPDW'
+                href='https://pooltogether.com/discord'
                 target='_blank'
                 rel='noreferrer noopener'
               >
